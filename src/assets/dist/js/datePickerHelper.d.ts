@@ -1,0 +1,1 @@
+export declare function daterangepicker(id: string, callback: any): any;
