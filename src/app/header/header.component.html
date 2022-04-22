@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-xl navbar-dark fixed-top hk-navbar">
+    <a id="navbar_toggle_btn" (click)="navbartoggle()" class="navbar-toggle-btn nav-link-hover"
+        href="javascript:void(0);"><span class="feather-icon"><i data-feather="menu"></i></span></a>
+    <a class="navbar-brand" href="dashboard.html">
+        <img class="brand-img d-inline-block" src="assets/dist/img/logo-dark.png" alt="brand" />
+    </a>
+    <ul class="navbar-nav hk-navbar-content">
+        <li>
+            <a class="nav-link nav-link-hover" href="javascript:void(0);" data-toggle="modal"
+                (click)="openmodal(lockmodal)" data-target="#lock"><span class="feather-icon"><i
+                        data-feather="lock"></i></span></a>
+        </li>
+        <li>
+            <a class="nav-link nav-link-hover" href="javascript:void(0);" data-toggle="modal"
+                (click)="openmodal(logoutmodal)" data-target="#logout"><span class="feather-icon"><i
+                        data-feather="power"></i></span></a>
+        </li>
+    </ul>
+</nav>
+<nav class="hk-nav hk-nav-light bg-white">
+    <a href="javascript:void(0);" id="hk_nav_close" class="hk-nav-close"><span class="feather-icon"><i
+                data-feather="x"></i></span></a>
+    <div class="nicescroll-bar">
+        <div class="navbar-nav-wrap">
+
+            <ul *ngFor="let menu of menus; let i = index;" class="navbar-nav flex-column">
+                <li class="nav-item" *ngIf="menu.children.length == 0 && !menu.hidden">
+                    <a class="nav-link" [routerLink]="[menu.url]">
+                        <!-- <i class="fa-thin fa-file-lines"></i> -->
+                        <img src="../../assets/svg/file-text.svg" alt="" srcset="">
+                        <span class="nav-link-text font-15 px-2">{{menu.title}}</span>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="menu.children.length > 0">
+                    <a class="nav-link pointer" href="javascript:void(0);" (click)="toggleCollapse(i)"
+                        data-toggle="collapse" data-target="#dummyid">
+                        <i class="{{menu.icon}}"></i>
+                        <span class="nav-link-text font-13 ">{{menu.title}}</span>
+                    </a>
+                    <ul class="nav flex-column collapse collapse-level-1" [(ngbCollapse)]="menu.isCollapsed">
+                        <li class="nav-item">
+                            <ul class="navbar-nav flex-column">
+                                <li class="nav-item" *ngFor="let cmenu of menu.children">
+                                    <a class="nav-link" [routerLink]="[cmenu.url]">
+                                        <span class="nav-link-text">{{cmenu.title}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

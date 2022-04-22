@@ -1,13 +1,145 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Multicompanies</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- vector map CSS -->
+  <link href="./assets/vendors/vectormap/jquery-jvectormap-2.0.3.css" rel="stylesheet" type="text/css" />
+
+  <!-- Toggles CSS -->
+  <link href="./assets/vendors/jquery-toggles/css/toggles.css" rel="stylesheet" type="text/css" />
+  <link href="./assets/vendors/jquery-toggles/css/themes/toggles-light.css" rel="stylesheet" type="text/css" />
+  <link href="./styles.css" rel="stylesheet" type="text/css" />
+  <!-- Toastr CSS -->
+  <link href="./assets/vendors/jquery-toast-plugin/dist/jquery.toast.min.css" rel="stylesheet" type="text/css" />
+  <!-- Pickr CSS -->
+  <link href="./assets/vendors/pickr-widget/dist/pickr.min.css" rel="stylesheet" type="text/css" />
+  <!-- Daterangepicker CSS -->
+  <link href="./assets/vendors/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+
+  <!-- Custom CSS -->
+  <link href="./assets/dist/css/style.css" rel="stylesheet" type="text/css" />
+  <!-- select2 CSS -->
+  <link href="./assets/vendors/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
+  <!-- DropZone -->
+  <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+  <title>Biz1book</title>
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Morris Charts CSS -->
+  <link href="./assets/vendors/morris.js/morris.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
-  <app-root></app-root>
+
+<body class="custom-scroll-bar">
+  <div id="maindiv" class="hk-wrapper hk-vertical-nav custom-scroll-bar">
+    <app-root></app-root>
+  </div>
+  <!-- jQuery -->
+  <script src="./assets/vendors/jquery/dist/jquery.min.js"></script>
+  <script src="./assets/vendors/jquery/dist/jquery.js"></script>
+  <script src="./assets/vendors/jquery-ui.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="./assets/vendors/popper.js/dist/umd/popper.min.js"></script>
+  <script src="./assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <!-- Slimscroll JavaScript -->
+  <script src="./assets/dist/js/jquery.slimscroll.js"></script>
+
+  <!-- Fancy Dropdown JS -->
+  <script src="./assets/dist/js/dropdown-bootstrap-extended.js"></script>
+
+  <!-- Toggles JavaScript -->
+  <script src="./assets/vendors/jquery-toggles/toggles.min.js"></script>
+  <script src="./assets/dist/js/toggle-data.js"></script>
+
+  <!-- FeatherIcons JavaScript -->
+  <script src="./assets/dist/js/feather.min.js"></script>
+
+
+
+  <!-- Toastr JS -->
+  <script src="./assets/vendors/jquery-toast-plugin/dist/jquery.toast.min.js"></script>
+  <!-- <script src="./assets/dist/js/toast-data.js"></script> -->
+
+  <!-- Slimscroll JavaScript -->
+  <!-- <script src="dist/js/jquery.slimscroll.js"></script> -->
+
+  <!-- Select2 JavaScript -->
+  <script src="./assets/vendors/select2/dist/js/select2.full.min.js"></script>
+  <script src="./assets/dist/js/select2-data.js"></script>
+
+
+  <!-- Toggles JavaScript -->
+  <script src="./assets/vendors/jquery-toggles/toggles.min.js"></script>
+  <script src="./assets/dist/js/toggle-data.js"></script>
+
+  <!-- Toogle css -->
+
+  <link href="./assets/vendors/jquery-toggles/css/toggles.css" rel="stylesheet" type="text/css" />
+  <link href="./assets/vendors/jquery-toggles/css/themes/toggles-light.css" rel="stylesheet" type="text/css" />
+
+  <!-- Toggles JavaScript -->
+  <!-- <script src="./assets/vendors/jquery-toggles/toggles.min.js"></script>
+   <script src="./assets/dist/js/toggle-data.js"></script> -->
+
+  <!-- Fancy Dropdown JS -->
+  <!-- <script src="dist/js/dropdown-bootstrap-extended.js"></script> -->
+  <script src="./assets/vendors/waypoints/lib/jquery.waypoints.min.js"></script>
+  <script src="./assets/vendors/jquery.counterup/jquery.counterup.min.js"></script>
+  <script src="./assets/vendors/raphael/raphael.min.js"></script>
+  <script src="./assets/vendors/morris.js/morris.min.js"></script>
+  <script src="./assets/vendors/echarts/dist/echarts-en.min.js"></script>
+  <script src="./assets/dist/js/piecharts-data.js"></script>
+  <!-- <script src="./assets/vendors/jquery.sparkline/dist/jquery.sparkline.min.js"></script> -->
+  <script src="./assets/vendors/vectormap/jquery-jvectormap-2.0.3.min.js"></script>
+  <script src="./assets/vendors/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="./assets/dist/js/vectormap-data.js"></script>
+  <script src="./assets/vendors/owl.carousel/dist/owl.carousel.min.js"></script>
+  <script src="./assets/dist/js/biz1-dashboard-data.js"></script>
+  <script src="./assets/dist/js/login-data.js"></script>
+
+  <!-- Daterangepicker JavaScript -->
+  <script src="./assets/vendors/moment/min/moment.min.js"></script>
+  <script src="./assets/vendors/daterangepicker/daterangepicker.js"></script>
+  <script src="./assets/dist/js/daterangepicker-data.js"></script>
+
+  <!-- Data Table JavaScript -->
+  <script src="./assets/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="./assets/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="./assets/vendors/datatables.net-dt/js/dataTables.dataTables.min.js"></script>
+  <script src="./assets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="./assets/vendors/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+  <script src="./assets/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+  <script src="./assets/vendors/jszip/dist/jszip.min.js"></script>
+  <script src="./assets/vendors/pdfmake/build/pdfmake.min.js"></script>
+  <script src="./assets/vendors/pdfmake/build/vfs_fonts.js"></script>
+  <script src="https://kit.fontawesome.com/4712a2b505.js" crossorigin="anonymous"></script>
+  <script src="./assets/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  <script src="./assets/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+  <script src="./assets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="./assets/dist/js/dataTables-data.js"></script>
+  <!-- DropZone -->
+  <script src="./assets/vendors/dropzone-5.7.0/dist/dropzone.js"></script>
+  <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+  <!-- Morris Charts JavaScript -->
+  <!-- <script src="./assets/vendors/raphael/raphael.min.js"></script> -->
+  <!-- <script src="./assets/vendors/morris.js/morris.min.js"></script> -->
+  <script src="./assets/dist/js/linecharts-data.js"></script>
+
+  <!-- Init JavaScript -->
+  <script src="./assets/dist/js/init.js"></script>
+  <script src="./assets/dist/js/login-data.js"></script>
 </body>
+
 </html>

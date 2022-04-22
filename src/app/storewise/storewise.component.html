@@ -1,0 +1,96 @@
+<div class="hk-pg-wrapper">
+    <nav class="hk-breadcrumb" aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-light bg-transparent">
+            <!-- <li class="breadcrumb-item"><a href="javascript:void(0);">Company Management</a></li> -->
+            <li class="breadcrumb-item active" aria-current="page">Multi Companies</li>
+        </ol>
+    </nav>
+
+    <div>
+        <div class="row col-xl-12">
+            <div class="col-xl-12 sticky">
+                <section class="hk-sec-wrapper row mx-0">
+                    <div class="form-group col-sm">
+                        <label>Search</label>
+                        <input type="text" [(ngModel)]="term" (input)="calculate()" class="form-control">
+                    </div>
+                    <div class="form-group col-sm">
+                        <label>Companies</label>
+                        <select class="form-control custom-select" [(ngModel)]="companyid"
+                            aria-placeholder="Select Company">
+                            <option *ngFor="let comp of companies" value={{comp.CompanyId}}>
+                                {{comp.AccountName}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm">
+                        <label>Date</label>
+                        <div id="myrangepicker" class="form-control text-truncate">
+                            <i class="fa fa-calendar text-light-40"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <button (click)="storeRpt()" style="position: absolute; bottom: 17px;"
+                            class="btn btn-icon btn-success btn-icon-style-1"><span class="btn-icon-wrap"><img
+                                    src="../../assets//svg/arrow-down-circle.svg" alt="" srcset=""></span></button>
+
+                    </div>
+                </section>
+            </div>
+            <div class="col-xl-9">
+                <section class="hk-sec-wrapper">
+                    <div class="table-wrap">
+                        <div class="table-responsive">
+                            <table class="table mb-0 table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Store Name</th>
+                                        <th class="text-right">Bill Amount</th>
+                                        <th class="text-right">Paid Amount</th>
+                                        <th class="text-right">POS</th>
+                                        <th class="text-right">Swiggy</th>
+                                        <th class="text-right">Zomato</th>
+                                        <th class="text-right">Discount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of storereport | filter: term">
+                                        <td>{{row.Name}}</td>
+                                        <td class="text-right">{{row.BillAmount | number: ".0"}}</td>
+                                        <td class="text-right">{{row.PaidAmount | number: ".0"}}</td>
+                                        <td class="text-right">
+                                            {{row.Pos | number:".0-0"}} <br>
+                                            {{(row.PaidAmount - row.Swiggy - row.Zomato) | number:
+                                            ".0"}}
+                                        </td>
+                                        <td class="text-right">{{row.Swiggy | number: ".0"}}</td>
+                                        <td class="text-right">{{row.Zomato | number: ".0"}}</td>
+                                        <td class="text-right">{{row.DiscAmount | number: ".0"}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-xl-3">
+                <section class="hk-sec-wrapper sticky" style="top: 220px;">
+                    <!-- <div class="form-group">
+                        <label>Search</label>
+                        <input type="text" [(ngModel)]="term" (input)="calculate()" class="form-control">
+                    </div>
+                    <hr> -->
+                    <strong>[Tax]</strong> <span class="float-right">{{Tax | number: ".0"}}</span> <br>
+                    <strong>[Disc]</strong> <span class="float-right">{{TotalDisc | number: ".0"}}</span> <br>
+                    <strong>[Bill]</strong> <span class="float-right">{{TotalBill | number: ".0"}}</span> <br>
+                    <strong>[PaidAmt]</strong> <span class="float-right">{{TotalPaidAmt | number: ".0"}}</span> <br>
+                    <hr>
+                    <strong>[POS]</strong> <span class="float-right">{{TotalPOS | number: ".0"}}</span> <br>
+                    <strong>[SWIGGY]</strong> <span class="float-right">{{TotalSWIGGY | number: ".0"}}</span> <br>
+                    <strong>[ZOMATO]</strong> <span class="float-right">{{TotalZomato | number: ".0"}}</span> <br>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
