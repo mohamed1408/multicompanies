@@ -1,0 +1,12 @@
+.form-group {
+    position: relative;
+}
+
+.errMsg {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #f83f37 !important;
+    font-weight: bolder;
+}

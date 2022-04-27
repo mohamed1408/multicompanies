@@ -12,6 +12,9 @@ export class AuthService {
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
+  public accLocked: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    true
+  );
 
   get isLoggedIn() {
     return this.loggedIn.asObservable();

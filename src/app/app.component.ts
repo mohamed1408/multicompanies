@@ -15,6 +15,7 @@ export class AppComponent {
   title = 'StoreSales';
   isCollapsed: boolean = false;
   isLoggedIn$: Observable<boolean>;
+  isLocked$: Observable<boolean>;
 
   constructor(
     private auth: AuthService,
@@ -24,21 +25,36 @@ export class AppComponent {
     setHeightWidth();
     console.log(this.router.url);
     this.isLoggedIn$ = this.auth.isLoggedIn;
+    this.isLocked$ = this.auth.accLocked;
     const ctoken = localStorage.getItem('ctoken') || '';
     const utoken = localStorage.getItem('utoken') || '';
     if (ctoken != '') {
       this.auth.loggedIn.next(true);
+    }
+    if (utoken == '' || this.jwtHelper.isTokenExpired(utoken)) {
+      this.auth.accLocked.next(true);
     }
     this.isLoggedIn$.subscribe((data) => {
       console.log(data);
       if (!data) {
         this.router.navigate(['/']);
       } else {
-        if (utoken != '' && !this.jwtHelper.isTokenExpired(utoken)) {
-          this.router.navigate(['/storewisereport']);
-        } else {
-          this.router.navigate(['/lock']);
-        }
+        this.isLocked$.subscribe((bool) => {
+          if (data) {
+            if (!bool) {
+              this.router.navigate(['/storewisereport']);
+            } else {
+              this.router.navigate(['/lock']);
+            }
+          } else {
+            this.router.navigate(['/']);
+          }
+        });
+        // if (utoken != '' && !this.jwtHelper.isTokenExpired(utoken)) {
+        //   this.router.navigate(['/storewisereport']);
+        // } else {
+        //   this.router.navigate(['/lock']);
+        // }
       }
     });
   }

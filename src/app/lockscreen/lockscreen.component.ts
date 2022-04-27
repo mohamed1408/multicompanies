@@ -11,6 +11,7 @@ import { AuthService } from '../auth.service';
 export class LockscreenComponent implements OnInit {
   companyid: number = 0;
   pin: string = '';
+  errorMsg: string = '';
   constructor(
     private auth: AuthService,
     public router: Router,
@@ -28,8 +29,9 @@ export class LockscreenComponent implements OnInit {
         const token_parsed = this.jwtHelper.decodeToken(data['token']);
         localStorage.setItem('utoken', data['token']);
         localStorage.setItem('user', JSON.stringify(token_parsed));
-        this.router.navigate(['/storewisereport']);
+        this.auth.accLocked.next(false);
       } else {
+        this.errorMsg = 'INALID PIN!';
       }
     });
   }

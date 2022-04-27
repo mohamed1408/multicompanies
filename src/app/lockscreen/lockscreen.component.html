@@ -28,13 +28,15 @@
                             </h1>
                             <!-- <p class="mb-30 text-center">administrator@Mintos.com</p> -->
                             <div class="form-group">
-                                <div class="input-group">
+                                <div class="input-group border"
+                                    [ngClass]="{'border-success': errorMsg == '', 'border-danger': errorMsg != ''}">
                                     <input class="form-control filled-input bg-white" [(ngModel)]="pin"
                                         placeholder="PIN" type="password" (keyup.enter)="unlock()">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><span class="feather-icon"><i
                                                     data-feather="arrow-right"></i></span></span>
                                     </div>
+                                    <span class="errMsg">{{errorMsg}}</span>
                                 </div>
                             </div>
                             <!-- </form> -->

@@ -4,6 +4,8 @@ import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
 import * as moment from 'moment';
 import { Ng2SearchPipe } from 'ng2-search-filter';
 
+declare function setHeightWidth(): any;
+
 @Component({
   selector: 'app-storewise',
   templateUrl: './storewise.component.html',
@@ -33,7 +35,8 @@ export class StorewiseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.stores = [...Array(50)].map((x) => 0);
+    setHeightWidth();
+    // this.stores = [...Array(50)].map((x) => 0);
     this.getusercompany();
     this.navbartoggle();
   }

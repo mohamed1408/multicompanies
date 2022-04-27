@@ -1,7 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../auth.service';
-
+import * as jq from 'jquery';
+declare var $: any; // ADD THIS
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -42,14 +43,15 @@ export class HeaderComponent implements OnInit {
   logout() {
     localStorage.removeItem('ctoken');
     localStorage.removeItem('utoken');
+    this.auth.accLocked.next(true);
     this.auth.loggedIn.next(false);
-    this.modalService.dismissAll();
+    // this.modalService.dismissAll();
   }
 
   lock() {
     localStorage.removeItem('utoken');
-    this.auth.loggedIn.next(true);
-    this.modalService.dismissAll();
+    this.auth.accLocked.next(true);
+    // this.modalService.dismissAll();
   }
 }
 

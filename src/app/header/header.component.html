@@ -6,14 +6,20 @@
     </a>
     <ul class="navbar-nav hk-navbar-content">
         <li>
-            <a class="nav-link nav-link-hover" href="javascript:void(0);" data-toggle="modal"
-                (click)="openmodal(lockmodal)" data-target="#lock"><span class="feather-icon"><i
-                        data-feather="lock"></i></span></a>
+            <ng-template #lockContent>
+                <button class="btn btn-danger btn-sm m-auto" (click)="lock()">Lock</button>
+            </ng-template>
+            <a href="javascript:void(0);" class="nav-link nav-link-hover" [ngbPopover]="lockContent"
+                popoverTitle="Do you wanna Lock?">
+                <span class="feather-icon"><i data-feather="lock"></i></span>
+            </a>
         </li>
         <li>
-            <a class="nav-link nav-link-hover" href="javascript:void(0);" data-toggle="modal"
-                (click)="openmodal(logoutmodal)" data-target="#logout"><span class="feather-icon"><i
-                        data-feather="power"></i></span></a>
+            <ng-template #logoutContent>
+                <button class="btn btn-danger btn-sm m-auto" (click)="logout()">Log Out</button>
+            </ng-template>
+            <a class="nav-link nav-link-hover" href="javascript:void(0);" [ngbPopover]="logoutContent"
+                popoverTitle="Do you wanna Log Out?"><span class="feather-icon"><i data-feather="power"></i></span></a>
         </li>
     </ul>
 </nav>
@@ -53,3 +59,27 @@
         </div>
     </div>
 </nav>
+<div class="popover fade bs-popover-top" role="tooltip" #lockpopover id="lockpopover"
+    style="will-change: transform; position: absolute; transform: translate3d(53px, 222px, 0px); top: 0px; left: 0px;"
+    x-placement="top">
+    <h3 class="popover-header">Do you wanna lock?</h3>
+    <div class="popover-body py-30">
+        <button class="btn btn-danger btn-sm" (click)="lock()" style="margin: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%);">Lock</button>
+    </div>
+</div>
+<div class="popover fade bs-popover-top" role="tooltip" #logpopover id="logpopover"
+    style="will-change: transform; position: absolute; transform: translate3d(53px, 222px, 0px); top: 0px; left: 0px;"
+    x-placement="top">
+    <h3 class="popover-header">Do you wanan log out?</h3>
+    <div class="popover-body py-30">
+        <button class="btn btn-danger btn-sm" (click)="logout()" style="margin: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%);">Log Out</button>
+    </div>
+</div>
