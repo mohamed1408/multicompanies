@@ -17,7 +17,8 @@ export class LockscreenComponent implements OnInit {
     public router: Router,
     private jwtHelper: JwtHelperService
   ) {
-    this.companyid = 3;
+    this.companyid = +JSON.parse(localStorage.getItem('company') || '{}')
+      .CompanyId;
     this.pin = '';
   }
 

@@ -28,7 +28,10 @@ export class SigninComponent implements OnInit {
           data.token.Value.token.Value
         );
         localStorage.setItem('ctoken', data.token.Value.token.Value);
-        localStorage.setItem('company', token_parsed);
+        localStorage.setItem(
+          'company',
+          JSON.stringify({ ...token_parsed, CompanyId: data.company.Id })
+        );
         if (data['status'] == 200) {
           this.auth.loggedIn.next(true);
         }
