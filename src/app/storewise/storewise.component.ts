@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { Ng2SearchPipe } from 'ng2-search-filter';
 
 declare function setHeightWidth(): any;
+declare const $wrapper: any;
 
 @Component({
   selector: 'app-storewise',
@@ -29,9 +30,17 @@ export class StorewiseComponent implements OnInit {
   TotalPOS: number = 0;
   TotalSWIGGY: number = 0;
   TotalZomato: number = 0;
-
+  rangeSetting: RangeSetting | null = null;
+  rangeSettings: Array<RangeSetting> = [];
+  sortSetting: any = {
+    PaidAmount: ['PaidAmount', 0],
+    BillAmount: ['BillAmount', 0],
+  };
   constructor(private Auth: AuthService, private ng2filterpipe: Ng2SearchPipe) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.rangeSettings = JSON.parse(
+      localStorage.getItem('rangeSettings') || '[]'
+    );
   }
 
   ngOnInit(): void {
@@ -72,6 +81,7 @@ export class StorewiseComponent implements OnInit {
       console.log(data);
       this.storereport = data['Order'];
       this.calculate();
+      this.paint();
     });
   }
 
@@ -116,8 +126,79 @@ export class StorewiseComponent implements OnInit {
     });
   }
 
+  openDrawer() {
+    $wrapper.toggleClass('hk-settings-toggle');
+  }
+
   navbartoggle() {
     // console.log(document.getElementById("maindiv"))
     document.getElementById('maindiv')?.classList.add('hk-nav-toggle');
+  }
+
+  newSetting() {
+    this.rangeSetting = new RangeSetting();
+  }
+
+  addSetting() {
+    if (this.rangeSetting != null) this.rangeSettings.push(this.rangeSetting);
+    localStorage.setItem('rangeSettings', JSON.stringify(this.rangeSettings));
+    this.rangeSetting = null;
+    this.paint();
+  }
+
+  updateSettings() {
+    this.rangeSettings.forEach((set) => (set.editmode = false));
+    localStorage.setItem('rangeSettings', JSON.stringify(this.rangeSettings));
+    this.paint();
+  }
+
+  deleteSetting(i: number) {
+    this.rangeSettings.splice(i, 1);
+    localStorage.setItem('rangeSettings', JSON.stringify(this.rangeSettings));
+    this.paint();
+  }
+
+  paint() {
+    this.storereport.forEach((rpt: any) => {
+      if (
+        this.rangeSettings.some(
+          (x) => x.from <= rpt.PaidAmount && x.to >= rpt.PaidAmount
+        )
+      ) {
+        rpt.setting = this.rangeSettings.filter(
+          (x) => x.from <= rpt.PaidAmount && x.to >= rpt.PaidAmount
+        )[0];
+      } else {
+        rpt.setting = new RangeSetting();
+      }
+    });
+  }
+
+  sort(field: string) {
+    const { compare } = Intl.Collator('en-US');
+    if ([-1, 0].includes(this.sortSetting[field][0])) {
+      this.sortSetting[field][0] = 1;
+    } else {
+      this.sortSetting[field][0] = -1;
+    }
+    this.storereport = this.storereport.sort(
+      (a: any, b: any) =>
+        ((a[field] - b[field]) / Math.abs(a[field] - b[field])) *
+        this.sortSetting[field][0]
+    );
+  }
+}
+
+class RangeSetting {
+  color: string;
+  from: number;
+  to: number;
+  editmode: boolean;
+
+  constructor() {
+    this.color = 'white';
+    this.from = 0;
+    this.to = 0;
+    this.editmode = false;
   }
 }
