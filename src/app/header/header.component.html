@@ -23,7 +23,7 @@
         </li>
     </ul>
 </nav>
-<nav class="hk-nav hk-nav-light bg-white">
+<nav class="hk-nav hk-nav-light bg-white" style="z-index: 100000000000;">
     <a href="javascript:void(0);" id="hk_nav_close" (click)="navbartoggle()" class="hk-nav-close"><span
             class="feather-icon"><i data-feather="x"></i></span></a>
     <div class="nicescroll-bar">
@@ -32,8 +32,7 @@
             <ul *ngFor="let menu of menus; let i = index;" class="navbar-nav flex-column">
                 <li class="nav-item" *ngIf="menu.children.length == 0 && !menu.hidden">
                     <a class="nav-link" [routerLink]="[menu.url]">
-                        <!-- <i class="fa-thin fa-file-lines"></i> -->
-                        <img src="../../assets/svg/file-text.svg" alt="" srcset="">
+                        <img src="{{menu.svg}}" alt="" srcset="">
                         <span class="nav-link-text font-15 px-2">{{menu.title}}</span>
                     </a>
                 </li>

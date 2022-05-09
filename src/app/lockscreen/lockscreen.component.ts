@@ -25,7 +25,9 @@ export class LockscreenComponent implements OnInit {
   ngOnInit(): void {}
 
   unlock() {
+    this.auth.isloading.next(true);
     this.auth.unlock(this.pin, this.companyid).subscribe((data: any) => {
+      this.auth.isloading.next(false);
       if (data['status'] == 200) {
         const token_parsed = this.jwtHelper.decodeToken(data['token']);
         localStorage.setItem('utoken', data['token']);

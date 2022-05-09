@@ -1,9 +1,9 @@
 .sticky {
-    position: sticky;
-    top: 70px;
-    z-index: 999;
+  position: sticky;
+  top: 70px;
+  z-index: 999;
 }
 
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }

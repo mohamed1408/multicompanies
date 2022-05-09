@@ -12,6 +12,7 @@ import { LockscreenComponent } from './lockscreen/lockscreen.component';
 import { HeaderComponent } from './header/header.component';
 import { StorewiseComponent } from './storewise/storewise.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { ProductsComponent } from './products/products.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     LockscreenComponent,
     HeaderComponent,
     StorewiseComponent,
+    ProductsComponent,
   ],
   imports: [
     BrowserModule,

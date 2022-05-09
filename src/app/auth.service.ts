@@ -15,6 +15,9 @@ export class AuthService {
   public accLocked: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     true
   );
+  public isloading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
 
   get isLoggedIn() {
     return this.loggedIn.asObservable();
@@ -105,6 +108,18 @@ export class AuthService {
         todate +
         '&companyId=' +
         compId
+    );
+  }
+
+  getCompanyProducts(companyid: number) {
+    return this.http.get(
+      this.baseurl + 'Product/CompanyProducts?companyid=' + companyid
+    );
+  }
+
+  getCompanySPG(companyid: number) {
+    return this.http.get(
+      this.baseurl + 'SaleProductGroup/GetSaleProducts?companyid=' + companyid
     );
   }
 }

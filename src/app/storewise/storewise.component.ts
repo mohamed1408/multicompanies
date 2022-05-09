@@ -44,6 +44,7 @@ export class StorewiseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.Auth.isloading.next(false);
     setHeightWidth();
     // this.stores = [...Array(50)].map((x) => 0);
     this.getusercompany();
@@ -51,6 +52,7 @@ export class StorewiseComponent implements OnInit {
   }
 
   getusercompany() {
+    this.Auth.isloading.next(true);
     this.Auth.getusercompanies(this.user.userid).subscribe((data: any) => {
       this.companies = data['userCompanies'];
       this.companyid = this.companies[0].CompanyId;
@@ -69,10 +71,12 @@ export class StorewiseComponent implements OnInit {
     this.Auth.GetStores(this.companyid).subscribe((data) => {
       console.log(data);
       this.stores = data;
+      this.Auth.isloading.next(false);
     });
   }
 
   storeRpt() {
+    this.Auth.isloading.next(true);
     this.Auth.GetStorewiseRpt(
       this.startdate,
       this.enddate,
@@ -82,6 +86,7 @@ export class StorewiseComponent implements OnInit {
       this.storereport = data['Order'];
       this.calculate();
       this.paint();
+      this.Auth.isloading.next(false);
     });
   }
 

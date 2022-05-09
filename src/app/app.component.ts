@@ -16,6 +16,7 @@ export class AppComponent {
   isCollapsed: boolean = false;
   isLoggedIn$: Observable<boolean>;
   isLocked$: Observable<boolean>;
+  isLoading$: Observable<boolean>;
 
   constructor(
     private auth: AuthService,
@@ -26,6 +27,8 @@ export class AppComponent {
     console.log(this.router.url);
     this.isLoggedIn$ = this.auth.isLoggedIn;
     this.isLocked$ = this.auth.accLocked;
+    this.isLoading$ = this.auth.isloading;
+
     const ctoken = localStorage.getItem('ctoken') || '';
     const utoken = localStorage.getItem('utoken') || '';
     if (ctoken != '') {
