@@ -23,14 +23,14 @@ export class ProductsComponent implements OnInit {
   }
 
   getcompanyproducts() {
-    this.Auth.getCompanyProducts(this.companyid).subscribe((data: any) => {
-      console.log(data);
-    });
+    // this.Auth.getCompanyProducts(this.companyid).subscribe((data: any) => {
+    //   console.log(data);
+    // });
   }
 
   getcompanyspg() {
-    this.Auth.getCompanyProducts(this.companyid).subscribe((data: any) => {
-      console.log(data);
-    });
+    // this.Auth.getCompanyProducts(this.companyid).subscribe((data: any) => {
+    //   console.log(data);
+    // });
   }
 }

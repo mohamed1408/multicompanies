@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
   baseurl = 'https://biz1pos.azurewebsites.net/api/';
+  baseurl1 = 'https://localhost:44383/api/';
+  ecomurl = 'https://biz1ecom.azurewebsites.net/api/';
 
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
@@ -111,9 +113,13 @@ export class AuthService {
     );
   }
 
-  getCompanyProducts(companyid: number) {
+  getCompanyProducts(companyid: number, storeid: number) {
     return this.http.get(
-      this.baseurl + 'Product/CompanyProducts?companyid=' + companyid
+      this.baseurl +
+        'Product/CompanyProducts?companyid=' +
+        companyid +
+        '&storeid=' +
+        storeid
     );
   }
 
@@ -121,5 +127,19 @@ export class AuthService {
     return this.http.get(
       this.baseurl + 'SaleProductGroup/GetSaleProducts?companyid=' + companyid
     );
+  }
+
+  getAllstores() {
+    return this.http.get(this.ecomurl + 'Ecommerce/getallStores');
+  }
+
+  getCustomerByPhone(phonenum: string) {
+    return this.http.get(
+      this.baseurl + 'Customer/GetCustomerByPhone?Phone=' + phonenum
+    );
+  }
+
+  saveorder(payload: any) {
+    return this.http.post(this.baseurl + 'POSOrder/saveorder_3', payload);
   }
 }

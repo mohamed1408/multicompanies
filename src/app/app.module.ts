@@ -13,6 +13,7 @@ import { HeaderComponent } from './header/header.component';
 import { StorewiseComponent } from './storewise/storewise.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { ProductsComponent } from './products/products.component';
+import { EnquiryordersComponent } from './enquiryorders/enquiryorders.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { ProductsComponent } from './products/products.component';
     HeaderComponent,
     StorewiseComponent,
     ProductsComponent,
+    EnquiryordersComponent,
   ],
   imports: [
     BrowserModule,

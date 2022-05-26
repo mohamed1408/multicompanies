@@ -1,0 +1,332 @@
+<div class="hk-pg-wrapper">
+    <nav class="hk-breadcrumb" aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-light bg-transparent">
+            <li class="breadcrumb-item active" aria-current="page">Enquiry Orders</li>
+        </ol>
+    </nav>
+    <div *ngIf="mode == 'list'" class="col-xl-12">
+        <section class="hk-sec-wrapper">
+            <div class="form-group col-sm-3">
+                <label>Stores</label>
+                <select class="form-control custom-select" [(ngModel)]="storeid" aria-placeholder="Select Store">
+                    <option *ngFor="let store of stores" value={{store.Id}}>
+                        []{{store.Name}}
+                    </option>
+                </select>
+            </div>
+        </section>
+        StoreId: {{storeid}}
+    </div>
+    <div *ngIf="mode == 'edit'" class="col-xl-12">
+        <section class="hk-sec-wrapper px-15" style="transition: all 0.3s ease-in-out;"
+            [ngStyle]="{'height': sections.customer.collapse ? '100px' : '150px'}">
+            <div *ngIf="sections.customer.collapse" class="col-xl-12 row" style="position: relative;">
+                <button style="position: absolute; top: 0; right: 0; z-index: 1000000;" class="btn btn-link"
+                    (click)="sections.customer.collapse = false">✏️</button>
+                <div class="col-xl-3">📞&nbsp;{{customer.PhoneNo}}</div>
+                <div class="col-xl-3">👨🏻&nbsp;{{customer.Name}}</div>
+                <div class="col-xl-3">📘&nbsp;{{customer.Address}}</div>
+                <div class="col-xl-3">🎂&nbsp;{{store?.Name}}<strong>[{{store?.C_Name}}]</strong> </div>
+            </div>
+            <div *ngIf="!sections.customer.collapse" class="col-xl-12 row" style="position: relative;">
+                <button style="position: absolute; top: 0; right: 0; z-index: 1000000;" class="btn btn-link"
+                    (click)="sections.customer.collapse = true">❌</button>
+                <div class="col-xl-3" style="position: relative;">
+                    <label>Phone</label>
+                    <input type="text" class="form-control" (keyup.enter)="getcustomerbyphonenum()"
+                        [class.is-invalid]="form_validation.phoneno" [(ngModel)]="customer.PhoneNo"
+                        (input)="validation()" />
+                    <span *ngIf="form_validation.phoneno" class="text-danger font-11">Phone Num. is Mandatory</span>
+                </div>
+                <div class="col-xl-3">
+                    <label>Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="customer.Name" />
+                </div>
+                <div class="col-xl-3">
+                    <label>Address</label>
+                    <textarea type="text" class="form-control" [(ngModel)]="customer.Address"></textarea>
+                </div>
+                <div class="form-group col-xl-3">
+                    <label>Stores <strong *ngIf="store">[{{store?.C_Name}}]</strong></label>
+                    <ng-template #rt let-r="result" let-t="term">
+                        <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+                    </ng-template>
+                    <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
+                        [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
+                        (selectItem)="selected($event.item)" />
+                </div>
+            </div>
+        </section>
+        <section *ngIf="products.length > 0" class="hk-sec-wrapper px-15" style="position: relative;">
+            <div *ngIf="loading"
+                style="position: absolute;background: rgb(255 255 255 / 39%);height: 100%;width: 100%;top: 0;z-index: 100000;">
+            </div>
+            <div class="col-xl-12 row">
+                <div class="col-xl-3">
+                    <div class="row px-15">
+                        <input name="OrderTypeId" style="align-self: center;" [(ngModel)]="order.OrderTypeId"
+                            [value]="3" type="radio">
+                        <button class="btn btn-sm" (click)="order.OrderTypeId = 3;">
+                            Delivery
+                        </button>
+                        <input name="OrderTypeId" style="align-self: center;" [(ngModel)]="order.OrderTypeId"
+                            [value]="4" type="radio">
+                        <button class="btn btn-sm" (click)="order.OrderTypeId = 4;">
+                            Pick Up
+                        </button>
+                    </div>
+                    <hr>
+                    <div>
+                        Delivery Date & Time
+                        <!-- <div class="form-group"> -->
+                        <!-- <label for="date">DELIVERY DATE</label> -->
+                        <input type="date" class="form-control form-control-sm" [(ngModel)]="order.DeliveryDate"
+                            [class.is-invalid]="form_validation.deliverydate" (input)="validation()" />
+                        <span *ngIf="form_validation.deliverydate" class="text-danger font-11">Select a
+                            Date</span>
+
+                        <br>
+                        <!-- </div>
+                        <div class="form-group"> -->
+                        <!-- <label for="date">DELIVERY TIME</label> -->
+                        <input type="time" class="form-control form-control-sm" [(ngModel)]="order.DeliveryTime"
+                            [class.is-invalid]="form_validation.deliverytime" (input)="validation()">
+                        <span *ngIf="form_validation.deliverytime" class="text-danger font-11">Select a
+                            Time</span>
+
+                        <!-- </div> -->
+                    </div>
+                    <hr>
+                    <!-- <NOTE> -->
+                    <label *ngIf="cart_settings.message_or_note == 'NOTE'" for="note">Booking Note</label>
+                    <button *ngIf="cart_settings.message_or_note == 'NOTE'" class="btn btn-link btn-sm"
+                        (click)="cart_settings.message_or_note = 'MESSAGE'">Message for Store
+                        >></button>
+                    <textarea *ngIf="cart_settings.message_or_note == 'NOTE'" name="note" [(ngModel)]="order.Note"
+                        class="form-control" cols="30" rows="3"></textarea>
+                    <!-- </NOTE> -->
+
+                    <!-- <MESSAGE> -->
+                    <label *ngIf="cart_settings.message_or_note == 'MESSAGE'" for="message">Message for Store</label>
+                    <button *ngIf="cart_settings.message_or_note == 'MESSAGE'" class="btn btn-link btn-sm"
+                        (click)="cart_settings.message_or_note = 'NOTE'">Order Message
+                        >></button>
+                    <textarea *ngIf="cart_settings.message_or_note == 'MESSAGE'" name="message"
+                        [(ngModel)]="order.Message" class="form-control" cols="30" rows="3"></textarea>
+                    <!-- </MESSAGE> -->
+                </div>
+                <div class="col-xl-6 row px-15" style="align-content: flex-start;">
+                    <!-- <autocomplet> -->
+                    <div class="col-xl-9">
+                        <ng-template #pd let-r="result" let-t="term">
+                            <ngb-highlight [result]="r.Product" [term]="t"></ngb-highlight>
+                        </ng-template>
+                        <input #autocompleteel id="autocompleteel" type="text" class="form-control col"
+                            [(ngModel)]="pdsearchTerm" [ngbTypeahead]="prodsearch" [resultTemplate]="pd"
+                            [inputFormatter]="pformatter" (selectItem)="selectItem($event.item, quantityel)"
+                            onfocus="this.select()" />
+                    </div>
+                    <div class="col-xl-3">
+                        <input #quantityel type="number" class="form-control" [(ngModel)]="quantity"
+                            (keyup.enter)="quantity && quantity>0 && addItem()">
+                    </div>
+                    <!-- </autocomplet> -->
+                    <!-- <item list> -->
+                    <div class="col-xl-12 mb-20"></div>
+                    <div class="col-xl-12 row px-30" *ngFor="let item of order.Items; let i = index;"
+                        [hidden]="(item.Quantity + item.ComplementryQty) == 0">
+                        <!-- <div> -->
+                        <div class="col-xl-1">
+                            <button class="btn btn-link p-0" (click)="editItem(item)">[#{{i+1}}]</button>
+                        </div>
+                        <div class="col-xl-5">
+                            {{item.showname}}
+                        </div>
+                        <div class="col-xl-2 text-right">x&nbsp;{{item.Quantity}}</div>
+                        <div class="col-xl-3 text-right">₹&nbsp;{{item.TotalAmount | number: '.2'}}</div>
+                        <div class="col-xl-1">
+                            <button class="btn btn-link p-0 text-danger"
+                                (click)="item.Quantity = 0; item.ComplementryQty = 0; order.setbillamount()">✕</button>
+                        </div>
+                        <!-- </div> -->
+                    </div>
+                    <!-- </item list> -->
+                </div>
+                <div class="col-xl-3">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td><button class="btn btn-link p-0" (click)="openbdmodal()">Bulk Discount</button></td>
+                            </tr>
+                            <tr>
+                                <th>Discount</th>
+                                <td class="text-right">-₹&nbsp;{{order.OrderTotDisc + order.AllItemTotalDisc | number:
+                                    "0.2"}}</td>
+                            </tr>
+                            <tr>
+                                <th>Tax</th>
+                                <td class="text-right">₹&nbsp;{{order.Tax1 + order.Tax2 + order.Tax3 | number: "0.2"}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Subtotal</th>
+                                <td class="text-right">₹&nbsp;{{order.subtotal | number: "0.2"}}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <strong>Total</strong>
+                                </th>
+                                <td class="text-right"><strong>₹&nbsp;{{order.BillAmount | number: '.2'}}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <strong>Tax:</strong>{{order.Tax1 + order.Tax2 + order.Tax3}} <br>
+                    <strong>Subtotal:</strong>{{order.subtotal}} <br>
+                    <strong>Total</strong>{{order.BillAmount}} -->
+                </div>
+            </div>
+        </section>
+    </div>
+    <button *ngIf="store" [disabled]="loading || !order" style="position: fixed; bottom: 20px; right: 20px;"
+        class="btn btn-success btn-wth-icon btn-rounded icon-right btn-sm">
+        <span class="btn-text" (click)="saveOrder()">Save Order</span>
+        <span class="icon-label">
+            <i *ngIf="!loading" class="fa fa-save"></i>
+            <i *ngIf="loading" class="fa fa-circle-notch fa-spin"></i>
+        </span>
+    </button>
+</div>
+
+<!-- Modal Option Group -->
+<ng-template #options_details let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">{{selected_product?.Product}}</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" style="height: 70vh ; overflow: auto; ">
+        <!-- {{selected_product?.OptionGroup | json}} -->
+        <div class="col-xl-12 row">
+            <div class="col-xl-6">
+                <div *ngFor="let vg of selected_product?.OptionGroup">
+                    <div *ngIf="vg.OptionGroupType == 1">
+                        <button *ngIf="vg.collapsed" class="btn btn-sm pl-0" (click)="vg.collapsed = !vg.collapsed"
+                            [innerHTML]="plusIcon"></button>
+                        <button *ngIf="!vg.collapsed" class="btn btn-sm pl-0" (click)="vg.collapsed = !vg.collapsed"
+                            [innerHTML]="minusIcon"></button>
+                        <strong>{{vg.Name}}</strong>
+                        <div *ngIf="!vg.collapsed">
+                            <div *ngFor="let variant of vg.Option">
+                                <input name="{{vg.Name}}" [(ngModel)]="vg.selected" [value]="variant.Id"
+                                    (change)="variantAl(vg.Id, variant.Id)" type="radio">&nbsp;
+                                <button class="btn btn-sm"
+                                    (click)="vg.selected = variant.Id; variantAl(vg.Id, variant.Id);">
+                                    {{variant.Name}}
+                                    <br><span class="float-left font-11" style="font-style: italic;">₹
+                                        {{variant.Price}}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div *ngFor="let ag of selected_product?.OptionGroup">
+                    <div *ngIf="ag.OptionGroupType == 2">
+                        <button *ngIf="ag.collapsed" class="btn btn-sm pl-0" (click)="ag.collapsed = !ag.collapsed"
+                            [innerHTML]="plusIcon"></button>
+                        <button *ngIf="!ag.collapsed" class="btn btn-sm pl-0" (click)="ag.collapsed = !ag.collapsed"
+                            [innerHTML]="minusIcon"></button>
+                        <strong>{{ag.Name}}</strong>
+                        <div *ngIf="!ag.collapsed">
+                            <div *ngFor="let addon of ag.Option">
+                                <input name="{{addon.Name}}" [(ngModel)]="addon.selected" [checked]="addon.selected"
+                                    (change)="addonAl()" type="checkbox">&nbsp;
+                                <button class="btn btn-sm" (click)="addon.selected = !addon.selected; addonAl();">
+                                    {{addon.Name}}
+                                    <br><span class="float-left font-11" style="font-style: italic;">₹
+                                        {{addon.Price}}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12 row">
+            <div class="col-xl-6 form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" class="form-control" (input)="setcurrentitemprice()"
+                    [(ngModel)]="selected_product!.Quantity">
+            </div>
+            <div class="col-xl-6">
+                <label for="quantity">Free Quantity</label>
+                <input type="number" class="form-control" [(ngModel)]="selected_product!.ComplementryQty">
+            </div>
+            <!-- DiscPercent -->
+            <div class="col-xl-12 form-group">
+                <label for="Discount">
+                    {{selected_product!.DiscType == 1 ? 'Cash' : 'Percentage'}} Discount
+                </label>
+                <button *ngIf="selected_product!.DiscType == 1" class="btn btn-link"
+                    (click)="selected_product!.DiscType = 2;selected_product!.DiscAmount=0">Percentage</button>
+                <button *ngIf="selected_product!.DiscType == 2" class="btn btn-link"
+                    (click)="selected_product!.DiscType = 1;selected_product!.DiscPercent=0">Cash</button>
+                <input *ngIf="selected_product!.DiscType == 1" type="number" class="form-control" name="Discount"
+                    [(ngModel)]="selected_product!.DiscAmount">
+                <input *ngIf="selected_product!.DiscType == 2" type="number" class="form-control" name="Discount"
+                    [(ngModel)]="selected_product!.DiscPercent">
+            </div>
+            <div class="col-xl-6">
+                <label for="extra">Extra</label>
+                <input type="number" onfocus="this.select()" class="form-control" [(ngModel)]="selected_product!.Extra">
+            </div>
+            <div class="col-xl-6">
+                <button *ngIf="selected_product!.Note == null" class="btn btn-link"
+                    (click)="selected_product!.Note = ''">+ Notes</button>
+                <label *ngIf="selected_product!.Note != null" for="extra">Extra</label>
+                <textarea *ngIf="selected_product!.Note != null" name="Note" class="form-control"
+                    [(ngModel)]="selected_product!.Note" cols="30" rows="5"></textarea>
+                <!-- <input type="number" onfocus="this.select()" class="form-control" [(ngModel)]="selected_product!.Extra"> -->
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-light" (click)="modal.close('Save click')">Cancel</button> -->
+        <div class="mr-auto">
+            <h5 class="float-left"> Price : </h5>
+            <h5 class="float-right ml-1"><b> {{selected_product?.TotalAmount}} </b></h5>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="addItem()">Save Changes</button>
+    </div>
+</ng-template>
+
+<ng-template #bulk_discount let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Bulk Discount</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="Discount">
+                {{order!.DiscType == 1 ? 'Cash' : 'Percentage'}} Discount
+            </label>
+            <button *ngIf="order!.DiscType == 1" class="btn btn-link"
+                (click)="order!.DiscType = 2; order!.DiscAmount = 0;">Percentage</button>
+            <button *ngIf="order!.DiscType == 2" class="btn btn-link"
+                (click)="order!.DiscType = 1; order!.DiscPercent = 0">Cash</button>
+            <input *ngIf="order!.DiscType == 1" type="number" class="form-control" name="Discount"
+                [(ngModel)]="order!.DiscAmount">
+            <input *ngIf="order!.DiscType == 2" type="number" class="form-control" name="Discount"
+                [(ngModel)]="order!.DiscPercent">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="order.setbillamount();modal.close('Save click')">Save
+            Changes</button>
+    </div>
+</ng-template>
