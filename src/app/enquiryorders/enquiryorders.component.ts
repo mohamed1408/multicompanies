@@ -346,6 +346,10 @@ export class EnquiryordersComponent implements OnInit {
     };
     this.order = new OrderModule(3);
     this.customer = new CustomerModule();
+    this.order.StoreId = this.store.Id;
+    this.order.DeliveryStoreId = this.store.Id;
+    this.order.store = this.store;
+    this.order.CompanyId = this.store.CompanyId;
   }
   setcurrentitemprice() {
     var singleqtyoptionprice = 0;

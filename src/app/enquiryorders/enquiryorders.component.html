@@ -23,7 +23,7 @@
             <div *ngIf="sections.customer.collapse" class="col-xl-12 row" style="position: relative;">
                 <button style="position: absolute; top: 0; right: 0; z-index: 1000000;" class="btn btn-link"
                     (click)="sections.customer.collapse = false">✏️</button>
-                <div class="col-xl-3">📞&nbsp;{{customer.PhoneNo}}</div>
+                <div class="col-xl-3">📞&nbsp;{{customer.PhoneNo}}[{{customer.Id}}]</div>
                 <div class="col-xl-3">👨🏻&nbsp;{{customer.Name}}</div>
                 <div class="col-xl-3">📘&nbsp;{{customer.Address}}</div>
                 <div class="col-xl-3">🎂&nbsp;{{store?.Name}}<strong>[{{store?.C_Name}}]</strong> </div>
