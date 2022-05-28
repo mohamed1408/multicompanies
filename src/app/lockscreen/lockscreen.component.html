@@ -33,7 +33,7 @@
                                     <input class="form-control filled-input bg-white" [(ngModel)]="pin"
                                         placeholder="PIN" type="password" (keyup.enter)="unlock()">
                                     <div class="input-group-append">
-                                        <span class="input-group-text"><span class="feather-icon"><i
+                                        <span class="input-group-text"><span (click)="unlock()" class="feather-icon"><i
                                                     data-feather="arrow-right"></i></span></span>
                                     </div>
                                     <span class="errMsg">{{errorMsg}}</span>
