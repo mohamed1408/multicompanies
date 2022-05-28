@@ -38,4 +38,12 @@ export class LockscreenComponent implements OnInit {
       }
     });
   }
+  
+  logout() {
+    localStorage.removeItem('ctoken');
+    localStorage.removeItem('utoken');
+    this.auth.accLocked.next(true);
+    this.auth.loggedIn.next(false);
+    // this.modalService.dismissAll();
+  }
 }
