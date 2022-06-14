@@ -14,6 +14,7 @@ import {
   OrderItemModule,
   OrderModule,
 } from './order.module';
+import { SignalrService } from '../services/signalr/signalr.service';
 
 declare function setHeightWidth(): any;
 declare const feather: any, $: any;
@@ -29,15 +30,20 @@ export class EnquiryordersComponent implements OnInit {
   @ViewChild('bulk_discount', { static: false }) public bulk_discount:
     | TemplateRef<any>
     | any;
+  @ViewChild('order_details', { static: false }) public order_details:
+    | TemplateRef<any>
+    | any;
 
   stores: any = [];
   store: any;
   storeid: number = 0;
-  mode: string = 'edit';
+  mode: string = 'list';
   searchTerm: string = '';
   pdsearchTerm: string = '';
   products: any = [];
   order: OrderModule;
+  temp_order: any;
+  orders: any = []
   customer: CustomerModule;
   sections = {
     customer: {
@@ -63,10 +69,19 @@ export class EnquiryordersComponent implements OnInit {
   phone_num_reg: RegExp =
     /((\+*)((0[ -]*)*|((91 )*))((\d{12})+|(\d{10})+))|\d{5}([- ]*)\d{6}/;
 
+  status = [
+    [-1, "Cancelled", "text-danger"],
+    [0, "Not Accepted", "text-secondary"],
+    [1, "Accepted", "text-success"],
+    [3, "Preparing", "text-warning"],
+    [4, "Prepared", "text-Success"],
+  ]
+
   constructor(
     private Auth: AuthService,
     private modalService: NgbModal,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private signalR: SignalrService
   ) {
     this.getAllStores();
     this.order = new OrderModule(3);
@@ -81,15 +96,36 @@ export class EnquiryordersComponent implements OnInit {
     this.customer = new CustomerModule();
     console.log(this.plusIcon);
     this.phone_num_reg;
+    this.signalR.hubconnection.on('DeliveryOrderUpdate', (fromstoreid, tostoreid, invoiceno) => {
+      if (invoiceno.includes("ENQ")) {
+        console.log('DeliveryOrderUpdate', fromstoreid, tostoreid, invoiceno)
+        const orderid = +invoiceno.split(' | ')[1]
+        this.getSingleOrder(orderid)
+      }
+    })
   }
 
+  getENQOrders() {
+    console.log("fetching enquiry orders")
+    this.Auth.getENQOrders().subscribe((data: any) => {
+      console.log(data)
+      this.orders = data["orders"]
+      this.orders = this.orders.map((x: any) => {
+        let json = JSON.parse(x.OrderJson)
+        let status = this.status.filter(x => x[0] == json.OrderStatusId)[0]
+        console.log(status)
+        json.status = status[1]
+        json.status_calss = status[2]
+        return json
+      })
+    })
+  }
   getAllStores() {
     this.Auth.getAllstores().subscribe((data: any) => {
       this.stores = data;
       // this.Stores.unshift()
     });
   }
-
   getcompanyproducts() {
     // this.page_loading = true
     this.Auth.isloading.next(true);
@@ -110,17 +146,14 @@ export class EnquiryordersComponent implements OnInit {
       }
     );
   }
-
   ngOnInit(): void {
+    this.getENQOrders()
     setHeightWidth();
     this.feather = feather;
     console.log(this.feather);
   }
-
   formatter = (result: any) => result.Name;
-
   pformatter = (result: any) => result.Product;
-
   search: OperatorFunction<string, readonly string[]> = (
     text$: Observable<string>
   ) =>
@@ -131,14 +164,13 @@ export class EnquiryordersComponent implements OnInit {
         term.length < 1
           ? []
           : this.stores
-              .filter(
-                (v: any) =>
-                  v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10)
+            .filter(
+              (v: any) =>
+                v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+            )
+            .slice(0, 10)
       )
     );
-
   prodsearch: OperatorFunction<string, readonly string[]> = (
     text$: Observable<string>
   ) =>
@@ -149,14 +181,13 @@ export class EnquiryordersComponent implements OnInit {
         term.length < 1
           ? []
           : this.products
-              .filter(
-                (v: any) =>
-                  v.Product.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10)
+            .filter(
+              (v: any) =>
+                v.Product.toLowerCase().indexOf(term.toLowerCase()) > -1
+            )
+            .slice(0, 10)
       )
     );
-
   selected(e: any) {
     this.store = e;
     this.order = new OrderModule(3);
@@ -166,7 +197,6 @@ export class EnquiryordersComponent implements OnInit {
     this.order.CompanyId = this.store.CompanyId;
     this.getcompanyproducts();
   }
-
   selectItem(e: any, quantityel: any) {
     this.selected_product = new CurrentItemModule(e);
     this.quantity = null;
@@ -176,7 +206,6 @@ export class EnquiryordersComponent implements OnInit {
     }
     quantityel.focus();
   }
-
   addItem() {
     console.log(this.quantity, this.selected_product?.Quantity);
     this.order.additem(this.selected_product, {
@@ -188,18 +217,15 @@ export class EnquiryordersComponent implements OnInit {
     $('#autocompleteel').focus();
     this.modalService.dismissAll();
   }
-
   editItem(item: OrderItemModule) {
     this.selected_product = new CurrentItemModule(
       JSON.parse(JSON.stringify(item))
     );
     this.modalService.open(this.options_details, { centered: true });
   }
-
   openbdmodal() {
     this.modalService.open(this.bulk_discount, { centered: true });
   }
-
   getcustomerbyphonenum() {
     this.Auth.getCustomerByPhone(this.customer.PhoneNo).subscribe(
       (data: any) => {
@@ -346,10 +372,15 @@ export class EnquiryordersComponent implements OnInit {
     };
     this.order = new OrderModule(3);
     this.customer = new CustomerModule();
-    this.order.StoreId = this.store.Id;
-    this.order.DeliveryStoreId = this.store.Id;
-    this.order.store = this.store;
-    this.order.CompanyId = this.store.CompanyId;
+    this.store = null
+    this.products = []
+    this.searchTerm = ""
+    // this.order.StoreId = this.store.Id;
+    // this.order.DeliveryStoreId = this.store.Id;
+    // this.order.store = this.store;
+    // this.order.CompanyId = this.store.CompanyId;
+    this.mode = "list"
+    this.getENQOrders()
   }
   setcurrentitemprice() {
     var singleqtyoptionprice = 0;
@@ -383,7 +414,6 @@ export class EnquiryordersComponent implements OnInit {
     }
     console.log(this.selected_product?.TotalAmount);
   }
-
   variantAl(vgId: number, varId: number) {
     this.selected_product?.OptionGroup.filter(
       (x) => x.OptionGroupType == 1
@@ -402,7 +432,6 @@ export class EnquiryordersComponent implements OnInit {
     });
     this.setcurrentitemprice();
   }
-
   addonAl() {
     this.selected_product?.OptionGroup.filter(
       (x) => x.OptionGroupType == 2
@@ -411,6 +440,26 @@ export class EnquiryordersComponent implements OnInit {
       else ag.selected = false;
     });
     this.setcurrentitemprice();
+  }
+  getSingleOrder(orderid: number) {
+    this.Auth.getENQOrders(orderid).subscribe((data: any) => {
+      console.log(data)
+      const index = this.orders.findIndex((x: any) => x.InvoiceNo == "ENQ | " + orderid)
+      let json = JSON.parse(data["orders"][0]["OrderJson"])
+      let status = this.status.filter(x => x[0] == json.OrderStatusId)[0]
+      console.log(status)
+      json.status = status[1]
+      json.status_calss = status[2]
+      if (index > -1) {
+        this.orders[index] = json
+      } else {
+        this.orders.push(json)
+      }
+    })
+  }
+  viewOrder(order: any) {
+    this.temp_order = order
+    this.modalService.open(this.order_details, { size: 'lg' })
   }
 }
 

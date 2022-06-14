@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { SignalrService } from './services/signalr/signalr.service';
 
 declare function setHeightWidth(): any;
 
@@ -21,7 +22,8 @@ export class AppComponent {
   constructor(
     private auth: AuthService,
     public router: Router,
-    private jwtHelper: JwtHelperService
+    private jwtHelper: JwtHelperService,
+    private signalR: SignalrService
   ) {
     setHeightWidth();
     console.log(this.router.url);
@@ -60,5 +62,6 @@ export class AppComponent {
         // }
       }
     });
+    this.signalR.connect()
   }
 }

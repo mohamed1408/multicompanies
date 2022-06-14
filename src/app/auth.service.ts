@@ -25,7 +25,7 @@ export class AuthService {
     return this.loggedIn.asObservable();
   }
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) { }
 
   toFormData(formValue: any) {
     const formData = new FormData();
@@ -74,7 +74,7 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Dashboard/Dashboards?fromdate=${fromdate}&todate=${todate}&storeid=${storeid}&userid=${userid}&companyid=${companyid}`
+      `Dashboard/Dashboards?fromdate=${fromdate}&todate=${todate}&storeid=${storeid}&userid=${userid}&companyid=${companyid}`
     );
   }
 
@@ -97,29 +97,29 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Dashboard/Post?fromDate=${fromdate}&toDate=${totdate}&compId=${companyid}&storeId=${storeid}`
+      `Dashboard/Post?fromDate=${fromdate}&toDate=${totdate}&compId=${companyid}&storeId=${storeid}`
     );
   }
 
   GetStorewiseRpt(frmdate: string, todate: string, compId: number) {
     return this.http.get(
       this.baseurl +
-        'StoreRpt/GetStoreRpt?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&companyId=' +
-        compId
+      'StoreRpt/GetStoreRpt?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&companyId=' +
+      compId
     );
   }
 
   getCompanyProducts(companyid: number, storeid: number) {
     return this.http.get(
       this.baseurl +
-        'Product/CompanyProducts?companyid=' +
-        companyid +
-        '&storeid=' +
-        storeid
+      'Product/CompanyProducts?companyid=' +
+      companyid +
+      '&storeid=' +
+      storeid
     );
   }
 
@@ -141,5 +141,9 @@ export class AuthService {
 
   saveorder(payload: any) {
     return this.http.post(this.baseurl + 'POSOrder/saveorder_3', payload);
+  }
+
+  getENQOrders(orderid?: number) {
+    return this.http.get(this.baseurl + 'POSOrder/enquiryOrders?orderid=' + orderid);
   }
 }

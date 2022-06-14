@@ -6,16 +6,61 @@
     </nav>
     <div *ngIf="mode == 'list'" class="col-xl-12">
         <section class="hk-sec-wrapper">
-            <div class="form-group col-sm-3">
-                <label>Stores</label>
-                <select class="form-control custom-select" [(ngModel)]="storeid" aria-placeholder="Select Store">
-                    <option *ngFor="let store of stores" value={{store.Id}}>
-                        []{{store.Name}}
-                    </option>
-                </select>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="table-wrap mb-30">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice</th>
+                                        <th>Customer</th>
+                                        <th>Amount</th>
+                                        <th>Ordered</th>
+                                        <th>Delivery</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let order of orders">
+                                        <td>
+                                            <button class="btn btn-link" (click)="viewOrder(order)">#{{order.InvoiceNo}}</button>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-user mr-3"></i>{{order.CustomerDetails?.Name || '-'}} <br>
+                                            <i class="fa fa-phone mr-3"></i>{{order.CustomerDetails?.PhoneNo || '-'}}
+                                        </td>
+                                        <td>
+                                            {{order.PaidAmount}}/{{order.BillAmount}}
+                                        </td>
+                                        <td>
+                                            <span class="text-muted">
+                                                <i class="icon-clock font-13"></i> {{order.OrderedDateTime | date: "MMM
+                                                d, y, h:mm a"}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-muted">
+                                                <i class="icon-clock font-13"></i> {{order.DeliveryDateTime | date: "MMM
+                                                d, y, h:mm a"}}</span>
+                                        </td>
+                                        <td class="{{order.status_calss}}">{{order.status}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
-        StoreId: {{storeid}}
+        <button style="position: fixed; bottom: 20px; right: 20px;"
+            class="btn btn-success btn-wth-icon btn-rounded icon-right btn-sm">
+            <span class="btn-text" (click)="mode = 'edit'">New Order</span>
+            <span class="icon-label">
+                <i class="fa fa-plus"></i>
+                <!-- <i *ngIf="loading" class="fa fa-circle-notch fa-spin"></i> -->
+            </span>
+        </button>
+
     </div>
     <div *ngIf="mode == 'edit'" class="col-xl-12">
         <section class="hk-sec-wrapper px-15" style="transition: all 0.3s ease-in-out;"
@@ -187,15 +232,23 @@
                 </div>
             </div>
         </section>
+        <button *ngIf="order" [disabled]="!order" style="position: fixed; bottom: 20px; left: 50px;"
+            class="btn btn-danger btn-wth-icon btn-rounded icon-right btn-sm">
+            <span class="btn-text" (click)="clearOrder()">Clear Order</span>
+            <span class="icon-label">
+                <i class="fa fa-times"></i>
+                <!-- <i *ngIf="loading" class="fa fa-circle-notch fa-spin"></i> -->
+            </span>
+        </button>
+        <button *ngIf="store" [disabled]="loading || !order" style="position: fixed; bottom: 20px; right: 20px;"
+            class="btn btn-success btn-wth-icon btn-rounded icon-right btn-sm">
+            <span class="btn-text" (click)="saveOrder()">Save Order</span>
+            <span class="icon-label">
+                <i *ngIf="!loading" class="fa fa-save"></i>
+                <i *ngIf="loading" class="fa fa-circle-notch fa-spin"></i>
+            </span>
+        </button>
     </div>
-    <button *ngIf="store" [disabled]="loading || !order" style="position: fixed; bottom: 20px; right: 20px;"
-        class="btn btn-success btn-wth-icon btn-rounded icon-right btn-sm">
-        <span class="btn-text" (click)="saveOrder()">Save Order</span>
-        <span class="icon-label">
-            <i *ngIf="!loading" class="fa fa-save"></i>
-            <i *ngIf="loading" class="fa fa-circle-notch fa-spin"></i>
-        </span>
-    </button>
 </div>
 
 <!-- Modal Option Group -->
@@ -329,4 +382,61 @@
         <button type="button" class="btn btn-primary" (click)="order.setbillamount();modal.close('Save click')">Save
             Changes</button>
     </div>
+</ng-template>
+
+<ng-template #order_details let-modal>
+    <div class="modal-header" *ngIf="temp_order">
+        <h5 class="modal-title">{{temp_order.InvoiceNo}}</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="col-xl-12 row">
+            <div class="col-xl-6">
+                <h6>Customer:</h6>
+                <p *ngIf="temp_order.CustomerDetails?.Name">{{temp_order.CustomerDetails?.Name}},<br></p>
+                <p *ngIf="temp_order.CustomerDetails?.Address">{{temp_order.CustomerDetails?.Address}},<br></p>
+                <p *ngIf="temp_order.CustomerDetails?.City">{{temp_order.CustomerDetails?.City}},<br></p>
+                <i class="fa fa-phone mr-3"></i>{{temp_order.CustomerDetails?.PhoneNo}}
+            </div>
+            <div class="col-xl-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Amt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of temp_order.Items">
+                            <td>{{item.showname}}</td>
+                            <td>{{item.Quantity}} <span *ngIf="item.ComplementryQty > 0">({{item.ComplementryQty}})</span></td>
+                            <td>{{item.TotalAmount}}</td>
+                        </tr>
+                        <tr *ngIf="(temp_order.Tax1 + temp_order.Tax2 + temp_order.Tax3) > 0">
+                            <td></td>
+                            <td><strong>Taxes</strong></td>
+                            <td>{{temp_order.Tax1 + temp_order.Tax2 + temp_order.Tax3}}</td>
+                        </tr>
+                        <tr *ngIf="(temp_order.AllItemDisc + temp_order.OrderTotDisc) > 0">
+                            <td></td>
+                            <td><strong>Disc</strong></td>
+                            <td>{{temp_order.AllItemDisc + temp_order.OrderTotDisc}}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><strong>Total</strong></td>
+                            <td>{{temp_order.BillAmount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="order.setbillamount();modal.close('Save click')">Save
+            Changes</button>
+    </div> -->
 </ng-template>
