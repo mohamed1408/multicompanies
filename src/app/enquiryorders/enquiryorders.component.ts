@@ -115,7 +115,7 @@ export class EnquiryordersComponent implements OnInit {
         let status = this.status.filter(x => x[0] == json.OrderStatusId)[0]
         console.log(status)
         json.status = status[1]
-        json.status_calss = status[2]
+        json.status_class = status[2]
         return json
       })
     })
@@ -444,22 +444,29 @@ export class EnquiryordersComponent implements OnInit {
   getSingleOrder(orderid: number) {
     this.Auth.getENQOrders(orderid).subscribe((data: any) => {
       console.log(data)
-      const index = this.orders.findIndex((x: any) => x.InvoiceNo == "ENQ | " + orderid)
+      let orders = this.orders
+      const index = orders.findIndex((x: any) => x.InvoiceNo == "ENQ | " + orderid)
       let json = JSON.parse(data["orders"][0]["OrderJson"])
       let status = this.status.filter(x => x[0] == json.OrderStatusId)[0]
       console.log(status)
       json.status = status[1]
-      json.status_calss = status[2]
+      json.status_class = status[2]
+      console.log("updating")
       if (index > -1) {
-        this.orders[index] = json
+        orders[index] = json
       } else {
-        this.orders.push(json)
+        orders.push(json)
       }
+      this.orders = orders
+      console.log("updated", this.orders[index])
     })
   }
   viewOrder(order: any) {
     this.temp_order = order
     this.modalService.open(this.order_details, { size: 'lg' })
+  }
+  change(){
+    this.orders[0].status = "lkjadhlklksdh"
   }
 }
 
