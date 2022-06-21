@@ -1,0 +1,710 @@
+<div class="hk-pg-wrapper">
+  <div class="container">
+    <div class="hk-pg-header">
+      <h4 class="hk-pg-title">SaleProductGroupwise Report</h4>
+    </div>
+    <br />
+    <div class="col-sm-14">
+      <div class="col-xl-12 pl-0 pr-0">
+        <section class="hk-sec-wrapper">
+          <div class="form-group d-flex">
+            <div style="margin-left: 10px">
+              <label for="username">Location</label>
+              <ng-autocomplete
+                [data]="stores"
+                style="width: 10em; margin-left: 30px; border-color: #c5d4d6"
+                [formControl]="myControl"
+                [searchKeyword]="key"
+                (selected)="selectEvent($event)"
+                placeHolder="Choose Location"
+                [itemTemplate]="itemTemplate1"
+                [notFoundTemplate]="notFoundTemplate1"
+                [(ngModel)]="all"
+              ></ng-autocomplete>
+              <ng-template #itemTemplate1 let-item>
+                <a [innerHTML]="item.Name"></a>
+              </ng-template>
+
+              <ng-template #notFoundTemplate1 let-notFound>
+                <div [innerHTML]="notFound"></div>
+              </ng-template>
+            </div>
+            <div style="margin-left: 10px">
+              <label for="username">Date</label>
+
+              <input
+                type="text"
+                class="form-group"
+                style="width: 15em; margin-left: 5px"
+                ngxDaterangepickerMd
+                [(ngModel)]="selected"
+                [locale]="{ applyLabel: 'ok', format: 'DD/MM/YYYY' }"
+                [showCustomRangeLabel]="true"
+                [alwaysShowCalendars]="true"
+                [ranges]="ranges"
+                [linkedCalendars]="true"
+                [showClearButton]="true"
+                (change)="date($event)"
+                placeholder="Select Date..."
+                class="form-control"
+              />
+            </div>
+            <div hidden style="margin-left: 50px">
+              <label for="username">Date</label>
+
+              <input
+                type="text"
+                class="form-group"
+                style="width: 15em; margin-left: 5px"
+                ngxDaterangepickerMd
+                [(ngModel)]="selected"
+                [locale]="{ applyLabel: 'ok', format: 'DD/MM/YYYY' }"
+                [showCustomRangeLabel]="true"
+                [alwaysShowCalendars]="true"
+                [ranges]="ranges"
+                [linkedCalendars]="true"
+                [showClearButton]="true"
+                (change)="date($event)"
+                placeholder="Select Date..."
+                class="form-control"
+              />
+            </div>
+            <!-- <div class="form-group" style="width: 10em;margin-left:10px  ">
+                <label for="username">Category</label>
+                <select class="form-control custom-select" [(ngModel)]="CategoryId">
+                  <option value="0" selected>All</option>
+                  <option value="{{item.Id}}" *ngFor="let item of categ">{{item.Description}}</option>
+                </select>
+                <div class="invalid-feedback">
+                  <div>Select Category</div>
+                </div>
+              </div> -->
+
+            <div class="form-group" style="width: 10em; margin-left: 20px">
+              <label for="username">Source</label>
+              <select
+                class="form-control custom-select"
+                [(ngModel)]="sourceId"
+                name="Source"
+              >
+                <option value="0">All</option>
+                <option value="1">POS</option>
+                <option value="2">Swiggy</option>
+                <option value="3">Zomato</option>
+                <option value="4">Food Panda</option>
+              </select>
+            </div>
+            <div class="form-group" style="width: 10em; margin-left: 20px">
+              <label for="username">SaleProdGrp</label>
+              <select
+                class="form-control custom-select"
+                (change)="setSaleProductId($event)"
+              >
+                <option value="0">All</option>
+                <option *ngFor="let item of saleProducts" value="{{ item.Id }}">
+                  {{ item.Name }}
+                </option>
+              </select>
+            </div>
+            <a style="margin-left: 10px; padding-top: 38px">
+              <button
+                class="btn btn-success btn-sm mx-5 w-80"
+                (click)="Submit('DetailedRpt')"
+              >
+                Submit
+              </button>
+              <!-- <button class="btn btn-success  btn-sm mx-5 w-40" (click)="ExportTOExcel()">Export
+                </button> -->
+            </a>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <div class="table-wrap">
+                <div class="table-responsive">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search Report.."
+                    [(ngModel)]="term"
+                  />
+                  <br />
+                  <ul class="nav nav-tabs active">
+                    <li class="nav-item">
+                      <a
+                        class="nav-link active"
+                        data-toggle="tab"
+                        (click)="Submit('DetailedRpt')"
+                      >
+                        Detailed Report
+                      </a>
+                    </li>
+                    &nbsp;&nbsp;
+
+                    <li class="nav-item">
+                      <a
+                        class="nav-link"
+                        data-toggle="tab"
+                        (click)="Submit('ByProduct')"
+                        >By Product</a
+                      >
+                    </li>
+
+                    <li class="nav-item">
+                      <a
+                        class="nav-link"
+                        data-toggle="tab"
+                        (click)="Submit('ByStore')"
+                        >By Location</a
+                      >
+                    </li>
+
+                    <li class="nav-item">
+                      <a
+                        class="nav-link"
+                        data-toggle="tab"
+                        (click)="Submit('by_orddate')"
+                        >By Ordered Date</a
+                      >
+                    </li>
+                  </ul>
+                  <table #TABLE class="table mb-0 table-sm">
+                    <thead>
+                      <tr style="background-color: rgb(217, 226, 250)">
+                        <th class="pr-0" (click)="sortsettings('Product')">
+                          <strong> <a class="font-12">SaleProduct</a></strong>
+
+                          <i
+                            *ngIf="sortfield != 'Product'"
+                            class="text-link pl-10 fas fa-sort"
+                          ></i>
+                          <i
+                            *ngIf="sortfield == 'Product' && x == -1"
+                            class="text-link pl-10 fas fa-sort-up"
+                          ></i>
+                          <i
+                            *ngIf="sortfield == 'Product' && x == 1"
+                            class="text-link pl-10 fas fa-sort-down"
+                          ></i>
+
+                          <!-- <i *ngIf="sortfield == 'Product' && x == -1" class="icon-arrow-up  pull-right"></i>
+                            <i *ngIf="sortfield == 'Product' && x == 1" class="icon-arrow-down  pull-right"></i> -->
+                        </th>
+
+                        <div *ngIf="action == 'ByStore'">
+                          <th class="pr-0" (click)="sortsettings('Location')">
+                            <strong> <a class="font-12">Location</a></strong>
+
+                            <i
+                              *ngIf="sortfield != 'Location'"
+                              class="text-link pl-10 fas fa-sort"
+                            ></i>
+                            <i
+                              *ngIf="sortfield == 'Location' && x == -1"
+                              class="text-link pl-10 fas fa-sort-up"
+                            ></i>
+                            <i
+                              *ngIf="sortfield == 'Location' && x == 1"
+                              class="text-link pl-10 fas fa-sort-down"
+                            ></i>
+
+                            <!-- <i *ngIf="sortfield == 'Location' && x == -1" class="icon-arrow-up  pull-right"></i>
+                              <i *ngIf="sortfield == 'Location' && x == 1" class="icon-arrow-down  pull-right"></i> -->
+                          </th>
+                        </div>
+                        <th class="px-0" (click)="sortsettings('Quantity')">
+                          <strong> <a class="font-12">Quantity</a></strong>
+
+                          <i
+                            *ngIf="sortfield != 'Quantity'"
+                            class="text-link pl-10 fas fa-sort"
+                          ></i>
+                          <i
+                            *ngIf="sortfield == 'Quantity' && x == -1"
+                            class="text-link pl-10 fas fa-sort-up"
+                          ></i>
+                          <i
+                            *ngIf="sortfield == 'Quantity' && x == 1"
+                            class="text-link pl-10 fas fa-sort-down"
+                          ></i>
+
+                          <!-- <i *ngIf="sortfield == 'Quantity' && x == -1" class="icon-arrow-up  pull-right"></i>
+                            <i *ngIf="sortfield == 'Quantity' && x == 1" class="icon-arrow-down  pull-right"></i> -->
+                        </th>
+                        <th class="px-0" (click)="sortsettings('TotalSales')">
+                          <strong> <a class="font-12">Amount</a></strong>
+
+                          <i
+                            *ngIf="sortfield != 'TotalSales'"
+                            class="text-link pl-10 fas fa-sort"
+                          ></i>
+                          <i
+                            *ngIf="sortfield == 'TotalSales' && x == -1"
+                            class="text-link pl-10 fas fa-sort-up"
+                          ></i>
+                          <i
+                            *ngIf="sortfield == 'TotalSales' && x == 1"
+                            class="text-link pl-10 fas fa-sort-down"
+                          ></i>
+
+                          <!-- <i *ngIf="sortfield == 'TotalSales' && x == -1" class="icon-arrow-up  pull-right"></i>
+                            <i *ngIf="sortfield == 'TotalSales' && x == 1" class="icon-arrow-down  pull-right"></i> -->
+                        </th>
+                        <th class="px-0" (click)="sortsettings('FreeQty')">
+                          <strong><a class="font-12">Free Qty</a></strong>
+
+                          <i
+                            *ngIf="sortfield != 'FreeQty'"
+                            class="text-link pl-10 fas fa-sort"
+                          ></i>
+                          <i
+                            *ngIf="sortfield == 'FreeQty' && x == -1"
+                            class="text-link pl-10 fas fa-sort-up"
+                          ></i>
+                          <i
+                            *ngIf="sortfield == 'FreeQty' && x == 1"
+                            class="text-link pl-10 fas fa-sort-down"
+                          ></i>
+
+                          <!-- <i *ngIf="sortfield == 'FreeQty' && x == -1" class="icon-arrow-up  pull-right"></i>
+                            <i *ngIf="sortfield == 'FreeQty' && x == 1" class="icon-arrow-down  pull-right"></i> -->
+                        </th>
+                        <th class="px-0" (click)="sortsettings('Totalqty')">
+                          <strong><a class="font-12">Total Qty</a></strong>
+
+                          <i
+                            *ngIf="sortfield != 'Totalqty'"
+                            class="text-link pl-10 fas fa-sort"
+                          ></i>
+                          <i
+                            *ngIf="sortfield == 'Totalqty' && x == -1"
+                            class="text-link pl-10 fas fa-sort-up"
+                          ></i>
+                          <i
+                            *ngIf="sortfield == 'Totalqty' && x == 1"
+                            class="text-link pl-10 fas fa-sort-down"
+                          ></i>
+
+                          <!-- <i *ngIf="sortfield == 'Totalqty' && x == -1" class="icon-arrow-up  pull-right"></i>
+                            <i *ngIf="sortfield == 'Totalqty' && x == 1" class="icon-arrow-down  pull-right"></i> -->
+                        </th>
+                        <th *ngIf="action == 'by_orddate'">
+                          <strong>Ordered Time</strong>
+                          <button
+                            class="btn btn-link"
+                            (click)="sortsettings('stamp')"
+                          >
+                            <i
+                              *ngIf="sortfield != 'stamp'"
+                              class="fas fa-sort"
+                            ></i>
+                            <i
+                              *ngIf="sortfield == 'stamp' && x == -1"
+                              class="fas fa-sort-up"
+                            ></i>
+                            <i
+                              *ngIf="sortfield == 'stamp' && x == 1"
+                              class="fas fa-sort-down"
+                            ></i>
+                          </button>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item1 of sortData | filter: term">
+                        <td class="font-13 pr-0">
+                          <span
+                            (click)="
+                              openDetailpopup(
+                                contentdetail1,
+                                item1.SaleProductId
+                              )
+                            "
+                            >{{ item1.Product }}</span
+                          >
+                        </td>
+                        <!-- <span *ngIf="action == 'ByStore'"> -->
+                        <td *ngIf="action == 'ByStore'" class="font-13 pr-0">
+                          {{ item1.StoreName }}
+                          <span *ngIf="item1.showoption">
+                            <span
+                              *ngFor="let option of item1.OptionJson.options"
+                            >
+                              <hr *ngIf="item1.showoption" />
+                              <br *ngIf="item1.showoption" />
+                            </span>
+                          </span>
+                        </td>
+
+                        <!-- </span> -->
+                        <td class="font-12 px-0">
+                          {{ item1.Quantity | number: ".2" }}
+                          <span *ngIf="item1.showoption">
+                            <span
+                              class="text-info font-13"
+                              *ngFor="let option of item1.OptionJson.options"
+                            >
+                              <hr *ngIf="item1.showoption" />
+                              {{ option.Quantity | number: ".2" }}
+                              <br *ngIf="item1.showoption" />
+                            </span>
+                          </span>
+                        </td>
+                        <td class="font-12 px-0">
+                          &#8377;{{ item1.TotalSales | number: ".2" }}
+                          <span *ngIf="item1.showoption">
+                            <span
+                              class="text-info font-13"
+                              *ngFor="let option of item1.OptionJson.options"
+                            >
+                              <hr *ngIf="item1.showoption" />
+                              &#8377;{{ option.Amount | number: ".2" }}
+                              <br *ngIf="item1.showoption" />
+                            </span>
+                          </span>
+                        </td>
+
+                        <td class="font-12 px-0">
+                          {{ item1.FreeQty | number: ".2" }}
+                          <span *ngIf="item1.showoption">
+                            <span
+                              *ngFor="let option of item1.OptionJson.options"
+                            >
+                              <hr *ngIf="item1.showoption" />
+                              <br *ngIf="item1.showoption" />
+                            </span>
+                          </span>
+                        </td>
+                        <td class="font-12 px-0">
+                          {{ item1.Totalqty | number: ".2" }}
+                          <span *ngIf="item1.showoption">
+                            <span
+                              *ngFor="let option of item1.OptionJson.options"
+                            >
+                              <hr *ngIf="item1.showoption" />
+                              <br *ngIf="item1.showoption" />
+                            </span>
+                          </span>
+                        </td>
+                        <td *ngIf="action == 'by_orddate'">
+                          <button
+                            class="btn btn-link"
+                            (click)="
+                              viewOrderDetails(item1.orderjson, item1.sourceid)
+                            "
+                          >
+                            <i class="fas fa-info-circle"></i>
+                          </button>
+                          {{ item1.OrderedDate | date: "d/M/yy, h:mm a" }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-14 pr-0"><strong>Total</strong></td>
+                        <td class="font-14 px-0">
+                          <strong>{{ Quantity | number: ".2" }}</strong>
+                        </td>
+                        <td class="font-14 px-0">
+                          <strong>&#8377;{{ TotalSale | number: ".2" }}</strong>
+                        </td>
+                        <td class="font-14 px-0">
+                          <strong>{{ FreeQty | number: ".2" }}</strong>
+                        </td>
+                        <td class="font-14 px-0">
+                          <strong>{{ Totalqty | number: ".2" }}</strong>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #contentdetail1 let-modal>
+  <ul class="nav nav-tabs active" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a
+        class="nav-link active"
+        data-toggle="tab"
+        [(ngModel)]="ProdNStore"
+        href="#Selling"
+        role="tab"
+        aria-controls="Selling"
+        id="Sellingtab"
+      >
+        Detailed Report
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        data-toggle="tab"
+        [(ngModel)]="CatNStore"
+        href="#Permission"
+        role="tab"
+        aria-controls="Permission"
+        id="Permissiontab"
+        >Product</a
+      >
+    </li>
+  </ul>
+  <div class="tab-content active" id="myTabContent">
+    <div class="mt-4 mb-4 tab-pane active" id="Selling" role="tabpanel">
+      <div
+        class="modal d-block position-static overflow-show"
+        tabindex="-1"
+        role="dialog"
+      >
+        <div class="modal-dialog ma-0" role="document">
+          <div class="modal-content">
+            <!-- <div class="modal-header">
+            <h5 class="modal-title">OrderWiseSalesReport</h5>
+          </div> -->
+            <div class="modal-body">
+              <table class="table table-sm mb-0">
+                <thead>
+                  <tr>
+                    <td>Product</td>
+                    <td>Quantity</td>
+                    <td>TotalSales</td>
+                    <td>DeliveredDateTime</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of detailedRpt.data">
+                    <td>{{ item.Product }}</td>
+                    <td>{{ item.Quantity }}</td>
+                    <td>&#8377;{{ item.TotalSales | number: ".2" }}</td>
+                    <td>{{ item.DeliveredDateTime | date: "medium" }}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <strong> TotalQty: {{ TotalDetQty }}</strong>
+                    </td>
+                    <td>
+                      <strong>TotalSales : &#8377;{{ TotalDetSale }}</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="modal.close()"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 mb-4 tab-pane" id="Permission" role="tabpanel">
+      <div
+        class="modal d-block position-static overflow-show"
+        tabindex="-1"
+        role="dialog"
+      >
+        <div class="modal-dialog ma-0" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <table class="table table-sm mb-0">
+                <thead>
+                  <tr>
+                    <!-- <td>StockProductId</td>
+                  <td>OptionId</td> -->
+                    <td>Product</td>
+                    <td>Quantity</td>
+                    <td>TotalSales</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of stockprdwiserpt.data">
+                    <!-- <td>{{item.StockProductId}}</td>
+                  <td>{{item.Id}}</td> -->
+                    <td>{{ item.Product }}</td>
+                    <td>{{ item.Quantity }}</td>
+                    <td>&#8377;{{ item.TotalSales | number: ".2" }}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <strong> TotalQty: {{ TotalPrdQty }}</strong>
+                    </td>
+                    <td>
+                      <strong
+                        >TotalSales : &#8377;{{ TotalProductSale }}</strong
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="modal.close()"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #order_details let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Order Details</h4>
+    <button
+      type="button"
+      class="close"
+      aria-describedby="modal-title"
+      (click)="modalService.dismissAll()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xl-6 border-right">
+        <h4>ORDER DETAILS</h4>
+        <strong>Invoice: </strong>
+        <span class="float-right">{{ "#" + order.InvoiceNo }}</span> <br />
+        <strong>Bill Amount: </strong>
+        <span class="float-right">{{ order.BillAmount }}</span> <br />
+        <strong>Paid Amount: </strong>
+        <span class="float-right">{{ order.PaidAmount }}</span> <br />
+        <strong>Ordered@: </strong>
+        <span class="float-right">{{
+          order.OrderedDateTime | date: "short"
+        }}</span>
+        <br />
+        <strong>Delivery Time: </strong>
+        <span class="float-right">{{
+          order.DeliveryDateTime | date: "short"
+        }}</span>
+        <br />
+        <strong>Delivered Time: </strong>
+        <span class="float-right">{{
+          order.DeliveredDate | date: "short"
+        }}</span>
+        <br />
+        <strong>Store: </strong>
+        <span class="float-right">{{ order.Store }}</span>
+      </div>
+      <div class="col-xl-6">
+        <h4>CUSTOMER DETAILS</h4>
+        <strong>Name: </strong>
+        <span class="float-right">{{ order.CustomerDetails.Name }}</span> <br />
+        <strong>Phone: </strong>
+        <span class="float-right">{{ order.CustomerDetails.PhoneNo }}</span>
+        <br />
+        <strong>Address: </strong>
+        <span class="float-right">{{ order.CustomerDetails.Address }}</span>
+        <br />
+        <strong>Email: </strong>
+        <span class="float-right">{{ order.CustomerDetails.Email }}</span>
+        <br />
+        <strong>Pincode: </strong>
+        <span class="float-right">{{ order.CustomerDetails.PostalCode }}</span>
+        <br />
+      </div>
+    </div>
+    <!-- <p><strong>Are you sure you want to delete <span class="text-primary">"John Doe"</span> profile?</strong></p>
+      <p>All information associated to this user profile will be permanently deleted.
+        <span class="text-danger">This operation can not be undone.</span>
+      </p> -->
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modalService.dismissAll()"
+    >
+      Ok
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #order_details_sz let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Order Details</h4>
+    <button
+      type="button"
+      class="close"
+      aria-describedby="modal-title"
+      (click)="modalService.dismissAll()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xl-6 border-right">
+        <h4>ORDER DETAILS</h4>
+        <strong>Invoice: </strong>
+        <span class="float-right">{{ "#" + order.invoiceno }}</span> <br />
+        <strong>Bill Amount: </strong>
+        <span class="float-right">{{ order.order.details.order_total }}</span>
+        <br />
+        <strong>Paid Amount: </strong>
+        <span class="float-right">{{
+          order.order.details.payable_amount
+        }}</span>
+        <br />
+        <strong>Ordered@: </strong>
+        <span class="float-right">{{ order.orderedtime | date: "short" }}</span>
+        <br />
+        <strong>Delivery Time: </strong>
+        <span class="float-right">{{
+          order.deliverytime | date: "short"
+        }}</span>
+        <br />
+        <!-- <strong>Delivered Time: </strong> <span class="float-right">{{order.DeliveredDate | date: "short"}}</span> <br> -->
+        <strong>Store: </strong>
+        <span class="float-right">{{ order.order.store.name }}</span>
+      </div>
+      <div class="col-xl-6">
+        <h4>CUSTOMER DETAILS</h4>
+        <strong>Name: </strong>
+        <span class="float-right">{{ order.customer.name }}</span> <br />
+        <strong>Phone: </strong>
+        <span class="float-right">{{ order.customer.phone }}</span> <br />
+        <strong>Address: </strong>
+        <span class="float-right">{{ order.customer.address.line_1 }}</span>
+        <br />
+        <strong>Email: </strong>
+        <span class="float-right">{{ order.customer.email }}</span> <br />
+        <strong>Pincode: </strong>
+        <span class="float-right">{{ order.customer.address.pin }}</span> <br />
+      </div>
+    </div>
+    <!-- <p><strong>Are you sure you want to delete <span class="text-primary">"John Doe"</span> profile?</strong></p>
+      <p>All information associated to this user profile will be permanently deleted.
+        <span class="text-danger">This operation can not be undone.</span>
+      </p> -->
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modalService.dismissAll()"
+    >
+      Ok
+    </button>
+  </div>
+</ng-template>

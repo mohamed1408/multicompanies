@@ -32,13 +32,20 @@ export class LockscreenComponent implements OnInit {
         const token_parsed = this.jwtHelper.decodeToken(data['token']);
         localStorage.setItem('utoken', data['token']);
         localStorage.setItem('user', JSON.stringify(token_parsed));
+        this.auth.user.next(token_parsed);
         this.auth.accLocked.next(false);
+        this.auth
+          .getusercompanies(token_parsed.userid)
+          .subscribe((data: any) => {
+            this.auth.companies.next(data['userCompanies']);
+            this.auth.companyid.next(data['userCompanies'][0].CompanyId);
+          });
       } else {
         this.errorMsg = 'INALID PIN!';
       }
     });
   }
-  
+
   logout() {
     localStorage.removeItem('ctoken');
     localStorage.removeItem('utoken');

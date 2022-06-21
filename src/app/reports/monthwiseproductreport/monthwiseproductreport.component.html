@@ -1,0 +1,402 @@
+<!-- HK Wrapper -->
+<div class="hk-pg-wrapper">
+    <div class="container">
+        <div class="hk-pg-header">
+            <h4 class="hk-pg-title">MonthWiseSales</h4>
+        </div>
+        <div class="form-group row">
+            <div style="margin-left:20px ">
+                <label for="username">Location</label>
+                <ng-autocomplete [data]="stores" style="width:10em;margin-left:30px;
+                border-color: #90a7a8;  " [searchKeyword]="key" (selected)='selectEvent($event)'
+                    placeHolder="Select Store" [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate"
+                    [(ngModel)]="str"></ng-autocomplete>
+
+                <!-- <ng-autocomplete [data]="stores" style="width:10em;margin-left:30px;  
+        border-color: #c5d4d6;" [formControl]="myControl" [searchKeyword]="key" (selected)='selectEvent($event)' placeHolder="Choose Location" [itemTemplate]="itemTemplate1" [notFoundTemplate]="notFoundTemplate1" [(ngModel)]="all"></ng-autocomplete> -->
+                <ng-template #itemTemplate let-item>
+                    <a [innerHTML]="item.Name"></a>
+                </ng-template>
+
+                <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                </ng-template>
+
+            </div>
+            <div style="margin-left:20px ">
+                <label for="username">Date</label>
+
+                <input type="text" class="form-group" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
+                    [(ngModel)]="selected" [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
+                    [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
+                    [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
+                    placeholder="Select Date..." class="form-control" />
+            </div>
+            <div hidden style="margin-left:130px ">
+                <label for="username">Date</label>
+
+                <input type="text" class="form-group" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
+                    [(ngModel)]="selected" [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
+                    [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
+                    [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
+                    placeholder="Select Date..." class="form-control" />
+            </div>
+
+            <div style="margin-left:40px ">
+                <label for="username">Product</label>
+                <ng-autocomplete [data]="product" style="width:10em;margin-left:30px;
+          border-color: #90a7a8;  " [searchKeyword]="key2" (selected)='selectedEvent($event)'
+                    placeHolder="Select Product" [itemTemplate]="itemTemplate1" [notFoundTemplate]="notFoundTemplate1"
+                    [(ngModel)]="prd"></ng-autocomplete>
+                <ng-template #itemTemplate1 let-item>
+                    <a [innerHTML]="item.Description"></a>
+                </ng-template>
+
+                <ng-template #notFoundTemplate1 let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                </ng-template>
+            </div>
+
+            <div class="form-group" style="width: 10em;margin-left:40px  ">
+                <label for="username">Category</label>
+                <select class="form-control custom-select" [(ngModel)]="categoryId">
+                    <option value="0" selected>All</option>
+                    <option value="{{item.Id}}" *ngFor="let item of categ">{{item.Description}}</option>
+                </select>
+                <div class="invalid-feedback">
+                    <div>Select Category</div>
+                </div>
+            </div>
+            <div class="form-group" style="width: 10em;margin-left:40px;">
+                <label for="username">Source</label>
+                <select class="form-control custom-select" [(ngModel)]="sourceId" name="Source">
+                    <option value="0">All</option>
+                    <option value="1">POS</option>
+                    <option value="2">Swiggy</option>
+                    <option value="3">Zomato</option>
+                    <option value="4">Food Panda</option>
+                    <option value="6">Swiggy & Zomato</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="width: 10em;margin-left:40px;">
+                <label for="username">Show BillWise</label>
+                <input type="checkbox" [(ngModel)]="billWise">
+            </div>
+            <div class="form-group" style="width: 10em;margin-left:40px;">
+                <label for="username">No of Months</label>
+                <input type="number" (input)="setStartDate()" [(ngModel)]="monthsToSub">
+            </div>
+            <!-- <div style="margin-top:35px;width:100px;height: 38px;margin-left:20px">
+          <button type="submit"  class="btn btn-success" (click)="Submit()">Submit</button>
+        </div> -->
+        </div>
+        <ul class="nav nav-tabs active" id="myTab" role="tablist">
+            <li class="nav-item active">
+                <a class="nav-link " data-toggle="tab" role="tab" [(ngModel)]="TotalSales" aria-controls="Printing"
+                    id="Printingtab" (click)="Submit('TotalSales')">
+                    Total Sales
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" [(ngModel)]="ProdNStore" href="#Selling" role="tab"
+                    aria-controls="Selling" id="Sellingtab" (click)="Submit('ProdNStore')">
+                    Product Sales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " data-toggle="tab" [(ngModel)]="CatNStore" href="#Permission" role="tab"
+                    aria-controls="Permission" (click)="Submit('CatNStore')" id="Permissiontab">CatWise Sales</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link " data-toggle="tab" role="tab" [(ngModel)]="ParCatNStore" aria-controls="Printing"
+                    id="Printingtab" (click)="Submit('ParCatNStore')">
+                    ParentCategoryWise Sales
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="mt-4 mb-4 tab-pane fade show active " id="Selling" role="tabpanel">
+                <div class="col-sm-14">
+                    <div class="col-xl-12 pl-0 pr-0">
+                        <section class="hk-sec-wrapper">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <input type="text" class="form-control" placeholder="Search Report.."
+                                                [(ngModel)]="term">
+                                            <br>
+                                            <table class="table mb-0 table-sm">
+                                                <thead>
+                                                    <tr style="background-color:rgb(217, 226, 250);">
+                                                        <th (click)="sortsettings('Store')"> <strong> <a
+                                                                    class="font-12">storeName</a></strong><i
+                                                                *ngIf="sortfield == 'Store' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'Store' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('Product')"> <strong><a
+                                                                    class="font-12">Product</a></strong><i
+                                                                *ngIf="sortfield == 'Product' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'Product' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('Amount')"> <strong><a
+                                                                    class="font-12">Totalsales</a></strong><i
+                                                                *ngIf="sortfield == 'Amount' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'Amount' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('DailyAvg')"> <strong><a
+                                                                    class="font-12">DailyAvg</a></strong><i
+                                                                *ngIf="sortfield == 'DailyAvg' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'DailyAvg' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('Year')"> <strong><a
+                                                                    class="font-12">Year</a></strong><i
+                                                                *ngIf="sortfield == 'Year' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'Year' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('Month')"> <strong><a
+                                                                    class="font-12">Month</a></strong><i
+                                                                *ngIf="sortfield == 'Month' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'Month' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('VariancePct')"> <strong> <a
+                                                                    class="font-12">Variable%</a></strong><i
+                                                                *ngIf="sortfield == 'VariancePct' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'VariancePct' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item1 of monthrpt?.Order | filter:term  ">
+                                                        <td class="font-12">{{item1.Store }} </td>
+                                                        <td class="font-12">{{item1.Product}}</td>
+                                                        <td class="font-12">
+                                                            &#8377;{{billWise ? item1.BillSales : item1.Amount | number:
+                                                            ".2"}}({{billWise ? item1.Amount : ''}})
+                                                        </td>
+                                                        <td class="font-12">
+                                                            &#8377;{{billWise ? item1.DailyAvg1 : item1.DailyAvg |
+                                                            number: ".2"}}({{billWise ? item1.DailyAvg : ''}})
+                                                        </td>
+                                                        <td class="font-12">{{item1.Year}}</td>
+                                                        <td class="font-12">{{item1.Month}}</td>
+                                                        <td class="font-12">{{billWise ? item1.VariancePct1 :
+                                                            item1.VariancePct}}</td>
+                                                    </tr>
+                                                    <!-- <tr>
+                            <td>Total</td>   
+                            <td>{{Quantity | number:".2"}}</td>
+                            <td>&#8377;{{TotalSale | number:".2"}}</td>
+                            <td>{{percent | number:".2" }}%</td>
+                            <td>{{FreeQty | number:".2"}}</td>
+                            <td>{{Totalqty | number:".2"}}</td>
+                          </tr> -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- <div class="tab-content" id="myTabContent"> -->
+            <div class="mt-4 mb-4 tab-pane  " id="Permission" role="tabpanel">
+                <div class="col-sm-14">
+                    <div class="col-xl-12 pl-0 pr-0">
+                        <section class="hk-sec-wrapper">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <input type="text" class="form-control" placeholder="Search Report.."
+                                                [(ngModel)]="term">
+                                            <br>
+                                            <table class="table mb-0 table-sm">
+                                                <thead>
+                                                    <tr style="background-color:rgb(217, 226, 250);">
+                                                        <th (click)="sortsettings('Quantity')"> <strong><a
+                                                                    class="font-12">storeName</a></strong><i
+                                                                *ngIf="sortfield == 'Quantity' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'Quantity' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('Product')"> <strong><a
+                                                                    class="font-12">Category</a></strong><i
+                                                                *ngIf="sortfield == 'Product' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'Product' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('TotalSales')"> <strong><a
+                                                                    class="font-12">Totalsales</a></strong><i
+                                                                *ngIf="sortfield == 'TotalSales' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'TotalSales' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('DailyAvg')"> <strong><a
+                                                                    class="font-12">DailyAvg</a></strong><i
+                                                                *ngIf="sortfield == 'DailyAvg' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'DailyAvg' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('percentage')"> <strong><a
+                                                                    class="font-12">Year</a></strong><i
+                                                                *ngIf="sortfield == 'percentage' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'percentage' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('percentage')"> <strong><a
+                                                                    class="font-12">Month</a></strong><i
+                                                                *ngIf="sortfield == 'percentage' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'percentage' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('percentage')"> <strong><a
+                                                                    class="font-12">Variable%</a></strong><i
+                                                                *ngIf="sortfield == 'percentage' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'percentage' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item1 of monthrpt?.Order | filter:term  ">
+                                                        <td class="font-12">{{item1.Store }}</td>
+                                                        <td class="font-12">{{item1.Category}}
+                                                        <td class="font-12">&#8377;{{item1.Amount | number: ".2"}}</td>
+                                                        <td class="font-12">&#8377;{{item1.DailyAvg | number: ".2"}}
+                                                        </td>
+                                                        <td class="font-12">{{item1.Year}}</td>
+                                                        <td class="font-12">{{item1.Month}}</td>
+                                                        <td class="font-12">{{item1.VariancePct}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <!-- </div> -->
+
+            <!-- <div class="tab-content" id="myTabContent">  -->
+            <div class="mt-4 mb-4 tab-pane fade  " id="Printing" role="tabpanel">
+                <div class="col-sm-14">
+                    <div class="col-xl-12 pl-0 pr-0">
+                        <section class="hk-sec-wrapper">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <input type="text" class="form-control" placeholder="Search Report.."
+                                                [(ngModel)]="term">
+                                            <br>
+                                            <table class="table mb-0 table-sm ">
+                                                <thead>
+                                                    <tr style="background-color:rgb(217, 226, 250);">
+                                                        <th (click)="sortsettings('Quantity')"> <strong><a
+                                                                    class="font-12">storeName</a></strong><i
+                                                                *ngIf="sortfield == 'Quantity' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'Quantity' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('Product')"> <strong><a
+                                                                    class="font-12">Category</a></strong><i
+                                                                *ngIf="sortfield == 'Product' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'Product' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('TotalSales')"> <strong><a
+                                                                    class="font-12">Totalsales</a></strong><i
+                                                                *ngIf="sortfield == 'TotalSales' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'TotalSales' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('DailyAvg')"> <strong><a
+                                                                    class="font-12">DailyAvg</a></strong><i
+                                                                *ngIf="sortfield == 'DailyAvg' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'DailyAvg' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('percentage')"> <strong><a
+                                                                    class="font-12">Year</a></strong><i
+                                                                *ngIf="sortfield == 'percentage' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'percentage' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('percentage')"> <strong><a
+                                                                    class="font-12">Month</a></strong><i
+                                                                *ngIf="sortfield == 'percentage' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'percentage' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                        <th (click)="sortsettings('percentage')"> <strong><a
+                                                                    class="font-12">Variable%</a></strong><i
+                                                                *ngIf="sortfield == 'percentage' && x == -1"
+                                                                class="icon-arrow-up  pull-right"></i>
+                                                            <i *ngIf="sortfield == 'percentage' && x == 1"
+                                                                class="icon-arrow-down  pull-right"></i>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item1 of monthrpt?.Order | filter:term  ">
+                                                        <td class="font-12">{{item1.Store }}</td>
+                                                        <td class="font-12">{{item1.Category}}
+                                                        <td class="font-12">&#8377;{{item1.Amount | number: ".2"}}</td>
+                                                        <td class="font-12">&#8377;{{item1.DailyAvg | number: ".2"}}
+                                                        </td>
+                                                        <td class="font-12">{{item1.Year}}</td>
+                                                        <td class="font-12">{{item1.Month}}</td>
+                                                        <td class="font-12">{{item1.VariancePct}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <!-- </div> -->
+            <!-- </div> -->
+        </div>
+    </div>
+</div>

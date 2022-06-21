@@ -41,14 +41,24 @@ export class StorewiseComponent implements OnInit {
     this.rangeSettings = JSON.parse(
       localStorage.getItem('rangeSettings') || '[]'
     );
+    this.Auth.companyid.subscribe((companyid) => {
+      this.companyid = companyid;
+      this.getstores();
+    });
   }
 
   ngOnInit(): void {
     this.Auth.isloading.next(false);
     setHeightWidth();
     // this.stores = [...Array(50)].map((x) => 0);
-    this.getusercompany();
+    // this.getusercompany();
     this.navbartoggle();
+    daterangepicker('myrangepicker', (start: any, end: any) => {
+      console.log(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
+      this.startdate = start.format('YYYY-MM-DD');
+      this.enddate = end.format('YYYY-MM-DD');
+      // this.storeRpt();
+    })(moment(), moment());
   }
 
   getusercompany() {
@@ -58,12 +68,6 @@ export class StorewiseComponent implements OnInit {
       this.companyid = this.companies[0].CompanyId;
       this.storeid = 0;
       this.getstores();
-      daterangepicker('myrangepicker', (start: any, end: any) => {
-        console.log(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
-        this.startdate = start.format('YYYY-MM-DD');
-        this.enddate = end.format('YYYY-MM-DD');
-        // this.storeRpt();
-      })(moment(), moment());
     });
   }
 

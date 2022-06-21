@@ -4,3 +4,8 @@
   margin-right: -15px;
   margin-left: -15px;
 }
+
+.settings {
+  position: absolute;
+  bottom: 0;
+}

@@ -1,20 +1,18 @@
 <div class="hk-pg-wrapper">
-    <nav class="hk-breadcrumb" aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-light bg-transparent">
-            <!-- <li class="breadcrumb-item"><a href="javascript:void(0);">Company Management</a></li> -->
-            <li class="breadcrumb-item active" aria-current="page">Multi Companies</li>
-        </ol>
-    </nav>
+  <nav class="hk-breadcrumb" aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-light bg-transparent">
+      <!-- <li class="breadcrumb-item"><a href="javascript:void(0);">Company Management</a></li> -->
+      <li class="breadcrumb-item active" aria-current="page">
+        Multi Companies
+      </li>
+    </ol>
+  </nav>
 
-    <div>
-        <div class="row col-xl-12">
-            <div class="col-xl-12 sticky">
-                <section class="hk-sec-wrapper row mx-0">
-                    <div class="form-group col-sm-3">
-                        <label>Search</label>
-                        <input type="text" [(ngModel)]="term" (input)="calculate()" class="form-control">
-                    </div>
-                    <div class="form-group col-sm-3">
+  <div>
+    <div class="row col-xl-12">
+      <div class="col-xl-12 sticky">
+        <section class="hk-sec-wrapper row mx-0">
+          <!-- <div class="form-group col-sm-3">
                         <label>Companies</label>
                         <select class="form-control custom-select" [(ngModel)]="companyid"
                             aria-placeholder="Select Company">
@@ -22,158 +20,312 @@
                                 {{comp.AccountName}}
                             </option>
                         </select>
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label>Date</label>
-                        <div id="myrangepicker" class="form-control text-truncate">
-                            <i class="fa fa-calendar text-light-40"></i>&nbsp;
-                            <span></span> <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <button (click)="storeRpt()" class="btn btn-icon btn-success btn-icon-style-1"><span
-                                class="btn-icon-wrap"><img src="../../assets//svg/arrow-down-circle.svg" alt=""
-                                    srcset=""></span></button>
-                    </div>
-                    <div class="col-sm">
-                        <button (click)="openDrawer()" class="btn btn-icon btn-icon-style-1"><span
-                                class="btn-icon-wrap"><img src="../../assets//svg/settings.svg" alt=""
-                                    srcset=""></span></button>
-                    </div>
-                </section>
+                    </div> -->
+          <div class="form-group col-sm-4">
+            <label>Date</label>
+            <div id="myrangepicker" class="form-control text-truncate">
+              <i class="fa fa-calendar text-light-40"></i>&nbsp; <span></span>
+              <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
             </div>
-            <div class="col-xl-9">
-                <section class="hk-sec-wrapper">
-                    <div class="table-wrap">
-                        <div class="table-responsive">
-                            <table class="table mb-0 table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Store Name</th>
-                                        <th class="text-right">Bill Amount</th>
-                                        <th class="text-right pointer" (click)="sort('PaidAmount')">Paid Amount</th>
-                                        <th class="text-right">POS</th>
-                                        <th class="text-right">Swiggy</th>
-                                        <th class="text-right">Zomato</th>
-                                        <th class="text-right">Discount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let row of storereport | filter: term" [style.color]="row.setting.color"
-                                        [style.background]="row.setting.color">
-                                        <td
-                                            style="filter: saturate(0) grayscale(1) brightness(.7) contrast(1000%) invert(1);">
-                                            {{row.Name}}</td>
-                                        <td style="filter: saturate(0) grayscale(1) brightness(.7) contrast(1000%) invert(1);"
-                                            class="text-right">{{row.BillAmount | number: ".2"}}</td>
-                                        <td style="filter: saturate(0) grayscale(1) brightness(.7) contrast(1000%) invert(1);"
-                                            class="text-right">{{row.PaidAmount | number: ".2"}}</td>
-                                        <td style="filter: saturate(0) grayscale(1) brightness(.7) contrast(1000%) invert(1);"
-                                            class="text-right">
-                                            {{row.Pos | number:".0-0"}} <br>
-                                            {{(row.PaidAmount - row.Swiggy - row.Zomato) | number:
-                                            ".0"}}
-                                        </td>
-                                        <td style="filter: saturate(0) grayscale(1) brightness(.7) contrast(1000%) invert(1);"
-                                            class="text-right">{{row.Swiggy | number: ".0"}}</td>
-                                        <td style="filter: saturate(0) grayscale(1) brightness(.7) contrast(1000%) invert(1);"
-                                            class="text-right">{{row.Zomato | number: ".0"}}</td>
-                                        <td style="filter: saturate(0) grayscale(1) brightness(.7) contrast(1000%) invert(1);"
-                                            class="text-right">{{row.DiscAmount | number: ".0"}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
+          </div>
+          <div class="col-sm">
+            <button
+              (click)="storeRpt()"
+              class="btn btn-icon btn-success btn-icon-style-1"
+              style="position: absolute; bottom: 15px;"
+            >
+              <span class="btn-icon-wrap"
+                ><img
+                  src="../../assets/svg/arrow-down-circle.svg"
+                  alt=""
+                  srcset=""
+              /></span>
+            </button>
+            <button
+              (click)="openDrawer()"
+              class="btn btn-icon btn-icon-style-1"
+              style="position: absolute; bottom: 15px; left: 15%;"
+            >
+              <span class="btn-icon-wrap"
+                ><img src="../../assets/svg/settings.svg" alt="" srcset=""
+              /></span>
+            </button>
+          </div>
+          <div class="form-group col-sm-3">
+            <label>Search</label>
+            <input
+              type="text"
+              [(ngModel)]="term"
+              (input)="calculate()"
+              class="form-control"
+            />
+          </div>
+          <!-- <div class="col-sm">
+            <button
+              (click)="openDrawer()"
+              class="btn btn-icon btn-icon-style-1"
+            >
+              <span class="btn-icon-wrap"
+                ><img src="../../assets/svg/settings.svg" alt="" srcset=""
+              /></span>
+            </button>
+          </div> -->
+        </section>
+      </div>
+      <div class="col-xl-9">
+        <section class="hk-sec-wrapper">
+          <div class="table-wrap">
+            <div class="table-responsive">
+              <table class="table mb-0 table-sm">
+                <thead>
+                  <tr>
+                    <th>Store Name</th>
+                    <th class="text-right">Bill Amount</th>
+                    <th class="text-right pointer" (click)="sort('PaidAmount')">
+                      Paid Amount
+                    </th>
+                    <th class="text-right">POS</th>
+                    <th class="text-right">Swiggy</th>
+                    <th class="text-right">Zomato</th>
+                    <th class="text-right">Discount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let row of storereport | filter: term"
+                    [style.color]="row.setting.color"
+                    [style.background]="row.setting.color"
+                  >
+                    <td
+                      style="
+                        filter: saturate(0) grayscale(1) brightness(0.7)
+                          contrast(1000%) invert(1);
+                      "
+                    >
+                      {{ row.Name }}
+                    </td>
+                    <td
+                      style="
+                        filter: saturate(0) grayscale(1) brightness(0.7)
+                          contrast(1000%) invert(1);
+                      "
+                      class="text-right"
+                    >
+                      {{ row.BillAmount | number: ".2" }}
+                    </td>
+                    <td
+                      style="
+                        filter: saturate(0) grayscale(1) brightness(0.7)
+                          contrast(1000%) invert(1);
+                      "
+                      class="text-right"
+                    >
+                      {{ row.PaidAmount | number: ".2" }}
+                    </td>
+                    <td
+                      style="
+                        filter: saturate(0) grayscale(1) brightness(0.7)
+                          contrast(1000%) invert(1);
+                      "
+                      class="text-right"
+                    >
+                      {{ row.Pos | number: ".0-0" }} <br />
+                      {{
+                        row.PaidAmount - row.Swiggy - row.Zomato | number: ".0"
+                      }}
+                    </td>
+                    <td
+                      style="
+                        filter: saturate(0) grayscale(1) brightness(0.7)
+                          contrast(1000%) invert(1);
+                      "
+                      class="text-right"
+                    >
+                      {{ row.Swiggy | number: ".0" }}
+                    </td>
+                    <td
+                      style="
+                        filter: saturate(0) grayscale(1) brightness(0.7)
+                          contrast(1000%) invert(1);
+                      "
+                      class="text-right"
+                    >
+                      {{ row.Zomato | number: ".0" }}
+                    </td>
+                    <td
+                      style="
+                        filter: saturate(0) grayscale(1) brightness(0.7)
+                          contrast(1000%) invert(1);
+                      "
+                      class="text-right"
+                    >
+                      {{ row.DiscAmount | number: ".0" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div class="col-xl-3">
-                <section class="hk-sec-wrapper sticky" style="top: 220px;">
-                    <strong>[Tax]</strong> <span class="float-right">{{Tax | number: ".0"}}</span> <br>
-                    <strong>[Disc]</strong> <span class="float-right">{{TotalDisc | number: ".0"}}</span> <br>
-                    <strong>[Bill]</strong> <span class="float-right">{{TotalBill | number: ".0"}}</span> <br>
-                    <strong>[PaidAmt]</strong> <span class="float-right">{{TotalPaidAmt | number: ".0"}}</span> <br>
-                    <hr>
-                    <strong>[POS]</strong> <span class="float-right">{{TotalPOS | number: ".0"}}</span> <br>
-                    <strong>[SWIGGY]</strong> <span class="float-right">{{TotalSWIGGY | number: ".0"}}</span> <br>
-                    <strong>[ZOMATO]</strong> <span class="float-right">{{TotalZomato | number: ".0"}}</span> <br>
-                </section>
-            </div>
-        </div>
+          </div>
+        </section>
+      </div>
+      <div class="col-xl-3">
+        <section class="hk-sec-wrapper sticky" style="top: 220px">
+          <strong>[Tax]</strong>
+          <span class="float-right">{{ Tax | number: ".0" }}</span> <br />
+          <strong>[Disc]</strong>
+          <span class="float-right">{{ TotalDisc | number: ".0" }}</span> <br />
+          <strong>[Bill]</strong>
+          <span class="float-right">{{ TotalBill | number: ".0" }}</span> <br />
+          <strong>[PaidAmt]</strong>
+          <span class="float-right">{{ TotalPaidAmt | number: ".0" }}</span>
+          <br />
+          <hr />
+          <strong>[POS]</strong>
+          <span class="float-right">{{ TotalPOS | number: ".0" }}</span> <br />
+          <strong>[SWIGGY]</strong>
+          <span class="float-right">{{ TotalSWIGGY | number: ".0" }}</span>
+          <br />
+          <strong>[ZOMATO]</strong>
+          <span class="float-right">{{ TotalZomato | number: ".0" }}</span>
+          <br />
+        </section>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="hk-settings-panel">
-    <div class="nicescroll-bar position-relative">
-        <div class="settings-panel-wrap">
-            <div class="settings-panel-head">
-                <h4>Coloring</h4>
-                <a href="javascript:void(0);" id="settings_panel_close" class="settings-panel-close"><span
-                        class="feather-icon"><i data-feather="x"></i></span></a>
+  <div class="nicescroll-bar position-relative">
+    <div class="settings-panel-wrap">
+      <div class="settings-panel-head">
+        <h4>Coloring</h4>
+        <a
+          href="javascript:void(0);"
+          id="settings_panel_close"
+          class="settings-panel-close"
+          ><span class="feather-icon"><i data-feather="x"></i></span
+        ></a>
+      </div>
+      <hr />
+      <div *ngIf="rangeSetting == null" class="row">
+        <button
+          style="
+            background: white;
+            border: 1px dashed;
+            margin: auto;
+            border-radius: 5px;
+          "
+          (click)="newSetting()"
+        >
+          Add Preference
+        </button>
+      </div>
+      <div *ngIf="rangeSetting != null">
+        <div class="row">
+          <div class="form-group col-xl-6">
+            <label>FROM</label>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="rangeSetting.from"
+              onfocus="this.select()"
+            />
+          </div>
+          <div class="form-group col-xl-6">
+            <label>To</label>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="rangeSetting.to"
+              onfocus="this.select()"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            type="color"
+            class="form-control"
+            [(ngModel)]="rangeSetting.color"
+          />
+        </div>
+        <div class="row px-15">
+          <button class="btn btn-primary col-sm-9" (click)="addSetting()">
+            Add
+          </button>
+          <button
+            class="btn text-danger col-sm-3"
+            (click)="rangeSetting = null"
+          >
+            &#x2715;
+          </button>
+        </div>
+      </div>
+      <div *ngFor="let setting of rangeSettings; let i = index">
+        <hr />
+        <div class="row">
+          <div class="col-xl-9 row">
+            <!-- <h6 class="mb-5 w-100">{{setting.from}} to {{setting.to}}</h6> -->
+            <div class="form-group form-control-sm col-sm-6">
+              <label>From</label>
+              <input
+                [disabled]="!setting.editmode"
+                type="number"
+                class="form-control form-control-sm"
+                [(ngModel)]="setting.from"
+                onfocus="this.select()"
+              />
             </div>
-            <hr>
-            <div *ngIf="rangeSetting == null" class="row">
-                <button style="background: white;
-                border: 1px dashed;
-                margin: auto;
-                border-radius: 5px;" (click)="newSetting()">Add Preference</button>
+            <div class="form-group form-control-sm col-sm-6">
+              <label>To</label>
+              <input
+                [disabled]="!setting.editmode"
+                type="number"
+                class="form-control form-control-sm"
+                [(ngModel)]="setting.to"
+                onfocus="this.select()"
+              />
             </div>
-            <div *ngIf="rangeSetting != null">
-                <div class="row">
-                    <div class="form-group col-xl-6">
-                        <label>FROM</label>
-                        <input type="number" class="form-control" [(ngModel)]="rangeSetting.from"
-                            onfocus="this.select()">
-                    </div>
-                    <div class="form-group col-xl-6">
-                        <label>To</label>
-                        <input type="number" class="form-control" [(ngModel)]="rangeSetting.to" onfocus="this.select()">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <input type="color" class="form-control" [(ngModel)]="rangeSetting.color">
-                </div>
-                <div class="row px-15">
-                    <button class="btn btn-primary col-sm-9" (click)="addSetting()">Add</button>
-                    <button class="btn text-danger col-sm-3" (click)="rangeSetting = null">&#x2715;</button>
-                </div>
+            <div class="form-group form-control-sm w-100">
+              <label>{{ setting.color }}</label>
+              <input
+                [disabled]="!setting.editmode"
+                type="color"
+                class="form-control form-control-sm"
+                [(ngModel)]="setting.color"
+              />
             </div>
-            <div *ngFor="let setting of rangeSettings; let i = index;">
-                <hr>
-                <div class="row">
-                    <div class="col-xl-9 row">
-                        <!-- <h6 class="mb-5 w-100">{{setting.from}} to {{setting.to}}</h6> -->
-                        <div class="form-group form-control-sm col-sm-6">
-                            <label>From</label>
-                            <input [disabled]="!setting.editmode" type="number" class="form-control form-control-sm"
-                                [(ngModel)]="setting.from" onfocus="this.select()">
-                        </div>
-                        <div class="form-group form-control-sm col-sm-6">
-                            <label>To</label>
-                            <input [disabled]="!setting.editmode" type="number" class="form-control form-control-sm"
-                                [(ngModel)]="setting.to" onfocus="this.select()">
-                        </div>
-                        <div class="form-group form-control-sm w-100">
-                            <label>{{setting.color}}</label>
-                            <input [disabled]="!setting.editmode" type="color" class="form-control form-control-sm"
-                                [(ngModel)]="setting.color">
-                        </div>
-
-                    </div>
-                    <div class="col-xl-3">
-                        <button *ngIf="setting.editmode" (click)="updateSettings()"
-                            class="btn btn-icon btn-icon-style-1"><span class="btn-icon-wrap"><img
-                                    src="../../assets//svg/upload.svg" alt="" srcset=""></span></button>
-                        <button *ngIf="!setting.editmode" (click)="setting.editmode = true"
-                            class="btn btn-icon btn-icon-style-1"><span class="btn-icon-wrap"><img
-                                    src="../../assets//svg/edit-2.svg" alt="" srcset=""></span></button>
-                        <button (click)="deleteSetting(i)" class="btn btn-icon btn-icon-style-1"><span
-                                class="btn-icon-wrap"><img src="../../assets//svg/trash.svg" alt=""
-                                    srcset=""></span></button>
-                    </div>
-                </div>
-            </div>
-            <!-- <hr>
+          </div>
+          <div class="col-xl-3">
+            <button
+              *ngIf="setting.editmode"
+              (click)="updateSettings()"
+              class="btn btn-icon btn-icon-style-1"
+            >
+              <span class="btn-icon-wrap"
+                ><img src="../../assets//svg/upload.svg" alt="" srcset=""
+              /></span>
+            </button>
+            <button
+              *ngIf="!setting.editmode"
+              (click)="setting.editmode = true"
+              class="btn btn-icon btn-icon-style-1"
+            >
+              <span class="btn-icon-wrap"
+                ><img src="../../assets//svg/edit-2.svg" alt="" srcset=""
+              /></span>
+            </button>
+            <button
+              (click)="deleteSetting(i)"
+              class="btn btn-icon btn-icon-style-1"
+            >
+              <span class="btn-icon-wrap"
+                ><img src="../../assets//svg/trash.svg" alt="" srcset=""
+              /></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- <hr>
             <h6 class="mb-5">Navigation</h6>
             <p class="font-14">Menu comes in two modes: dark & light</p>
             <div class="button-list hk-nav-select mb-10">
@@ -200,8 +352,8 @@
                 <h6>Scrollable Header</h6>
                 <div class="toggle toggle-sm toggle-simple toggle-light toggle-bg-primary scroll-nav-switch"></div>
             </div> -->
-        </div>
     </div>
-    <!-- <img class="d-none" src="dist/img/logo-light.png" alt="brand" />
+  </div>
+  <!-- <img class="d-none" src="dist/img/logo-light.png" alt="brand" />
     <img class="d-none" src="dist/img/logo-dark.png" alt="brand" /> -->
 </div>

@@ -1,0 +1,385 @@
+<div class="hk-pg-wrapper">
+    <!-- <div class="drawer-control bg-dark">
+        <a href="javascript:void(0);" (click)="openDrawer()">
+            <span class="feather-icon" style="margin: 5px;"><i data-feather="settings"></i></span></a>
+    </div> -->
+    <div class="container">
+        <!-- <nav class="hk-breadcrumb" aria-label="breadcrumb">
+          <ol class="breadcrumb breadcrumb-light bg-transparent">
+              <li class="breadcrumb-item active" aria-current="page"><i class="icon-note"></i> Manage</li>
+          </ol>
+      </nav> -->
+        <div class="hk-pg-header">
+            <h4 class="hk-pg-title">TimeWiseSales</h4>
+        </div>
+        <div class="col-sm-14">
+            <div class="col-xl-12 pl-0 pr-0">
+                <section class="hk-sec-wrapper">
+                    <div class="form-group row">
+                        <div style="margin-left:30px">
+                            <label for="username">Location</label>
+                            <ng-autocomplete (inputCleared)="focusAutocomplete()" [data]="stores" style="width:10em;margin-left:30px;
+                border-color: #056b33;  " [searchKeyword]="key" (selected)='selectEvent($event)'
+                                placeHolder="Choose Location" [itemTemplate]="itemTemplate1"
+                                [notFoundTemplate]="notFoundTemplate1" [(ngModel)]="str"></ng-autocomplete>
+                            <ng-template #itemTemplate1 let-item>
+                                <a [innerHTML]="item.Name"></a>
+                            </ng-template>
+
+                            <ng-template #notFoundTemplate1 let-notFound>
+                                <div [innerHTML]="notFound"></div>
+                            </ng-template>
+                        </div>
+
+                        <div style="margin-left:20px ">
+                            <label for="username">Date</label>
+
+                            <input type="text" class="form-group" style="width:15em;margin-left:5px;"
+                                ngxDaterangepickerMd [(ngModel)]="selected"
+                                [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [showCustomRangeLabel]="true"
+                                [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
+                                [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
+                                class="form-control" />
+                        </div>
+
+                        <div hidden style="margin-left:130px ">
+                            <label for="username">Date</label>
+
+                            <input type="text" class="form-group" style="width:15em;margin-left:5px;"
+                                ngxDaterangepickerMd [(ngModel)]="selected"
+                                [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [showCustomRangeLabel]="true"
+                                [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
+                                [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
+                                class="form-control" />
+                        </div>
+                        <div class="px-20">
+                            <label for="username">Start Time {{StartTime}}</label>
+                            <input class="form-control" [(ngModel)]="StartTime" type="time" style="widows: 150px;"
+                                placeholder="Select Time...">
+                            <!-- <ngx-material-timepicker #picker1></ngx-material-timepicker>  -->
+                        </div>
+
+                        <div>
+                            <label for="username">End Time</label>
+                            <input class="form-control" [(ngModel)]="EndTime" type="time" style="width:150px;"
+                                placeholder="Select Time...">
+                            <!-- <ngx-material-timepicker #picker></ngx-material-timepicker>   -->
+                        </div>
+
+
+                        <div style="margin-left:35px">
+                            <label for="username">Interval Time</label>
+                            <div class="row">
+                                <input type="number" class="form-control" style="width:70px;margin-left:5px;"
+                                    [(ngModel)]="Intervalhours" placeholder="Set">
+                                <strong class="py-20 px-5">hrs</strong>
+                                <input type="number" class="form-control" style="width:70px;margin-left:5px;"
+                                    [(ngModel)]="Intervalmins" placeholder="Set">
+                                <strong class="py-20 px-5">min</strong>
+                            </div>
+                        </div>
+                        <div class="form-group" style="width: 10em;margin-left:40px  ">
+                            <label for="username">Category</label>
+                            <select class="form-control custom-select" [(ngModel)]="categoryId">
+                                <option value="0" selected>All</option>
+                                <option value="{{item.Id}}" *ngFor="let item of categ">{{item.Description}}</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                <div>Select Category</div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="width: 10em;margin-left:40px;">
+                            <label for="username">Source</label>
+                            <select class="form-control custom-select" [(ngModel)]="sourceId" name="Source">
+                                <option value="0">All</option>
+                                <option value="1">POS</option>
+                                <option value="2">Swiggy</option>
+                                <option value="3">Zomato</option>
+                                <option value="4">Food Panda</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-left:40px ">
+                            <label for="username">Product</label>
+                            <ng-autocomplete (inputCleared)="focusedAutocomplete()" [data]="product1" style="width:10em;margin-left:30px;
+                        border-color: #90a7a8;  " [searchKeyword]="key2" (selected)='selectedEvent($event)'
+                                placeHolder="Select Product" [itemTemplate]="itemTemplate1"
+                                [notFoundTemplate]="notFoundTemplate1" [(ngModel)]="prd"></ng-autocomplete>
+                            <ng-template #itemTemplate1 let-item>
+                                <a [innerHTML]="item.Name"></a>
+                            </ng-template>
+
+                            <ng-template #notFoundTemplate1 let-notFound>
+                                <div [innerHTML]="notFound"></div>
+                            </ng-template>
+                        </div>
+
+                        <div class="form-group" style="width: 10em;margin-left:40px  ">
+                            <label for="username">Sale Product Group</label>
+                            <select class="form-control custom-select" [(ngModel)]="saleProductId">
+                                <option value="0" selected>All</option>
+                                <option value="{{item.Id}}" *ngFor="let item of saleProducts">{{item.Name}}</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                <div>Select Category</div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group">
+                      <div class="switch-toggle switch-3 switch-candy">    
+                        <input id="on" name="state-d" [value]="on"  [checked]="value === 'on'"  type="radio" (change)="onSelectionChange('on')" >
+                                      <label for="on">ON</label>    
+                                      <input id="off" name="state-d"  [value]="off"  [checked]="value === 'off'"  type="radio" (change)="onSelectionChange('off')">
+                                      <label for="off" >OFF</label>
+          
+                                      <a></a>
+                                  </div>
+                    </div> -->
+                        <div style="margin-top:35px;width:70px;height: 38px;float:right;margin-left: 35px;"
+                            class="pull-right">
+                            <button class="btn btn-success  btn-sm mx-100 w-300 " (click)="Submit()">Submit</button>
+                            <button class="btn btn-success  btn-sm mx-100 w-300 "
+                                (click)="openTimeIntervalModal()">timeInterval</button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="table-wrap">
+                                <div class="table-responsive">
+                                    <!-- <div style="position: relative;" class="mx-30">
+                                        <output style="transform: translate(-50%); position: absolute; z-index: 10;" id="bubble" class="irs-single text-white px-5 shadow">{{sliderVal |
+                                            slidertime}}</output>
+                                        <output style="transform: translate(-50%);" class="bg-white text-white">{{sliderVal | slidertime}}</output>
+                                        <input type="range" min="0" max="1440" value="0" [(ngModel)]="sliderVal" class="w-100 slider" id="myRange" step="30" (input)="setBubble()">
+                                    </div> -->
+                                    <input type="text" class="form-control" placeholder="Search Report.."
+                                        [(ngModel)]="term">
+                                    <br>
+                                    <table *ngIf="salesrpt" class="table mb-0 table-sm">
+                                        <thead>
+                                            <tr style="background-color:rgb(217, 226, 250);">
+                                                <th> <strong><a class="font-12">Store Name </a></strong> </th>
+                                                <th> <strong><a class="font-12">StartTime</a></strong> </th>
+                                                <th> <strong><a class="font-12">EndTime</a></strong> </th>
+                                                <th> <strong><a class="font-12">Quantity</a></strong> </th>
+                                                <th> <strong><a class="font-12">TotalSales</a></strong> </th>
+                                                <th> </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of salesrpt.Order | filter:term  ">
+                                                <td class="font-12">{{item.storeName}}</td>
+                                                <td class="font-12">{{item.StartTime}}</td>
+                                                <td class="font-12">{{item.EndTime}}</td>
+                                                <td class="font-12">{{item.quantity | number:".2" }}</td>
+                                                <td class="font-12">{{item.TotSales | number:".2" }}</td>
+                                                <td>
+                                                    <button (click)="viewproducts(item)" class="btn btn-sm btn-link">
+                                                        <i class="material-icons">visibility</i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #contentdetail1 let-modal>
+    <div class="modal d-block position-static overflow-show" tabindex="-1" role="dialog">
+        <div class="modal-dialog ma-0" role="document">
+            <div class="modal-content">
+                <!-- <div class="modal-header">
+          <h5 class="modal-title">OrderWiseSalesReport</h5>
+        </div> -->
+                <div class="modal-body">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <td>StoreName</td>
+                                <td>Quantity</td>
+                                <td>TotalSales</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of storeprd?.Order">
+                                <td>{{item.storeName}}</td>
+                                <td>{{item.Quantity}}</td>
+                                <td>&#8377;{{item.TotalSales | number:".2"}}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td> TotalQty</td>
+                                <td>{{ TotalPrdQty}}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td> TotalSales</td>
+                                <td>{{TotalProductSale}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="modal.close()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Setting Panel -->
+<!-- <div class="hk-settings-panel">
+    <div class="nicescroll-bar position-relative">
+        <div class="settings-panel-wrap">
+            <div class="settings-panel-head">
+                <h1>Presets</h1>
+                <a href="javascript:void(0);" id="settings_panel_close" class="settings-panel-close"><span
+            class="feather-icon"><i data-feather="x"></i></span></a>
+            </div>
+            <hr>
+            <p class="font-14">Choose preset to load data</p>
+            <div class="row" style="padding: 20px;">
+                <div *ngFor="let preset of presets" class="col-6">
+                    <button type="button" class="btn btn-outline-primary btn-sm w-100"><span
+              class="btn-text">{{preset.preset_name}}</span></button>
+                </div>
+            </div>
+            <hr>
+            <div class="justify-content-between align-items-center">
+                <h6>Add Preset</h6>
+                <div class="row col-12">
+                    <div class="col-12 p-0 mb-1">
+                        <input type="text" class="form-control" placeholder="preset name">
+                    </div>
+                    <div class="col-6 p-0 mb-1">
+                        <input type="time" class="form-control" placeholder="from time">
+                    </div>
+                    <div class="col-6 p-0 mb-1">
+                        <input type="time" class="form-control" placeholder="to time">
+                    </div>
+                </div>
+            </div>
+            <button id="reset_settings" class="btn btn-primary btn-block btn-reset mt-30">Reset</button>
+        </div>
+    </div>
+    <img class="d-none" src="dist/img/logo-light.png" alt="brand" />
+    <img class="d-none" src="dist/img/logo-dark.png" alt="brand" />
+</div> -->
+<!-- /Setting Panel -->
+
+<ng-template #productmodal let-modal>
+    <!-- <div class="modal-dialog modal-lg" role="document"> -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" (click)="modalS.dismissAll()" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body" style="max-height: 70vh; overflow: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Factor</th>
+                        <th>FQuantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of reportProducts">
+                        <td>{{product.Name}}</td>
+                        <td>{{product.Quantity}}</td>
+                        <td>{{product.Factor}}</td>
+                        <td>{{product.Quantity * product.Factor}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td>{{reportProductsTotal.quantity}}</td>
+                        <td></td>
+                        <td><span style="font-style: italic;">(sales)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- </div> -->
+</ng-template>
+
+<ng-template #timeintervalmodal let-modal>
+    <!-- <div class="modal-dialog modal-lg" role="document"> -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Set Time Intervals</h5>
+            <button type="button" (click)="modalS.dismissAll()" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body" style="max-height: 70vh; overflow: auto;">
+            <ul class="list-group">
+                <li *ngIf="timeintervals.length"
+                    class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center col-xl-12">
+                    <div class="col-xl-5">
+                        From
+                    </div>
+                    <div class="col-xl-5">
+                        To
+                    </div>
+                    <div class="col-xl-2">
+                        <!-- <button class="btn btn-link" (click)="deleteInterval(lap)">
+                            <i class="ion ion-md-trash text-light font-22"></i>
+                        </button> -->
+                    </div>
+                </li>
+                <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center col-xl-12"
+                    *ngFor="let lap of timeintervals">
+                    <div class="col-xl-5">
+                        {{lap.from | slidertime}}
+                    </div>
+                    <div class="col-xl-5">
+                        {{lap.to | slidertime}}
+                    </div>
+                    <div class="col-xl-2">
+                        <button class="btn btn-link" (click)="deleteInterval(lap)">
+                            <i class="ion ion-md-trash text-light font-22"></i>
+                        </button>
+                    </div>
+                </li>
+                <li *ngIf="!timeintervals.length" class="text-center font-italic text-warning">
+                    <span>Select a time in slider below and press Enter</span>
+                </li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <div style="position: relative;" class="mx-30 w-100">
+                <div class="row w-100 col-xl-12">
+                    <div class="col-xl-6 text-center font-italic text-success">
+                        <span>from: {{fromInt | slidertime}}</span>
+                    </div>
+                    <div class="col-xl-6 text-center font-italic text-success">
+                        <span>to: {{toInt | slidertime}}</span>
+                    </div>
+                </div>
+                <output style="transform: translate(-50%); position: absolute; z-index: 10;" id="bubble"
+                    class="irs-single text-white px-5 shadow">{{sliderVal | slidertime}}</output>
+                <input autofocus type="range" min="0" max="1440" value="0" (keydown.enter)="addInterval()"
+                    [(ngModel)]="sliderVal" class="w-100 slider mt-30" #timeSlider id="timeSlider" step="30"
+                    (input)="setBubble()">
+            </div>
+        </div>
+    </div>
+    <!-- </div> -->
+</ng-template>
