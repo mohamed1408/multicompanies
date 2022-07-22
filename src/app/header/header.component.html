@@ -13,9 +13,10 @@
       alt="brand"
     />
   </a>
-  <ul class="navbar-nav hk-navbar-content">
-    <li>
+  <ul class="navbar-nav hk-navbar-content w-20">
+    <li class="w-100">
       <select
+        *ngIf="!multicompanies"
         class="form-control custom-select"
         [(ngModel)]="companyid"
         (change)="setCompanyId()"
@@ -25,6 +26,51 @@
           {{ comp.AccountName }}
         </option>
       </select>
+
+      <div *ngIf="multicompanies" class="checkbox-select px-0 cbselectels">
+        <input
+          type="text"
+          class="w-100 cbselectels"
+          placeholder="Select atleast one"
+          readonly
+          (focus)="toggleDropDown()"
+          [(ngModel)]="selected_companies"
+        />
+        <div
+          *ngIf="showdropdown | async"
+          class="options w-100 shadow shadow-xl cbselectels"
+        >
+          <div
+            class="option px-15 cbselectels"
+            (click)="all = !all; toggleAll()"
+          >
+            <label for="one" class="cbselectels">
+              <input
+                type="checkbox"
+                readonly
+                [(ngModel)]="all"
+                class="cbselectels"
+              />
+              Select All
+            </label>
+          </div>
+          <div
+            *ngFor="let company of companies"
+            class="option px-15 cbselectels"
+            (click)="company.isselected = !company.isselected; change()"
+          >
+            <label for="one" class="cbselectels">
+              <input
+                type="checkbox"
+                readonly
+                [(ngModel)]="company.isselected"
+                class="cbselectels"
+              />
+              &nbsp;{{ company.AccountName }}</label
+            >
+          </div>
+        </div>
+      </div>
     </li>
     <li>
       <!-- <a
@@ -54,7 +100,11 @@
         <li class="nav-item" *ngIf="menu.children.length == 0 && !menu.hidden">
           <a class="nav-link" [routerLink]="[menu.url]">
             <img src="{{ menu.svg }}" alt="" srcset="" />
-            <span class="nav-link-text font-15 px-2" [ngClass]="menu.active ? 'text-dark font-weight-bolder' : ''">{{ menu.title }}</span>
+            <span
+              class="nav-link-text font-15 px-2"
+              [ngClass]="menu.active ? 'text-dark font-weight-bolder' : ''"
+              >{{ menu.title }}</span
+            >
           </a>
         </li>
         <li class="nav-item" *ngIf="menu.children.length > 0">
@@ -65,7 +115,7 @@
             data-toggle="collapse"
             data-target="#dummyid"
           >
-          <img src="{{ menu.svg }}" alt="" srcset="" />
+            <img src="{{ menu.svg }}" alt="" srcset="" />
             <span class="nav-link-text font-13 px-2">{{ menu.title }}</span>
           </a>
           <ul
@@ -76,7 +126,13 @@
               <ul class="navbar-nav flex-column">
                 <li class="nav-item" *ngFor="let cmenu of menu.children">
                   <a class="nav-link" [routerLink]="[cmenu.url]">
-                    <span class="nav-link-text" [ngClass]=" cmenu.active ? 'text-dark font-weight-bolder' : ''">{{ cmenu.title }}</span>
+                    <span
+                      class="nav-link-text"
+                      [ngClass]="
+                        cmenu.active ? 'text-dark font-weight-bolder' : ''
+                      "
+                      >{{ cmenu.title }}</span
+                    >
                   </a>
                 </li>
               </ul>

@@ -21,6 +21,9 @@ export class AuthService {
   public isloading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
+  public showdropdown: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
 
   get isLoggedIn() {
     return this.loggedIn.asObservable();
@@ -30,6 +33,8 @@ export class AuthService {
   public companies: BehaviorSubject<Array<any>> = new BehaviorSubject<
     Array<any>
   >([]);
+  public selectedcompanies: BehaviorSubject<Array<number>> =
+    new BehaviorSubject<Array<number>>([]);
   public companyid: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor(private router: Router, private http: HttpClient) {}
@@ -116,6 +121,18 @@ export class AuthService {
         todate +
         '&companyId=' +
         compId
+    );
+  }
+
+  GetMultiStorewiseRpt(frmdate: string, todate: string, companykey: string) {
+    return this.http.get(
+      this.baseurl +
+        'StoreRpt/GetMultiCompanyStoreRpt?frmdate=' +
+        frmdate +
+        '&todate=' +
+        todate +
+        '&companykey=' +
+        companykey
     );
   }
 

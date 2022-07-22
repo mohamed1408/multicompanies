@@ -1,12 +1,60 @@
 <div class="hk-pg-wrapper">
-    <nav class="hk-breadcrumb" aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-light bg-transparent">
-            <li class="breadcrumb-item active" aria-current="page">Products</li>
-        </ol>
-    </nav>
-    <div class="col-xl-12">
-        <section class="hk-sec-wrapper">
-            <h6>Section Header</h6>
-        </section>
-    </div>
+  <nav class="hk-breadcrumb" aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-light bg-transparent">
+      <li class="breadcrumb-item active" aria-current="page">Products</li>
+    </ol>
+  </nav>
+  <div class="col-xl-12">
+    <section class="hk-sec-wrapper">
+      <h6>Section Header</h6>
+
+      <!-- cbselectels -->
+      <div class="row col-xl-12 cbselectels">
+        <div class=" checkbox-select px-0 cbselectels">
+          <input
+            type="text"
+            class="w-100 cbselectels"
+            readonly
+            (focus)="toggleDropDown()"
+            [(ngModel)]="selected_companies"
+          />
+          <div
+            *ngIf="showdropdown | async"
+            class="options w-100 shadow shadow-xl cbselectels"
+          >
+            <div
+              class="option px-15 cbselectels"
+              (click)="all = !all; toggleAll();"
+            >
+              <label for="one" class="cbselectels">
+                <input
+                  type="checkbox"
+                  readonly
+                  [(ngModel)]="all"
+                  class="cbselectels"
+                />
+                Select All
+              </label>
+            </div>
+            <div
+              *ngFor="let company of companies"
+              class="option px-15 cbselectels"
+              (click)="company.isselected = !company.isselected; change()"
+            >
+              <label for="one" class="cbselectels">
+                <input
+                  type="checkbox"
+                  readonly
+                  [(ngModel)]="company.isselected"
+                  class="cbselectels"
+                />
+                &nbsp;{{ company.AccountName }}</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- cbselectels -->
+    </section>
+  </div>
 </div>

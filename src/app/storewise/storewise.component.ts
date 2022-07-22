@@ -80,11 +80,14 @@ export class StorewiseComponent implements OnInit {
   }
 
   storeRpt() {
+    // console.log(this.Auth.selectedcompanies.value)
+    // return
     this.Auth.isloading.next(true);
-    this.Auth.GetStorewiseRpt(
+    const companykey = this.Auth.selectedcompanies.value.join('_');
+    this.Auth.GetMultiStorewiseRpt(
       this.startdate,
       this.enddate,
-      this.companyid
+      companykey
     ).subscribe((data: any) => {
       console.log(data);
       this.storereport = data['Order'];
@@ -145,18 +148,29 @@ export class StorewiseComponent implements OnInit {
   }
 
   newSetting() {
-    this.rangeSetting = new RangeSetting();
+    this.rangeSetting = new RangeSetting('#ff0000');
   }
 
   addSetting() {
-    if (this.rangeSetting != null) this.rangeSettings.push(this.rangeSetting);
+    if (this.rangeSetting != null) {
+      this.rangeSettings.forEach((set) => {
+        set.editmode = false;
+        if (!set.from) set.from = 0;
+        if (!set.to) set.to = 0;
+      });
+      this.rangeSettings.push(this.rangeSetting);
+    }
     localStorage.setItem('rangeSettings', JSON.stringify(this.rangeSettings));
     this.rangeSetting = null;
     this.paint();
   }
 
   updateSettings() {
-    this.rangeSettings.forEach((set) => (set.editmode = false));
+    this.rangeSettings.forEach((set) => {
+      set.editmode = false;
+      if (!set.from) set.from = 0;
+      if (!set.to) set.to = 0;
+    });
     localStorage.setItem('rangeSettings', JSON.stringify(this.rangeSettings));
     this.paint();
   }
@@ -171,14 +185,14 @@ export class StorewiseComponent implements OnInit {
     this.storereport.forEach((rpt: any) => {
       if (
         this.rangeSettings.some(
-          (x) => x.from <= rpt.PaidAmount && x.to >= rpt.PaidAmount
+          (x) => x.from <= rpt.PaidAmount && (x.to >= rpt.PaidAmount || !x.to)
         )
       ) {
         rpt.setting = this.rangeSettings.filter(
-          (x) => x.from <= rpt.PaidAmount && x.to >= rpt.PaidAmount
+          (x) => x.from <= rpt.PaidAmount && (x.to >= rpt.PaidAmount || !x.to)
         )[0];
       } else {
-        rpt.setting = new RangeSetting();
+        rpt.setting = new RangeSetting('white');
       }
     });
   }
@@ -204,8 +218,8 @@ class RangeSetting {
   to: number;
   editmode: boolean;
 
-  constructor() {
-    this.color = 'white';
+  constructor(color: string) {
+    this.color = color; //'#ff0000';
     this.from = 0;
     this.to = 0;
     this.editmode = false;

@@ -1,6 +1,6 @@
-import { ɵSafeHtml } from '@angular/core';
+// import { ɵSafeHtml } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
-import * as moment from 'moment';
+// import * as moment from 'moment';
 // import * as old from './oldorder.module'
 // import { version } from 'package.json'
 

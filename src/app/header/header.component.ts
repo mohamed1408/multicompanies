@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 // import * as jq from 'jquery';
 // import { Observable } from 'rxjs';
@@ -21,6 +22,11 @@ export class HeaderComponent implements OnInit {
   companyid: number = 0;
   stores: any = [];
   storeid: number = 0;
+  multicompanies: boolean = false;
+
+  showdropdown: Observable<boolean>;
+  selected_companies: string = '';
+  all: boolean = false;
 
   constructor(
     private auth: AuthService,
@@ -39,27 +45,27 @@ export class HeaderComponent implements OnInit {
     this.auth.companyid.subscribe((companyid) => {
       this.companyid = companyid;
     });
+    this.showdropdown = auth.showdropdown;
     // console.log(router.url)
     this.menuActiveConfig(router.url, getMenuData);
+    if (router.url == '/storewisereport') {
+      this.multicompanies = true;
+    } else {
+      this.multicompanies = false;
+    }
+    // console.log(router.url, this.multicompanies);
     router.events.forEach((event) => {
-      console.log(event);
+      // console.log(event);
       if (event instanceof NavigationStart) {
         this.auth.isloading.next(false);
         const pageName = event['url'].replace('/', '');
         this.menuActiveConfig(event['url'], getMenuData);
-
-        // if (event["url"] == "/") {
-        //   this.showHead = false;
-        // } else if (event["url"] == "/signup") {
-        //   this.showHead = false;
-        //   //this.AppName = "";
-        // } else if (event["url"] == "/unlockscreen") {
-        //   this.showHead = false;
-        // } else if (event["url"] == "/password-reset") {
-        //   this.showHead = false;
-        // } else {
-        //   this.showHead = true;
-        // }
+        if (event['url'] == '/storewisereport') {
+          this.multicompanies = true;
+        } else {
+          this.multicompanies = false;
+        }
+        // console.log(event['url'], this.multicompanies);
       }
     });
   }
@@ -130,6 +136,36 @@ export class HeaderComponent implements OnInit {
       this.stores = data;
       this.auth.isloading.next(false);
     });
+  }
+
+  //multi select
+  select(i: number) {
+    console.log(i);
+  }
+
+  toggleDropDown() {
+    this.auth.showdropdown.next(true);
+  }
+
+  change(bool: boolean = true) {
+    // console.log(bool);
+    this.selected_companies = this.companies
+      .filter((x: any) => x.isselected)
+      .map((x: any) => x.AccountName)
+      .join(', ');
+    console.log(this.selected_companies);
+    this.auth.selectedcompanies.next(
+      this.companies
+        .filter((x: any) => x.isselected)
+        .map((x: any) => x.CompanyId)
+    );
+  }
+
+  toggleAll() {
+    this.companies.forEach((element: any) => {
+      element.isselected = this.all;
+    });
+    this.change();
   }
 }
 

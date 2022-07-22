@@ -34,6 +34,7 @@ export class SigninComponent implements OnInit {
         );
         if (data['status'] == 200) {
           this.auth.loggedIn.next(true);
+          this.auth.companyid.next(data.company.Id)
         }
       });
   }

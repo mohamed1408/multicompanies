@@ -9,3 +9,33 @@
   position: absolute;
   bottom: 0;
 }
+
+
+.checkbox-select {
+  position: relative;
+}
+
+.options {
+  position: absolute;
+  left: 0;
+  max-height: 250px;
+  overflow: auto;
+}
+
+.option {
+  background: white;
+  cursor: pointer;
+}
+
+.option label {
+  margin: 0;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: #348ff1;
+}
+
+.option:hover label {
+  color: white;
+}

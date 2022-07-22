@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -13,6 +13,14 @@ declare function setHeightWidth(): any;
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  @HostListener('click', ['$event.target'])
+  onClick(btn: any) {
+    console.log('button', btn, btn.classList.value);
+    if (!btn.classList.value.includes('cbselectels')) {
+      this.auth.showdropdown.next(false);
+    }
+  }
+
   title = 'StoreSales';
   isCollapsed: boolean = false;
   isLoggedIn$: Observable<boolean>;
@@ -30,7 +38,9 @@ export class AppComponent {
     this.isLoggedIn$ = this.auth.isLoggedIn;
     this.isLocked$ = this.auth.accLocked;
     this.isLoading$ = this.auth.isloading;
-
+    this.auth.companyid.subscribe((cid) => {
+      console.log(cid);
+    });
     const ctoken = localStorage.getItem('ctoken') || '';
     const utoken = localStorage.getItem('utoken') || '';
     if (ctoken != '') {
@@ -62,6 +72,6 @@ export class AppComponent {
         // }
       }
     });
-    this.signalR.connect()
+    this.signalR.connect();
   }
 }

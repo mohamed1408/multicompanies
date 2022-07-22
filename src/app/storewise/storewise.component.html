@@ -13,14 +13,14 @@
       <div class="col-xl-12 sticky">
         <section class="hk-sec-wrapper row mx-0">
           <!-- <div class="form-group col-sm-3">
-                        <label>Companies</label>
-                        <select class="form-control custom-select" [(ngModel)]="companyid"
-                            aria-placeholder="Select Company">
-                            <option *ngFor="let comp of companies" value={{comp.CompanyId}}>
-                                {{comp.AccountName}}
-                            </option>
-                        </select>
-                    </div> -->
+              <label>Companies</label>
+              <select class="form-control custom-select" [(ngModel)]="companyid"
+                  aria-placeholder="Select Company">
+                  <option *ngFor="let comp of companies" value={{comp.CompanyId}}>
+                      {{comp.AccountName}}
+                  </option>
+              </select>
+          </div> -->
           <div class="form-group col-sm-4">
             <label>Date</label>
             <div id="myrangepicker" class="form-control text-truncate">
@@ -32,7 +32,7 @@
             <button
               (click)="storeRpt()"
               class="btn btn-icon btn-success btn-icon-style-1"
-              style="position: absolute; bottom: 15px;"
+              style="position: absolute; bottom: 15px"
             >
               <span class="btn-icon-wrap"
                 ><img
@@ -44,7 +44,7 @@
             <button
               (click)="openDrawer()"
               class="btn btn-icon btn-icon-style-1"
-              style="position: absolute; bottom: 15px; left: 15%;"
+              style="position: absolute; bottom: 15px; left: 15%"
             >
               <span class="btn-icon-wrap"
                 ><img src="../../assets/svg/settings.svg" alt="" srcset=""
@@ -229,6 +229,7 @@
               class="form-control"
               [(ngModel)]="rangeSetting.from"
               onfocus="this.select()"
+              (keyup.enter)="addSetting()"
             />
           </div>
           <div class="form-group col-xl-6">
@@ -238,6 +239,7 @@
               class="form-control"
               [(ngModel)]="rangeSetting.to"
               onfocus="this.select()"
+              (keyup.enter)="addSetting()"
             />
           </div>
         </div>
@@ -246,6 +248,7 @@
             type="color"
             class="form-control"
             [(ngModel)]="rangeSetting.color"
+            (keyup.enter)="addSetting()"
           />
         </div>
         <div class="row px-15">
@@ -273,6 +276,7 @@
                 class="form-control form-control-sm"
                 [(ngModel)]="setting.from"
                 onfocus="this.select()"
+                (keyup.enter)="updateSettings()"
               />
             </div>
             <div class="form-group form-control-sm col-sm-6">
@@ -283,6 +287,7 @@
                 class="form-control form-control-sm"
                 [(ngModel)]="setting.to"
                 onfocus="this.select()"
+                (keyup.enter)="updateSettings()"
               />
             </div>
             <div class="form-group form-control-sm w-100">
@@ -292,6 +297,7 @@
                 type="color"
                 class="form-control form-control-sm"
                 [(ngModel)]="setting.color"
+                (keyup.enter)="updateSettings()"
               />
             </div>
           </div>
