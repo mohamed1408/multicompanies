@@ -29,7 +29,7 @@ export class OrderwisereportComponent implements OnInit {
   alwaysShowCalendars: boolean;
   TotalSales = 0;
   TotalPayments = 0;
-  term: string = "";
+  term: string = '';
   p: any;
   showloading = true;
   ranges: any = {
@@ -67,8 +67,12 @@ export class OrderwisereportComponent implements OnInit {
   x!: number;
   y!: number;
   pricetot = 0;
+  limited_user: boolean = true;
   constructor(private Auth: AuthService, private modalService: NgbModal) {
     this.alwaysShowCalendars = true;
+    this.Auth.limited_user.subscribe((lu) => {
+      this.limited_user = lu;
+    });
     // var userinfo = localStorage.getItem("userinfo");
     // var userinfoObj = JSON.parse(userinfo);
     // this.CompanyId = userinfoObj[0].CompanyId;
@@ -80,7 +84,7 @@ export class OrderwisereportComponent implements OnInit {
   ngOnInit() {
     this.Auth.companyid.subscribe((companyid) => {
       this.CompanyId = companyid;
-      this.Auth.isloading.next(true)
+      this.Auth.isloading.next(true);
       this.GetStore();
     });
     setHeightWidth();
@@ -299,6 +303,12 @@ export class OrderwisereportComponent implements OnInit {
         this.orderwiserpt.Order[i].OrderedDate = moment(
           this.orderwiserpt.Order[i].OrderedDate
         ).format('LLL');
+        if (this.limited_user) {
+          this.orderwiserpt.Order[i].PaidAmount = 0;
+          this.orderwiserpt.Order[i].BillAmount = 0;
+          this.orderwiserpt.Order[i].DiscAmount = 0;
+          this.orderwiserpt.Order[i].TotalTax = 0;
+        }
         // this.orderwiserpt.Order[i].ItemJson = JSON.parse(this.orderwiserpt.Order[i].ItemJson);
         // this.orderwiserpt.Order[i].ChargeJson = JSON.parse(this.orderwiserpt.Order[i].ChargeJson);
 
@@ -360,7 +370,7 @@ export class OrderwisereportComponent implements OnInit {
         this.errorMsg = response.msg;
         console.log(dangertoast(this.errorMsg));
       }
-      this.Auth.isloading.next(false)
+      this.Auth.isloading.next(false);
     });
   }
 
@@ -389,10 +399,14 @@ export class OrderwisereportComponent implements OnInit {
     }
   }
 
-  date(e: {
-    startDate: { format: (arg0: string) => any };
-    endDate: { format: (arg0: string) => any };
-  } | any) {
+  date(
+    e:
+      | {
+          startDate: { format: (arg0: string) => any };
+          endDate: { format: (arg0: string) => any };
+        }
+      | any
+  ) {
     // console.log(e);
     if (e && e.startDate && e.endDate) {
       this.startdate = e.startDate.format('YYYY-MM-DD');

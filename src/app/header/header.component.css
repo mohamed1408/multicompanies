@@ -13,12 +13,13 @@
 
 .checkbox-select {
   position: relative;
+  right: 50px;
 }
 
 .options {
   position: absolute;
   left: 0;
-  max-height: 250px;
+  /* max-height: 250px; */
   overflow: auto;
 }
 

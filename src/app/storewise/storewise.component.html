@@ -3,7 +3,7 @@
     <ol class="breadcrumb breadcrumb-light bg-transparent">
       <!-- <li class="breadcrumb-item"><a href="javascript:void(0);">Company Management</a></li> -->
       <li class="breadcrumb-item active" aria-current="page">
-        Multi Companies
+        Store Wise Report
       </li>
     </ol>
   </nav>
@@ -79,15 +79,35 @@
               <table class="table mb-0 table-sm">
                 <thead>
                   <tr>
-                    <th>Store Name</th>
-                    <th class="text-right">Bill Amount</th>
-                    <th class="text-right pointer" (click)="sort('PaidAmount')">
-                      Paid Amount
+                    <th class="unselectable pointer" (click)="sort('Name')">
+                      <span *ngIf="sortSetting['Name'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
+                      Store Name 
+                      <i *ngIf="sortSetting['Name'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['Name'][1]>0,'fa-caret-down text-danger': sortSetting['Name'][1]<0}" class="fa font-12"></i></th>
+                    <th class="text-right unselectable pointer" (click)="sort('BillAmount')">
+                      <span *ngIf="sortSetting['BillAmount'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
+                      Bill Amount 
+                      <i *ngIf="sortSetting['BillAmount'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['BillAmount'][1]>0,'fa-caret-down text-danger': sortSetting['BillAmount'][1]<0}" class="fa font-12"></i></th>
+                    <th class="text-right unselectable pointer" (click)="sort('PaidAmount')">
+                      <span *ngIf="sortSetting['PaidAmount'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
+                      Paid Amount 
+                      <i *ngIf="sortSetting['PaidAmount'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['PaidAmount'][1]>0,'fa-caret-down text-danger': sortSetting['PaidAmount'][1]<0}" class="fa font-12"></i>
                     </th>
-                    <th class="text-right">POS</th>
-                    <th class="text-right">Swiggy</th>
-                    <th class="text-right">Zomato</th>
-                    <th class="text-right">Discount</th>
+                    <th class="text-right unselectable pointer" (click)="sort('Pos')">
+                      <span *ngIf="sortSetting['Pos'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
+                      POS 
+                      <i *ngIf="sortSetting['Pos'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['Pos'][1]>0,'fa-caret-down text-danger': sortSetting['Pos'][1]<0}" class="fa font-12"></i></th>
+                    <th class="text-right unselectable pointer" (click)="sort('Swiggy')">
+                      <span *ngIf="sortSetting['Swiggy'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
+                      Swiggy
+                      <i *ngIf="sortSetting['Swiggy'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['Swiggy'][1]>0,'fa-caret-down text-danger': sortSetting['Swiggy'][1]<0}" class="fa font-12"></i></th>
+                    <th class="text-right unselectable pointer" (click)="sort('Zomato')">
+                      <span *ngIf="sortSetting['Zomato'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
+                      Zomato
+                      <i *ngIf="sortSetting['Zomato'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['Zomato'][1]>0,'fa-caret-down text-danger': sortSetting['Zomato'][1]<0}" class="fa font-12"></i></th>
+                    <th class="text-right unselectable pointer" (click)="sort('DiscAmount')">
+                      <span *ngIf="sortSetting['DiscAmount'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
+                      Discount 
+                      <i *ngIf="sortSetting['DiscAmount'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['DiscAmount'][1]>0,'fa-caret-down text-danger': sortSetting['DiscAmount'][1]<0}" class="fa font-12"></i></th>
                   </tr>
                 </thead>
                 <tbody>

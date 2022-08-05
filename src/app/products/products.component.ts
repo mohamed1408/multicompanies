@@ -28,12 +28,12 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  getusercompany() {
-    this.Auth.getusercompanies(this.user.userid).subscribe((data: any) => {
-      this.companies = data['userCompanies'];
-      // this.companyid = this.companies[0].CompanyId;
-    });
-  }
+  // getusercompany() {
+  //   this.Auth.getusercompanies(this.user.userid).subscribe((data: any) => {
+  //     this.companies = data['userCompanies'];
+  //     // this.companyid = this.companies[0].CompanyId;
+  //   });
+  // }
 
   getcompanyproducts() {
     // this.Auth.getCompanyProducts(this.companyid).subscribe((data: any) => {

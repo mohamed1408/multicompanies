@@ -12,30 +12,20 @@ export class AuthService {
   ecomurl = 'https://biz1ecom.azurewebsites.net/api/';
   posurl = 'http://localhost:2357/';
 
-  public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
-  public accLocked: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    true
-  );
-  public isloading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
-  public showdropdown: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
+  public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public accLocked: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public isloading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public showdropdown: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   get isLoggedIn() {
     return this.loggedIn.asObservable();
   }
 
   public user: BehaviorSubject<any> = new BehaviorSubject<any>({});
-  public companies: BehaviorSubject<Array<any>> = new BehaviorSubject<
-    Array<any>
-  >([]);
-  public selectedcompanies: BehaviorSubject<Array<number>> =
-    new BehaviorSubject<Array<number>>([]);
+  public companies: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
+  public selectedcompanies: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>([]);
   public companyid: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public limited_user: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   constructor(private router: Router, private http: HttpClient) {}
 

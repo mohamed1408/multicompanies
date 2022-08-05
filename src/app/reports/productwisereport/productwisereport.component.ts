@@ -14,6 +14,7 @@ import { dangertoast } from 'src/assets/dist/js/toast-data';
 import * as XLSX from 'xlsx';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/auth.service';
+import { Observable } from 'rxjs';
 
 declare function setHeightWidth(): any;
 export interface PeriodicElement {
@@ -60,8 +61,10 @@ export class ProductwisereportComponent implements OnInit {
   show: boolean = true;
   myControl = new FormControl();
   stores: any;
+  selected_stores: string = "";
+  showdropdown: Observable<boolean>;
   key = 'Name';
-  all: string = 'All';
+  all: boolean = false;
   term: string = '';
   p: any;
   selected: any;
@@ -120,6 +123,7 @@ export class ProductwisereportComponent implements OnInit {
   showfactor: boolean = false;
   constructor(private Auth: AuthService, private modalService: NgbModal) {
     this.alwaysShowCalendars = true;
+    this.showdropdown = Auth.showdropdown;
     // var userinfo = localStorage.getItem("userinfo");
     // var userinfoObj = JSON.parse(userinfo);
     // this.CompanyId = userinfoObj[0].CompanyId;
@@ -179,7 +183,7 @@ export class ProductwisereportComponent implements OnInit {
   factoredQuantity = 0;
   Submit() {
     // this.loaderService.show();
-    this.Auth.isloading.next(true)
+    this.Auth.isloading.next(true);
     this.show = true;
     if (this.startdate && this.startdate.hasOwnProperty('month')) {
       this.startdate.month = this.startdate.month - 1;
@@ -268,7 +272,7 @@ export class ProductwisereportComponent implements OnInit {
         console.log(dangertoast(this.errorMsg));
       }
       // this.loaderService.hide();
-      this.Auth.isloading.next(false)
+      this.Auth.isloading.next(false);
     });
   }
   strMatch(string: string, substring: string) {
@@ -639,5 +643,35 @@ export class ProductwisereportComponent implements OnInit {
         this.getSaleProducts();
       }
     }
+  }
+
+  //multi select
+  select(i: number) {
+    console.log(i);
+  }
+
+  toggleDropDown() {
+    this.Auth.showdropdown.next(true);
+  }
+
+  change(bool: boolean = true) {
+    // console.log(bool);
+    this.selected_stores = this.stores
+      .filter((x: any) => x.isselected)
+      .map((x: any) => x.Name)
+      .join(', ');
+    console.log(this.selected_stores);
+    this.Auth.selectedcompanies.next(
+      this.stores
+        .filter((x: any) => x.isselected)
+        .map((x: any) => x.CompanyId)
+    );
+  }
+
+  toggleAll() {
+    this.stores.forEach((element: any) => {
+      element.isselected = this.all;
+    });
+    this.change();
   }
 }

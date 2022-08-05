@@ -29,6 +29,11 @@ export class LockscreenComponent implements OnInit {
   }
 
   unlock() {
+    this.auth.companies.subscribe(companies => {
+      if(companies.length > 1) {
+        this.auth.limited_user.next(false)
+      }
+    })
     this.auth.isloading.next(true);
     this.auth.unlock(this.pin, this.companyid).subscribe((data: any) => {
       this.auth.isloading.next(false);

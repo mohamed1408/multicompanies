@@ -33,9 +33,15 @@ export class StorewiseComponent implements OnInit {
   rangeSetting: RangeSetting | null = null;
   rangeSettings: Array<RangeSetting> = [];
   sortSetting: any = {
+    Name: ['Name', 0],
     PaidAmount: ['PaidAmount', 0],
     BillAmount: ['BillAmount', 0],
+    Pos: ['Pos', 0],
+    Swiggy: ['Swiggy', 0],
+    Zomato: ['Zomato', 0],
+    DiscAmount: ['DiscAmount', 0],
   };
+
   constructor(private Auth: AuthService, private ng2filterpipe: Ng2SearchPipe) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
     this.rangeSettings = JSON.parse(
@@ -61,15 +67,15 @@ export class StorewiseComponent implements OnInit {
     })(moment(), moment());
   }
 
-  getusercompany() {
-    this.Auth.isloading.next(true);
-    this.Auth.getusercompanies(this.user.userid).subscribe((data: any) => {
-      this.companies = data['userCompanies'];
-      this.companyid = this.companies[0].CompanyId;
-      this.storeid = 0;
-      this.getstores();
-    });
-  }
+  // getusercompany() {
+  //   this.Auth.isloading.next(true);
+  //   this.Auth.getusercompanies(this.user.userid).subscribe((data: any) => {
+  //     this.companies = data['userCompanies'];
+  //     this.companyid = this.companies[0].CompanyId;
+  //     this.storeid = 0;
+  //     this.getstores();
+  //   });
+  // }
 
   getstores() {
     this.Auth.GetStores(this.companyid).subscribe((data) => {
@@ -199,16 +205,33 @@ export class StorewiseComponent implements OnInit {
 
   sort(field: string) {
     const { compare } = Intl.Collator('en-US');
-    if ([-1, 0].includes(this.sortSetting[field][0])) {
-      this.sortSetting[field][0] = 1;
+    if ([-1, 0].includes(this.sortSetting[field][1])) {
+      this.sortSetting[field][1] = 1;
     } else {
-      this.sortSetting[field][0] = -1;
+      this.sortSetting[field][1] = -1;
     }
-    this.storereport = this.storereport.sort(
-      (a: any, b: any) =>
-        ((a[field] - b[field]) / Math.abs(a[field] - b[field])) *
-        this.sortSetting[field][0]
-    );
+    this.resetSettings(field);
+    const type = typeof this.storereport[0][field];
+    if (type == 'number')
+      this.storereport = this.storereport.sort(
+        (a: any, b: any) =>
+          ((a[field] - b[field]) / Math.abs(a[field] - b[field])) *
+          this.sortSetting[field][1]
+      );
+    else if (type == 'string')
+      this.storereport = this.storereport.sort(
+        (a: any, b: any) =>
+          (a[field].localeCompare(b[field])) *
+          this.sortSetting[field][1]
+      );
+  }
+
+  resetSettings(field: string) {
+    Object.keys(this.sortSetting).forEach((key) => {
+      if (key != field) {
+        this.sortSetting[key][1] = 0;
+      }
+    });
   }
 }
 
