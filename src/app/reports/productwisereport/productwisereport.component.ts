@@ -133,6 +133,7 @@ export class ProductwisereportComponent implements OnInit {
   }
   localOrders: any = [];
   localOrderItems: any = [];
+  storekey: string = ''
   ngOnInit() {
     this.Auth.companyid.subscribe((companyid) => {
       this.CompanyId = companyid;
@@ -202,7 +203,8 @@ export class ProductwisereportComponent implements OnInit {
       this.CategoryId,
       this.sourceId,
       this.tagId,
-      this.datatype ? 2 : 1
+      this.datatype ? 2 : 1,
+      this.storekey
     ).subscribe((data) => {
       this.showloading = false;
       if (this.tagId > 0) this.showfactor = true;
@@ -441,7 +443,8 @@ export class ProductwisereportComponent implements OnInit {
       this.CategoryId,
       this.sourceId,
       this.tagId,
-      this.datatype ? 2 : 1
+      this.datatype ? 2 : 1,
+      ''
     ).subscribe((data) => {
       this.data = data;
       console.log(this.data);
@@ -661,11 +664,15 @@ export class ProductwisereportComponent implements OnInit {
       .map((x: any) => x.Name)
       .join(', ');
     console.log(this.selected_stores);
-    this.Auth.selectedcompanies.next(
-      this.stores
-        .filter((x: any) => x.isselected)
-        .map((x: any) => x.CompanyId)
-    );
+    this.storekey = this.stores
+    .filter((x: any) => x.isselected)
+    .map((x: any) => x.Id)
+    .join('_');
+    // this.Auth.selectedcompanies.next(
+    //   this.stores
+    //     .filter((x: any) => x.isselected)
+    //     .map((x: any) => x.CompanyId)
+    // );
   }
 
   toggleAll() {
