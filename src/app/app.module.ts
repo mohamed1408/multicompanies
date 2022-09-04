@@ -25,6 +25,7 @@ import { TimePipe } from './pipes/time/time.pipe';
 import { MonthwiseproductreportComponent } from './reports/monthwiseproductreport/monthwiseproductreport.component';
 import { SpgwisereportComponent } from './reports/spgwisereport/spgwisereport.component';
 import { DeliveryorderreportComponent } from './reports/deliveryorderreport/deliveryorderreport.component';
+import { ClickOutsideDirective } from './Directives/click-outside.directive';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { DeliveryorderreportComponent } from './reports/deliveryorderreport/deli
     MonthwiseproductreportComponent,
     SpgwisereportComponent,
     DeliveryorderreportComponent,
+    ClickOutsideDirective,
   ],
   imports: [
     BrowserModule,

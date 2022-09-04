@@ -4,6 +4,7 @@ import {
   NgModule,
   ElementRef,
   ViewChild,
+  HostListener,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 // import { AuthService } from '../auth.service';
@@ -30,6 +31,10 @@ export interface PeriodicElement {
   styleUrls: ['./productwisereport.component.css'],
 })
 export class ProductwisereportComponent implements OnInit {
+  @HostListener('window:keydown', ['$event'])
+  newColor(key: any) {
+    console.log(key);
+  }
   orders: PeriodicElement[] = [];
   displayedColumns: string[] = [
     'Name',
@@ -38,6 +43,15 @@ export class ProductwisereportComponent implements OnInit {
     'Totalqty',
     'TotalSales',
   ];
+  sources = [
+    { id: 1, name: 'POS', isselected: false },
+    { id: 2, name: 'Swiggy', isselected: false },
+    { id: 3, name: 'Zomato', isselected: false },
+  ];
+  sourceMS: multiselectConfig;
+  storeMS: multiselectConfig = new multiselectConfig([], () => {});
+  selected_sources: string;
+  source_key: string = ""
   @ViewChild('TABLE', { static: false })
   TABLE!: ElementRef;
   title = 'Excel';
@@ -61,7 +75,7 @@ export class ProductwisereportComponent implements OnInit {
   show: boolean = true;
   myControl = new FormControl();
   stores: any;
-  selected_stores: string = "";
+  selected_stores: string = '';
   showdropdown: Observable<boolean>;
   key = 'Name';
   all: boolean = false;
@@ -124,6 +138,12 @@ export class ProductwisereportComponent implements OnInit {
   constructor(private Auth: AuthService, private modalService: NgbModal) {
     this.alwaysShowCalendars = true;
     this.showdropdown = Auth.showdropdown;
+    this.selected_sources = '';
+    this.sourceMS = new multiselectConfig(this.sources, (data: any) => {
+      // console.log(data);
+      this.source_key = data.map((x: any) => x.id).join("_")
+      this.sourceMS.show_string = data.map((x: any) => x.name).join(", ")
+    });
     // var userinfo = localStorage.getItem("userinfo");
     // var userinfoObj = JSON.parse(userinfo);
     // this.CompanyId = userinfoObj[0].CompanyId;
@@ -133,12 +153,12 @@ export class ProductwisereportComponent implements OnInit {
   }
   localOrders: any = [];
   localOrderItems: any = [];
-  storekey: string = ''
+  storekey: string = '';
   ngOnInit() {
     this.Auth.companyid.subscribe((companyid) => {
       this.CompanyId = companyid;
       this.GetStore();
-      this.Submit();
+      // this.Submit();
       this.getCategory();
       this.gettags();
       this._localorders();
@@ -201,7 +221,7 @@ export class ProductwisereportComponent implements OnInit {
       todate,
       this.CompanyId,
       this.CategoryId,
-      this.sourceId,
+      this.source_key,
       this.tagId,
       this.datatype ? 2 : 1,
       this.storekey
@@ -441,7 +461,7 @@ export class ProductwisereportComponent implements OnInit {
       this.enddate,
       this.CompanyId,
       this.CategoryId,
-      this.sourceId,
+      this.source_key,
       this.tagId,
       this.datatype ? 2 : 1,
       ''
@@ -547,6 +567,10 @@ export class ProductwisereportComponent implements OnInit {
         this.errorMsg = response.msg;
         console.log(dangertoast(this.errorMsg));
       }
+      this.storeMS = new multiselectConfig(data, ((stores: any) => {
+        this.storekey = stores.map((x: any) => x.Id).join("_")
+        this.storeMS.show_string = stores.map((x: any) => x.Name).join(", ")
+      }))
     });
   }
   gettags() {
@@ -665,9 +689,9 @@ export class ProductwisereportComponent implements OnInit {
       .join(', ');
     console.log(this.selected_stores);
     this.storekey = this.stores
-    .filter((x: any) => x.isselected)
-    .map((x: any) => x.Id)
-    .join('_');
+      .filter((x: any) => x.isselected)
+      .map((x: any) => x.Id)
+      .join('_');
     // this.Auth.selectedcompanies.next(
     //   this.stores
     //     .filter((x: any) => x.isselected)
@@ -680,5 +704,40 @@ export class ProductwisereportComponent implements OnInit {
       element.isselected = this.all;
     });
     this.change();
+  }
+
+  //source multiselect
+  onload(component: string ) {
+    console.log(component)
+  }
+}
+
+class multiselectConfig {
+  // @HostListener('keydown') newColor(key: any) {
+  //   console.log(key)
+  // }
+  data: any;
+  all: boolean;
+  show_string: string;
+  show_panel: boolean;
+
+  constructor(_data: any, public change_callback: any) {
+    this.data = _data;
+    this.all = false;
+    this.show_string = '';
+    this.show_panel = false;
+  }
+
+  toggleAll() {
+    this.data.forEach((element: any) => {
+      element.isselected = this.all;
+    });
+    this.change();
+  }
+
+  change(bool: boolean = true) {
+    if(this.data.length == this.data.filter((x: any) => x.isselected).length) this.all = true
+    else this.all = false
+    this.change_callback(this.data.filter((x: any) => x.isselected));
   }
 }

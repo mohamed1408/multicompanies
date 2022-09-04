@@ -287,7 +287,7 @@ export class StorewisereportComponent implements OnInit {
     // console.log(this.term, this.orderwiserpt.Order.filter(x => this.filter(x)).length)
   }
 
-  openDetailpopup(contentdetail: any, Id: string) {
+  openDetailpopup(contentdetail: any, Id: any) {
     console.log('contentdetail', contentdetail);
     var frmdate = moment(this.startdate).format('YYYY-MM-DD');
     var todate = moment(this.enddate).format('YYYY-MM-DD');
@@ -350,7 +350,8 @@ export class StorewisereportComponent implements OnInit {
         todate,
         this.CompanyId,
         this.categoryId,
-        this.sourceId
+        this.sourceId.toString(),
+        null
       ).subscribe((data) => {
         this.categorywiserpt = data;
         console.log(this.categorywiserpt);

@@ -13,7 +13,7 @@
             <div class="form-group row">
               <div style="margin-left:30px ">
                 <label for="username">Location</label>
-                <ng-autocomplete (inputCleared)="focusAutocomplete()" [data]="stores" style="width:10em;margin-left:30px;
+                <!-- <ng-autocomplete (inputCleared)="focusAutocomplete()" [data]="stores" style="width:10em;margin-left:30px;
                                border-color: #90a7a8;  " [searchKeyword]="key" (selected)='selectEvent($event)'
                   placeHolder="Choose Location" [itemTemplate]="itemTemplate1" [notFoundTemplate]="notFoundTemplate1"
                   [(ngModel)]="all"></ng-autocomplete>
@@ -22,8 +22,26 @@
                 </ng-template>  
                 <ng-template #notFoundTemplate1 let-notFound>
                   <div [innerHTML]="notFound"></div>
-                </ng-template>
-              </div>
+                </ng-template> -->
+
+                <div (clickOutside)="storeMS.show_panel = false" #sourcemultiselect class="checkbox-select px-0 sourcemultiselect">
+                  <input (focus)="storeMS.show_panel = true" type="text" class="w-100 sourcemultiselect" placeholder="Select atleast one" readonly [(ngModel)]="storeMS.show_string"/>
+                  <div id="sourcemultiselectdd" *ngIf="storeMS.show_panel" class="options w-100 shadow shadow-xl multidd sourcemultiselect">
+                    <div class="option px-15 sourcemultiselect" (click)="storeMS.all = !storeMS.all; storeMS.toggleAll()">
+                      <label for="one" class="sourcemultiselect">
+                        <input type="checkbox" readonly [(ngModel)]="storeMS.all" class="sourcemultiselect"/>
+                        Select All
+                      </label>
+                    </div>
+                    <div *ngFor="let source of storeMS.data" class="option px-15 sourcemultiselect" (click)="source.isselected = !source.isselected; storeMS.change()">
+                      <label for="one" class="sourcemultiselect">
+                        <input type="checkbox" readonly [(ngModel)]="source.isselected" class="sourcemultiselect"/>
+                        &nbsp;{{ source.Name }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                </div>
               <div style="margin-left:35px;">
                 <label for="username">Date</label>
                 <input type="text" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
@@ -47,14 +65,24 @@
               </div>
               <div class="form-group" style="width: 10em;margin-left:40px;">
                 <label for="username">Source</label>
-                <select class="form-control custom-select" [(ngModel)]="sourceId" name="Source">
-                  <option value="0">All</option>
-                  <option value="1">POS</option>
-                  <option value="2">Swiggy</option>
-                  <option value="3">Zomato</option>
-                  <option value="4">Food Panda</option>
-                </select>
-              </div>
+                <div (clickOutside)="sourceMS.show_panel = false" #sourcemultiselect class="checkbox-select px-0 sourcemultiselect">
+                  <input (focus)="sourceMS.show_panel = true" type="text" class="w-100 sourcemultiselect" placeholder="Select atleast one" readonly [(ngModel)]="sourceMS.show_string"/>
+                  <div id="sourcemultiselectdd" *ngIf="sourceMS.show_panel" class="options w-100 shadow shadow-xl multidd sourcemultiselect">
+                    <div class="option px-15 sourcemultiselect" (click)="sourceMS.all = !sourceMS.all; sourceMS.toggleAll()">
+                      <label for="one" class="sourcemultiselect">
+                        <input type="checkbox" readonly [(ngModel)]="sourceMS.all" class="sourcemultiselect"/>
+                        Select All
+                      </label>
+                    </div>
+                    <div *ngFor="let source of sourceMS.data" class="option px-15 sourcemultiselect" (click)="source.isselected = !source.isselected; sourceMS.change()">
+                      <label for="one" class="sourcemultiselect">
+                        <input type="checkbox" readonly [(ngModel)]="source.isselected" class="sourcemultiselect"/>
+                        &nbsp;{{ source.name }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                </div>
               <div style="margin-left:50px;margin-top:35px;">
                 <button class="btn btn-success  btn-sm mx-10 w-100" (click)="Submit()">Submit</button>
               </div>

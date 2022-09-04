@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-categorywisereport',
@@ -15,8 +16,8 @@ export class CategorywisereportComponent implements OnInit {
   catId: number = 0;
   storeId: any;
   sourceId = 0;
-  all: string = 'All';
-  // al: string = "All";
+  // all: string = 'All';
+  all: boolean = false;
   stores: any;
   category: any;
   alwaysShowCalendars: boolean;
@@ -62,8 +63,24 @@ export class CategorywisereportComponent implements OnInit {
   x: number = 0;
   y: number = 0;
 
+  showdropdown: Observable<boolean>;
+  sources = [
+    { id: 1, name: 'POS', isselected: false },
+    { id: 2, name: 'Swiggy', isselected: false },
+    { id: 3, name: 'Zomato', isselected: false },
+  ];
+  sourceMS: multiselectConfig;
+  storeMS: multiselectConfig = new multiselectConfig([], () => {});
+  source_key: string = '';
+
   constructor(private Auth: AuthService, private modalService: NgbModal) {
     this.alwaysShowCalendars = true;
+    this.showdropdown = Auth.showdropdown;
+    this.sourceMS = new multiselectConfig(this.sources, (data: any) => {
+      // console.log(data);
+      this.source_key = data.map((x: any) => x.id).join('_');
+      this.sourceMS.show_string = data.map((x: any) => x.name).join(', ');
+    });
     // var logInfo = JSON.parse(localStorage.getItem("loginInfo"));
     // this.CompanyId = logInfo.CompanyId;
   }
@@ -80,6 +97,7 @@ export class CategorywisereportComponent implements OnInit {
     });
   }
   Submit() {
+    this.Auth.isloading.next(true);
     this.show = true;
     if (this.startdate.hasOwnProperty('month')) {
       this.startdate.month = this.startdate.month - 1;
@@ -91,13 +109,15 @@ export class CategorywisereportComponent implements OnInit {
       this.storeId + 'frm' + frmdate + '' + todate + 'sourceId' + this.sourceId
     );
     this.Auth.GetSalesRpt5(
-      this.storeId,
+      -1,
       frmdate,
       todate,
       this.CompanyId,
       this.ParentCatId,
-      this.sourceId
+      this.source_key,
+      this.storekey
     ).subscribe((data) => {
+      this.Auth.isloading.next(false);
       this.categorywiserpt = data;
       console.log(this.categorywiserpt);
       this.TotalSales = 0;
@@ -117,7 +137,7 @@ export class CategorywisereportComponent implements OnInit {
     // console.log(string, substring)
     return string.toLowerCase().includes(substring);
   }
-  filter(obj: { [x: string]: any; }) {
+  filter(obj: { [x: string]: any }) {
     const term = this.term.toLowerCase();
     if (term == '') return true;
     var ismatching = false;
@@ -135,9 +155,11 @@ export class CategorywisereportComponent implements OnInit {
 
   calculate() {
     this.TotalSales = 0;
-    this.categorywiserpt.Order.filter((x: any) => this.filter(x)).forEach((pd: { TotalSales: number; }) => {
-      this.TotalSales += pd.TotalSales;
-    });
+    this.categorywiserpt.Order.filter((x: any) => this.filter(x)).forEach(
+      (pd: { TotalSales: number }) => {
+        this.TotalSales += pd.TotalSales;
+      }
+    );
     this.TotalSales = +this.TotalSales.toFixed(2);
   }
 
@@ -152,23 +174,26 @@ export class CategorywisereportComponent implements OnInit {
     }
   }
   get sortData() {
-    return this.categorywiserpt.Order.sort((a: { [x: string]: number; }, b: { [x: string]: number; }) => {
-      if (a[this.sortfield] < b[this.sortfield]) return this.x;
-      else if (a[this.sortfield] > b[this.sortfield]) return this.y;
-      else return 0;
-    });
+    return this.categorywiserpt.Order.sort(
+      (a: { [x: string]: number }, b: { [x: string]: number }) => {
+        if (a[this.sortfield] < b[this.sortfield]) return this.x;
+        else if (a[this.sortfield] > b[this.sortfield]) return this.y;
+        else return 0;
+      }
+    );
   }
 
   All() {
     var frmdate = moment().format('YYYY-MM-DD  00:00:00');
     var todate = moment().format('YYYY-MM-DD  23:59:59');
     this.Auth.GetSalesRpt5(
-      this.storeId,
+      -1,
       frmdate,
       todate,
       this.CompanyId,
       this.ParentCatId,
-      this.sourceId
+      this.source_key,
+      this.storekey
     ).subscribe((data) => {
       this.categorywiserpt = data;
       console.log(this.categorywiserpt);
@@ -186,15 +211,22 @@ export class CategorywisereportComponent implements OnInit {
     });
   }
 
-  selectEvent(e: { Id: any; }) {
+  selectEvent(e: { Id: any }) {
     this.storeId = e.Id;
   }
 
-  selectedEvent(e: { Id: number; }) {
+  selectedEvent(e: { Id: number }) {
     this.catId = e.Id;
   }
 
-  date(e: { startDate: { format: (arg0: string) => any; }; endDate: { format: (arg0: string) => any; }; } | any) {
+  date(
+    e:
+      | {
+          startDate: { format: (arg0: string) => any };
+          endDate: { format: (arg0: string) => any };
+        }
+      | any
+  ) {
     this.startdate = e.startDate.format('YYYY-MM-DD');
     this.enddate = e.endDate.format('YYYY-MM-DD');
   }
@@ -211,6 +243,10 @@ export class CategorywisereportComponent implements OnInit {
       };
       this.stores.push(obj);
       console.log(this.stores);
+      this.storeMS = new multiselectConfig(data, (stores: any) => {
+        this.storekey = stores.map((x: any) => x.Id).join('_');
+        this.storeMS.show_string = stores.map((x: any) => x.Name).join(', ');
+      });
     });
   }
 
@@ -221,7 +257,7 @@ export class CategorywisereportComponent implements OnInit {
       //  var obj = { Id: 0, Description: "All", ParentCategoryId: null }
       //  this.category.push(obj);
       let i = 0;
-      this.category.forEach((element: { ParentCategoryId: null; }) => {
+      this.category.forEach((element: { ParentCategoryId: null }) => {
         if (element.ParentCategoryId == null) {
           this.parentcategory[i] = element;
           i++;
@@ -288,5 +324,63 @@ export class CategorywisereportComponent implements OnInit {
       element = xPathResult.iterateNext();
     }
     element.focus();
+  }
+  selected_stores: string = '';
+  storekey: string = '';
+  change(bool: boolean = true) {
+    // console.log(bool);
+    this.selected_stores = this.stores
+      .filter((x: any) => x.isselected)
+      .map((x: any) => x.Name)
+      .join(', ');
+    console.log(this.selected_stores);
+    this.storekey = this.stores
+      .filter((x: any) => x.isselected)
+      .map((x: any) => x.Id)
+      .join('_');
+    // this.Auth.selectedcompanies.next(
+    //   this.stores
+    //     .filter((x: any) => x.isselected)
+    //     .map((x: any) => x.CompanyId)
+    // );
+  }
+  toggleDropDown() {
+    this.Auth.showdropdown.next(true);
+  }
+  toggleAll() {
+    this.stores.forEach((element: any) => {
+      element.isselected = this.all;
+    });
+    this.change();
+  }
+}
+class multiselectConfig {
+  // @HostListener('keydown') newColor(key: any) {
+  //   console.log(key)
+  // }
+  data: any;
+  all: boolean;
+  show_string: string;
+  show_panel: boolean;
+
+  constructor(_data: any, public change_callback: any) {
+    this.data = _data;
+    this.all = false;
+    this.show_string = '';
+    this.show_panel = false;
+  }
+
+  toggleAll() {
+    this.data.forEach((element: any) => {
+      element.isselected = this.all;
+    });
+    this.change();
+  }
+
+  change(bool: boolean = true) {
+    if (this.data.length == this.data.filter((x: any) => x.isselected).length)
+      this.all = true;
+    else this.all = false;
+    this.change_callback(this.data.filter((x: any) => x.isselected));
   }
 }

@@ -19,6 +19,30 @@ export class AppComponent {
     if (!btn.classList.value.includes('cbselectels')) {
       this.auth.showdropdown.next(false);
     }
+    if (
+      btn.classList.value.includes('sourcemultiselect') ||
+      btn.classList.value.includes('storemultiselect')
+    ) {
+      let sdd: any = document.getElementById('sourcemultiselectdd');
+      let sTdd: any = document.getElementById('storemultiselectdd');
+
+      if (btn.classList.value.includes('sourcemultiselect')) {        
+        sdd.hidden = false;
+      } else if(sdd) {
+        sdd.hidden = true;
+      }
+
+      if (btn.classList.value.includes('storemultiselect')) {        
+        sTdd.hidden = false;
+      } else if(sTdd) {
+        sTdd.hidden = true;
+      }
+    } else {
+      for(let i=0; i<document.getElementsByClassName("multidd").length; i++) {
+        let a = document.getElementsByClassName("multidd").item(i) as HTMLElement || {hidden: false}//.hidden = true
+        a.hidden = true
+      }
+    }
   }
 
   title = 'StoreSales';

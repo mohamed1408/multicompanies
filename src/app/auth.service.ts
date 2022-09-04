@@ -206,7 +206,7 @@ export class AuthService {
     todate: string,
     compId: number,
     categoryId: number,
-    sourceId: number,
+    sourcekey: string,
     tagId: number,
     datatype: number,
     storekey: string
@@ -223,8 +223,8 @@ export class AuthService {
         compId +
         '&categoryId=' +
         categoryId +
-        '&sourceId=' +
-        sourceId +
+        '&sourcekey=' +
+        sourcekey +
         '&tagId=' +
         tagId +
         '&datatype=' +
@@ -298,12 +298,13 @@ export class AuthService {
   }
 
   GetSalesRpt5(
-    Id: string,
+    Id: number,
     frmdate: string,
     todate: string,
     CompanyId: number,
     ParentCatId: number,
-    sourceId: number
+    sourcekey: string,
+    store_key: string | null
   ) {
     return this.http.get(
       this.baseurl +
@@ -317,8 +318,10 @@ export class AuthService {
         CompanyId +
         '&ParentCatId=' +
         ParentCatId +
-        '&sourceId=' +
-        sourceId
+        '&sourcekey=' +
+        sourcekey +
+        '&store_key=' +
+        store_key
     );
   }
 
