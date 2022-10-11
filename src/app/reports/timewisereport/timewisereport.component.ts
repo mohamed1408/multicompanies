@@ -220,6 +220,9 @@ export class TimewisereportComponent implements OnInit {
   }
   Intervalhours: number = 7;
   Intervalmins: number = 0;
+  totalQty: number = 0
+  totalSales: number = 0
+
   Submit() {
     this.Auth.isloading.next(true);
     // if (this.startdate.hasOwnProperty("month")) {
@@ -276,6 +279,14 @@ export class TimewisereportComponent implements OnInit {
       this.CompanyId
     ).subscribe((data: any) => {
       this.salesrpt = data;
+      this.totalQty = 0
+      this.totalSales = 0
+      this.salesrpt.Order.forEach((order: any) => {
+        this.totalQty += order.quantity
+        this.totalSales += order.TotSales
+      });
+      this.totalQty = +(this.totalQty.toFixed(2))
+      this.totalSales = +(this.totalSales.toFixed(2))
       console.log(this.salesrpt);
       this.Auth.isloading.next(false);
     });
