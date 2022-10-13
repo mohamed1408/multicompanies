@@ -145,6 +145,8 @@
 
                     <div class="row">
                         <div class="col-sm">
+                            <input type="text" class="form-control" placeholder="Search Report.." [(ngModel)]="term">
+                            <br>
                             <div class="table-wrap">
                                 <div class="table-responsive">
                                     <!-- <div style="position: relative;" class="mx-30">
@@ -153,27 +155,48 @@
                                         <output style="transform: translate(-50%);" class="bg-white text-white">{{sliderVal | slidertime}}</output>
                                         <input type="range" min="0" max="1440" value="0" [(ngModel)]="sliderVal" class="w-100 slider" id="myRange" step="30" (input)="setBubble()">
                                     </div> -->
-                                    <input type="text" class="form-control" placeholder="Search Report.."
-                                        [(ngModel)]="term">
-                                    <br>
                                     <table *ngIf="salesrpt" class="table mb-0 table-sm">
                                         <thead>
                                             <tr style="background-color:rgb(217, 226, 250);">
-                                                <th> <strong><a class="font-12">Store Name </a></strong> </th>
+                                                <th class="unselectable pointer" (click)="sort('storeName')">
+                                                    <!-- <span *ngIf="sortSetting['storeName'][1] != 0" class="font-11"
+                                                        style="font-style: italic; position: absolute; top: 20px;">Sorted
+                                                        by</span> -->
+                                                    Store Name
+                                                    <i *ngIf="sortSetting['storeName'][1] != 0"
+                                                        [ngClass]="{'fa-caret-up text-blue': sortSetting['storeName'][1]>0,'fa-caret-down text-danger': sortSetting['storeName'][1]<0}"
+                                                        class="fa font-12"></i>
+                                                </th>
+                                                <th class="text-right unselectable pointer" (click)="sort('TotSales')">
+                                                    <!-- <span *ngIf="sortSetting['TotSales'][1] != 0" class="font-11"
+                                                        style="font-style: italic; position: absolute; top: 20px;">Sorted
+                                                        by</span> -->
+                                                    TotalSales
+                                                    <i *ngIf="sortSetting['TotSales'][1] != 0"
+                                                        [ngClass]="{'fa-caret-up text-blue': sortSetting['TotSales'][1]>0,'fa-caret-down text-danger': sortSetting['TotSales'][1]<0}"
+                                                        class="fa font-12"></i>
+                                                </th>
+                                                <th class="text-right unselectable pointer" (click)="sort('quantity')">
+                                                    <!-- <span *ngIf="sortSetting['quantity'][1] != 0" class="font-11"
+                                                        style="font-style: italic; position: absolute; top: 20px;">Sorted
+                                                        by</span> -->
+                                                    Quantity
+                                                    <i *ngIf="sortSetting['quantity'][1] != 0"
+                                                        [ngClass]="{'fa-caret-up text-blue': sortSetting['quantity'][1]>0,'fa-caret-down text-danger': sortSetting['quantity'][1]<0}"
+                                                        class="fa font-12"></i>
+                                                </th>
                                                 <th> <strong><a class="font-12">StartTime</a></strong> </th>
                                                 <th> <strong><a class="font-12">EndTime</a></strong> </th>
-                                                <th> <strong><a class="font-12">Quantity</a></strong> </th>
-                                                <th> <strong><a class="font-12">TotalSales</a></strong> </th>
                                                 <th> </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let item of salesrpt.Order | filter:term  ">
                                                 <td class="font-12">{{item.storeName}}</td>
+                                                <td class="font-12 text-right">{{item.TotSales | number:".2" }}</td>
+                                                <td class="font-12 text-right">{{item.quantity | number:".2" }}</td>
                                                 <td class="font-12">{{item.StartTime}}</td>
                                                 <td class="font-12">{{item.EndTime}}</td>
-                                                <td class="font-12">{{item.quantity | number:".2" }}</td>
-                                                <td class="font-12">{{item.TotSales | number:".2" }}</td>
                                                 <td>
                                                     <button (click)="viewproducts(item)" class="btn btn-sm btn-link">
                                                         <i class="material-icons">visibility</i>
@@ -181,10 +204,11 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"></td>
+                                                <!-- <td colspan="2"></td> -->
                                                 <td><strong>Total</strong></td>
-                                                <td><strong>{{totalQty}}</strong></td>
                                                 <td><strong>{{totalSales}}</strong></td>
+                                                <td><strong>{{totalQty}}</strong></td>
+                                                <td colspan="3"></td>
                                             </tr>
                                         </tbody>
                                     </table>

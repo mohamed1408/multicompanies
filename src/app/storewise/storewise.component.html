@@ -82,7 +82,8 @@
                     <th class="unselectable pointer" (click)="sort('Name')">
                       <span *ngIf="sortSetting['Name'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
                       Store Name 
-                      <i *ngIf="sortSetting['Name'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['Name'][1]>0,'fa-caret-down text-danger': sortSetting['Name'][1]<0}" class="fa font-12"></i></th>
+                      <i *ngIf="sortSetting['Name'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['Name'][1]>0,'fa-caret-down text-danger': sortSetting['Name'][1]<0}" class="fa font-12"></i>
+                    </th>
                     <th class="text-right unselectable pointer" (click)="sort('BillAmount')">
                       <span *ngIf="sortSetting['BillAmount'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
                       Bill Amount 

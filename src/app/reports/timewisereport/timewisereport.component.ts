@@ -125,6 +125,16 @@ export class TimewisereportComponent implements OnInit {
   TotalPrdQty: any;
   TotalProductSale: any;
 
+  sortSetting: any = {
+    storeName: ['storeName', 0],
+    TotSales: ['TotSales', 0],
+    quantity: ['quantity', 0],
+    Pos: ['Pos', 0],
+    Swiggy: ['Swiggy', 0],
+    Zomato: ['Zomato', 0],
+    DiscAmount: ['DiscAmount', 0],
+  };
+
   isInvalidDate = (m: moment.Moment) => {
     return this.invalidDates.some((d) => d.isSame(m, 'day'));
   };
@@ -354,6 +364,35 @@ export class TimewisereportComponent implements OnInit {
       }
     );
   }
+  sort(field: string) {
+    const { compare } = Intl.Collator('en-US');
+    if ([-1, 0].includes(this.sortSetting[field][1])) {
+      this.sortSetting[field][1] = 1;
+    } else {
+      this.sortSetting[field][1] = -1;
+    }
+    this.resetSettings(field);
+    const type = typeof this.salesrpt.Order[0][field];
+    if (type == 'number')
+      this.salesrpt.Order = this.salesrpt.Order.sort(
+        (a: any, b: any) =>
+          ((a[field] - b[field]) / Math.abs(a[field] - b[field])) *
+          this.sortSetting[field][1]
+      );
+    else if (type == 'string')
+      this.salesrpt.Order = this.salesrpt.Order.sort(
+        (a: any, b: any) =>
+          (a[field].localeCompare(b[field])) *
+          this.sortSetting[field][1]
+      );
+  }
+  resetSettings(field: string) {
+    Object.keys(this.sortSetting).forEach((key) => {
+      if (key != field) {
+        this.sortSetting[key][1] = 0;
+      }
+    });
+  }
 
   // open(ev: any) {
   //   const amazingTimePicker = this.atp.open();
@@ -525,5 +564,18 @@ export class TimewisereportComponent implements OnInit {
         this.keyarr = [];
       }
     }
+  }
+}
+class RangeSetting {
+  color: string;
+  from: number;
+  to: number;
+  editmode: boolean;
+
+  constructor(color: string) {
+    this.color = color; //'#ff0000';
+    this.from = 0;
+    this.to = 0;
+    this.editmode = false;
   }
 }
