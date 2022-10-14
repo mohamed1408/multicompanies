@@ -57,7 +57,7 @@ export class TimewisereportComponent implements OnInit {
   salesrpt: any;
   str: string = 'All';
   Interval = 0;
-  StartTime: string = '10:00';
+  StartTime: string = '08:00';
   EndTime: string = '23:59';
   mytime: Date = new Date();
   sortfield: any;
@@ -150,7 +150,7 @@ export class TimewisereportComponent implements OnInit {
     this.alwaysShowCalendars = true;
     // var logInfo = JSON.parse(localStorage.getItem("loginInfo"));
     // this.CompanyId = logInfo.CompanyId;
-    const intervalStr = localStorage.getItem("[timewise:interval]") || '07:00'
+    const intervalStr = localStorage.getItem("[timewise:interval]") || '09:00'
     this.Intervalhours = +intervalStr.split(":")[0]
     this.Intervalmins = +intervalStr.split(":")[1]
   }
