@@ -128,12 +128,14 @@ export class TimewisereportComponent implements OnInit {
   sortSetting: any = {
     storeName: ['storeName', 0],
     TotSales: ['TotSales', 0],
+    payments: ['payments', 0],
     quantity: ['quantity', 0],
     Pos: ['Pos', 0],
     Swiggy: ['Swiggy', 0],
     Zomato: ['Zomato', 0],
     DiscAmount: ['DiscAmount', 0],
   };
+  showPaidAmount: boolean = false
 
   isInvalidDate = (m: moment.Moment) => {
     return this.invalidDates.some((d) => d.isSame(m, 'day'));
@@ -288,9 +290,14 @@ export class TimewisereportComponent implements OnInit {
       this.saleProductId,
       this.CompanyId
     ).subscribe((data: any) => {
+      if(this.productId == 0 && this.saleProductId == 0) this.showPaidAmount = true
       this.salesrpt = data;
       this.totalQty = 0
       this.totalSales = 0
+      if(this.salesrpt.status == 0) {
+        this.Auth.isloading.next(false);
+        return;
+      }
       this.salesrpt.Order.forEach((order: any) => {
         this.totalQty += order.quantity
         this.totalSales += order.TotSales

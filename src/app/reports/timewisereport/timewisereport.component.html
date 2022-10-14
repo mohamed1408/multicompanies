@@ -53,7 +53,7 @@
                                 class="form-control" />
                         </div>
                         <div class="px-20">
-                            <label for="username">Start Time {{StartTime}}</label>
+                            <label for="username">Start Time</label>
                             <input class="form-control" [(ngModel)]="StartTime" type="time" style="widows: 150px;"
                                 placeholder="Select Time...">
                             <!-- <ngx-material-timepicker #picker1></ngx-material-timepicker>  -->
@@ -176,6 +176,15 @@
                                                         [ngClass]="{'fa-caret-up text-blue': sortSetting['TotSales'][1]>0,'fa-caret-down text-danger': sortSetting['TotSales'][1]<0}"
                                                         class="fa font-12"></i>
                                                 </th>
+                                                <th class="text-right unselectable pointer" (click)="sort('payments')" *ngIf="showPaidAmount">
+                                                    <!-- <span *ngIf="sortSetting['TotSales'][1] != 0" class="font-11"
+                                                        style="font-style: italic; position: absolute; top: 20px;">Sorted
+                                                        by</span> -->
+                                                    PaidAmount
+                                                    <i *ngIf="sortSetting['payments'][1] != 0"
+                                                        [ngClass]="{'fa-caret-up text-blue': sortSetting['payments'][1]>0,'fa-caret-down text-danger': sortSetting['payments'][1]<0}"
+                                                        class="fa font-12"></i>
+                                                </th>
                                                 <th class="text-right unselectable pointer" (click)="sort('quantity')">
                                                     <!-- <span *ngIf="sortSetting['quantity'][1] != 0" class="font-11"
                                                         style="font-style: italic; position: absolute; top: 20px;">Sorted
@@ -194,6 +203,7 @@
                                             <tr *ngFor="let item of salesrpt.Order | filter:term  ">
                                                 <td class="font-12">{{item.storeName}}</td>
                                                 <td class="font-12 text-right">{{item.TotSales | number:".2" }}</td>
+                                                <td class="font-12 text-right" *ngIf="showPaidAmount">{{item.payments | number:".2" }}</td>
                                                 <td class="font-12 text-right">{{item.quantity | number:".2" }}</td>
                                                 <td class="font-12">{{item.StartTime}}</td>
                                                 <td class="font-12">{{item.EndTime}}</td>
