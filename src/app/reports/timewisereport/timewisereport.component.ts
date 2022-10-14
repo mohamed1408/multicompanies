@@ -150,6 +150,9 @@ export class TimewisereportComponent implements OnInit {
     this.alwaysShowCalendars = true;
     // var logInfo = JSON.parse(localStorage.getItem("loginInfo"));
     // this.CompanyId = logInfo.CompanyId;
+    const intervalStr = localStorage.getItem("[timewise:interval]") || '07:00'
+    this.Intervalhours = +intervalStr.split(":")[0]
+    this.Intervalmins = +intervalStr.split(":")[1]
   }
 
   ngOnInit() {
@@ -234,6 +237,10 @@ export class TimewisereportComponent implements OnInit {
   Intervalmins: number = 0;
   totalQty: number = 0
   totalSales: number = 0
+
+  saveInterval() {
+    localStorage.setItem("[timewise:interval]", this.Intervalhours + ":" + this.Intervalmins)
+  }
 
   Submit() {
     this.Auth.isloading.next(true);
