@@ -237,6 +237,7 @@ export class TimewisereportComponent implements OnInit {
   Intervalmins: number = 0;
   totalQty: number = 0
   totalSales: number = 0
+  totalPays: number = 0
 
   saveInterval() {
     localStorage.setItem("[timewise:interval]", this.Intervalhours + ":" + this.Intervalmins)
@@ -301,6 +302,7 @@ export class TimewisereportComponent implements OnInit {
       this.salesrpt = data;
       this.totalQty = 0
       this.totalSales = 0
+      this.totalPays = 0
       if(this.salesrpt.status == 0) {
         this.Auth.isloading.next(false);
         return;
@@ -308,9 +310,11 @@ export class TimewisereportComponent implements OnInit {
       this.salesrpt.Order.forEach((order: any) => {
         this.totalQty += order.quantity
         this.totalSales += order.TotSales
+        this.totalPays += order.payments
       });
       this.totalQty = +(this.totalQty.toFixed(2))
       this.totalSales = +(this.totalSales.toFixed(2))
+      this.totalPays = +(this.totalPays.toFixed(2))
       console.log(this.salesrpt);
       this.Auth.isloading.next(false);
     });
