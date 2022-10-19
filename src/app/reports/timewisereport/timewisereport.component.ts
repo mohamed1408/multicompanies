@@ -156,6 +156,9 @@ export class TimewisereportComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(moment().format("LTS"))
+    console.log(moment())
+    // this.StartTime = moment().utc().local().format("HH:mm")
     this.Auth.companyid.subscribe((companyid) => {
       this.CompanyId = companyid;
       // this.Auth.isloading.next(true);
@@ -166,11 +169,15 @@ export class TimewisereportComponent implements OnInit {
       var date = new Date();
       this.startdate = moment();
       this.enddate = moment();
-      this.All();
+      // this.All();
     });
   }
   saleProductId = 0;
   saleProducts: any = [];
+
+  getCurrentTime() {
+    return moment().utc().local().format("HH:mm")
+  }
 
   getSaleProducts() {
     this.Auth.getSaleProducts(this.CompanyId).subscribe((data: any) => {

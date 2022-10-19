@@ -53,14 +53,16 @@
                                 class="form-control" />
                         </div>
                         <div class="px-20">
-                            <label for="username">Start Time</label>
+                            <!-- <label for="username">Start Time</label> -->
+                            <a href="javascript:void(0);" (click)="StartTime = getCurrentTime()">Start Time</a>
                             <input class="form-control" [(ngModel)]="StartTime" type="time" style="widows: 150px;"
                                 placeholder="Select Time...">
                             <!-- <ngx-material-timepicker #picker1></ngx-material-timepicker>  -->
                         </div>
 
                         <div>
-                            <label for="username">End Time</label>
+                            <!-- <label for="username">End Time</label> -->
+                            <a href="javascript:void(0);" (click)="EndTime = getCurrentTime()">End Time</a>
                             <input class="form-control" [(ngModel)]="EndTime" type="time" style="width:150px;"
                                 placeholder="Select Time...">
                             <!-- <ngx-material-timepicker #picker></ngx-material-timepicker>   -->
