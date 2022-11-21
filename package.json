@@ -27,7 +27,7 @@
     "@capacitor/ios": "^4.1.0",
     "@fortawesome/fontawesome-free": "^6.1.1",
     "@microsoft/signalr": "^6.0.5",
-    "@ng-bootstrap/ng-bootstrap": "^10.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^12.1.2",
     "angular-ng-autocomplete": "^2.0.8",
     "bootstrap": "^4.5.0",
     "jquery": "^3.6.0",
