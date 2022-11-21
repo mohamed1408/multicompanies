@@ -13,6 +13,7 @@ import { StorewisereportComponent } from './reports/storewisereport/storewiserep
 import { TimewisereportComponent } from './reports/timewisereport/timewisereport.component';
 import { SigninComponent } from './signin/signin.component';
 import { StorewiseComponent } from './storewise/storewise.component';
+import { SusordersComponent } from './susorders/susorders.component';
 
 const routes: Routes = [
   { path: '', component: SigninComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'monthwiseproductreport', component: MonthwiseproductreportComponent },
   { path: 'spgwisereport', component: SpgwisereportComponent },
   { path: 'deliveryorderreport', component: DeliveryorderreportComponent },
+  { path: 'susorders', component: SusordersComponent },
 ];
 
 @NgModule({

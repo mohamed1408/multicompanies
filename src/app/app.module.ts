@@ -26,6 +26,7 @@ import { MonthwiseproductreportComponent } from './reports/monthwiseproductrepor
 import { SpgwisereportComponent } from './reports/spgwisereport/spgwisereport.component';
 import { DeliveryorderreportComponent } from './reports/deliveryorderreport/deliveryorderreport.component';
 import { ClickOutsideDirective } from './Directives/click-outside.directive';
+import { SusordersComponent } from './susorders/susorders.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ClickOutsideDirective } from './Directives/click-outside.directive';
     SpgwisereportComponent,
     DeliveryorderreportComponent,
     ClickOutsideDirective,
+    SusordersComponent,
   ],
   imports: [
     BrowserModule,

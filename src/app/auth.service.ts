@@ -572,6 +572,12 @@ export class AuthService {
         `Report/DeliveryOrderReport?storeid=${storeid}&companyid=${companyid}&fromdate=${fromdate}&todate=${todate}&invoiceno=${invoiceno}`
     );
   }
+  getSusOrders(companyid: number, storeid: number, from: string, to: string) {
+    return this.http.get(
+      this.baseurl +
+        `Report/SusOrders?companyid=${companyid}&storeid=${storeid}&from=${from}&to=${to}`
+    );
+  }
 }
 
 // baseurl

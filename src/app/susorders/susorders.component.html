@@ -1,0 +1,225 @@
+<p>susorders works!</p>
+<div class="hk-pg-wrapper">
+    <div class="hk-pg-header">
+      <h4 class="hk-pg-title">&nbsp; Sus Orders</h4>
+    </div>
+    <div class="container">
+      <section class="hk-sec-wrapper">
+        <div class="row">
+          <div class="col-xl-3">
+            <ng-template #rt let-r="result" let-t="term">
+              <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+            </ng-template>
+            <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
+              [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" placeholder="Search Stores..."
+              (selectItem)="selected($event.item)" />
+          </div>
+          <div class="col-xl-5">
+            <div id="myrangepicker" class="form-control text-truncate">
+              <i class="fa fa-calendar text-light-40"></i>&nbsp; <span></span>
+              <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
+            </div>
+          </div>
+          <div class="col-xl-1">
+            <button class="btn btn-success btn-rounded" (click)="getSusOrders()">Fetch</button>
+          </div>
+          <div class="col-xl-3">
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text bg-white border-0" id="basic-addon1"><span class="feather-icon"><i
+                        data-feather="search"></i></span></span>
+                </div>
+                <input type="text" class="form-control border-0" placeholder="Search by invoice..." aria-label="Username"
+                  aria-describedby="basic-addon1">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#cancelleditems">By Cancelled Items</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#discountedorders">By Discount Orders</a>
+            </li>
+          </ul>
+  
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div id="cancelleditems" class="container tab-pane active"><br>
+              <p *ngIf="cancelledItemOrders.length == 0">Nothing to display</p>
+              <div *ngIf="cancelledItemOrders.length > 0" class="row">
+                <div class="col-sm">
+                  <div class="table-wrap">
+                    <div class="table-responsive">
+                      <table class="table mb-0">
+                        <thead>
+                          <tr>
+                            <th>Invoice Number</th>
+                            <th>Product</th>
+                            <th>Total Quantity</th>
+                            <th>Comment</th>
+                            <th>Version</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of cancelledItemOrders; let i = index;">
+                            <th>
+                              <button (click)="viewKotInfo(i)"
+                                class="bg-white btn p-0"><strong>{{item.InvoiceNo}}</strong></button> <br>
+                              <strong class="text-light-30">{{item.Store}}</strong>
+                            </th>
+                            <th>
+                              <strong>{{item.Product}}</strong> <br>
+                              <strong class="text-light-30">{{item.pricechangemap}}</strong>
+                              <span *ngIf="!item.isvaliddata"
+                                class="font-15 font-italic font-weight-bold ml-5 text-danger">*Error</span>
+                            </th>
+                            <th><strong>{{item.Quantity}}</strong></th>
+                            <th [innerHTML]=item.comment></th>
+                            <th><span class="badge badge-danger">{{item.appversion}}</span> </th>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="discountedorders" class="container tab-pane fade"><br>
+              <p *ngIf="discountedOrders.length == 0">Nothing to display</p>
+              <div *ngIf="discountedOrders.length > 0" class="row">
+                <div class="col-sm">
+                  <div class="table-wrap">
+                    <div class="table-responsive">
+                      <table class="table mb-0">
+                        <thead>
+                          <tr>
+                            <th>Invoice Number</th>
+                            <th>Bill Amount</th>
+                            <th>Discount</th>
+                            <th>Discount %</th>
+                            <th>Version</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of discountedOrders; let i = index;">
+                            <th>
+                              <button (click)="viewKotInfo_discounted(i)"
+                                class="bg-white btn p-0"><strong>{{item.InvoiceNo}}</strong></button> <br>
+                              <strong class="text-light-30">{{item.Store}}</strong>
+                            </th>
+                            <th>
+                              {{item.BillAmount}}
+                            </th>
+                            <th><strong>{{item.Discount}}</strong></th>
+                            <th>{{item.DiscountPercentage}}</th>
+                            <th><span class="badge badge-danger">{{item.appversion}}</span> </th>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  
+  <ng-template #kotInfo let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">{{selectedKots[0].invoiceno}}</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body row">
+      <div class="col-xl-6">
+        <!-- <div *ngFor="let kot of selectedItems"> -->
+        <div class="table-wrap">
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <!-- <thead>
+                  <tr>
+                    <th colspan="2">
+                      <strong>#{{kot.KOTNo}}</strong>
+                      <span class="font-italic text-light-30 float-right">@ {{kot.CreatedDate | date:'EEE, MMM d, y, h:mm
+                        a'}}</span>
+                    </th>
+                  </tr>
+                </thead> -->
+              <tbody>
+                <tr>
+                  <th>Ordered @</th>
+                  <th colspan="2">{{selectedItems.OrderedDateTime | date:'EEE, MMM d, y, h:mm a'}}</th>
+                </tr>
+                <tr *ngFor="let item of selectedItems; let i = index;">
+                  <th>
+                    {{item.showname}}
+                  </th>
+                  <th class="text-right"><strong>{{item.Quantity}}</strong></th>
+                  <th>{{item.TotalAmount}}</th>
+                </tr>
+                <tr>
+                  <th colspan="2" class="text-right">
+                    Discount
+                  </th>
+                  <th>
+                    {{selectedItems.Discount}}
+                  </th>
+                </tr>
+                <tr *ngIf="selectedItems.customerdetails">
+                  <th><strong>Customer</strong></th>
+                  <th colspan="2">
+                    <strong>{{selectedItems.customerdetails.Name}}</strong><br>
+                    {{selectedItems.customerdetails.PhoneNo}}<br>
+                    {{selectedItems.customerdetails.Address}}
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- </div> -->
+      </div>
+      <div class="col-xl-6">
+        <div *ngFor="let kot of selectedKots">
+          <div class="table-wrap">
+            <div class="table-responsive">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th colspan="2">
+                      <strong>#{{kot.KOTNo}}</strong>
+                      <span class="font-italic text-light-30 float-right">@ {{kot.CreatedDate | date:'EEE, MMM d, y, h:mm a'}}</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of kot.Items; let i = index;">
+                    <th>
+                      {{item.showname}}
+                    </th>
+                    <th class="text-right"><strong>{{item.Quantity}}</strong></th>
+                  </tr>
+                  <tr>
+                    <th class="text-right">Total So Far</th>
+                    <th class="text-right">{{kot.totalsofar}}</th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary">Save changes</button>
+    </div> -->
+  </ng-template>
