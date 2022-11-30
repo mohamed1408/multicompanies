@@ -90,3 +90,7 @@
   animation-name: onOff;
   animation-direction: reverse;
 }
+
+ngb-modal-backdrop {
+  z-index: 0 !important;
+}

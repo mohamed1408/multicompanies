@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +14,10 @@ declare function setHeightWidth(): any;
   styleUrls: ['./orderwisereport.component.css'],
 })
 export class OrderwisereportComponent implements OnInit {
+  @ViewChild('itemsModal', { static: false }) private itemsModal:
+    | ElementRef
+    | any;
+
   orderwiserpt: any;
   show: boolean = true;
   CompanyId: number = 0;
@@ -142,7 +146,6 @@ export class OrderwisereportComponent implements OnInit {
     this.storeId = e.Id;
   }
   itemdetails(
-    modal: any,
     itemjson: string,
     ChargeJson: string,
     sourceId: number
@@ -153,7 +156,7 @@ export class OrderwisereportComponent implements OnInit {
     this.subtotal = 0;
     if (itemjson) {
       if (sourceId != 1) {
-        this.onlineOrderDetails(modal, itemjson, ChargeJson, sourceId);
+        this.onlineOrderDetails(itemjson, ChargeJson, sourceId);
         return;
       }
       var itemarray = JSON.parse(itemjson);
@@ -182,10 +185,11 @@ export class OrderwisereportComponent implements OnInit {
         });
     }
 
-    this.openDetailpopup(modal);
+    // this.openDetailpopup(modal);
+    this.modalService.open(this.itemsModal, { centered: true, size: 'lg', backdropClass: 'z-index-1' });
   }
   onlineOrderDetails(
-    modal: any,
+    // modal: any,
     itemjson: string,
     ChargeJson: string,
     sourceId: any
@@ -236,7 +240,8 @@ export class OrderwisereportComponent implements OnInit {
       });
     }
 
-    this.openDetailpopup(modal);
+    // this.openDetailpopup(modal);
+    this.modalService.open(this.itemsModal, { centered: true, size: 'lg', backdropClass: 'z-index-1' });
   }
   filter1(Id: any) {
     var orderitem = this.orderwiserpt.order1.filter(

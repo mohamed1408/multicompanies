@@ -134,7 +134,7 @@
                                         </thead>
                                         <tbody>
                                             <tr class="select" *ngFor="let item of sortData | filter:term; index as i;"
-                                                (click)="itemdetails(contentdetail1,item.ItemJson,item.ChargeJson, item.SourceId);">
+                                                (click)="itemdetails(item.ItemJson,item.ChargeJson, item.SourceId);">
                                                 <td class="font-12">{{item.InvoiceNo}}</td>
                                                 <td class="font-12">{{item.OrderedDate}}</td>
                                                 <td class="font-12">{{item.Store}}</td>
@@ -177,81 +177,78 @@
     </div>
 </div>
 
-<ng-template #contentdetail1 let-modal>
-    <div class="modal d-block position-static overflow-show" tabindex="-1" role="dialog">
-        <div class="modal-dialog ma-0" role="document">
-            <div class="modal-content">
-                <!-- <div class="modal-header">
-          <h5 class="modal-title">OrderWiseSalesReport</h5>
-        </div> -->
-                <div class="modal-body" style="width:100%">
-                    <table *ngIf="receipt.length" class="table table-sm mb-0" style="width:100%">
-                        <thead>
-                            <tr>
-                                <td>Item</td>
-                                <td>Quantity</td>
-                                <td>Tax</td>
-                                <td>Price</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of receipt">
-                                <td>{{item.showname || item.Product}}</td>
-                                <td>{{item.Quantity}}</td>
-                                <td>{{item.Tax1+item.Tax2}}</td>
-                                <td>&#8377;{{item.TotalAmount | number:".2"}}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>Subtotal</td>
-                                <td>&#8377;{{subtotal | number:".2"}}</td>
-                            </tr>
-                            <tr *ngIf="discount > 0">
-                                <td></td>
-                                <td></td>
-                                <td>Discount</td>
-                                <td>-&#8377;{{discount | number: ".2"}}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>CGST</td>
-                                <td>&#8377;{{cgst | number:".2"}}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>SGST</td>
-                                <td>&#8377;{{sgst | number:".2"}}</td>
-                            </tr>
-                            <tr *ngFor="let item of ordcharges">
-                                <td></td>
-                                <td></td>
-                                <td>{{item.Description}}</td>
-                                <td>&#8377;{{item.ChargeAmount | number:".2"}}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>Total</td>
-                                <td>&#8377;{{total | number:".2"}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div *ngIf="!receipt.length" style="background: #fffbe5"
-                        class="row px-30 py-30 border border-warning rounded-5 mx-10 bg-primary-10">
-                        <span style="
-            margin: auto;
-            color: #6b5d00;
-            font-style: italic;
-        ">Item details not available</span>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" (click)="modal.close()">OK</button>
-                </div>
-            </div>
+<ng-template #itemsModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <table *ngIf="receipt.length" class="table table-sm mb-0" style="width:100%">
+            <thead>
+                <tr>
+                    <td>Item</td>
+                    <td>Quantity</td>
+                    <td>Tax</td>
+                    <td>Price</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of receipt">
+                    <td>{{item.showname || item.Product}}</td>
+                    <td>{{item.Quantity}}</td>
+                    <td>{{item.Tax1+item.Tax2}}</td>
+                    <td>&#8377;{{item.TotalAmount | number:".2"}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Subtotal</td>
+                    <td>&#8377;{{subtotal | number:".2"}}</td>
+                </tr>
+                <tr *ngIf="discount > 0">
+                    <td></td>
+                    <td></td>
+                    <td>Discount</td>
+                    <td>-&#8377;{{discount | number: ".2"}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>CGST</td>
+                    <td>&#8377;{{cgst | number:".2"}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>SGST</td>
+                    <td>&#8377;{{sgst | number:".2"}}</td>
+                </tr>
+                <tr *ngFor="let item of ordcharges">
+                    <td></td>
+                    <td></td>
+                    <td>{{item.Description}}</td>
+                    <td>&#8377;{{item.ChargeAmount | number:".2"}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Total</td>
+                    <td>&#8377;{{total | number:".2"}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="!receipt.length" style="background: #fffbe5"
+            class="row px-30 py-30 border border-warning rounded-5 mx-10 bg-primary-10">
+            <span style="
+margin: auto;
+color: #6b5d00;
+font-style: italic;
+">Item details not available</span>
         </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
     </div>
 </ng-template>
