@@ -72,6 +72,7 @@ export class SusordersComponent implements OnInit {
   }
 
   getSusOrders() {
+    console.log(this.storeid, this.companyid)
     this.auth
       .getSusOrders(this.companyid, this.storeid, this.fromdate, this.todate)
       .subscribe((data: any) => {
