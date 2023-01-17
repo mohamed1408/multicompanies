@@ -137,15 +137,13 @@
                                       <a></a>
                                   </div>
                     </div> -->
-                        <div style="margin-top:35px;width:70px;height: 38px;float:right;margin-left: 35px;"
-                            class="pull-right">
-                            <button class="btn btn-success  btn-sm mx-100 w-300 " (click)="Submit()">Submit</button>
-                            <button class="btn btn-success  btn-sm mx-100 w-300 "
-                                (click)="openTimeIntervalModal()">timeInterval</button>
-                        </div>
+                    </div>
+                    <div class="mb-10 pull-right">
+                        <button class="btn btn-success btn-sm" (click)="Submit()">Submit</button>
+                        <button class="btn btn-success btn-sm" (click)="openTimeIntervalModal()">timeInterval</button>
                     </div>
 
-                    <div class="row">
+                    <div class="row w-100">
                         <div class="col-sm">
                             <input type="text" class="form-control" placeholder="Search Report.." [(ngModel)]="term">
                             <br>
@@ -178,7 +176,8 @@
                                                         [ngClass]="{'fa-caret-up text-blue': sortSetting['TotSales'][1]>0,'fa-caret-down text-danger': sortSetting['TotSales'][1]<0}"
                                                         class="fa font-12"></i>
                                                 </th>
-                                                <th class="text-right unselectable pointer" (click)="sort('payments')" *ngIf="showPaidAmount">
+                                                <th class="text-right unselectable pointer" (click)="sort('payments')"
+                                                    *ngIf="showPaidAmount">
                                                     <!-- <span *ngIf="sortSetting['TotSales'][1] != 0" class="font-11"
                                                         style="font-style: italic; position: absolute; top: 20px;">Sorted
                                                         by</span> -->
@@ -196,6 +195,24 @@
                                                         [ngClass]="{'fa-caret-up text-blue': sortSetting['quantity'][1]>0,'fa-caret-down text-danger': sortSetting['quantity'][1]<0}"
                                                         class="fa font-12"></i>
                                                 </th>
+                                                <th class="text-right unselectable pointer" (click)="sort('quantity')">
+                                                    <!-- <span *ngIf="sortSetting['quantity'][1] != 0" class="font-11"
+                                                        style="font-style: italic; position: absolute; top: 20px;">Sorted
+                                                        by</span> -->
+                                                    div by 5
+                                                    <i *ngIf="sortSetting['quantity'][1] != 0"
+                                                        [ngClass]="{'fa-caret-up text-blue': sortSetting['quantity'][1]>0,'fa-caret-down text-danger': sortSetting['quantity'][1]<0}"
+                                                        class="fa font-12"></i>
+                                                </th>
+                                                <th class="text-right unselectable pointer" (click)="sort('quantity')">
+                                                    <!-- <span *ngIf="sortSetting['quantity'][1] != 0" class="font-11"
+                                                        style="font-style: italic; position: absolute; top: 20px;">Sorted
+                                                        by</span> -->
+                                                    div by 90
+                                                    <i *ngIf="sortSetting['quantity'][1] != 0"
+                                                        [ngClass]="{'fa-caret-up text-blue': sortSetting['quantity'][1]>0,'fa-caret-down text-danger': sortSetting['quantity'][1]<0}"
+                                                        class="fa font-12"></i>
+                                                </th>
                                                 <th> <strong><a class="font-12">StartTime</a></strong> </th>
                                                 <th> <strong><a class="font-12">EndTime</a></strong> </th>
                                                 <th> </th>
@@ -205,8 +222,12 @@
                                             <tr *ngFor="let item of salesrpt.Order | filter:term  ">
                                                 <td class="font-12">{{item.storeName}}</td>
                                                 <td class="font-12 text-right">{{item.TotSales | number:".2" }}</td>
-                                                <td class="font-12 text-right" *ngIf="showPaidAmount">{{item.payments | number:".2" }}</td>
+                                                <td class="font-12 text-right" *ngIf="showPaidAmount">{{item.payments |
+                                                    number:".2" }}</td>
                                                 <td class="font-12 text-right">{{item.quantity | number:".2" }}</td>
+                                                <td class="font-12 text-right">{{(item.quantity/5) | number:".2" }}</td>
+                                                <td class="font-12 text-right">{{(item.quantity/90) | number:".2" }}
+                                                </td>
                                                 <td class="font-12">{{item.StartTime}}</td>
                                                 <td class="font-12">{{item.EndTime}}</td>
                                                 <td>

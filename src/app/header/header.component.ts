@@ -127,7 +127,7 @@ export class HeaderComponent implements OnInit {
   }
 
   prompt_logoff() {
-    this.modalService.open(this.logoff_prompt);
+    this.modalService.open(this.logoff_prompt, { backdropClass: 'z-index-1' });
   }
 
   getstores() {
