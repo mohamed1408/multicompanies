@@ -225,8 +225,8 @@
                                                 <td class="font-12 text-right" *ngIf="showPaidAmount">{{item.payments |
                                                     number:".2" }}</td>
                                                 <td class="font-12 text-right">{{item.quantity | number:".2" }}</td>
-                                                <td class="font-12 text-right">{{(item.quantity/5) | number:".2" }}</td>
-                                                <td class="font-12 text-right">{{(item.quantity/90) | number:".2" }}
+                                                <td class="font-12 text-right">{{(item.quantity/5).toFixed(2) | number:".2" }}</td>
+                                                <td class="font-12 text-right">{{(item.quantity/90).toFixed(2) | number:".2" }}
                                                 </td>
                                                 <td class="font-12">{{item.StartTime}}</td>
                                                 <td class="font-12">{{item.EndTime}}</td>
