@@ -258,9 +258,9 @@ export class SpgwisereportComponent implements OnInit {
       this.order.deliverytime = new Date(
         this.order.order.details.delivery_datetime
       );
-      this.modalService.open(this.order_details_sz, { size: 'lg' });
+      this.modalService.open(this.order_details_sz, { size: 'lg', backdropClass: 'z-index-1' });
     } else {
-      this.modalService.open(this.order_details, { size: 'lg' });
+      this.modalService.open(this.order_details, { size: 'lg', backdropClass: 'z-index-1' });
     }
   }
 

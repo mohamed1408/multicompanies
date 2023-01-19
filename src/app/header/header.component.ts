@@ -109,7 +109,7 @@ export class HeaderComponent implements OnInit {
   }
 
   openmodal(modal: any) {
-    this.modalService.open(modal, { centered: true });
+    this.modalService.open(modal, { centered: true, backdropClass: 'z-index-1' });
   }
 
   logout() {

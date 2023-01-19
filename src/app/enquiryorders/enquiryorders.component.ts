@@ -201,7 +201,7 @@ export class EnquiryordersComponent implements OnInit {
     this.selected_product = new CurrentItemModule(e);
     this.quantity = null;
     if (this.selected_product.OptionGroup.length > 0) {
-      this.modalService.open(this.options_details, { centered: true });
+      this.modalService.open(this.options_details, { centered: true, backdropClass: 'z-index-1' });
       return;
     }
     quantityel.focus();
@@ -221,10 +221,10 @@ export class EnquiryordersComponent implements OnInit {
     this.selected_product = new CurrentItemModule(
       JSON.parse(JSON.stringify(item))
     );
-    this.modalService.open(this.options_details, { centered: true });
+    this.modalService.open(this.options_details, { centered: true, backdropClass: 'z-index-1' });
   }
   openbdmodal() {
-    this.modalService.open(this.bulk_discount, { centered: true });
+    this.modalService.open(this.bulk_discount, { centered: true, backdropClass: 'z-index-1' });
   }
   getcustomerbyphonenum() {
     this.Auth.getCustomerByPhone(this.customer.PhoneNo).subscribe(
@@ -463,7 +463,7 @@ export class EnquiryordersComponent implements OnInit {
   }
   viewOrder(order: any) {
     this.temp_order = order
-    this.modalService.open(this.order_details, { size: 'lg' })
+    this.modalService.open(this.order_details, { size: 'lg', backdropClass: 'z-index-1' })
   }
   change(){
     this.orders[0].status = "lkjadhlklksdh"

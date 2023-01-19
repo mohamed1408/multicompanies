@@ -235,13 +235,13 @@ export class SusordersComponent implements OnInit {
     this.selectedKots = this.cancelledItemOrders[i].json;
     this.selectedItems = this.cancelledItemOrders[i].items;
     console.log(this.selectedItems, this.selectedKots);
-    this.modalService.open(this.kotInfo, { centered: true, size: 'lg' });
+    this.modalService.open(this.kotInfo, { centered: true, size: 'lg', backdropClass: 'z-index-1' });
   }
   viewKotInfo_discounted(i: number) {
     this.selectedKots = this.discountedOrders[i].json;
     this.selectedItems = this.discountedOrders[i].items;
     console.log(this.selectedItems, this.selectedKots);
-    this.modalService.open(this.kotInfo, { centered: true, size: 'lg' });
+    this.modalService.open(this.kotInfo, { centered: true, size: 'lg', backdropClass: 'z-index-1' });
   }
   formatter = (result: any) => result.Name;
 
