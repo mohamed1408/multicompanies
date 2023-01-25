@@ -183,7 +183,8 @@ export class AuthService {
     frmdate: string,
     todate: string,
     compId: number,
-    sourceId: number
+    sourceId: number,
+    cancelOrder: number = 0
   ) {
     return this.http.get(
       this.baseurl +
@@ -196,7 +197,9 @@ export class AuthService {
         '&compId=' +
         compId +
         '&sourceId=' +
-        sourceId
+        sourceId +
+        '&cancelOrder=' +
+        cancelOrder
     );
   }
 
@@ -576,6 +579,38 @@ export class AuthService {
     return this.http.get(
       this.baseurl +
         `Report/SusOrders?companyid=${companyid}&storeid=${storeid}&from=${from}&to=${to}`
+    );
+  }
+  GetOrdRpt(
+    frmdate: string,
+    todate: string,
+    CompanyId: string | number,
+    sourceId: string | number,
+    storeId: string | number
+  ) {
+    console.log(frmdate, todate, CompanyId, sourceId, storeId);
+    var formURL = this.baseurl;
+    var formURL =
+      this.baseurl +
+      'CancelordRpt/GetRpt?frmDate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&CompanyId=' +
+      CompanyId +
+      '&sourceId=' +
+      sourceId +
+      '&storeId=' +
+      storeId;
+    return this.http.get(formURL);
+  }
+  updateorder(payload: { OrderJson: string }) {
+    return this.http.post(this.baseurl + 'POSOrder/updateorder_2', payload);
+  }
+  updateuporder(orderid: string, payload: any) {
+    return this.http.post(
+      this.baseurl + 'UrbanPiper/updateuporder?orderid=' + orderid,
+      payload
     );
   }
 }

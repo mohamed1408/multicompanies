@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { EnquiryordersComponent } from './enquiryorders/enquiryorders.component';
 import { LockscreenComponent } from './lockscreen/lockscreen.component';
 import { ProductsComponent } from './products/products.component';
+import { CancelOrdReportComponent } from './reports/cancel-ord-report/cancel-ord-report.component';
 import { CategorywisereportComponent } from './reports/categorywisereport/categorywisereport.component';
 import { DeliveryorderreportComponent } from './reports/deliveryorderreport/deliveryorderreport.component';
 import { MonthwiseproductreportComponent } from './reports/monthwiseproductreport/monthwiseproductreport.component';
@@ -30,6 +31,7 @@ const routes: Routes = [
   { path: 'spgwisereport', component: SpgwisereportComponent },
   { path: 'deliveryorderreport', component: DeliveryorderreportComponent },
   { path: 'susorders', component: SusordersComponent },
+  { path: 'cancelorderreport', component: CancelOrdReportComponent },
 ];
 
 @NgModule({
