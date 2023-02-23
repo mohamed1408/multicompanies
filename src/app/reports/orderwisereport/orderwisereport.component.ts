@@ -145,11 +145,7 @@ export class OrderwisereportComponent implements OnInit {
   selectEvent(e: { Id: any }) {
     this.storeId = e.Id;
   }
-  itemdetails(
-    itemjson: string,
-    ChargeJson: string,
-    sourceId: number
-  ) {
+  itemdetails(itemjson: string, ChargeJson: string, sourceId: number) {
     this.receipt = [];
     this.sgst = 0;
     this.cgst = 0;
@@ -186,7 +182,11 @@ export class OrderwisereportComponent implements OnInit {
     }
 
     // this.openDetailpopup(modal);
-    this.modalService.open(this.itemsModal, { centered: true, size: 'lg', backdropClass: 'z-index-1' });
+    this.modalService.open(this.itemsModal, {
+      centered: true,
+      size: 'lg',
+      backdropClass: 'z-index-1',
+    });
   }
   onlineOrderDetails(
     // modal: any,
@@ -241,7 +241,11 @@ export class OrderwisereportComponent implements OnInit {
     }
 
     // this.openDetailpopup(modal);
-    this.modalService.open(this.itemsModal, { centered: true, size: 'lg', backdropClass: 'z-index-1' });
+    this.modalService.open(this.itemsModal, {
+      centered: true,
+      size: 'lg',
+      backdropClass: 'z-index-1',
+    });
   }
   filter1(Id: any) {
     var orderitem = this.orderwiserpt.order1.filter(
@@ -390,13 +394,27 @@ export class OrderwisereportComponent implements OnInit {
     }
   }
 
+  compareFunc(a: any, b: any) {
+    let avalue, bvalue, dataType;
+    avalue = a[this.sortfield];
+    bvalue = b[this.sortfield];
+    dataType = typeof avalue;
+    console.log('string', Date.parse(avalue), +avalue)
+    if (dataType == 'string' && !isNaN(Date.parse(avalue)) && isNaN(+avalue)) {
+      avalue = new Date(avalue).getTime();
+      bvalue = new Date(bvalue).getTime();
+      console.log(avalue, bvalue)
+    }
+    if (avalue < bvalue) return this.x;
+    else if (avalue > bvalue) return this.y;
+    else return 0;
+  }
+
   get sortData() {
     if (this.orderwiserpt) {
       return this.orderwiserpt.Order.sort(
         (a: { [x: string]: number }, b: { [x: string]: number }) => {
-          if (a[this.sortfield] < b[this.sortfield]) return this.x;
-          else if (a[this.sortfield] > b[this.sortfield]) return this.y;
-          else return 0;
+          return this.compareFunc(a, b);
         }
       );
     } else {
