@@ -60,7 +60,7 @@ export class OrderwisereportComponent implements OnInit {
   status!: number;
   cgst: any;
   sgst: any;
-  receipt: any[] = [];
+  receipt: any = { items: [], invoiceno: '' };
   subtotal: any;
   total: any;
   charge: any;
@@ -145,18 +145,30 @@ export class OrderwisereportComponent implements OnInit {
   selectEvent(e: { Id: any }) {
     this.storeId = e.Id;
   }
-  itemdetails(itemjson: string, ChargeJson: string, sourceId: number) {
+  TransactionDetails: string[] = [];
+  itemdetails(
+    itemjson: string,
+    ChargeJson: string,
+    sourceId: number,
+    invoiceno: string,
+    orderjson: string,
+    transdetails: string
+  ) {
+    console.log(JSON.parse(orderjson));
     this.receipt = [];
     this.sgst = 0;
     this.cgst = 0;
     this.subtotal = 0;
+    this.TransactionDetails = transdetails.split(', ')
     if (itemjson) {
       if (sourceId != 1) {
-        this.onlineOrderDetails(itemjson, ChargeJson, sourceId);
+        this.onlineOrderDetails(itemjson, ChargeJson, sourceId, invoiceno);
         return;
       }
       var itemarray = JSON.parse(itemjson);
       console.log(itemarray);
+      this.receipt.invoiceno = invoiceno;
+      this.receipt.items = [];
       itemarray.forEach((item: { Tax1: any; Tax2: any; TotalAmount: any }) => {
         // item.OptionGroup.forEach(optgrp => {
         //   optgrp.Option.forEach(opt => {
@@ -165,7 +177,7 @@ export class OrderwisereportComponent implements OnInit {
         //   });
         // });
         // item.Price = item.Price * item.Quantity - item.DiscAmount
-        this.receipt.push(item);
+        this.receipt.items.push(item);
         this.cgst = this.cgst + item.Tax1;
         this.sgst = this.sgst + item.Tax2;
         // console.log(this.subtotal)
@@ -192,10 +204,13 @@ export class OrderwisereportComponent implements OnInit {
     // modal: any,
     itemjson: string,
     ChargeJson: string,
-    sourceId: any
+    sourceId: any,
+    invoiceno: string
   ) {
     var itemarray = JSON.parse(itemjson);
     console.log(itemarray);
+    this.receipt.invoiceno = invoiceno;
+    this.receipt.items = [];
     itemarray.forEach(
       (item: {
         Price: number;
@@ -221,7 +236,7 @@ export class OrderwisereportComponent implements OnInit {
           // });
         });
         // item.Price = item.Price - item.DiscAmount
-        this.receipt.push(item);
+        this.receipt.items.push(item);
         item.Tax1 = item.taxes[0] ? item.taxes[0].value : 0;
         item.Tax2 = item.taxes[1] ? item.taxes[1].value : 0;
         this.cgst = this.cgst + item.Tax1;
@@ -399,11 +414,11 @@ export class OrderwisereportComponent implements OnInit {
     avalue = a[this.sortfield];
     bvalue = b[this.sortfield];
     dataType = typeof avalue;
-    console.log('string', Date.parse(avalue), +avalue)
+    // console.log('string', Date.parse(avalue), +avalue)
     if (dataType == 'string' && !isNaN(Date.parse(avalue)) && isNaN(+avalue)) {
       avalue = new Date(avalue).getTime();
       bvalue = new Date(bvalue).getTime();
-      console.log(avalue, bvalue)
+      // console.log(avalue, bvalue)
     }
     if (avalue < bvalue) return this.x;
     else if (avalue > bvalue) return this.y;

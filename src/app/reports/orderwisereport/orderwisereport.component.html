@@ -134,7 +134,7 @@
                                         </thead>
                                         <tbody>
                                             <tr class="select" *ngFor="let item of sortData | filter:term; index as i;"
-                                                (click)="itemdetails(item.ItemJson,item.ChargeJson, item.SourceId);">
+                                                (click)="itemdetails(item.ItemJson, item.ChargeJson, item.SourceId, item.InvoiceNo, item.OrderJson, item.TransactionDetails);">
                                                 <td class="font-12">{{item.InvoiceNo}}</td>
                                                 <td class="font-12">{{item.OrderedDate}}</td>
                                                 <td class="font-12">{{item.Store}}</td>
@@ -179,13 +179,13 @@
 
 <ng-template #itemsModal let-modal>
     <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{receipt.invoiceno}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body">
-        <table *ngIf="receipt.length" class="table table-sm mb-0" style="width:100%">
+        <table *ngIf="receipt.items.length" class="table table-sm mb-0" style="width:100%">
             <thead>
                 <tr>
                     <td>Item</td>
@@ -195,7 +195,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of receipt">
+                <tr *ngFor="let item of receipt.items">
                     <td>{{item.showname || item.Product}}</td>
                     <td>{{item.Quantity}}</td>
                     <td>{{item.Tax1+item.Tax2}}</td>
@@ -237,9 +237,15 @@
                     <td>Total</td>
                     <td>&#8377;{{total | number:".2"}}</td>
                 </tr>
+                <tr *ngFor="let transaction of TransactionDetails">
+                    <td>₹ {{transaction}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
-        <div *ngIf="!receipt.length" style="background: #fffbe5"
+        <div *ngIf="!receipt.items.length" style="background: #fffbe5"
             class="row px-30 py-30 border border-warning rounded-5 mx-10 bg-primary-10">
             <span style="
 margin: auto;
