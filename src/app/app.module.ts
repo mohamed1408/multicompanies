@@ -28,6 +28,7 @@ import { DeliveryorderreportComponent } from './reports/deliveryorderreport/deli
 import { ClickOutsideDirective } from './Directives/click-outside.directive';
 import { SusordersComponent } from './susorders/susorders.component';
 import { CancelOrdReportComponent } from './reports/cancel-ord-report/cancel-ord-report.component';
+import { ProductsalesreportComponent } from './productsalesreport/productsalesreport.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { CancelOrdReportComponent } from './reports/cancel-ord-report/cancel-ord
     ClickOutsideDirective,
     SusordersComponent,
     CancelOrdReportComponent,
+    ProductsalesreportComponent,
   ],
   imports: [
     BrowserModule,

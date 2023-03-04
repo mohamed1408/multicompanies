@@ -1,0 +1,90 @@
+<div class="hk-pg-wrapper">
+    <!-- Breadcrumb -->
+    <nav class="hk-breadcrumb" aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-light bg-transparent">
+            <li class="breadcrumb-item"><a href="#">Reports</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Product Sales Report</li>
+        </ol>
+    </nav>
+    <!-- /Breadcrumb -->
+    <div class="container">
+        <!-- Title -->
+        <div class="hk-pg-header">
+            <h4 class="hk-pg-title"><span class="pg-title-icon"><span class="feather-icon"><i
+                            data-feather="toggle-right"></i></span></span>Product Sales</h4>
+        </div>
+        <!-- /Title -->
+        <div class="row">
+            <div class="col-xl-12">
+                <section class="hk-sec-wrapper">
+                    <!-- <h5 class="hk-sec-title">Form controls</h5> -->
+                    <div class="col-xl-12 row">
+                        <div class="form-group col-xl-3">
+                            <h5 class="hk-sec-title">Stores</h5>
+                            <!-- <label>Stores</label> -->
+                            <ng-template #rt let-r="result" let-t="term">
+                                <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+                            </ng-template>
+                            <div class="position-relative">
+                                <input id="typeahead-template" type="text" class="form-control col"
+                                    [(ngModel)]="searchTerm" [ngbTypeahead]="search" [resultTemplate]="rt"
+                                    [inputFormatter]="formatter" (selectItem)="selected($event.item)" />
+                                <span *ngIf="storeid > 0" class="position-absolute"
+                                    style="top: 7px; right: 10px; cursor: pointer;"
+                                    (click)="searchTerm = ''; storeid = 0;">
+                                    <strong>&times;</strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label>Date</label>
+                            <div id="myrangepicker" class="form-control text-truncate">
+                                <i class="fa fa-calendar text-light-40"></i>&nbsp; <span></span>
+                                <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-xl-3">
+                            <label>Category</label>
+                            <select class="form-control custom-select" [(ngModel)]="categoryid">
+                                <option value="0" selected>All</option>
+                                <option value="{{ item.Id }}" *ngFor="let item of categories">
+                                    {{ item.Description }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-2">
+                            <label class="text-white">dummy text</label>
+                            <button class="btn btn-success" (click)="submit()">Submit</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <table class="table table-hover table-bordered mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let product of products">
+                                    <td>{{product.showname}}</td>
+                                    <td>
+                                        {{product.Quantity}}
+                                        <span *ngIf="product.ComplementryQty > 0"> + {{product.ComplementryQty}}</span>
+                                    </td>
+                                    <td>{{product.TotalAmount}}</td>
+                                    <td>
+                                        <a href="javascript:void(0);" class="text-blue"> <i class="fa fa-info-circle"></i> </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- <p class="mb-25">Textual form controls—like inputs, selects, and textareas—are styled with the <code>.form-control</code> class. Included are styles for general appearance, focus state, sizing, and more.</p> -->
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

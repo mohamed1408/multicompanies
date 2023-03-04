@@ -581,6 +581,12 @@ export class AuthService {
         `Report/SusOrders?companyid=${companyid}&storeid=${storeid}&from=${from}&to=${to}`
     );
   }
+  productsales(companyid: number, storeid: number, from: string, to: string, catgeoryid: number, ordertypeid: number) {
+    return this.http.get(
+      this.baseurl +
+        `Report/SalesByProducts?companyid=${companyid}&storeid=${storeid}&from=${from}&to=${to}&catgeoryid=${catgeoryid}&ordertypeid=${ordertypeid}`
+    );
+  }
   GetOrdRpt(
     frmdate: string,
     todate: string,
