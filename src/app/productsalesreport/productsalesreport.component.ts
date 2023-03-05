@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 import * as moment from 'moment';
 
 import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-productsalesreport',
@@ -12,6 +13,10 @@ import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
   styleUrls: ['./productsalesreport.component.css'],
 })
 export class ProductsalesreportComponent implements OnInit {
+  @ViewChild('orderdetails', { static: false }) private orderdetails:
+    | ElementRef
+    | any;
+
   enddate: string = '';
   startdate: string = '';
   searchTerm: string = '';
@@ -19,13 +24,16 @@ export class ProductsalesreportComponent implements OnInit {
   stores: any = [];
   categories: any[] = [];
   products: any[] = [];
+  raw_data: any[] = [];
 
   storeid: number = 0;
   companyid: number = 0;
   ordertypid: number = 3;
   categoryid: number = 0;
 
-  constructor(private auth: AuthService) {}
+  order: any;
+
+  constructor(private auth: AuthService, private modalS: NgbModal) {}
 
   ngOnInit(): void {
     this.auth.companyid.subscribe((companyid) => {
@@ -108,6 +116,7 @@ export class ProductsalesreportComponent implements OnInit {
       )
       .subscribe((data: any) => {
         // console.log(data);
+        this.raw_data = data.report;
         let products = data.report.map((element: any) => {
           let raw = JSON.parse(element.OrderJson)
             .KOTS.filter((x: any) => x.refid == element.kotrefid)[0]
@@ -118,6 +127,7 @@ export class ProductsalesreportComponent implements OnInit {
             BillAmount: element.BillAmount,
             InvoiceNo: element.InvoiceNo,
             OrderedDateTime: element.OrderedDateTime,
+            OrderId: element.OrderId,
           };
         });
         console.log(products);
@@ -127,7 +137,9 @@ export class ProductsalesreportComponent implements OnInit {
               if (y.ProductKey == product.ProductKey) {
                 y.Quantity += product.Quantity;
                 y.ComplementryQty += product.ComplementryQty;
-                y.TotalAmount += (product.TotalAmount * (product.Quantity/Math.abs(product.Quantity)))
+                y.TotalAmount +=
+                  product.TotalAmount *
+                  (product.Quantity / Math.abs(product.Quantity));
               }
               return y;
             });
@@ -137,5 +149,19 @@ export class ProductsalesreportComponent implements OnInit {
         });
         console.log(this.products);
       });
+  }
+
+  getOrderDetails(orderid: number, productkey: string) {
+    console.log(
+      JSON.parse(this.raw_data.filter((x) => x.OrderId == orderid)[0].OrderJson)
+    );
+    this.order = JSON.parse(
+      this.raw_data.filter((x) => x.OrderId == orderid)[0].OrderJson
+    );
+    this.modalS.open(this.orderdetails, {
+      centered: true,
+      size: 'lg',
+      backdropClass: 'z-index-1',
+    });
   }
 }

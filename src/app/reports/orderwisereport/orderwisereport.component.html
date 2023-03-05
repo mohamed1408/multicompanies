@@ -135,10 +135,13 @@
                                         <tbody>
                                             <tr class="select" *ngFor="let item of sortData | filter:term; index as i;"
                                                 (click)="itemdetails(item.ItemJson, item.ChargeJson, item.SourceId, item.InvoiceNo, item.OrderJson, item.TransactionDetails);">
-                                                <td class="font-12">{{item.InvoiceNo}}</td>
+                                                <td class="font-12">
+                                                    {{item.InvoiceNo}} <br>
+                                                    <span class="font-11 font-italic text-light">{{item.itemnames}}</span>
+                                                </td>
                                                 <td class="font-12">{{item.OrderedDate}}</td>
                                                 <td class="font-12">{{item.Store}}</td>
-                                                <td class="font-12">&#8377;{{item.TotalTax | number: ".2"}}</td>
+                                                <td class="font-12">&#8377;{{item.TotalTax   | number: ".2"}}</td>
                                                 <td class="font-12">&#8377;{{item.DiscAmount | number: ".2"}}</td>
                                                 <td class="font-12">&#8377;{{item.BillAmount | number: ".2"}}</td>
                                                 <td class="font-12">&#8377;{{item.PaidAmount | number: ".2"}}</td>
