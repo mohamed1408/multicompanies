@@ -109,7 +109,10 @@ export class HeaderComponent implements OnInit {
   }
 
   openmodal(modal: any) {
-    this.modalService.open(modal, { centered: true, backdropClass: 'z-index-1' });
+    this.modalService.open(modal, {
+      centered: true,
+      backdropClass: 'z-index-1',
+    });
   }
 
   logout() {
@@ -354,6 +357,32 @@ let getMenuData: Array<navlink> = [
       {
         title: 'Product Sales',
         url: '/productsalesreport',
+        icon: 'fa fa-pie-chart',
+        svg: '../../assets/svg/phone-incoming.svg',
+        icon_res: 'svg',
+        hidden: false,
+        roles: ['admin'],
+        notification_count: 4,
+        isCollapsed: true,
+        children: [],
+        active: false,
+      },
+      {
+        title: 'Customer List',
+        url: '/customerdatareport',
+        icon: 'fa fa-pie-chart',
+        svg: '../../assets/svg/phone-incoming.svg',
+        icon_res: 'svg',
+        hidden: false,
+        roles: ['admin'],
+        notification_count: 4,
+        isCollapsed: true,
+        children: [],
+        active: false,
+      },
+      {
+        title: 'Versions List',
+        url: '/versionlistreport',
         icon: 'fa fa-pie-chart',
         svg: '../../assets/svg/phone-incoming.svg',
         icon_res: 'svg',

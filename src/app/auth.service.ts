@@ -581,7 +581,14 @@ export class AuthService {
         `Report/SusOrders?companyid=${companyid}&storeid=${storeid}&from=${from}&to=${to}`
     );
   }
-  productsales(companyid: number, storeid: number, from: string, to: string, catgeoryid: number, ordertypeid: number) {
+  productsales(
+    companyid: number,
+    storeid: number,
+    from: string,
+    to: string,
+    catgeoryid: number,
+    ordertypeid: number
+  ) {
     return this.http.get(
       this.baseurl +
         `Report/SalesByProducts?companyid=${companyid}&storeid=${storeid}&from=${from}&to=${to}&catgeoryid=${catgeoryid}&ordertypeid=${ordertypeid}`
@@ -617,6 +624,24 @@ export class AuthService {
     return this.http.post(
       this.baseurl + 'UrbanPiper/updateuporder?orderid=' + orderid,
       payload
+    );
+  }
+  //MASTER 25-02-2023
+  getCustListRpt(
+    frmdate: string,
+    todate: string,
+    CompanyId: number,
+    OrderTypeId: number
+  ) {
+    return this.http.get(
+      this.baseurl +
+        `Customer/GetCustomerList?companyid=${CompanyId}&frmdate=${frmdate}&todate=${todate}&ordertype=${OrderTypeId}`
+    );
+  }
+  getAppVersion(CompanyId: number, OrderedDate: string) {
+    return this.http.get(
+      this.baseurl +
+        `Electron/GetAppversion?companyid=${CompanyId}&orderdate=${OrderedDate}`
     );
   }
 }

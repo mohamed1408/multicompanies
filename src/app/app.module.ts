@@ -29,6 +29,8 @@ import { ClickOutsideDirective } from './Directives/click-outside.directive';
 import { SusordersComponent } from './susorders/susorders.component';
 import { CancelOrdReportComponent } from './reports/cancel-ord-report/cancel-ord-report.component';
 import { ProductsalesreportComponent } from './productsalesreport/productsalesreport.component';
+import { VersionlistComponent } from './reports/versionlist/versionlist.component';
+import { CustomerdatarptComponent } from './reports/customerdatarpt/customerdatarpt.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { ProductsalesreportComponent } from './productsalesreport/productsalesre
     SusordersComponent,
     CancelOrdReportComponent,
     ProductsalesreportComponent,
+    VersionlistComponent,
+    CustomerdatarptComponent
   ],
   imports: [
     BrowserModule,
