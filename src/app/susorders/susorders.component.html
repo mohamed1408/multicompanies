@@ -20,7 +20,7 @@
         </div>
       </div>
     </section>
-    <section class="hk-sec-wrapper" *ngIf="sectionid == 0">
+    <section class="hk-sec-wrapper" [hidden]="sectionid == 1">
       <div class="row">
         <div class="col-xl-3 text-left">
           <label for="cars">Choose a Invoice: </label>
@@ -180,7 +180,7 @@
         </section>
       </div>
     </section>
-    <section class="hk-sec-wrapper" *ngIf="sectionid == 1">
+    <section class="hk-sec-wrapper" [hidden]="sectionid == 0">
       <div class="row">
         <div class="col-xl-3">
           <ng-template #rt let-r="result" let-t="term">

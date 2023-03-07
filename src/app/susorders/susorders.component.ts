@@ -74,6 +74,7 @@ export class SusordersComponent implements OnInit {
           ...comps,
         ]);
     });
+    this.setDateRange()
     setHeightWidth();
   }
 
@@ -297,13 +298,16 @@ export class SusordersComponent implements OnInit {
   changeSection(sectionid: number) {
     this.sectionid = sectionid;
     if (sectionid == 1) {
-      console.log("myrangepicker")
-      daterangepicker('myrangepicker', (start: any, end: any) => {
-        this.fromdate = start.startOf('day').format('YYYY-MM-DD HH:mm:ss');
-        this.todate = end.endOf('day').format('YYYY-MM-DD HH:mm:ss');
-        console.log(this.fromdate, this.todate);
-      })(moment(), moment());
+      console.log('myrangepicker');
     }
+  }
+
+  setDateRange() {
+    daterangepicker('myrangepicker', (start: any, end: any) => {
+      this.fromdate = start.startOf('day').format('YYYY-MM-DD HH:mm:ss');
+      this.todate = end.endOf('day').format('YYYY-MM-DD HH:mm:ss');
+      console.log(this.fromdate, this.todate);
+    })(moment(), moment());
   }
 
   // PENDING ORDERS
