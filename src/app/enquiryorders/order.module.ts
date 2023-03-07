@@ -5,6 +5,9 @@ import { SafeHtml } from '@angular/platform-browser';
 // import { version } from 'package.json'
 
 export class OrderModule {
+  Name: string = "";
+  OrderType: string = "";
+  selected: any;
   additionalchargearray: Array<AdditionalCharge> = [];
   AggregatorOrderId!: number;
   AllItemDisc: number;

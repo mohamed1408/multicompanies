@@ -1,11 +1,19 @@
-import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { Ng2SearchPipe } from "ng2-search-filter";
 
 import { AuthService } from '../auth.service';
 import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
+import { OrderModule } from '../enquiryorders/order.module';
 
 declare function setHeightWidth(): any;
 
@@ -13,23 +21,28 @@ declare function setHeightWidth(): any;
   selector: 'app-susorders',
   templateUrl: './susorders.component.html',
   styleUrls: ['./susorders.component.css'],
+  providers: [Ng2SearchPipe],
 })
 export class SusordersComponent implements OnInit {
   @ViewChild('kotInfo', { static: false }) private kotInfo: ElementRef | any;
 
-  companyid: number = 0;
   storeid: number = 0;
-  fromdate: string = '';
-  todate: string = '';
-  searchTerm: string = '';
-  stores: any[] = [];
+  companyid: number = 0;
+  sectionid: number = 0;
 
-  cancelledItemOrders: any = [];
-  discountedOrders: any = [];
+  // showFutureOrders: boolean = false;
+
+  todate: string = '';
+  fromdate: string = '';
+  searchTerm: string = '';
+
+  stores: any[] = [];
   selectedKots: any = [];
   selectedItems: any = [];
+  discountedOrders: any = [];
+  cancelledItemOrders: any = [];
 
-  constructor(private auth: AuthService, private modalService: NgbModal) {
+  constructor(private auth: AuthService, private modalService: NgbModal, private ng2FilterPipe: Ng2SearchPipe) {
     // this.kotInfo = undefined
     var logInfo = JSON.parse(localStorage.getItem('loginInfo') || '{}');
     this.companyid = logInfo.CompanyId;
@@ -67,12 +80,12 @@ export class SusordersComponent implements OnInit {
 
   ngOnDestroy() {
     this.auth.companies.subscribe((comps) => {
-      this.auth.companies.next(comps.filter(x => x.CompanyId != 0))
+      this.auth.companies.next(comps.filter((x) => x.CompanyId != 0));
     });
   }
 
   getSusOrders() {
-    console.log(this.storeid, this.companyid)
+    console.log(this.storeid, this.companyid);
     this.auth
       .getSusOrders(this.companyid, this.storeid, this.fromdate, this.todate)
       .subscribe((data: any) => {
@@ -235,13 +248,21 @@ export class SusordersComponent implements OnInit {
     this.selectedKots = this.cancelledItemOrders[i].json;
     this.selectedItems = this.cancelledItemOrders[i].items;
     console.log(this.selectedItems, this.selectedKots);
-    this.modalService.open(this.kotInfo, { centered: true, size: 'lg', backdropClass: 'z-index-1' });
+    this.modalService.open(this.kotInfo, {
+      centered: true,
+      size: 'lg',
+      backdropClass: 'z-index-1',
+    });
   }
   viewKotInfo_discounted(i: number) {
     this.selectedKots = this.discountedOrders[i].json;
     this.selectedItems = this.discountedOrders[i].items;
     console.log(this.selectedItems, this.selectedKots);
-    this.modalService.open(this.kotInfo, { centered: true, size: 'lg', backdropClass: 'z-index-1' });
+    this.modalService.open(this.kotInfo, {
+      centered: true,
+      size: 'lg',
+      backdropClass: 'z-index-1',
+    });
   }
   formatter = (result: any) => result.Name;
 
@@ -272,5 +293,212 @@ export class SusordersComponent implements OnInit {
       this.auth.isloading.next(false);
       // console.log(this.stores)
     });
+  }
+
+  // PENDING ORDERS
+  @ViewChild('selected_order_list', { static: true })
+  selected_order_list: ElementRef | any;
+  @ViewChild('orderdetails', { static: true }) orderdetails: ElementRef | any;
+
+  // CompanyId: number = 3;
+  orders: any = [];
+  allorders: any = [];
+  orderItems: any;
+  transactions: any;
+  data: any;
+  orderid: any;
+  total: any;
+  smodel = '';
+  Stores: any;
+  // storeId: number = 0;
+  startdate: any;
+  enddate: any;
+  term: string = "";
+  ordersSelectState: boolean = false;
+  selectedOrders: Array<CompleteOrderPayload> = [];
+  p: any;
+  paymentTypes: any = [];
+  selectedStoreId: number = 0;
+  showFutureOrders: boolean = false;
+  statusfilter = 0;
+  hidepaidorders: boolean = true;
+
+  
+  openDetailpopup(contentdetail: any) {
+    const modalRef = this.modalService
+      .open(contentdetail, {
+        ariaLabelledBy: "modal-basic-title",
+        centered: true,
+      })
+      .result.then(
+        (result) => {},
+        (reason) => {}
+      );
+  }
+  
+  Getpendingorder() {
+    this.auth
+      .getpendingorder(this.companyid, this.storeid)
+      .subscribe((data: { [x: string]: any; }) => {
+        this.orders = data['Orders'];
+        this.allorders = data['Orders'];
+        this.filterUnpaidOrders(this.hidepaidorders);
+        this.paymentTypes = [];
+        this.selectedOrders = [];
+        console.log(this.orders);
+        const todaystamp = new Date().getTime();
+        const today11oclockstamp = new Date(
+          moment().format('YY-MM-DD') + ' 11:00 AM'
+        ).getTime();
+        this.orders.forEach((order: { futureOrder: boolean; DeliveryDateTime: string | number | Date; }) => {
+          order.futureOrder =
+            todaystamp >= today11oclockstamp &&
+            new Date(order.DeliveryDateTime).getTime() > todaystamp;
+        });
+        this.selectedStoreId = this.storeid;
+        if (this.storeid > 0 || this.companyid == 0) this.getPaymentTypes();
+      });
+  }
+
+  filterUnpaidOrders(val: boolean) {
+    if (val)
+      this.orders = this.allorders.filter((x: { PaidAmount: any; BillAmount: any; }) => x.PaidAmount != x.BillAmount);
+    else this.orders = this.allorders;
+  }
+
+  getPaymentTypes() {
+    this.auth.getpaymenttypes(this.companyid, this.storeid).subscribe(
+      (data: any) => {
+        this.paymentTypes = data.filter((x: { IsActive: any; }) => x.IsActive);
+      }
+    );
+  }
+
+  getOrderItems(OrderId: any, modalRef: any) {
+    console.log(this.orderid);
+    this.auth.getOrderId(OrderId).subscribe((data: { [x: string]: any; }) => {
+      this.orderItems = data['Orders'];
+      console.log(this.orderItems);
+      this.getTransaction(OrderId, modalRef);
+    });
+  }
+
+  getTransaction(OrderId: any, modalRef: any) {
+    this.auth.getTransactionId(OrderId).subscribe((data: { [x: string]: any; }) => {
+      this.transactions = data['Transactions'];
+      console.log(this.transactions);
+      this.openDetailpopup(modalRef);
+    });
+  }
+  select(e: any, id: number) {
+    let select = e.target.checked
+    console.log(select, id);
+    // console.log(this.ng2FilterPipe.transform(this.orders, this.term))
+    this.ng2FilterPipe.transform(this.orders, this.term).forEach((order: OrderModule) => {
+      if (order.Id == id || id == 0) {
+        console.log(order, this.paymentTypes)
+        order.selected = select;
+        if (select) {
+          this.selectedOrders = [
+            ...this.selectedOrders,
+            new CompleteOrderPayload(order, this.paymentTypes.filter((x: any) => x.StoreId == order.StoreId)),
+          ];
+        } else {
+          this.removeOrder(order);
+        }
+      }
+    });
+  }
+
+  removeOrder(order: { Id: number; }) {
+    this.selectedOrders = this.selectedOrders.filter(
+      (x) => x.orderid != order.Id
+    );
+    console.log(this.selectedOrders.length);
+  }
+
+  reviewSelectedOrders() {
+    this.modalService.open(this.selected_order_list, {
+      centered: true,
+      size: 'lg',
+      backdropClass: 'z-index-1',
+    });
+  }
+
+  completeOrders() {
+    this.auth.completeOrders(this.selectedOrders).subscribe((data: any) => {
+      console.log(data);
+      this.Getpendingorder();
+      this.modalService.dismissAll();
+    });
+  }
+
+  selected_order: any;
+  selectorder(json: string) {
+    this.selected_order = JSON.parse(json);
+    console.log(this.selected_order);
+    this.modalService.open(this.orderdetails, {
+      centered: true,
+      size: 'lg',
+      windowClass: 'float-right',
+    });
+  }
+}
+
+class CompleteOrderPayload {
+  invoiceno: string;
+  orderid: number;
+  storeid: number;
+  transdatetime: string;
+  transdate: string;
+  paidamount: number;
+  billamount: number;
+  orderstatusid: number;
+  orderstatus: string;
+  store: string;
+  paymenttypeid: number;
+  ordertype: string;
+  showpopover: boolean;
+  /**
+   *
+   */
+  constructor(order: OrderModule, pts: any) {
+    this.invoiceno = order.InvoiceNo;
+    this.orderid = order.Id;
+    this.storeid = order.StoreId;
+    this.transdatetime = order.DeliveryDateTime || '';
+    this.transdate = moment(order.DeliveryDateTime).format('YYYY-MM-DD');
+    this.paidamount = order.PaidAmount;
+    this.billamount = order.BillAmount;
+    this.store = order.Name;
+    this.orderstatusid = order.OrderStatusId;
+    this.paymenttypeid = pts[0].Id;
+    this.ordertype = order.OrderType;
+    this.showpopover  = false;
+
+    const status: any = {
+      '-1': 'Cancelled',
+      '0': 'Pending',
+      '1': 'Accepted',
+      '2': 'Preparing',
+      '3': 'Prepared',
+      '4': 'Out fo Delivery',
+      '5': 'Completed',
+    };
+    const orderType = {
+      '1': 'Dinr In',
+      '2': 'Take Away',
+      '3': 'Delivery',
+      '4': 'Pick Up',
+      '5': 'Counter',
+    };
+    let typeid: string = this.orderstatusid.toString()
+    this.orderstatus = status[typeid];
+  }
+  //YYYY-MM-DDTHH:mm:ss.SSS
+  setDateTime() {
+    console.log(this.transdate);
+    this.transdatetime = this.transdate + moment().format('THH:mm:ss.SSS');
+    console.log(this.transdatetime, this.transdate);
   }
 }

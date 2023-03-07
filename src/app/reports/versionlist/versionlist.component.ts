@@ -83,9 +83,6 @@ export class VersionlistComponent implements OnInit {
       console.log(data)
       this.apkversion = data.versions
       console.log(this.apkversion)
-
     })
   }
-
-
 }

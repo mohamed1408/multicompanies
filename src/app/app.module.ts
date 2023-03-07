@@ -4,8 +4,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
-import { AutocompleteLibModule } from "angular-ng-autocomplete";
-import { NgxDaterangepickerMd } from "ngx-daterangepicker-material";
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,6 +31,8 @@ import { CancelOrdReportComponent } from './reports/cancel-ord-report/cancel-ord
 import { ProductsalesreportComponent } from './productsalesreport/productsalesreport.component';
 import { VersionlistComponent } from './reports/versionlist/versionlist.component';
 import { CustomerdatarptComponent } from './reports/customerdatarpt/customerdatarpt.component';
+import { OrderPipe, OrderfilterPipe, PtypefilterPipe } from './pipes/order.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,10 @@ import { CustomerdatarptComponent } from './reports/customerdatarpt/customerdata
     CancelOrdReportComponent,
     ProductsalesreportComponent,
     VersionlistComponent,
-    CustomerdatarptComponent
+    CustomerdatarptComponent,
+    OrderPipe,
+    OrderfilterPipe,
+    PtypefilterPipe,
   ],
   imports: [
     BrowserModule,
@@ -66,6 +71,7 @@ import { CustomerdatarptComponent } from './reports/customerdatarpt/customerdata
     Ng2SearchPipeModule,
     AutocompleteLibModule,
     ReactiveFormsModule,
+    NgxPaginationModule,
     NgxDaterangepickerMd.forRoot(),
   ],
   providers: [
@@ -74,7 +80,6 @@ import { CustomerdatarptComponent } from './reports/customerdatarpt/customerdata
   ],
   bootstrap: [AppComponent],
 })
-
 export class AppModule {
   ngDoBootstrap() {}
 }

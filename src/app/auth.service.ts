@@ -644,6 +644,62 @@ export class AuthService {
         `Electron/GetAppversion?companyid=${CompanyId}&orderdate=${OrderedDate}`
     );
   }
+
+  getpendingorder(CompanyId: string | number, storeId: string | number) {
+    return this.http.get(
+      this.baseurl +
+        'POSOrder/Getpendingorder?CompanyId=' +
+        CompanyId +
+        '&storeId=' +
+        storeId
+    );
+  }
+  getpaymenttypes(companyid: number, storeid: number) {
+    return this.http.get(
+      this.baseurl +
+        'PaymentType/getpaymenttypes?companyid=' +
+        companyid +
+        '&storeid=' +
+        storeid
+    );
+    // return this.http.get(this.baseurl + "PaymentType/getpaymenttypes?companyid=" + companyid + "&storeid=" + storeid);
+  }
+  getOrderId(orderid: string) {
+    return this.http.get(
+      this.baseurl + 'POSOrder/GetOrderId?orderid=' + orderid
+    );
+  }
+  getTransactionId(orderid: string) {
+    return this.http.get(
+      this.baseurl + 'POSOrder/GetTransactionId?orderid=' + orderid
+    );
+  }
+  completeOrders(payload: any) {
+    return this.http.post(
+      new BizUrl(this.baseurl, "POSOrder", "completePayment", {}).url,
+      payload
+    );
+  }
+
 }
 
 // baseurl
+class BizUrl {
+  controller: string;
+  method: string;
+  params: any;
+  url: string;
+  constructor(baseUrl: string, controller: string, method: string, params: any) {
+    this.controller = controller;
+    this.method = method;
+    this.params = params;
+    this.url = baseUrl + controller + "/" + method + this.getParams();
+  }
+  getParams() {
+    let paramStr = "?";
+    Object.keys(this.params).forEach((key) => {
+      paramStr += key + "=" + this.params[key] + "&";
+    });
+    return paramStr;
+  }
+}

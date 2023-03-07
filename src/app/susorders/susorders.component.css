@@ -1,0 +1,28 @@
+button.tab-active {
+    border-bottom: 2px solid green;
+}
+
+.search-clear {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 7px;
+    cursor: pointer;
+}
+
+.bizpopover {
+    position: absolute;
+    background-color: white;
+    top: 40px;
+    left: 20px;
+    padding: 10px;
+    border-radius: 3px;
+    z-index: 1000;
+}
+
+.superscript {
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-shadow: 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #0092ee, 0 0 1px #0092ee, 0 0 1px #0092ee, 0 0 1px #0092ee, 0 0 1px #0092ee;
+}
