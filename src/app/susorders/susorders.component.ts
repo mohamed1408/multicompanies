@@ -9,7 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { Ng2SearchPipe } from "ng2-search-filter";
+import { Ng2SearchPipe } from 'ng2-search-filter';
 
 import { AuthService } from '../auth.service';
 import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
@@ -42,7 +42,11 @@ export class SusordersComponent implements OnInit {
   discountedOrders: any = [];
   cancelledItemOrders: any = [];
 
-  constructor(private auth: AuthService, private modalService: NgbModal, private ng2FilterPipe: Ng2SearchPipe) {
+  constructor(
+    private auth: AuthService,
+    private modalService: NgbModal,
+    private ng2FilterPipe: Ng2SearchPipe
+  ) {
     // this.kotInfo = undefined
     var logInfo = JSON.parse(localStorage.getItem('loginInfo') || '{}');
     this.companyid = logInfo.CompanyId;
@@ -71,11 +75,6 @@ export class SusordersComponent implements OnInit {
         ]);
     });
     setHeightWidth();
-    daterangepicker('myrangepicker', (start: any, end: any) => {
-      this.fromdate = start.startOf('day').format('YYYY-MM-DD HH:mm:ss');
-      this.todate = end.endOf('day').format('YYYY-MM-DD HH:mm:ss');
-      console.log(this.fromdate, this.todate);
-    })(moment(), moment());
   }
 
   ngOnDestroy() {
@@ -295,6 +294,18 @@ export class SusordersComponent implements OnInit {
     });
   }
 
+  changeSection(sectionid: number) {
+    this.sectionid = sectionid;
+    if (sectionid == 1) {
+      console.log("myrangepicker")
+      daterangepicker('myrangepicker', (start: any, end: any) => {
+        this.fromdate = start.startOf('day').format('YYYY-MM-DD HH:mm:ss');
+        this.todate = end.endOf('day').format('YYYY-MM-DD HH:mm:ss');
+        console.log(this.fromdate, this.todate);
+      })(moment(), moment());
+    }
+  }
+
   // PENDING ORDERS
   @ViewChild('selected_order_list', { static: true })
   selected_order_list: ElementRef | any;
@@ -313,7 +324,7 @@ export class SusordersComponent implements OnInit {
   // storeId: number = 0;
   startdate: any;
   enddate: any;
-  term: string = "";
+  term: string = '';
   ordersSelectState: boolean = false;
   selectedOrders: Array<CompleteOrderPayload> = [];
   p: any;
@@ -323,11 +334,10 @@ export class SusordersComponent implements OnInit {
   statusfilter = 0;
   hidepaidorders: boolean = true;
 
-  
   openDetailpopup(contentdetail: any) {
     const modalRef = this.modalService
       .open(contentdetail, {
-        ariaLabelledBy: "modal-basic-title",
+        ariaLabelledBy: 'modal-basic-title',
         centered: true,
       })
       .result.then(
@@ -335,11 +345,11 @@ export class SusordersComponent implements OnInit {
         (reason) => {}
       );
   }
-  
+
   Getpendingorder() {
     this.auth
       .getpendingorder(this.companyid, this.storeid)
-      .subscribe((data: { [x: string]: any; }) => {
+      .subscribe((data: { [x: string]: any }) => {
         this.orders = data['Orders'];
         this.allorders = data['Orders'];
         this.filterUnpaidOrders(this.hidepaidorders);
@@ -350,11 +360,16 @@ export class SusordersComponent implements OnInit {
         const today11oclockstamp = new Date(
           moment().format('YY-MM-DD') + ' 11:00 AM'
         ).getTime();
-        this.orders.forEach((order: { futureOrder: boolean; DeliveryDateTime: string | number | Date; }) => {
-          order.futureOrder =
-            todaystamp >= today11oclockstamp &&
-            new Date(order.DeliveryDateTime).getTime() > todaystamp;
-        });
+        this.orders.forEach(
+          (order: {
+            futureOrder: boolean;
+            DeliveryDateTime: string | number | Date;
+          }) => {
+            order.futureOrder =
+              todaystamp >= today11oclockstamp &&
+              new Date(order.DeliveryDateTime).getTime() > todaystamp;
+          }
+        );
         this.selectedStoreId = this.storeid;
         if (this.storeid > 0 || this.companyid == 0) this.getPaymentTypes();
       });
@@ -362,21 +377,24 @@ export class SusordersComponent implements OnInit {
 
   filterUnpaidOrders(val: boolean) {
     if (val)
-      this.orders = this.allorders.filter((x: { PaidAmount: any; BillAmount: any; }) => x.PaidAmount != x.BillAmount);
+      this.orders = this.allorders.filter(
+        (x: { PaidAmount: any; BillAmount: any }) =>
+          x.PaidAmount != x.BillAmount
+      );
     else this.orders = this.allorders;
   }
 
   getPaymentTypes() {
-    this.auth.getpaymenttypes(this.companyid, this.storeid).subscribe(
-      (data: any) => {
-        this.paymentTypes = data.filter((x: { IsActive: any; }) => x.IsActive);
-      }
-    );
+    this.auth
+      .getpaymenttypes(this.companyid, this.storeid)
+      .subscribe((data: any) => {
+        this.paymentTypes = data.filter((x: { IsActive: any }) => x.IsActive);
+      });
   }
 
   getOrderItems(OrderId: any, modalRef: any) {
     console.log(this.orderid);
-    this.auth.getOrderId(OrderId).subscribe((data: { [x: string]: any; }) => {
+    this.auth.getOrderId(OrderId).subscribe((data: { [x: string]: any }) => {
       this.orderItems = data['Orders'];
       console.log(this.orderItems);
       this.getTransaction(OrderId, modalRef);
@@ -384,33 +402,40 @@ export class SusordersComponent implements OnInit {
   }
 
   getTransaction(OrderId: any, modalRef: any) {
-    this.auth.getTransactionId(OrderId).subscribe((data: { [x: string]: any; }) => {
-      this.transactions = data['Transactions'];
-      console.log(this.transactions);
-      this.openDetailpopup(modalRef);
-    });
+    this.auth
+      .getTransactionId(OrderId)
+      .subscribe((data: { [x: string]: any }) => {
+        this.transactions = data['Transactions'];
+        console.log(this.transactions);
+        this.openDetailpopup(modalRef);
+      });
   }
   select(e: any, id: number) {
-    let select = e.target.checked
+    let select = e.target.checked;
     console.log(select, id);
     // console.log(this.ng2FilterPipe.transform(this.orders, this.term))
-    this.ng2FilterPipe.transform(this.orders, this.term).forEach((order: OrderModule) => {
-      if (order.Id == id || id == 0) {
-        console.log(order, this.paymentTypes)
-        order.selected = select;
-        if (select) {
-          this.selectedOrders = [
-            ...this.selectedOrders,
-            new CompleteOrderPayload(order, this.paymentTypes.filter((x: any) => x.StoreId == order.StoreId)),
-          ];
-        } else {
-          this.removeOrder(order);
+    this.ng2FilterPipe
+      .transform(this.orders, this.term)
+      .forEach((order: OrderModule) => {
+        if (order.Id == id || id == 0) {
+          console.log(order, this.paymentTypes);
+          order.selected = select;
+          if (select) {
+            this.selectedOrders = [
+              ...this.selectedOrders,
+              new CompleteOrderPayload(
+                order,
+                this.paymentTypes.filter((x: any) => x.StoreId == order.StoreId)
+              ),
+            ];
+          } else {
+            this.removeOrder(order);
+          }
         }
-      }
-    });
+      });
   }
 
-  removeOrder(order: { Id: number; }) {
+  removeOrder(order: { Id: number }) {
     this.selectedOrders = this.selectedOrders.filter(
       (x) => x.orderid != order.Id
     );
@@ -474,7 +499,7 @@ class CompleteOrderPayload {
     this.orderstatusid = order.OrderStatusId;
     this.paymenttypeid = pts[0].Id;
     this.ordertype = order.OrderType;
-    this.showpopover  = false;
+    this.showpopover = false;
 
     const status: any = {
       '-1': 'Cancelled',
@@ -492,7 +517,7 @@ class CompleteOrderPayload {
       '4': 'Pick Up',
       '5': 'Counter',
     };
-    let typeid: string = this.orderstatusid.toString()
+    let typeid: string = this.orderstatusid.toString();
     this.orderstatus = status[typeid];
   }
   //YYYY-MM-DDTHH:mm:ss.SSS
