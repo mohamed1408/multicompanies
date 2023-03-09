@@ -470,6 +470,7 @@ export class SusordersComponent implements OnInit {
       centered: true,
       size: 'lg',
       windowClass: 'float-right',
+      backdropClass: 'z-index-1'
     });
   }
 }
