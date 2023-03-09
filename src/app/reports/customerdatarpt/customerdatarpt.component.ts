@@ -9,7 +9,7 @@ declare function setHeightWidth(): any;
 @Component({
   selector: 'app-customerdatarpt',
   templateUrl: './customerdatarpt.component.html',
-  styleUrls: ['./customerdatarpt.component.css']
+  styleUrls: ['./customerdatarpt.component.css'],
 })
 export class CustomerdatarptComponent implements OnInit {
   CompanyId: number = 0;
@@ -53,7 +53,7 @@ export class CustomerdatarptComponent implements OnInit {
       // this.Auth.isloading.next(true);
       // this.GetStore();
       // this.GetCustomerList();
-      this.Submit()
+      this.Submit();
     });
     setHeightWidth();
     var date = new Date();
@@ -64,9 +64,9 @@ export class CustomerdatarptComponent implements OnInit {
   date(
     e:
       | {
-        startDate: { format: (arg0: string) => any };
-        endDate: { format: (arg0: string) => any };
-      }
+          startDate: { format: (arg0: string) => any };
+          endDate: { format: (arg0: string) => any };
+        }
       | any
   ) {
     // console.log(e);
@@ -76,7 +76,7 @@ export class CustomerdatarptComponent implements OnInit {
     }
   }
 
-  cuslist: any
+  cuslist: any;
   Submit() {
     // this.loaderService.show();
 
@@ -87,17 +87,21 @@ export class CustomerdatarptComponent implements OnInit {
     // }
     var frmdate = moment(this.startdate).format('YYYY-MM-DD');
     var todate = moment(this.enddate).format('YYYY-MM-DD');
-    console.log(this.OrderTypeId)
-    this.Auth.getCustListRpt(frmdate, todate, this.CompanyId, this.OrderTypeId).subscribe((data: any) => {
-      console.log(data)
-      this.cuslist = data.Order
-      console.log(this.cuslist)
-      this.importtocus = this.cuslist
+    console.log(this.OrderTypeId);
+    this.Auth.getCustListRpt(
+      frmdate,
+      todate,
+      this.CompanyId,
+      this.OrderTypeId
+    ).subscribe((data: any) => {
+      console.log(data);
+      this.cuslist = data.Order;
+      console.log(this.cuslist);
+      this.importtocus = this.cuslist;
       // this.cuslist.OrderedDate = moment(
       //   this.cuslist.OrderedDate
       // ).format('LLL');
-
-    })
+    });
     // this.exportToExcel()
   }
 
@@ -111,8 +115,8 @@ export class CustomerdatarptComponent implements OnInit {
   //   })
   // }
 
-  exceldata: any = []
-  importtocus: any
+  exceldata: any = [];
+  importtocus: any;
   exportToExcel() {
     // if (this.startdate.hasOwnProperty('month')) {
     //   this.startdate.month = this.startdate.month - 1;
@@ -120,22 +124,40 @@ export class CustomerdatarptComponent implements OnInit {
     // }
     var frmdate = moment(this.startdate).format('YYYY-MM-DD');
     var todate = moment(this.enddate).format('YYYY-MM-DD');
-    console.log(this.OrderTypeId)
-    this.Auth.getCustListRpt(frmdate, todate, this.CompanyId, this.OrderTypeId).subscribe((data: any) => {
-      console.log(data)
-      this.importtocus = data.Order
-      console.log(this.importtocus)
+    console.log(this.OrderTypeId);
+    this.Auth.getCustListRpt(
+      frmdate,
+      todate,
+      this.CompanyId,
+      this.OrderTypeId
+    ).subscribe((data: any) => {
+      console.log(data);
+      this.importtocus = data.Order;
+      console.log(this.importtocus);
 
       // this.exceldata = [{ "StoreName": this.importtocus.Store, "CustomerName": this.importtocus.CusName, "PhoneNumber": this.importtocus.CusPhone, "OrderedDate": this.importtocus.OrderedDate, "DeliveryDate": this.importtocus.DeliveryDate }]
       // // this.exceldata = obj
       // this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel')
 
-      this.importtocus.forEach((element: { Store: any; CusName: any; CusPhone: any; OrderedDate: any; DeliveryDate: any; }) => {
-        this.exceldata = [{ "StoreName": element.Store, "CustomerName": element.CusName, "PhoneNumber": element.CusPhone, "OrderedDate": element.OrderedDate, "DeliveryDate": element.DeliveryDate }]
-      });
-      this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel')
-
-    })
+      this.importtocus.forEach(
+        (element: {
+          Store: any;
+          CusName: any;
+          CusPhone: any;
+          OrderedDate: any;
+          DeliveryDate: any;
+        }) => {
+          this.exceldata.push({
+            StoreName: element.Store,
+            CustomerName: element.CusName,
+            PhoneNumber: element.CusPhone,
+            OrderedDate: element.OrderedDate,
+            DeliveryDate: element.DeliveryDate,
+          });
+        }
+      );
+      this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel');
+      this.exceldata = [];
+    });
   }
-
 }
