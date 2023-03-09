@@ -7,7 +7,7 @@ const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.
 const EXCEL_EXTENSION = '.xlsx';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root' 
 })
 export class ExcelService {
 
