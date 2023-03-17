@@ -79,9 +79,12 @@
         <section class="hk-sec-wrapper">
           <div class="mb-2 row px-15">
             <div class="form-group col-sm pl-0">
-              <button [disabled]="selectedOrders.length == 0 || (selectedStoreId == 0 && companyid != 0)" class="btn btn-success btn-sm"
-                (click)="reviewSelectedOrders()">
+              <button [disabled]="selectedOrders.length == 0 || (selectedStoreId == 0 && companyid != 0)"
+                class="btn btn-success btn-sm" (click)="reviewSelectedOrders()">
                 Complete {{ selectedOrders.length }} Orders
+              </button>
+              <button class="btn btn-link ml-10" (click)="openStoresArray()">
+                {{ selectedstores }} Stores Selected
               </button>
             </div>
             <div class="form-group mr-3">
@@ -143,8 +146,8 @@
                               | orderfilter: statusfilter
                           ">
                         <td class="font-12">
-                          <input type="checkbox" [checked]="order.selected" [disabled]="selectedStoreId == 0 && companyid != 0"
-                            (change)="select($event, order.Id)" />
+                          <input type="checkbox" [checked]="order.selected"
+                            [disabled]="selectedStoreId == 0 && companyid != 0" (change)="select($event, order.Id)" />
                         </td>
                         <td class="font-12">
                           <button class="btn btn-link" (click)="selectorder(order.OrderJson)">
@@ -507,6 +510,25 @@
       {{ selected_order.CustomerDetails.Address }}<br />
       <strong class="text-dark">EmailId: </strong>
       {{ selected_order.CustomerDetails.EmailId }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #POStoreArrayModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Select Stores</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.close('Save click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <button class="btn btn-success float-right" *ngIf="selectedstores == 0" (click)="deselctAllStores(true)">Select All</button>
+    <button class="btn btn-danger float-right" *ngIf="selectedstores > 0" (click)="deselctAllStores(false)">DeSelect All</button>
+  </div>
+  <div class="modal-body row col-xl-12">
+    <div *ngFor="let store of POStortesArray" (click)="togglePOStoreSelect(store.Id)" [class.selected]="store.selected"
+      class="col-xl-3 store-card">
+      {{store.Name}}
     </div>
   </div>
 </ng-template>

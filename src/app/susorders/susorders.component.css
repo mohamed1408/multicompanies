@@ -26,3 +26,16 @@ button.tab-active {
     right: 0;
     text-shadow: 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #0092ee, 0 0 1px #0092ee, 0 0 1px #0092ee, 0 0 1px #0092ee, 0 0 1px #0092ee;
 }
+
+.store-card {
+    padding: 10px;
+    user-select: none;
+}
+
+.store-card:hover {
+    background-color: #e2dcdc;
+}
+
+.store-card.selected {
+    background-color: #172a32;
+}

@@ -25,6 +25,9 @@ declare function setHeightWidth(): any;
 })
 export class SusordersComponent implements OnInit {
   @ViewChild('kotInfo', { static: false }) private kotInfo: ElementRef | any;
+  @ViewChild('POStoreArrayModal', { static: false }) private POStoreArrayModal:
+    | ElementRef
+    | any;
 
   storeid: number = 0;
   companyid: number = 0;
@@ -74,7 +77,7 @@ export class SusordersComponent implements OnInit {
           ...comps,
         ]);
     });
-    this.setDateRange()
+    this.setDateRange();
     setHeightWidth();
   }
 
@@ -349,7 +352,7 @@ export class SusordersComponent implements OnInit {
         (reason) => {}
       );
   }
-
+  POStortesArray: any = [];
   Getpendingorder() {
     this.auth
       .getpendingorder(this.companyid, this.storeid)
@@ -368,12 +371,26 @@ export class SusordersComponent implements OnInit {
           (order: {
             futureOrder: boolean;
             DeliveryDateTime: string | number | Date;
+            StoreId: number;
           }) => {
             order.futureOrder =
               todaystamp >= today11oclockstamp &&
               new Date(order.DeliveryDateTime).getTime() > todaystamp;
+            if (!this.POStortesArray.some((x: any) => x.Id == order.StoreId))
+              this.POStortesArray.push(
+                this.stores
+                  .filter((x) => x.Id == order.StoreId)
+                  .map((x) => {
+                    return { ...x, selected: true };
+                  })[0]
+              );
           }
         );
+        this.POStortesArray = this.POStortesArray.sort(
+          (a: { CompanyId: number }, b: { CompanyId: number }) =>
+            a.CompanyId - b.CompanyId
+        );
+        this.selectedstores = this.POStortesArray.length;
         this.selectedStoreId = this.storeid;
         if (this.storeid > 0 || this.companyid == 0) this.getPaymentTypes();
       });
@@ -414,6 +431,7 @@ export class SusordersComponent implements OnInit {
         this.openDetailpopup(modalRef);
       });
   }
+
   select(e: any, id: number) {
     let select = e.target.checked;
     console.log(select, id);
@@ -470,8 +488,44 @@ export class SusordersComponent implements OnInit {
       centered: true,
       size: 'lg',
       windowClass: 'float-right',
-      backdropClass: 'z-index-1'
+      backdropClass: 'z-index-1',
     });
+  }
+  selectedstores: number = 0;
+  openStoresArray() {
+    this.modalService.open(this.POStoreArrayModal, {
+      centered: true,
+      size: 'lg',
+      windowClass: 'float-right',
+      backdropClass: 'z-index-1',
+    });
+  }
+
+  togglePOStoreSelect(id: number) {
+    this.POStortesArray.filter((x: any) => x.Id == id)[0].selected =
+      !this.POStortesArray.filter((x: any) => x.Id == id)[0].selected;
+    this.filterOrderbySelectedStores();
+  }
+
+  deselctAllStores(bool: boolean) {
+    this.POStortesArray.forEach((element: any) => {
+      element.selected = false || bool;
+    });
+    this.filterOrderbySelectedStores();
+  }
+
+  filterOrderbySelectedStores() {
+    const selected_ids = this.POStortesArray.filter((y: any) => y.selected).map(
+      (y: any) => y.Id
+    );
+    console.log(selected_ids);
+    this.selectedstores = selected_ids.length;
+    this.orders = this.allorders.filter(
+      (x: any) =>
+        selected_ids.includes(x.StoreId) &&
+        ((this.hidepaidorders && x.PaidAmount != x.BillAmount) ||
+          !this.hidepaidorders)
+    );
   }
 }
 
