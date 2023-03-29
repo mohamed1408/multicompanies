@@ -135,7 +135,7 @@ export class TimewisereportComponent implements OnInit {
     Zomato: ['Zomato', 0],
     DiscAmount: ['DiscAmount', 0],
   };
-  showPaidAmount: boolean = false
+  showPaidAmount: boolean = false;
 
   isInvalidDate = (m: moment.Moment) => {
     return this.invalidDates.some((d) => d.isSame(m, 'day'));
@@ -150,14 +150,14 @@ export class TimewisereportComponent implements OnInit {
     this.alwaysShowCalendars = true;
     // var logInfo = JSON.parse(localStorage.getItem("loginInfo"));
     // this.CompanyId = logInfo.CompanyId;
-    const intervalStr = localStorage.getItem("[timewise:interval]") || '09:00'
-    this.Intervalhours = +intervalStr.split(":")[0]
-    this.Intervalmins = +intervalStr.split(":")[1]
+    const intervalStr = localStorage.getItem('[timewise:interval]') || '09:00';
+    this.Intervalhours = +intervalStr.split(':')[0];
+    this.Intervalmins = +intervalStr.split(':')[1];
   }
 
   ngOnInit() {
-    console.log(moment().format("LTS"))
-    console.log(moment())
+    console.log(moment().format('LTS'));
+    console.log(moment());
     // this.StartTime = moment().utc().local().format("HH:mm")
     this.Auth.companyid.subscribe((companyid) => {
       this.CompanyId = companyid;
@@ -176,7 +176,7 @@ export class TimewisereportComponent implements OnInit {
   saleProducts: any = [];
 
   getCurrentTime() {
-    return moment().utc().local().format("HH:mm")
+    return moment().utc().local().format('HH:mm');
   }
 
   getSaleProducts() {
@@ -242,12 +242,16 @@ export class TimewisereportComponent implements OnInit {
   }
   Intervalhours: number = 7;
   Intervalmins: number = 0;
-  totalQty: number = 0
-  totalSales: number = 0
-  totalPays: number = 0
-
+  totalQty: number = 0;
+  totalSales: number = 0;
+  totalPays: number = 0;
+  total5Qty: number = 0;
+  total90Qty: number = 0;
   saveInterval() {
-    localStorage.setItem("[timewise:interval]", this.Intervalhours + ":" + this.Intervalmins)
+    localStorage.setItem(
+      '[timewise:interval]',
+      this.Intervalhours + ':' + this.Intervalmins
+    );
   }
 
   Submit() {
@@ -305,23 +309,24 @@ export class TimewisereportComponent implements OnInit {
       this.saleProductId,
       this.CompanyId
     ).subscribe((data: any) => {
-      if(this.productId == 0 && this.saleProductId == 0) this.showPaidAmount = true
+      if (this.productId == 0 && this.saleProductId == 0)
+        this.showPaidAmount = true;
       this.salesrpt = data;
-      this.totalQty = 0
-      this.totalSales = 0
-      this.totalPays = 0
-      if(this.salesrpt.status == 0) {
+      this.totalQty = 0;
+      this.totalSales = 0;
+      this.totalPays = 0;
+      if (this.salesrpt.status == 0) {
         this.Auth.isloading.next(false);
         return;
       }
       this.salesrpt.Order.forEach((order: any) => {
-        this.totalQty += order.quantity
-        this.totalSales += order.TotSales
-        this.totalPays += order.payments
+        this.totalQty += order.quantity;
+        this.totalSales += order.TotSales;
+        this.totalPays += order.payments;
       });
-      this.totalQty = +(this.totalQty.toFixed(2))
-      this.totalSales = +(this.totalSales.toFixed(2))
-      this.totalPays = +(this.totalPays.toFixed(2))
+      this.totalQty = +this.totalQty.toFixed(2);
+      this.totalSales = +this.totalSales.toFixed(2);
+      this.totalPays = +this.totalPays.toFixed(2);
       console.log(this.salesrpt);
       this.Auth.isloading.next(false);
     });
@@ -407,8 +412,7 @@ export class TimewisereportComponent implements OnInit {
     else if (type == 'string')
       this.salesrpt.Order = this.salesrpt.Order.sort(
         (a: any, b: any) =>
-          (a[field].localeCompare(b[field])) *
-          this.sortSetting[field][1]
+          a[field].localeCompare(b[field]) * this.sortSetting[field][1]
       );
   }
   resetSettings(field: string) {
