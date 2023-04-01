@@ -126,7 +126,7 @@ export class OrderwisereportComponent implements OnInit {
         this.orderwiserpt.Order[i].OrderedDate = moment(
           this.orderwiserpt.Order[i].OrderedDate
         ).format('LLL');
-        this.orderwiserpt.Order[i].itemnames = JSON.parse(this.orderwiserpt.Order[i].ItemJson).map((x: any) => x.showname).join(', ')
+        this.orderwiserpt.Order[i].itemnames = JSON.parse(this.orderwiserpt.Order[i].ItemJson).map((x: any) => x.showname || x.title).join(', ')
         this.TotalPayments = this.TotalPayments + this.orderwiserpt.Order[i].PaidAmount;
         this.TotalSales = this.TotalSales + this.orderwiserpt.Order[i].BillAmount;
       }
@@ -327,7 +327,7 @@ export class OrderwisereportComponent implements OnInit {
         this.orderwiserpt.Order[i].OrderedDate = moment(
           this.orderwiserpt.Order[i].OrderedDate
         ).format('LLL');
-        this.orderwiserpt.Order[i].itemnames = JSON.parse(this.orderwiserpt.Order[i].ItemJson).map((x: any) => x.showname).join(', ')
+        this.orderwiserpt.Order[i].itemnames = JSON.parse(this.orderwiserpt.Order[i].ItemJson).map((x: any) => x.showname || x.title).join(', ')
 
         if (this.limited_user) {
           this.orderwiserpt.Order[i].PaidAmount = 0;
