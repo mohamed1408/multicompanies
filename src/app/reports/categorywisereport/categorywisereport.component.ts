@@ -13,6 +13,7 @@ export class CategorywisereportComponent implements OnInit {
   CompanyId: number = 0;
   StoreId: number = 0;
   ParentCatId = 0;
+  CatId = 0;
   catId: number = 0;
   storeId: any;
   sourceId = 0;
@@ -72,17 +73,15 @@ export class CategorywisereportComponent implements OnInit {
   sourceMS: multiselectConfig;
   storeMS: multiselectConfig = new multiselectConfig([], () => {});
   source_key: string = '';
+  mergereport: boolean = false;
 
   constructor(private Auth: AuthService, private modalService: NgbModal) {
     this.alwaysShowCalendars = true;
     this.showdropdown = Auth.showdropdown;
     this.sourceMS = new multiselectConfig(this.sources, (data: any) => {
-      // console.log(data);
       this.source_key = data.map((x: any) => x.id).join('_');
       this.sourceMS.show_string = data.map((x: any) => x.name).join(', ');
     });
-    // var logInfo = JSON.parse(localStorage.getItem("loginInfo"));
-    // this.CompanyId = logInfo.CompanyId;
   }
 
   ngOnInit() {
@@ -173,6 +172,7 @@ export class CategorywisereportComponent implements OnInit {
       this.y = 1;
     }
   }
+
   get sortData() {
     return this.categorywiserpt.Order.sort(
       (a: { [x: string]: number }, b: { [x: string]: number }) => {
@@ -254,15 +254,12 @@ export class CategorywisereportComponent implements OnInit {
     this.Auth.getcat(this.CompanyId).subscribe((data) => {
       this.category = data;
       console.log(this.category);
-      //  var obj = { Id: 0, Description: "All", ParentCategoryId: null }
-      //  this.category.push(obj);
-      let i = 0;
-      this.category.forEach((element: { ParentCategoryId: null }) => {
-        if (element.ParentCategoryId == null) {
-          this.parentcategory[i] = element;
-          i++;
-        }
-      });
+
+      var obj = { Id: 0, Description: 'All', ParentCategoryId: null };
+      this.category.unshift(obj);
+      this.parentcategory = this.category.filter(
+        (x: { ParentCategoryId: null }) => x.ParentCategoryId == null
+      );
       console.log(this.parentcategory);
     });
   }

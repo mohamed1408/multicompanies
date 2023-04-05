@@ -31,7 +31,7 @@ import { CancelOrdReportComponent } from './reports/cancel-ord-report/cancel-ord
 import { ProductsalesreportComponent } from './productsalesreport/productsalesreport.component';
 import { VersionlistComponent } from './reports/versionlist/versionlist.component';
 import { CustomerdatarptComponent } from './reports/customerdatarpt/customerdatarpt.component';
-import { OrderPipe, OrderfilterPipe, PtypefilterPipe } from './pipes/order.pipe';
+import { CTGReportPipe, CategoryPipe, OrderPipe, OrderfilterPipe, PtypefilterPipe } from './pipes/order.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
@@ -61,6 +61,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     OrderPipe,
     OrderfilterPipe,
     PtypefilterPipe,
+    CategoryPipe,
+    CTGReportPipe
   ],
   imports: [
     BrowserModule,

@@ -126,14 +126,20 @@ export class OrderwisereportComponent implements OnInit {
         this.orderwiserpt.Order[i].OrderedDate = moment(
           this.orderwiserpt.Order[i].OrderedDate
         ).format('LLL');
-        this.orderwiserpt.Order[i].itemnames = JSON.parse(this.orderwiserpt.Order[i].ItemJson).map((x: any) => x.showname || x.title).join(', ')
-        this.TotalPayments = this.TotalPayments + this.orderwiserpt.Order[i].PaidAmount;
-        this.TotalSales = this.TotalSales + this.orderwiserpt.Order[i].BillAmount;
+        this.orderwiserpt.Order[i].itemnames = JSON.parse(
+          this.orderwiserpt.Order[i].ItemJson
+        )
+          .map((x: any) => x.showname || x.title)
+          .join(', ');
+        this.TotalPayments =
+          this.TotalPayments + this.orderwiserpt.Order[i].PaidAmount;
+        this.TotalSales =
+          this.TotalSales + this.orderwiserpt.Order[i].BillAmount;
       }
       this.TotalSales = +this.TotalSales.toFixed(2);
       this.TotalPayments = +this.TotalPayments.toFixed(2);
       var response: any = data;
-      console.log(this.orderwiserpt.Order)
+      console.log(this.orderwiserpt.Order);
       if (response.status == 0) {
         this.status = 0;
         this.errorMsg = response.msg;
@@ -159,7 +165,7 @@ export class OrderwisereportComponent implements OnInit {
     this.sgst = 0;
     this.cgst = 0;
     this.subtotal = 0;
-    this.TransactionDetails = transdetails.split(', ')
+    this.TransactionDetails = transdetails.split(', ');
     if (itemjson) {
       if (sourceId != 1) {
         this.onlineOrderDetails(itemjson, ChargeJson, sourceId, invoiceno);
@@ -327,7 +333,11 @@ export class OrderwisereportComponent implements OnInit {
         this.orderwiserpt.Order[i].OrderedDate = moment(
           this.orderwiserpt.Order[i].OrderedDate
         ).format('LLL');
-        this.orderwiserpt.Order[i].itemnames = JSON.parse(this.orderwiserpt.Order[i].ItemJson).map((x: any) => x.showname || x.title).join(', ')
+        this.orderwiserpt.Order[i].itemnames = JSON.parse(
+          this.orderwiserpt.Order[i].ItemJson
+        )
+          .map((x: any) => x.showname || x.title)
+          .join(', ');
 
         if (this.limited_user) {
           this.orderwiserpt.Order[i].PaidAmount = 0;

@@ -1,19 +1,19 @@
 <div class="hk-pg-wrapper">
-    <div class="container">
-      <nav class="hk-breadcrumb" aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-light bg-transparent">
-        </ol>
-      </nav>
-      <div class="hk-pg-header">
-        <h4 class="hk-pg-title">Categorywise</h4>
-      </div> 
-      <div class="col-sm-14">
-        <div class="col-xl-12 pl-0 pr-0">
-          <section class="hk-sec-wrapper">
-            <div class="form-group row">
-              <div style="margin-left:30px ">
-                <label for="username">Location</label>
-                <!-- <ng-autocomplete (inputCleared)="focusAutocomplete()" [data]="stores" style="width:10em;margin-left:30px;
+  <div class="container">
+    <nav class="hk-breadcrumb" aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-light bg-transparent">
+      </ol>
+    </nav>
+    <div class="hk-pg-header">
+      <h4 class="hk-pg-title">Categorywise</h4>
+    </div>
+    <div class="col-sm-14">
+      <div class="col-xl-12 pl-0 pr-0">
+        <section class="hk-sec-wrapper">
+          <div class="form-group row">
+            <div class="col-xl-3">
+              <label for="username">Location</label>
+              <!-- <ng-autocomplete (inputCleared)="focusAutocomplete()" [data]="stores" style="width:10em;margin-left:30px;
                                border-color: #90a7a8;  " [searchKeyword]="key" (selected)='selectEvent($event)'
                   placeHolder="Choose Location" [itemTemplate]="itemTemplate1" [notFoundTemplate]="notFoundTemplate1"
                   [(ngModel)]="all"></ng-autocomplete>
@@ -24,148 +24,204 @@
                   <div [innerHTML]="notFound"></div>
                 </ng-template> -->
 
-                <div (clickOutside)="storeMS.show_panel = false" #sourcemultiselect class="checkbox-select px-0 sourcemultiselect">
-                  <input (focus)="storeMS.show_panel = true" type="text" class="w-100 sourcemultiselect" placeholder="Select atleast one" readonly [(ngModel)]="storeMS.show_string"/>
-                  <div id="sourcemultiselectdd" *ngIf="storeMS.show_panel" class="options w-100 shadow shadow-xl multidd sourcemultiselect">
-                    <div class="option px-15 sourcemultiselect" (click)="storeMS.all = !storeMS.all; storeMS.toggleAll()">
-                      <label for="one" class="sourcemultiselect">
-                        <input type="checkbox" readonly [(ngModel)]="storeMS.all" class="sourcemultiselect"/>
-                        Select All
-                      </label>
-                    </div>
-                    <div *ngFor="let source of storeMS.data" class="option px-15 sourcemultiselect" (click)="source.isselected = !source.isselected; storeMS.change()">
-                      <label for="one" class="sourcemultiselect">
-                        <input type="checkbox" readonly [(ngModel)]="source.isselected" class="sourcemultiselect"/>
-                        &nbsp;{{ source.Name }}
-                      </label>
-                    </div>
+              <div (clickOutside)="storeMS.show_panel = false" #sourcemultiselect
+                class="checkbox-select px-0 sourcemultiselect">
+                <input (focus)="storeMS.show_panel = true" type="text" class="w-100 sourcemultiselect"
+                  placeholder="Select atleast one" readonly [(ngModel)]="storeMS.show_string" />
+                <div id="sourcemultiselectdd" *ngIf="storeMS.show_panel"
+                  class="options w-100 shadow shadow-xl multidd sourcemultiselect">
+                  <div class="option px-15 sourcemultiselect" (click)="storeMS.all = !storeMS.all; storeMS.toggleAll()">
+                    <label for="one" class="sourcemultiselect">
+                      <input type="checkbox" readonly [(ngModel)]="storeMS.all" class="sourcemultiselect" />
+                      Select All
+                    </label>
                   </div>
-                </div>
-                </div>
-              <div style="margin-left:35px;">
-                <label for="username">Date</label>
-                <input type="text" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
-                  [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected" [showCustomRangeLabel]="true"
-                  [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true" [showClearButton]="true"
-                  (change)="date($event)" placeholder="Select Date..." class="form-control" />
-                </div>
-              <div hidden style="margin-left:50px;">
-                <label for="username">Date</label>
-                <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
-                  [(ngModel)]="selected" [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
-                  [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
-                  class="form-control" />
-              </div>
-              <div class="form-group" style="width: 10em;margin-left:40px;">
-                <label for="username">ParentCategory</label>
-                <select class="form-control custom-select" [(ngModel)]="ParentCatId" name="ParentCategoryId">
-                  <option value="0">All</option>
-                  <option value="{{item.Id}}" *ngFor="let item of parentcategory">{{item.Description}}</option>
-                </select>
-              </div>
-              <div class="form-group" style="width: 10em;margin-left:40px;">
-                <label for="username">Source</label>
-                <div (clickOutside)="sourceMS.show_panel = false" #sourcemultiselect class="checkbox-select px-0 sourcemultiselect">
-                  <input (focus)="sourceMS.show_panel = true" type="text" class="w-100 sourcemultiselect" placeholder="Select atleast one" readonly [(ngModel)]="sourceMS.show_string"/>
-                  <div id="sourcemultiselectdd" *ngIf="sourceMS.show_panel" class="options w-100 shadow shadow-xl multidd sourcemultiselect">
-                    <div class="option px-15 sourcemultiselect" (click)="sourceMS.all = !sourceMS.all; sourceMS.toggleAll()">
-                      <label for="one" class="sourcemultiselect">
-                        <input type="checkbox" readonly [(ngModel)]="sourceMS.all" class="sourcemultiselect"/>
-                        Select All
-                      </label>
-                    </div>
-                    <div *ngFor="let source of sourceMS.data" class="option px-15 sourcemultiselect" (click)="source.isselected = !source.isselected; sourceMS.change()">
-                      <label for="one" class="sourcemultiselect">
-                        <input type="checkbox" readonly [(ngModel)]="source.isselected" class="sourcemultiselect"/>
-                        &nbsp;{{ source.name }}
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                </div>
-              <div style="margin-left:50px;margin-top:35px;">
-                <button class="btn btn-success  btn-sm mx-10 w-100" (click)="Submit()">Submit</button>
-              </div>
-            </div>  
-            <div class="row">
-              <div class="col-sm">
-                <div class="table-wrap">
-                  <div class="table-responsive">
-                    <input type="text" class="form-control" (input)="calculate()" placeholder="Search Report.." [(ngModel)]="term">
-                    <br>
-                    <div class="float-right">
-                      <strong>TotalSale: </strong>{{TotalSales | number: ".2"}} <br>
-                    </div>
-                    <table class="table mb-0 table-sm">
-                      <thead>
-                        <tr style="background-color:rgb(217, 226, 250);">
-                          <th (click)="sortsettings('Category')"><strong><a class="font-12"> Category </a></strong><i
-                              *ngIf="sortfield == 'Category' && x == -1" class="icon-arrow-up  pull-right"></i>
-                            <i *ngIf="sortfield == 'Category' && x == 1" class="icon-arrow-down  pull-right"></i>
-                          </th>
-                          <th (click)="sortsettings('TotalSales')"><strong> <a class="font-12">TotalSales </a></strong><i
-                              *ngIf="sortfield == 'TotalSales' && x == -1" class="icon-arrow-up  pull-right"></i>
-                            <i *ngIf="sortfield == 'TotalSales' && x == 1" class="icon-arrow-down  pull-right"></i>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr (click)="openDetailpopup(contentdetail1,item.Id)"
-                          *ngFor="let item of sortData | filter:term ">
-                          <td class="font-12">{{item.Category}}</td>
-                          <td class="font-12">&#8377;{{item.TotalSales | number: ".2"}}</td>
-                        </tr>
-                        <tr>
-                          <td class="font-12"><strong> Total</strong></td>
-                          <td class="font-12"><strong>&#8377;{{TotalSales | number: ".2"}}</strong></td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <div *ngFor="let source of storeMS.data" class="option px-15 sourcemultiselect"
+                    (click)="source.isselected = !source.isselected; storeMS.change()">
+                    <label for="one" class="sourcemultiselect">
+                      <input type="checkbox" readonly [(ngModel)]="source.isselected" class="sourcemultiselect" />
+                      &nbsp;{{ source.Name }}
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
-          </section>
+            <div class="col-xl-3">
+              <label for="username">Date</label>
+              <input type="text" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
+                [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected" [showCustomRangeLabel]="true"
+                [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true" [showClearButton]="true"
+                (change)="date($event)" placeholder="Select Date..." class="form-control" />
+            </div>
+            <div hidden style="margin-left:50px;">
+              <label for="username">Date</label>
+              <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
+                [(ngModel)]="selected" [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
+                [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
+                class="form-control" />
+            </div>
+            <div class="form-group col-xl-3">
+              <label for="username">ParentCategory</label>
+              <select class="form-control custom-select" [(ngModel)]="ParentCatId" name="ParentCategoryId">
+                <option value="0">All</option>
+                <option value="{{item.Id}}" *ngFor="let item of parentcategory">{{item.Description}}</option>
+              </select>
+            </div>
+            <div class="form-group col-xl-3">
+              <!-- <label for="username">Source</label>
+              <div (clickOutside)="sourceMS.show_panel = false" #sourcemultiselect
+                class="checkbox-select px-0 sourcemultiselect">
+                <input (focus)="sourceMS.show_panel = true" type="text" class="w-100 sourcemultiselect"
+                  placeholder="Select atleast one" readonly [(ngModel)]="sourceMS.show_string" />
+                <div id="sourcemultiselectdd" *ngIf="sourceMS.show_panel"
+                  class="options w-100 shadow shadow-xl multidd sourcemultiselect">
+                  <div class="option px-15 sourcemultiselect"
+                    (click)="sourceMS.all = !sourceMS.all; sourceMS.toggleAll()">
+                    <label for="one" class="sourcemultiselect">
+                      <input type="checkbox" readonly [(ngModel)]="sourceMS.all" class="sourcemultiselect" />
+                      Select All
+                    </label>
+                  </div>
+                  <div *ngFor="let source of sourceMS.data" class="option px-15 sourcemultiselect"
+                    (click)="source.isselected = !source.isselected; sourceMS.change()">
+                    <label for="one" class="sourcemultiselect">
+                      <input type="checkbox" readonly [(ngModel)]="source.isselected" class="sourcemultiselect" />
+                      &nbsp;{{ source.name }}
+                    </label>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+            <div class="col-xl-3">
+              <label for="username">Source</label>
+              <div (clickOutside)="sourceMS.show_panel = false" #sourcemultiselect
+                class="checkbox-select px-0 sourcemultiselect">
+                <input (focus)="sourceMS.show_panel = true" type="text" class="w-100 sourcemultiselect"
+                  placeholder="Select atleast one" readonly [(ngModel)]="sourceMS.show_string" />
+                <div id="sourcemultiselectdd" *ngIf="sourceMS.show_panel"
+                  class="options w-100 shadow shadow-xl multidd sourcemultiselect">
+                  <div class="option px-15 sourcemultiselect"
+                    (click)="sourceMS.all = !sourceMS.all; sourceMS.toggleAll()">
+                    <label for="one" class="sourcemultiselect">
+                      <input type="checkbox" readonly [(ngModel)]="sourceMS.all" class="sourcemultiselect" />
+                      Select All
+                    </label>
+                  </div>
+                  <div *ngFor="let source of sourceMS.data" class="option px-15 sourcemultiselect"
+                    (click)="source.isselected = !source.isselected; sourceMS.change()">
+                    <label for="one" class="sourcemultiselect">
+                      <input type="checkbox" readonly [(ngModel)]="source.isselected" class="sourcemultiselect" />
+                      &nbsp;{{ source.name }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3">
+              <!-- <button class="btn btn-success btn-sm mx-10 w-100" (click)="Submit()">Submit</button> -->
+            </div>
+            <div class="col-xl-3">
+              <label for="username">Category</label>
+              <select class="form-control custom-select" [(ngModel)]="CatId" name="CategoryId">
+                <option value="0">All</option>
+                <option value="{{item.Id}}" *ngFor="let item of category | categoryfilter:ParentCatId">
+                  {{item.Description}}</option>
+              </select>
+            </div>
+            <div class="col-xl-3">
+              <label for="">Submit</label> <br>
+              <button class="btn btn-success btn-sm mx-10 w-100" (click)="Submit()">Submit</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+              <div class="table-wrap">
+                <div class="table-responsive">
+                  <input type="text" class="form-control" (input)="calculate()" placeholder="Search Report.."
+                    [(ngModel)]="term">
+                  <br>
+                  <div class="float-right">
+                    <strong>TotalSale: </strong>{{TotalSales | number: ".2"}} <br>
+                  </div>
+                  <div class="float-left">
+                    <input type="checkbox" [(ngModel)]="mergereport" class="mr-5">
+                    <label for="">Merge Report</label>
+                  </div>
+                  <table class="table mb-0 table-sm">
+                    <thead>
+                      <tr style="background-color:rgb(217, 226, 250);">
+                        <th *ngIf="!mergereport" (click)="sortsettings('Store')"><strong><a class="font-12"> Store </a></strong><i
+                            *ngIf="sortfield == 'Store' && x == -1" class="icon-arrow-up  pull-right"></i>
+                          <i *ngIf="sortfield == 'Store' && x == 1" class="icon-arrow-down  pull-right"></i>
+                        </th>
+                        <th (click)="sortsettings('Category')"><strong><a class="font-12"> Category </a></strong><i
+                            *ngIf="sortfield == 'Category' && x == -1" class="icon-arrow-up  pull-right"></i>
+                          <i *ngIf="sortfield == 'Category' && x == 1" class="icon-arrow-down  pull-right"></i>
+                        </th>
+                        <th (click)="sortsettings('TotalSales')"><strong> <a class="font-12">TotalSales </a></strong><i
+                            *ngIf="sortfield == 'TotalSales' && x == -1" class="icon-arrow-up  pull-right"></i>
+                          <i *ngIf="sortfield == 'TotalSales' && x == 1" class="icon-arrow-down  pull-right"></i>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr (click)="openDetailpopup(contentdetail1,item.Id)"
+                        *ngFor="let item of sortData | ctgreportpipe:CatId:mergereport | filter:term ">
+                        <td *ngIf="!mergereport" class="font-12">{{item.Store}}</td>
+                        <td class="font-12">{{item.Category}}</td>
+                        <td class="font-12">&#8377;{{item.TotalSales | number: ".2"}}</td>
+                      </tr>
+                      <tr>
+                        <td class="font-12"><strong> Total</strong></td>
+                        <td class="font-12"><strong>&#8377;{{TotalSales | number: ".2"}}</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #contentdetail1 let-modal>
+  <div class="modal d-block position-static overflow-show" tabindex="-1" role="dialog">
+    <div class="modal-dialog ma-0" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <table class="table table-sm mb-0">
+            <thead>
+              <tr>
+                <td>Product</td>
+                <td>Quantity</td>
+                <td>TotalSales</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of filtprd.data">
+                <td>{{item.Product}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>&#8377;{{item.TotalSales | number:".2"}}</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td> TotalQty</td>
+                <td>{{ TotalPrdQty}}</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td> TotalSales</td>
+                <td>{{TotalProductSale}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="modal.close()">OK</button>
         </div>
       </div>
     </div>
-  </div>  
-  <ng-template #contentdetail1 let-modal>
-    <div class="modal d-block position-static overflow-show" tabindex="-1" role="dialog">
-      <div class="modal-dialog ma-0" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <table class="table table-sm mb-0">
-              <thead>
-                <tr>
-                  <td>Product</td>
-                  <td>Quantity</td>
-                  <td>TotalSales</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of filtprd.data">
-                  <td>{{item.Product}}</td>
-                  <td>{{item.Quantity}}</td>
-                  <td>&#8377;{{item.TotalSales | number:".2"}}</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td> TotalQty</td>
-                  <td>{{ TotalPrdQty}}</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td> TotalSales</td>
-                  <td>{{TotalProductSale}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" (click)="modal.close()">OK</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-template>
+  </div>
+</ng-template>
