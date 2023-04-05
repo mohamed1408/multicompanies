@@ -73,7 +73,7 @@ export class CategorywisereportComponent implements OnInit {
   sourceMS: multiselectConfig;
   storeMS: multiselectConfig = new multiselectConfig([], () => {});
   source_key: string = '';
-  mergereport: boolean = false;
+  mergereport: boolean = true;
 
   constructor(private Auth: AuthService, private modalService: NgbModal) {
     this.alwaysShowCalendars = true;
@@ -88,11 +88,11 @@ export class CategorywisereportComponent implements OnInit {
     this.Auth.companyid.subscribe((companyid) => {
       this.CompanyId = companyid;
       // this.Auth.isloading.next(true);
+      this.startdate = this.startdate ? this.startdate : moment().format('YYYY-MM-DD');
+      this.enddate = this.enddate ? this.enddate : moment().format('YYYY-MM-DD');
       this.All();
       this.GetStores();
       this.Getcategory();
-      this.startdate = moment().format('YYYY-MM-DD');
-      this.enddate = moment().format('YYYY-MM-DD');
     });
   }
   Submit() {
@@ -188,8 +188,8 @@ export class CategorywisereportComponent implements OnInit {
     var todate = moment().format('YYYY-MM-DD  23:59:59');
     this.Auth.GetSalesRpt5(
       -1,
-      frmdate,
-      todate,
+      this.startdate,
+      this.enddate,
       this.CompanyId,
       this.ParentCatId,
       this.source_key,

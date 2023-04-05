@@ -43,7 +43,7 @@ export class PtypefilterPipe implements PipeTransform {
 export class CategoryPipe implements PipeTransform {
   transform(categories: any[], pcatid: number): any {
     return categories
-      ? categories.filter((x) => x.ParentCategoryId == pcatid)
+      ? categories.filter((x) => x.ParentCategoryId == pcatid || pcatid == 0)
       : [];
   }
 }
