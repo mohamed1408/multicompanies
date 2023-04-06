@@ -74,6 +74,7 @@ export class CategorywisereportComponent implements OnInit {
   storeMS: multiselectConfig = new multiselectConfig([], () => {});
   source_key: string = '';
   mergereport: boolean = true;
+  drawerOpen: boolean = false;
 
   constructor(private Auth: AuthService, private modalService: NgbModal) {
     this.alwaysShowCalendars = true;
@@ -88,8 +89,12 @@ export class CategorywisereportComponent implements OnInit {
     this.Auth.companyid.subscribe((companyid) => {
       this.CompanyId = companyid;
       // this.Auth.isloading.next(true);
-      this.startdate = this.startdate ? this.startdate : moment().format('YYYY-MM-DD');
-      this.enddate = this.enddate ? this.enddate : moment().format('YYYY-MM-DD');
+      this.startdate = this.startdate
+        ? this.startdate
+        : moment().format('YYYY-MM-DD');
+      this.enddate = this.enddate
+        ? this.enddate
+        : moment().format('YYYY-MM-DD');
       this.All();
       this.GetStores();
       this.Getcategory();
@@ -119,17 +124,7 @@ export class CategorywisereportComponent implements OnInit {
       this.Auth.isloading.next(false);
       this.categorywiserpt = data;
       console.log(this.categorywiserpt);
-      this.TotalSales = 0;
-      for (let i = 0; i < this.categorywiserpt.Order.length; i++) {
-        this.categorywiserpt.Order[i].OrderedDate = moment(
-          this.categorywiserpt.Order[i].OrderedDate
-        ).format('ll');
-        this.TotalSales =
-          this.TotalSales + this.categorywiserpt.Order[i].TotalSales;
-      }
-      this.TotalSales = +this.TotalSales.toFixed(2);
-      console.log(this.startdate);
-      console.log(this.enddate);
+      this.format_report();
     });
   }
   strMatch(string: string, substring: string) {
@@ -197,18 +192,63 @@ export class CategorywisereportComponent implements OnInit {
     ).subscribe((data) => {
       this.categorywiserpt = data;
       console.log(this.categorywiserpt);
-      this.TotalSales = 0;
-      for (let i = 0; i < this.categorywiserpt.Order.length; i++) {
-        this.categorywiserpt.Order[i].OrderedDate = moment(
-          this.categorywiserpt.Order[i].OrderedDate
-        ).format('ll');
-        // this.TotalPayments = this.TotalPayments + this.daywisesalesrpt.Order[i].TotalPayments;
-        this.TotalSales =
-          this.TotalSales + this.categorywiserpt.Order[i].TotalSales;
-      }
-      this.TotalSales = +this.TotalSales.toFixed(2);
+      this.format_report();
       this.showloading = false;
     });
+  }
+  childReport: any = {
+    title: "",
+    report: []
+  };
+  viewChildReport(cr: any) {
+    this.childReport = {title: cr.Category, report: cr.childreport}
+    this.drawerOpen = true
+  }
+  format_report() {
+    console.log('Formating report');
+    let parentreport: any[] = [];
+    this.TotalSales = 0;
+    this.categorywiserpt.Order.forEach((rpt: any) => {
+      rpt.OrderedDate = moment(rpt.OrderedDate).format('ll');
+      this.TotalSales = this.TotalSales + rpt.TotalSales;
+      console.log(
+        rpt.StoreId == rpt.ParentStoreId ? 'Parent Store' : 'Child Store'
+      );
+      if (
+        !parentreport.some(
+          (x) =>
+            x.StoreId == rpt.ParentStoreId && x.CategoryId == rpt.CategoryId
+        )
+      ) {
+        parentreport.push({
+          Store: rpt.ParentStoreName,
+          StoreId: rpt.ParentStoreId,
+          Category: rpt.Category,
+          CategoryId: rpt.CategoryId,
+          TotalSales:
+            rpt.StoreId == rpt.ParentStoreId
+              ? rpt.TotalSales
+              : this.categorywiserpt.Order.filter(
+                  (x: any) =>
+                    x.ParentStoreId == rpt.ParentStoreId &&
+                    x.CategoryId == rpt.CategoryId
+                )
+                  .map((x: any) => x.TotalSales)
+                  .reduce((a: any, b: any) => a + b, 0),
+          childreport:
+            rpt.StoreId == rpt.ParentStoreId
+              ? []
+              : this.categorywiserpt.Order.filter(
+                  (x: any) =>
+                    x.ParentStoreId == rpt.ParentStoreId &&
+                    x.CategoryId == rpt.CategoryId
+                ),
+        });
+      }
+    });
+    console.log(parentreport);
+    this.categorywiserpt.Order = parentreport;
+    this.TotalSales = +this.TotalSales.toFixed(2);
   }
 
   selectEvent(e: { Id: any }) {
