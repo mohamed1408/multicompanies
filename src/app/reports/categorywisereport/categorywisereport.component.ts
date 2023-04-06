@@ -197,20 +197,23 @@ export class CategorywisereportComponent implements OnInit {
     });
   }
   childReport: any = {
-    title: "",
-    report: []
+    title: '',
+    report: [],
   };
   viewChildReport(cr: any) {
-    this.childReport = {title: cr.Category, report: cr.childreport}
-    this.drawerOpen = true
+    this.childReport = { title: cr.Category, report: cr.childreport };
+    this.drawerOpen = true;
   }
+  totalPercentage: number = 0;
   format_report() {
     console.log('Formating report');
     let parentreport: any[] = [];
     this.TotalSales = 0;
+    this.totalPercentage = 0;
     this.categorywiserpt.Order.forEach((rpt: any) => {
       rpt.OrderedDate = moment(rpt.OrderedDate).format('ll');
       this.TotalSales = this.TotalSales + rpt.TotalSales;
+      this.totalPercentage += 0;
       console.log(
         rpt.StoreId == rpt.ParentStoreId ? 'Parent Store' : 'Child Store'
       );
@@ -220,22 +223,25 @@ export class CategorywisereportComponent implements OnInit {
             x.StoreId == rpt.ParentStoreId && x.CategoryId == rpt.CategoryId
         )
       ) {
+        let totalSales =
+          rpt.StoreId == rpt.ParentStoreId
+            ? rpt.TotalSales
+            : this.categorywiserpt.Order.filter(
+                (x: any) =>
+                  x.ParentStoreId == rpt.ParentStoreId &&
+                  x.CategoryId == rpt.CategoryId
+              )
+                .map((x: any) => x.TotalSales)
+                .reduce((a: any, b: any) => a + b, 0);
+        this.totalPercentage += (totalSales * 100) / rpt.StoreSale;
         parentreport.push({
           Store: rpt.ParentStoreName,
           StoreId: rpt.ParentStoreId,
+          ParentCategory: rpt.ParentCategory,
           Category: rpt.Category,
           CategoryId: rpt.CategoryId,
           StoreSale: rpt.StoreSale,
-          TotalSales:
-            rpt.StoreId == rpt.ParentStoreId
-              ? rpt.TotalSales
-              : this.categorywiserpt.Order.filter(
-                  (x: any) =>
-                    x.ParentStoreId == rpt.ParentStoreId &&
-                    x.CategoryId == rpt.CategoryId
-                )
-                  .map((x: any) => x.TotalSales)
-                  .reduce((a: any, b: any) => a + b, 0),
+          TotalSales: totalSales,
           childreport:
             rpt.StoreId == rpt.ParentStoreId
               ? []

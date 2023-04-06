@@ -155,6 +155,7 @@
                             class="icon-arrow-up  pull-right"></i>
                           <i *ngIf="sortfield == 'Store' && x == 1" class="icon-arrow-down  pull-right"></i>
                         </th>
+                        <th>Parent Category</th>
                         <th (click)="sortsettings('Category')"><strong><a class="font-12"> Category </a></strong><i
                             *ngIf="sortfield == 'Category' && x == -1" class="icon-arrow-up  pull-right"></i>
                           <i *ngIf="sortfield == 'Category' && x == 1" class="icon-arrow-down  pull-right"></i>
@@ -173,15 +174,17 @@
                           <a *ngIf="item.childreport.length" (click)="viewChildReport(item)"
                             href="javascript:void(0);">{{item.Store}} +</a>
                         </td>
+                        <td class="font-12">{{item.ParentCategory}}</td>
                         <td class="font-12">{{item.Category}}</td>
                         <td class="font-12">&#8377;{{item.TotalSales | number: ".2"}}</td>
                         <td *ngIf="!mergereport">{{item.TotalSales*100/item.StoreSale | number: ".2"}} %</td>
                       </tr>
                       <tr>
                         <td *ngIf="!mergereport" class="font-12"></td>
+                        <td></td>
                         <td class="font-12"><strong> Total</strong></td>
                         <td class="font-12"><strong>&#8377;{{TotalSales | number: ".2"}}</strong></td>
-                        <td *ngIf="!mergereport"></td>
+                        <td *ngIf="!mergereport"><strong>{{totalPercentage | number: ".2"}} %</strong></td>
                       </tr>
                     </tbody>
                   </table>
