@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/auth.service';
 import { Observable } from 'rxjs';
+import { ExcelService } from 'src/app/services/excel/excel.service';
 
 @Component({
   selector: 'app-categorywisereport',
@@ -76,7 +77,7 @@ export class CategorywisereportComponent implements OnInit {
   mergereport: boolean = true;
   drawerOpen: boolean = false;
 
-  constructor(private Auth: AuthService, private modalService: NgbModal) {
+  constructor(private Auth: AuthService, private modalService: NgbModal, private excelservice: ExcelService) {
     this.alwaysShowCalendars = true;
     this.showdropdown = Auth.showdropdown;
     this.sourceMS = new multiselectConfig(this.sources, (data: any) => {
@@ -149,9 +150,11 @@ export class CategorywisereportComponent implements OnInit {
 
   calculate() {
     this.TotalSales = 0;
+    this.totalPercentage = 0;
     this.categorywiserpt.Order.filter((x: any) => this.filter(x)).forEach(
-      (pd: { TotalSales: number }) => {
+      (pd: any) => {
         this.TotalSales += pd.TotalSales;
+        this.totalPercentage += (pd.TotalSales * 100) / pd.StoreSale;
       }
     );
     this.TotalSales = +this.TotalSales.toFixed(2);
@@ -213,7 +216,6 @@ export class CategorywisereportComponent implements OnInit {
     this.categorywiserpt.Order.forEach((rpt: any) => {
       rpt.OrderedDate = moment(rpt.OrderedDate).format('ll');
       this.TotalSales = this.TotalSales + rpt.TotalSales;
-      this.totalPercentage += 0;
       console.log(
         rpt.StoreId == rpt.ParentStoreId ? 'Parent Store' : 'Child Store'
       );
@@ -233,7 +235,6 @@ export class CategorywisereportComponent implements OnInit {
               )
                 .map((x: any) => x.TotalSales)
                 .reduce((a: any, b: any) => a + b, 0);
-        this.totalPercentage += (totalSales * 100) / rpt.StoreSale;
         parentreport.push({
           Store: rpt.ParentStoreName,
           StoreId: rpt.ParentStoreId,
@@ -397,6 +398,13 @@ export class CategorywisereportComponent implements OnInit {
     });
     this.change();
   }
+  
+  export2excel() {
+    this.excelservice.exportAsExcelFile(this.categorywiserpt.Order.map((x: any) => {
+      return {Store: x.Store, ParentCategory: x.ParentCategory, Category: x.Category, TotalSales: x.TotalSales, "Sales %": x.TotalSales*100/x.StoreSale}
+    }), 'category-wise-report__' + moment(this.startdate).format("DD-MM-YYYY") + "_to_" + moment(this.enddate).format("DD-MM-YYYY"));
+  }
+
 }
 class multiselectConfig {
   // @HostListener('keydown') newColor(key: any) {

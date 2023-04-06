@@ -68,29 +68,7 @@
               </select>
             </div>
             <div class="form-group col-xl-3">
-              <!-- <label for="username">Source</label>
-              <div (clickOutside)="sourceMS.show_panel = false" #sourcemultiselect
-                class="checkbox-select px-0 sourcemultiselect">
-                <input (focus)="sourceMS.show_panel = true" type="text" class="w-100 sourcemultiselect"
-                  placeholder="Select atleast one" readonly [(ngModel)]="sourceMS.show_string" />
-                <div id="sourcemultiselectdd" *ngIf="sourceMS.show_panel"
-                  class="options w-100 shadow shadow-xl multidd sourcemultiselect">
-                  <div class="option px-15 sourcemultiselect"
-                    (click)="sourceMS.all = !sourceMS.all; sourceMS.toggleAll()">
-                    <label for="one" class="sourcemultiselect">
-                      <input type="checkbox" readonly [(ngModel)]="sourceMS.all" class="sourcemultiselect" />
-                      Select All
-                    </label>
-                  </div>
-                  <div *ngFor="let source of sourceMS.data" class="option px-15 sourcemultiselect"
-                    (click)="source.isselected = !source.isselected; sourceMS.change()">
-                    <label for="one" class="sourcemultiselect">
-                      <input type="checkbox" readonly [(ngModel)]="source.isselected" class="sourcemultiselect" />
-                      &nbsp;{{ source.name }}
-                    </label>
-                  </div>
-                </div>
-              </div> -->
+              <button class="btn btn-success" (click)="export2excel()">Export</button>
             </div>
             <div class="col-xl-3">
               <label for="username">Source</label>
