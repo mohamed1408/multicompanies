@@ -163,6 +163,7 @@
                             *ngIf="sortfield == 'TotalSales' && x == -1" class="icon-arrow-up  pull-right"></i>
                           <i *ngIf="sortfield == 'TotalSales' && x == 1" class="icon-arrow-down  pull-right"></i>
                         </th>
+                        <th *ngIf="!mergereport">Sales %</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -174,11 +175,13 @@
                         </td>
                         <td class="font-12">{{item.Category}}</td>
                         <td class="font-12">&#8377;{{item.TotalSales | number: ".2"}}</td>
+                        <td *ngIf="!mergereport">{{item.TotalSales*100/item.StoreSale | number: ".2"}} %</td>
                       </tr>
                       <tr>
                         <td *ngIf="!mergereport" class="font-12"></td>
                         <td class="font-12"><strong> Total</strong></td>
                         <td class="font-12"><strong>&#8377;{{TotalSales | number: ".2"}}</strong></td>
+                        <td *ngIf="!mergereport"></td>
                       </tr>
                     </tbody>
                   </table>

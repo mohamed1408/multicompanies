@@ -225,6 +225,7 @@ export class CategorywisereportComponent implements OnInit {
           StoreId: rpt.ParentStoreId,
           Category: rpt.Category,
           CategoryId: rpt.CategoryId,
+          StoreSale: rpt.StoreSale,
           TotalSales:
             rpt.StoreId == rpt.ParentStoreId
               ? rpt.TotalSales
