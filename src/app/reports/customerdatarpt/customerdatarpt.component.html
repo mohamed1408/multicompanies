@@ -38,14 +38,7 @@
 
                         <div class="form-group" style="width: 10em;margin-left:40px;">
                             <label for="username">Bill Amount</label>
-                            <select class="form-control custom-select" [(ngModel)]=BillAmount name="BillAmount">
-                                <option value="0">All</option>
-                                <option value="300">300</option>
-                                <!-- <option value="2">TakeAway</option>
-                                <option value="3">Delivery</option>
-                                <option value="4">PickUp</option>
-                                <option value="5">Counter</option> -->
-                            </select>
+                            <input class="form-control" type="text" [(ngModel)]="BillAmount">
                         </div>
 
                         <div style="margin-top:35px;">
@@ -67,6 +60,9 @@
                                         Store Name
                                     </th>
                                     <th>
+                                        Order Type
+                                    </th>
+                                    <th>
                                         Customer Name
                                     </th>
                                     <th>
@@ -83,6 +79,7 @@
                             <tbody>
                                 <tr *ngFor="let item of cuslist">
                                     <td class="font-12">{{item.Store}}</td>
+                                    <td class="font-12">{{item.OrderType}}</td>
                                     <td class="font-12">{{item.CusName}}</td>
                                     <td class="font-12">{{item.CusPhone}}</td>
                                     <td class="font-12">{{item.OrderedDate | date : 'dd-MM-YYYY'}}</td>
