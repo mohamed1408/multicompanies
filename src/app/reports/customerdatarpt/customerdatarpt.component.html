@@ -36,6 +36,18 @@
                             </select>
                         </div>
 
+                        <div class="form-group" style="width: 10em;margin-left:40px;">
+                            <label for="username">Bill Amount</label>
+                            <select class="form-control custom-select" [(ngModel)]=BillAmount name="BillAmount">
+                                <option value="0">All</option>
+                                <option value="300">300</option>
+                                <!-- <option value="2">TakeAway</option>
+                                <option value="3">Delivery</option>
+                                <option value="4">PickUp</option>
+                                <option value="5">Counter</option> -->
+                            </select>
+                        </div>
+
                         <div style="margin-top:35px;">
                             <button class="btn btn-success btn-sm mx-100 w-30 pull-right"
                                 (click)="Submit()">Submit</button>

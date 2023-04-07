@@ -18,6 +18,7 @@ export class CustomerdatarptComponent implements OnInit {
   enddate = moment().format('YYYY-MMM-DD');
   selected: any;
   OrderTypeId = 3;
+  BillAmount = 0;
   ranges: any = {
     Today: [moment(), moment()],
     Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -92,7 +93,8 @@ export class CustomerdatarptComponent implements OnInit {
       frmdate,
       todate,
       this.CompanyId,
-      this.OrderTypeId
+      this.OrderTypeId,
+      this.BillAmount
     ).subscribe((data: any) => {
       console.log(data);
       this.cuslist = data.Order;
@@ -129,7 +131,8 @@ export class CustomerdatarptComponent implements OnInit {
       frmdate,
       todate,
       this.CompanyId,
-      this.OrderTypeId
+      this.OrderTypeId,
+      this.BillAmount
     ).subscribe((data: any) => {
       console.log(data);
       this.importtocus = data.Order;

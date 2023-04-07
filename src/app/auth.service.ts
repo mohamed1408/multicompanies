@@ -631,11 +631,12 @@ export class AuthService {
     frmdate: string,
     todate: string,
     CompanyId: number,
-    OrderTypeId: number
+    OrderTypeId: number,
+    BillAmt : number
   ) {
     return this.http.get(
       this.baseurl +
-        `Customer/GetCustomerList?companyid=${CompanyId}&frmdate=${frmdate}&todate=${todate}&ordertype=${OrderTypeId}`
+        `Customer/GetCustomerList?companyid=${CompanyId}&frmdate=${frmdate}&todate=${todate}&ordertype=${OrderTypeId}&billamt=${BillAmt}`
     );
   }
   getAppVersion(CompanyId: number, OrderedDate: string) {
