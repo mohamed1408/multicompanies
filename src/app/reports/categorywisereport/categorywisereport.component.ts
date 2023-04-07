@@ -77,7 +77,11 @@ export class CategorywisereportComponent implements OnInit {
   mergereport: boolean = true;
   drawerOpen: boolean = false;
 
-  constructor(private Auth: AuthService, private modalService: NgbModal, private excelservice: ExcelService) {
+  constructor(
+    private Auth: AuthService,
+    private modalService: NgbModal,
+    private excelservice: ExcelService
+  ) {
     this.alwaysShowCalendars = true;
     this.showdropdown = Auth.showdropdown;
     this.sourceMS = new multiselectConfig(this.sources, (data: any) => {
@@ -235,6 +239,8 @@ export class CategorywisereportComponent implements OnInit {
               )
                 .map((x: any) => x.TotalSales)
                 .reduce((a: any, b: any) => a + b, 0);
+        this.totalPercentage += (totalSales * 100) / rpt.StoreSale;
+
         parentreport.push({
           Store: rpt.ParentStoreName,
           StoreId: rpt.ParentStoreId,
@@ -398,13 +404,24 @@ export class CategorywisereportComponent implements OnInit {
     });
     this.change();
   }
-  
-  export2excel() {
-    this.excelservice.exportAsExcelFile(this.categorywiserpt.Order.map((x: any) => {
-      return {Store: x.Store, ParentCategory: x.ParentCategory, Category: x.Category, TotalSales: x.TotalSales, "Sales %": x.TotalSales*100/x.StoreSale}
-    }), 'category-wise-report__' + moment(this.startdate).format("DD-MM-YYYY") + "_to_" + moment(this.enddate).format("DD-MM-YYYY"));
-  }
 
+  export2excel() {
+    this.excelservice.exportAsExcelFile(
+      this.categorywiserpt.Order.map((x: any) => {
+        return {
+          Store: x.Store,
+          ParentCategory: x.ParentCategory,
+          Category: x.Category,
+          TotalSales: x.TotalSales,
+          'Sales %': (x.TotalSales * 100) / x.StoreSale,
+        };
+      }),
+      'category-wise-report__' +
+        moment(this.startdate).format('DD-MM-YYYY') +
+        '_to_' +
+        moment(this.enddate).format('DD-MM-YYYY')
+    );
+  }
 }
 class multiselectConfig {
   // @HostListener('keydown') newColor(key: any) {
