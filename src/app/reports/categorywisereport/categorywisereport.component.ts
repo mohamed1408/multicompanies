@@ -245,6 +245,7 @@ export class CategorywisereportComponent implements OnInit {
           Store: rpt.ParentStoreName,
           StoreId: rpt.ParentStoreId,
           ParentCategory: rpt.ParentCategory,
+          ParentCategoryId: rpt.ParentCategoryId,
           Category: rpt.Category,
           CategoryId: rpt.CategoryId,
           StoreSale: rpt.StoreSale,

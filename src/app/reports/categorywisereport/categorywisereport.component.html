@@ -134,7 +134,7 @@
                           <i *ngIf="sortfield == 'Store' && x == 1" class="icon-arrow-down  pull-right"></i>
                         </th>
                         <th>Parent Category</th>
-                        <th (click)="sortsettings('Category')"><strong><a class="font-12"> Category </a></strong><i
+                        <th *ngIf="!mergereport" (click)="sortsettings('Category')"><strong><a class="font-12"> Category </a></strong><i
                             *ngIf="sortfield == 'Category' && x == -1" class="icon-arrow-up  pull-right"></i>
                           <i *ngIf="sortfield == 'Category' && x == 1" class="icon-arrow-down  pull-right"></i>
                         </th>
@@ -142,7 +142,7 @@
                             *ngIf="sortfield == 'TotalSales' && x == -1" class="icon-arrow-up  pull-right"></i>
                           <i *ngIf="sortfield == 'TotalSales' && x == 1" class="icon-arrow-down  pull-right"></i>
                         </th>
-                        <th *ngIf="!mergereport">Sales %</th>
+                        <th>Sales %</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -153,16 +153,16 @@
                             href="javascript:void(0);">{{item.Store}} +</a>
                         </td>
                         <td class="font-12">{{item.ParentCategory}}</td>
-                        <td class="font-12">{{item.Category}}</td>
+                        <td *ngIf="!mergereport" class="font-12">{{item.Category}}</td>
                         <td class="font-12">&#8377;{{item.TotalSales | number: ".2"}}</td>
-                        <td *ngIf="!mergereport">{{item.TotalSales*100/item.StoreSale | number: ".2"}} %</td>
+                        <td>{{item.TotalSales*100/item.StoreSale | number: ".2"}} %</td>
                       </tr>
                       <tr>
                         <td *ngIf="!mergereport" class="font-12"></td>
-                        <td></td>
+                        <td *ngIf="!mergereport"></td>
                         <td class="font-12"><strong> Total</strong></td>
                         <td class="font-12"><strong>&#8377;{{TotalSales | number: ".2"}}</strong></td>
-                        <td *ngIf="!mergereport"><strong>{{totalPercentage | number: ".2"}} %</strong></td>
+                        <td><strong>{{totalPercentage | number: ".2"}} %</strong></td>
                       </tr>
                     </tbody>
                   </table>
@@ -176,20 +176,22 @@
           <button type="button" (click)="drawerOpen = false" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Store</th>
-                <th>TotalSales</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of childReport.report">
-                <td>{{item.Store}}</td>
-                <td>{{item.TotalSales}}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="mh-375p overflow-auto">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Store</th>
+                  <th>TotalSales</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of childReport.report">
+                  <td>{{item.Store}}</td>
+                  <td>{{item.TotalSales}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
       </div>
     </div>
