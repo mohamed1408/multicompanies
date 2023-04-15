@@ -51,7 +51,7 @@ export class ProductwisereportComponent implements OnInit {
   sourceMS: multiselectConfig;
   storeMS: multiselectConfig = new multiselectConfig([], () => {});
   selected_sources: string;
-  source_key: string = ""
+  source_key: string = '';
   @ViewChild('TABLE', { static: false })
   TABLE!: ElementRef;
   title = 'Excel';
@@ -87,6 +87,8 @@ export class ProductwisereportComponent implements OnInit {
   FreeQty = 0;
   Totalqty = 0;
   percent = 0;
+  totalmargin = 0;
+  totalmargin_percentage = 0;
   categ: any;
   CategoryId = 0;
   sourceId = 0;
@@ -141,8 +143,8 @@ export class ProductwisereportComponent implements OnInit {
     this.selected_sources = '';
     this.sourceMS = new multiselectConfig(this.sources, (data: any) => {
       // console.log(data);
-      this.source_key = data.map((x: any) => x.id).join("_")
-      this.sourceMS.show_string = data.map((x: any) => x.name).join(", ")
+      this.source_key = data.map((x: any) => x.id).join('_');
+      this.sourceMS.show_string = data.map((x: any) => x.name).join(', ');
     });
     // var userinfo = localStorage.getItem("userinfo");
     // var userinfoObj = JSON.parse(userinfo);
@@ -261,7 +263,9 @@ export class ProductwisereportComponent implements OnInit {
       this.Totalqty = 0;
       this.percent = 0;
       this.factoredQuantity = 0;
-      // console.log(this.productrpt)
+      this.totalmargin = 0;
+      this.totalmargin_percentage = 0;
+
       for (let i = 0; i < this.productrpt.length; i++) {
         // this.productrpt[i].OrderedDate = moment(this.productrpt[i].OrderedDate).format('LL');
         this.TotalSale = this.TotalSale + this.productrpt[i].TotalSales;
@@ -269,16 +273,33 @@ export class ProductwisereportComponent implements OnInit {
         this.FreeQty = this.FreeQty + this.productrpt[i].FreeQty;
         this.Totalqty = this.Totalqty + this.productrpt[i].Totalqty;
         this.factoredQuantity += this.productrpt[i].FactoredQty;
+        this.productrpt[i].Margin =
+          this.productrpt[i].TotalSales - this.productrpt[i].TotalMakingCost;
+        this.productrpt[i].Margin_per =
+          (this.productrpt[i].Margin * 100) / this.productrpt[i].TotalSales;
+        this.totalmargin += this.productrpt[i].Margin;
         console.log(
           this.productrpt[i].Quantity,
           this.productrpt[i].Factor,
-          this.factoredQuantity
+          this.factoredQuantity,
+          this.productrpt[i].Margin,
+          this.productrpt[i].Margin_per,
+          this.totalmargin
         );
       }
+      this.totalmargin_percentage = (this.totalmargin * 100) / this.TotalSale;
       this.TotalSale = +this.TotalSale.toFixed(2);
       this.Quantity = +this.Quantity.toFixed(2);
       this.FreeQty = +this.FreeQty.toFixed(2);
       this.Totalqty = +this.Totalqty.toFixed(2);
+      this.totalmargin = +this.totalmargin.toFixed(2);
+      this.totalmargin_percentage = +this.totalmargin_percentage.toFixed(2);
+      console.log('Final Values');
+      console.log(
+        this.TotalSale,
+        this.totalmargin,
+        this.totalmargin_percentage + ' %'
+      );
       this.productrpt.forEach((element: any) => {
         element.percentage = +(
           (element.TotalSales * 100) /
@@ -331,6 +352,9 @@ export class ProductwisereportComponent implements OnInit {
     this.FreeQty = 0;
     this.Totalqty = 0;
     this.percent = 0;
+    this.totalmargin = 0;
+    this.totalmargin_percentage = 0;
+
     this.productrpt
       .filter((x: any) => this.filter(x))
       .forEach((pd: any) => {
@@ -338,11 +362,15 @@ export class ProductwisereportComponent implements OnInit {
         this.Quantity += pd.Quantity;
         this.FreeQty += pd.FreeQty;
         this.Totalqty += pd.Totalqty;
+        this.totalmargin += pd.Margin;
       });
+    this.totalmargin_percentage = (this.totalmargin * 100) / this.TotalSale;
     this.TotalSale = +this.TotalSale.toFixed(2);
     this.Quantity = +this.Quantity.toFixed(2);
     this.FreeQty = +this.FreeQty.toFixed(2);
     this.Totalqty = +this.Totalqty.toFixed(2);
+    this.totalmargin = +this.totalmargin.toFixed(2);
+    this.totalmargin_percentage = +this.totalmargin_percentage.toFixed(2);
     // console.log(this.term, this.productrpt.filter(x => this.filter(x)))
   }
   report: any = [];
@@ -499,12 +527,18 @@ export class ProductwisereportComponent implements OnInit {
       this.cgst = 0;
       this.subtotal = 0;
       this.discount = 0;
+      this.totalmargin = 0;
+      this.totalmargin_percentage = 0;
+
       this.productrpt.forEach((element: any) => {
         this.cgst = this.cgst + (element.tax1 * element.Price) / 100;
         this.sgst = this.sgst + (element.tax2 * element.Price) / 100;
         this.subtotal = element.TotalSales + this.subtotal;
         this.discount = element.DiscAmount;
         this.total = this.subtotal + this.sgst + this.cgst;
+        element.Margin = element.TotalSales - element.TotalMakingCost;
+        element.Margin_per = (element.Margin * 100) / element.TotalSales;
+        this.totalmargin += element.Margin;
       });
       this.cgst = +this.cgst.toFixed(2);
       this.sgst = +this.sgst.toFixed(2);
@@ -521,10 +555,13 @@ export class ProductwisereportComponent implements OnInit {
       console.log(
         this.productrpt[1].Product + '        ' + this.productrpt[1].Quantity
       );
+      this.totalmargin_percentage = (this.totalmargin * 100) / this.TotalSale;
       this.TotalSale = +this.TotalSale.toFixed(2);
       this.Quantity = +this.Quantity.toFixed(2);
       this.FreeQty = +this.FreeQty.toFixed(2);
       this.Totalqty = +this.Totalqty.toFixed(2);
+      this.totalmargin = +this.totalmargin.toFixed(2);
+      this.totalmargin_percentage = +this.totalmargin_percentage.toFixed(2);
       this.productrpt.forEach((element: any) => {
         element.percentage = +(
           (element.TotalSales * 100) /
@@ -567,10 +604,10 @@ export class ProductwisereportComponent implements OnInit {
         this.errorMsg = response.msg;
         console.log(dangertoast(this.errorMsg));
       }
-      this.storeMS = new multiselectConfig(data, ((stores: any) => {
-        this.storekey = stores.map((x: any) => x.Id).join("_")
-        this.storeMS.show_string = stores.map((x: any) => x.Name).join(", ")
-      }))
+      this.storeMS = new multiselectConfig(data, (stores: any) => {
+        this.storekey = stores.map((x: any) => x.Id).join('_');
+        this.storeMS.show_string = stores.map((x: any) => x.Name).join(', ');
+      });
     });
   }
   gettags() {
@@ -707,8 +744,8 @@ export class ProductwisereportComponent implements OnInit {
   }
 
   //source multiselect
-  onload(component: string ) {
-    console.log(component)
+  onload(component: string) {
+    console.log(component);
   }
 }
 
@@ -736,8 +773,9 @@ class multiselectConfig {
   }
 
   change(bool: boolean = true) {
-    if(this.data.length == this.data.filter((x: any) => x.isselected).length) this.all = true
-    else this.all = false
+    if (this.data.length == this.data.filter((x: any) => x.isselected).length)
+      this.all = true;
+    else this.all = false;
     this.change_callback(this.data.filter((x: any) => x.isselected));
   }
 }
