@@ -347,6 +347,7 @@ export class ProductwisereportComponent implements OnInit {
   }
 
   calculate() {
+    console.log("For Azure Down")
     this.TotalSale = 0;
     this.Quantity = 0;
     this.FreeQty = 0;
