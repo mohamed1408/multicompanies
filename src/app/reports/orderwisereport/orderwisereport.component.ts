@@ -131,6 +131,10 @@ export class OrderwisereportComponent implements OnInit {
         )
           .map((x: any) => x.showname || x.title)
           .join(', ');
+        this.orderwiserpt.Order[i].cus_details = this.getcustomerDetails(
+          this.orderwiserpt.Order[i].OrderTypeId,
+          JSON.parse(this.orderwiserpt.Order[i].OrderJson)
+        );
         this.TotalPayments =
           this.TotalPayments + this.orderwiserpt.Order[i].PaidAmount;
         this.TotalSales =
