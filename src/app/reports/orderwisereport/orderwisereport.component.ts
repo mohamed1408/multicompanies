@@ -307,6 +307,27 @@ export class OrderwisereportComponent implements OnInit {
       }
     );
   }
+  getcustomerDetails(ordertypeid: number, obj: any) {
+    let cus_details = { name: '', phone: '' };
+    try {
+      if (ordertypeid <= 5) {
+        cus_details = {
+          name: obj.CustomerDetails.Name,
+          phone: obj.CustomerDetails.PhoneNo,
+        };
+      } else if (ordertypeid == 6) {
+        cus_details = { name: obj.customer.name, phone: obj.customer.phone };
+      } else if (ordertypeid == 7) {
+        // console.log(obj);
+        cus_details = { name: obj.Name, phone: obj.Phone };
+      }
+    } catch (error) {
+      console.log(error);
+      console.log(obj);
+    }
+    // console.log(obj.InvoiceNo, cus_details)
+    return cus_details;
+  }
   All() {
     // this.loaderService.show();
 
@@ -347,7 +368,14 @@ export class OrderwisereportComponent implements OnInit {
         }
         // this.orderwiserpt.Order[i].ItemJson = JSON.parse(this.orderwiserpt.Order[i].ItemJson);
         // this.orderwiserpt.Order[i].ChargeJson = JSON.parse(this.orderwiserpt.Order[i].ChargeJson);
-
+        this.orderwiserpt.Order[i].cus_details = this.getcustomerDetails(
+          this.orderwiserpt.Order[i].OrderTypeId,
+          JSON.parse(this.orderwiserpt.Order[i].OrderJson)
+        );
+        console.log(
+          this.orderwiserpt.Order[i].InvoiceNo,
+          this.orderwiserpt.Order[i].cus_details
+        );
         this.TotalPayments =
           this.TotalPayments + this.orderwiserpt.Order[i].PaidAmount;
         this.TotalSales =
