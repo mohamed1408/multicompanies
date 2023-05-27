@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { DenomEntry } from './denomination/denomination.module';
 
 @Injectable({
   providedIn: 'root',
@@ -682,6 +683,52 @@ export class AuthService {
     );
   }
 
+
+  getstorecashsales(storeid: number, companyid: number, date: string) {
+    return this.http.get(
+      this.baseurl +
+        `Receipt/getStoreCashSales?storeid=${storeid}&companyid=${companyid}&date=${date}`
+    );
+  }
+  fetchDenominationEntries(storeid: number, date: string, companyid: number, entrytypeid: number | null) {
+    return this.http.get(
+      this.baseurl +
+        `Denomination/getDenomEntry?storeid=${storeid}&date=${date}&companyid=${companyid}&entrytypeid=${entrytypeid}`
+    );
+  }
+  denomEntryReport(companyid: number, from: string, to: string, margin: number) {
+    return this.http.get(
+      this.baseurl +
+        `Denomination/denomReport_?companyid=${companyid}&from=${from}&to=${to}&margin=${margin}`
+    );
+  }
+  pettyCashTransfer(storeid: number, companyid: number, amount: number, to: string, reason: string) {
+    return this.http.get(
+      this.baseurl +
+        `Denomination/pettyCashTransfer?storeid=${storeid}&companyid=${companyid}&amount=${amount}&to=${to}&reason=${reason}`
+    );
+  }
+  denominationTypes() {
+    return this.http.get(this.baseurl + `Denomination/GetDenominationTypes`);
+  }
+
+  base_url_ak = "https://fbakountz.azurewebsites.net/api/";
+  dayclosing(companyid: number, storeid: number, date: string, time: string) {
+    return this.http.get(
+      this.base_url_ak +
+        `DayClosing/TransDetails?posCompId=${companyid}&posStoreId=${storeid}&dateStr=${date}&time=${time}`
+    );
+  }
+  addDenomEntry(denomentry: DenomEntry) {
+    return this.http.post(
+      this.baseurl + `Denomination/addDenomEntry`,
+      denomentry
+    );
+  }
+  deleteDenomEntry(denomentryid: number) {
+    return this.http.get(
+      this.baseurl + `Denomination/delDenomEntry?denomeEntryId=${denomentryid}`);
+  }
 }
 
 // baseurl

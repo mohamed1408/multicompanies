@@ -1,0 +1,39 @@
+.search-clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 5px 13px;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.calender {
+  position: absolute;
+}
+
+.edited {
+  background-color: #faad152e;
+}
+
+canvas {
+  border: 1px black solid;
+}
+
+#textCanvas {
+  display: none;
+}
+
+.biz-drawer {
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  right: -40%;
+  z-index: 1040;
+  position: fixed;
+  background-color: white;
+
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}

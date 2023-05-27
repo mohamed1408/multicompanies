@@ -9,7 +9,6 @@ declare function setHeightWidth(): any;
   templateUrl: './lockscreen.component.html',
   styleUrls: ['./lockscreen.component.css'],
 })
-
 export class LockscreenComponent implements OnInit {
   companyid: number = 0;
   pin: string = '';
@@ -25,15 +24,15 @@ export class LockscreenComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    setHeightWidth()
+    setHeightWidth();
   }
 
   unlock() {
-    this.auth.companies.subscribe(companies => {
-      if(companies.length > 1) {
-        this.auth.limited_user.next(false)
+    this.auth.companies.subscribe((companies) => {
+      if (companies.length > 1) {
+        this.auth.limited_user.next(false);
       }
-    })
+    });
     this.auth.isloading.next(true);
     this.auth.unlock(this.pin, this.companyid).subscribe((data: any) => {
       this.auth.isloading.next(false);
@@ -46,7 +45,18 @@ export class LockscreenComponent implements OnInit {
         this.auth
           .getusercompanies(token_parsed.userid)
           .subscribe((data: any) => {
-            this.auth.companies.next(data['userCompanies']);
+            this.auth.companies.next([
+              {
+                AccountId: 0,
+                AccountName: 'All',
+                Address: '',
+                CompanyId: 0,
+                CompanyName: 'All Companies',
+                Email: 'all@gmail.com',
+                UserId: 149,
+              },
+              ...data['userCompanies'],
+            ]);
             this.auth.companyid.next(this.companyid);
           });
       } else {

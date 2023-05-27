@@ -89,6 +89,7 @@ export class SusordersComponent implements OnInit {
 
   getSusOrders() {
     console.log(this.storeid, this.companyid);
+    this.auth.isloading.next(true);
     this.auth
       .getSusOrders(this.companyid, this.storeid, this.fromdate, this.todate)
       .subscribe((data: any) => {
@@ -164,6 +165,7 @@ export class SusordersComponent implements OnInit {
             console.log(added);
           });
         }
+        this.auth.isloading.next(false);
       });
   }
   getItemPrice = (item: any) => {

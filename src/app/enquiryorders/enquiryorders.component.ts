@@ -123,6 +123,7 @@ export class EnquiryordersComponent implements OnInit {
   getAllStores() {
     this.Auth.getAllstores().subscribe((data: any) => {
       this.stores = data;
+      console.log(this.stores)
       // this.Stores.unshift()
     });
   }
