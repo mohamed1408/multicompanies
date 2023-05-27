@@ -191,7 +191,7 @@ export class DenominationComponent implements OnInit {
     time: string;
   }> = [];
   fetchdenomentries() {
-    this.auth.isloading.next(true)
+    this.auth.isloading.next(true);
     this.totalexcess = 0;
     this.totalshortage = 0;
     this.total = 0;
@@ -293,7 +293,7 @@ export class DenominationComponent implements OnInit {
         this.denomentries = this.denomentries.sort((a: any, b: any) => {
           return b.Id - a.Id;
         });
-        this.auth.isloading.next(false)
+        this.auth.isloading.next(false);
       });
   }
   opencopymodal() {
@@ -721,13 +721,13 @@ export class DenominationComponent implements OnInit {
           obj[String.fromCharCode(charcode + i)] = moment(
             entry.EntryDateTime
           ).format('hh:mm A');
-          detaiils[String.fromCharCode(charcode + i)] =
-            (entry.Remarks == 'Shortage' ? -1 : 1) * entry.diff;
+          detaiils[String.fromCharCode(charcode + i)] = entry.diff;
         });
       this.exceldata.push(obj);
       this.exceldata.push(detaiils);
-      this.exceldata.push({store: ""});
+      this.exceldata.push({ store: '' });
     });
+    console.log(this.exceldata);
     this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel');
   }
 }
