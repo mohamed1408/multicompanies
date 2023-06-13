@@ -479,7 +479,7 @@ export class TimewisereportComponent implements OnInit {
     var todate = moment(this.enddate).format('YYYY-MM-DD');
 
     this.Auth.getTimeWiseProducts(
-      this.storeId,
+      reportdata.storeId,
       frmdate,
       todate,
       reportdata.StartTime,
@@ -494,7 +494,7 @@ export class TimewisereportComponent implements OnInit {
       this.reportProducts.forEach((prod: any) => {
         this.reportProductsTotal.quantity += prod.Quantity * prod.Factor;
       });
-      this.modalS.open(this.productmodal);
+      this.modalS.open(this.productmodal, {backdropClass: 'z-index-1'});
       this.Auth.isloading.next(false);
     });
   }

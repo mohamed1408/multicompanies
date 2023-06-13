@@ -129,6 +129,9 @@
                                                     <i *ngIf="sortfield == 'PaidAmount' && x == 1"
                                                         class="icon-arrow-down  pull-right"></i>
                                                 </th>
+                                                <th (click)="sortsettings('PaidAmount')">
+                                                    <strong><a class="font-12">Customer Details</a></strong>
+                                                </th>
 
                                             </tr>
                                         </thead>
@@ -137,14 +140,19 @@
                                                 (click)="itemdetails(item.ItemJson, item.ChargeJson, item.SourceId, item.InvoiceNo, item.OrderJson, item.TransactionDetails);">
                                                 <td class="font-12">
                                                     {{item.InvoiceNo}} <br>
-                                                    <span class="font-11 font-italic text-light">{{item.itemnames}}</span>
+                                                    <span
+                                                        class="font-11 font-italic text-light">{{item.itemnames}}</span>
                                                 </td>
                                                 <td class="font-12">{{item.OrderedDate}}</td>
                                                 <td class="font-12">{{item.Store}}</td>
-                                                <td class="font-12">&#8377;{{item.TotalTax   | number: ".2"}}</td>
+                                                <td class="font-12">&#8377;{{item.TotalTax | number: ".2"}}</td>
                                                 <td class="font-12">&#8377;{{item.DiscAmount | number: ".2"}}</td>
                                                 <td class="font-12">&#8377;{{item.BillAmount | number: ".2"}}</td>
                                                 <td class="font-12">&#8377;{{item.PaidAmount | number: ".2"}}</td>
+                                                <td class="font-12">
+                                                    {{item.cus_details.name}} <br>
+                                                    {{item.cus_details.phone}}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td></td>
@@ -154,6 +162,7 @@
                                                 <td><strong>TotalSales</strong></td>
                                                 <td class="font-14"><strong>&#8377;{{TotalSales | number:".2"}}</strong>
                                                 </td>
+                                                <td></td>
                                                 <td></td>
                                             </tr>
                                             <tr>

@@ -79,10 +79,12 @@ export class VersionlistComponent implements OnInit {
   }
   apkversion : any
   Submit() {
+    this.Auth.isloading.next(true);
     this.Auth.getAppVersion(this.CompanyId, moment(this.startdate).format('YYYY-MM-DD')).subscribe((data : any) =>{
       console.log(data)
       this.apkversion = data.versions
       console.log(this.apkversion)
+      this.Auth.isloading.next(false);
     })
   }
 }

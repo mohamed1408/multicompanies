@@ -60,8 +60,8 @@ export class CTGReportPipe implements PipeTransform {
       if (merge) {
         report.forEach((rpt) => {
           // console.log("category: ", rpt.Category)
-          if (_report.some((x) => x.CategoryId == rpt.CategoryId)) {
-            _report.filter((x) => x.CategoryId == rpt.CategoryId)[0].TotalSales += rpt.TotalSales
+          if (_report.some((x) => x.ParentCategoryId == rpt.ParentCategoryId)) {
+            _report.filter((x) => x.ParentCategoryId == rpt.ParentCategoryId)[0].TotalSales += rpt.TotalSales
           } else {
             // console.log("new category: ", rpt.Category)
             _report.push({ ...rpt, Store: '' });

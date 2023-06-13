@@ -373,6 +373,9 @@
                     <br />
                     <strong>Totalqty: </strong>{{ Totalqty | number: ".2" }}
                     <br />
+                    <strong>Total Margin: </strong> {{totalmargin | number: ".2"}}
+                    <br>
+                    <strong>Total Margin%: </strong> {{totalmargin_percentage | number: ".2"}}
                   </div>
                   <table #TABLE class="table mb-0 table-sm">
                     <thead>
@@ -412,6 +415,7 @@
                             class="icon-arrow-down pull-right"
                           ></i>
                         </th>
+                        <th>Making Cost</th>
                         <th class="px-0" (click)="sortsettings('percentage')">
                           <strong>
                             <a class="font-12">Sales Percentage</a></strong
@@ -446,6 +450,8 @@
                             class="icon-arrow-down pull-right"
                           ></i>
                         </th>
+                        <th>Margin</th>
+                        <th>Margin %</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -522,6 +528,7 @@
                             </span>
                           </span>
                         </td>
+                        <td>&#8377;{{item1.TotalMakingCost | number: ".2"}}</td>
                         <td class="font-12 px-0">
                           {{ item1.percentage }}%
                           <span *ngIf="item1.showoption">
@@ -555,6 +562,8 @@
                             </span>
                           </span>
                         </td>
+                        <td>{{item1.Margin | number: ".2"}}</td>
+                        <td>{{item1.Margin_per | number: ".2"}}%</td>
                       </tr>
                       <tr>
                         <td class="font-14 pr-0"><strong>Total</strong></td>

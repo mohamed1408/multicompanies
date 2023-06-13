@@ -68,29 +68,7 @@
               </select>
             </div>
             <div class="form-group col-xl-3">
-              <!-- <label for="username">Source</label>
-              <div (clickOutside)="sourceMS.show_panel = false" #sourcemultiselect
-                class="checkbox-select px-0 sourcemultiselect">
-                <input (focus)="sourceMS.show_panel = true" type="text" class="w-100 sourcemultiselect"
-                  placeholder="Select atleast one" readonly [(ngModel)]="sourceMS.show_string" />
-                <div id="sourcemultiselectdd" *ngIf="sourceMS.show_panel"
-                  class="options w-100 shadow shadow-xl multidd sourcemultiselect">
-                  <div class="option px-15 sourcemultiselect"
-                    (click)="sourceMS.all = !sourceMS.all; sourceMS.toggleAll()">
-                    <label for="one" class="sourcemultiselect">
-                      <input type="checkbox" readonly [(ngModel)]="sourceMS.all" class="sourcemultiselect" />
-                      Select All
-                    </label>
-                  </div>
-                  <div *ngFor="let source of sourceMS.data" class="option px-15 sourcemultiselect"
-                    (click)="source.isselected = !source.isselected; sourceMS.change()">
-                    <label for="one" class="sourcemultiselect">
-                      <input type="checkbox" readonly [(ngModel)]="source.isselected" class="sourcemultiselect" />
-                      &nbsp;{{ source.name }}
-                    </label>
-                  </div>
-                </div>
-              </div> -->
+              <button class="btn btn-success" (click)="export2excel()">Export</button>
             </div>
             <div class="col-xl-3">
               <label for="username">Source</label>
@@ -150,11 +128,13 @@
                   <table class="table mb-0 table-sm">
                     <thead>
                       <tr style="background-color:rgb(217, 226, 250);">
-                        <th *ngIf="!mergereport" (click)="sortsettings('Store')"><strong><a class="font-12"> Store </a></strong><i
-                            *ngIf="sortfield == 'Store' && x == -1" class="icon-arrow-up  pull-right"></i>
+                        <th *ngIf="!mergereport" (click)="sortsettings('Store')"><strong><a class="font-12"> Store
+                            </a></strong><i *ngIf="sortfield == 'Store' && x == -1"
+                            class="icon-arrow-up  pull-right"></i>
                           <i *ngIf="sortfield == 'Store' && x == 1" class="icon-arrow-down  pull-right"></i>
                         </th>
-                        <th (click)="sortsettings('Category')"><strong><a class="font-12"> Category </a></strong><i
+                        <th>Parent Category</th>
+                        <th *ngIf="!mergereport" (click)="sortsettings('Category')"><strong><a class="font-12"> Category </a></strong><i
                             *ngIf="sortfield == 'Category' && x == -1" class="icon-arrow-up  pull-right"></i>
                           <i *ngIf="sortfield == 'Category' && x == 1" class="icon-arrow-down  pull-right"></i>
                         </th>
@@ -162,24 +142,55 @@
                             *ngIf="sortfield == 'TotalSales' && x == -1" class="icon-arrow-up  pull-right"></i>
                           <i *ngIf="sortfield == 'TotalSales' && x == 1" class="icon-arrow-down  pull-right"></i>
                         </th>
+                        <th>Sales %</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr (click)="openDetailpopup(contentdetail1,item.Id)"
-                        *ngFor="let item of sortData | ctgreportpipe:CatId:mergereport | filter:term ">
-                        <td *ngIf="!mergereport" class="font-12">{{item.Store}}</td>
-                        <td class="font-12">{{item.Category}}</td>
+                      <tr *ngFor="let item of sortData | ctgreportpipe:CatId:mergereport | filter:term ">
+                        <td *ngIf="!mergereport" class="font-12">
+                          <span *ngIf="!item.childreport.length">{{item.Store}}</span>
+                          <a *ngIf="item.childreport.length" (click)="viewChildReport(item)"
+                            href="javascript:void(0);">{{item.Store}} +</a>
+                        </td>
+                        <td class="font-12">{{item.ParentCategory}}</td>
+                        <td *ngIf="!mergereport" class="font-12">{{item.Category}}</td>
                         <td class="font-12">&#8377;{{item.TotalSales | number: ".2"}}</td>
+                        <td>{{item.TotalSales*100/item.StoreSale | number: ".2"}} %</td>
                       </tr>
                       <tr>
+                        <td *ngIf="!mergereport" class="font-12"></td>
+                        <td *ngIf="!mergereport"></td>
                         <td class="font-12"><strong> Total</strong></td>
                         <td class="font-12"><strong>&#8377;{{TotalSales | number: ".2"}}</strong></td>
+                        <td><strong>{{totalPercentage | number: ".2"}} %</strong></td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+        <section class="hk-sec-wrapper position-fixed drawer" [class.drawer-open]="drawerOpen">
+          <h3>{{childReport.title}}</h3>
+          <button type="button" (click)="drawerOpen = false" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="mh-375p overflow-auto">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Store</th>
+                  <th>TotalSales</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of childReport.report">
+                  <td>{{item.Store}}</td>
+                  <td>{{item.TotalSales}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </section>
       </div>

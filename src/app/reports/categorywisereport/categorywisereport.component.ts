@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/auth.service';
 import { Observable } from 'rxjs';
+import { ExcelService } from 'src/app/services/excel/excel.service';
 
 @Component({
   selector: 'app-categorywisereport',
@@ -74,8 +75,13 @@ export class CategorywisereportComponent implements OnInit {
   storeMS: multiselectConfig = new multiselectConfig([], () => {});
   source_key: string = '';
   mergereport: boolean = true;
+  drawerOpen: boolean = false;
 
-  constructor(private Auth: AuthService, private modalService: NgbModal) {
+  constructor(
+    private Auth: AuthService,
+    private modalService: NgbModal,
+    private excelservice: ExcelService
+  ) {
     this.alwaysShowCalendars = true;
     this.showdropdown = Auth.showdropdown;
     this.sourceMS = new multiselectConfig(this.sources, (data: any) => {
@@ -88,8 +94,12 @@ export class CategorywisereportComponent implements OnInit {
     this.Auth.companyid.subscribe((companyid) => {
       this.CompanyId = companyid;
       // this.Auth.isloading.next(true);
-      this.startdate = this.startdate ? this.startdate : moment().format('YYYY-MM-DD');
-      this.enddate = this.enddate ? this.enddate : moment().format('YYYY-MM-DD');
+      this.startdate = this.startdate
+        ? this.startdate
+        : moment().format('YYYY-MM-DD');
+      this.enddate = this.enddate
+        ? this.enddate
+        : moment().format('YYYY-MM-DD');
       this.All();
       this.GetStores();
       this.Getcategory();
@@ -119,17 +129,7 @@ export class CategorywisereportComponent implements OnInit {
       this.Auth.isloading.next(false);
       this.categorywiserpt = data;
       console.log(this.categorywiserpt);
-      this.TotalSales = 0;
-      for (let i = 0; i < this.categorywiserpt.Order.length; i++) {
-        this.categorywiserpt.Order[i].OrderedDate = moment(
-          this.categorywiserpt.Order[i].OrderedDate
-        ).format('ll');
-        this.TotalSales =
-          this.TotalSales + this.categorywiserpt.Order[i].TotalSales;
-      }
-      this.TotalSales = +this.TotalSales.toFixed(2);
-      console.log(this.startdate);
-      console.log(this.enddate);
+      this.format_report();
     });
   }
   strMatch(string: string, substring: string) {
@@ -154,9 +154,11 @@ export class CategorywisereportComponent implements OnInit {
 
   calculate() {
     this.TotalSales = 0;
+    this.totalPercentage = 0;
     this.categorywiserpt.Order.filter((x: any) => this.filter(x)).forEach(
-      (pd: { TotalSales: number }) => {
+      (pd: any) => {
         this.TotalSales += pd.TotalSales;
+        this.totalPercentage += (pd.TotalSales * 100) / pd.StoreSale;
       }
     );
     this.TotalSales = +this.TotalSales.toFixed(2);
@@ -197,18 +199,71 @@ export class CategorywisereportComponent implements OnInit {
     ).subscribe((data) => {
       this.categorywiserpt = data;
       console.log(this.categorywiserpt);
-      this.TotalSales = 0;
-      for (let i = 0; i < this.categorywiserpt.Order.length; i++) {
-        this.categorywiserpt.Order[i].OrderedDate = moment(
-          this.categorywiserpt.Order[i].OrderedDate
-        ).format('ll');
-        // this.TotalPayments = this.TotalPayments + this.daywisesalesrpt.Order[i].TotalPayments;
-        this.TotalSales =
-          this.TotalSales + this.categorywiserpt.Order[i].TotalSales;
-      }
-      this.TotalSales = +this.TotalSales.toFixed(2);
+      this.format_report();
       this.showloading = false;
     });
+  }
+  childReport: any = {
+    title: '',
+    report: [],
+  };
+  viewChildReport(cr: any) {
+    this.childReport = { title: cr.Category, report: cr.childreport };
+    this.drawerOpen = true;
+  }
+  totalPercentage: number = 0;
+  format_report() {
+    console.log('Formating report');
+    let parentreport: any[] = [];
+    this.TotalSales = 0;
+    this.totalPercentage = 0;
+    this.categorywiserpt.Order.forEach((rpt: any) => {
+      rpt.OrderedDate = moment(rpt.OrderedDate).format('ll');
+      this.TotalSales = this.TotalSales + rpt.TotalSales;
+      console.log(
+        rpt.StoreId == rpt.ParentStoreId ? 'Parent Store' : 'Child Store'
+      );
+      if (
+        !parentreport.some(
+          (x) =>
+            x.StoreId == rpt.ParentStoreId && x.CategoryId == rpt.CategoryId
+        )
+      ) {
+        let totalSales =
+          rpt.StoreId == rpt.ParentStoreId
+            ? rpt.TotalSales
+            : this.categorywiserpt.Order.filter(
+                (x: any) =>
+                  x.ParentStoreId == rpt.ParentStoreId &&
+                  x.CategoryId == rpt.CategoryId
+              )
+                .map((x: any) => x.TotalSales)
+                .reduce((a: any, b: any) => a + b, 0);
+        this.totalPercentage += (totalSales * 100) / rpt.StoreSale;
+
+        parentreport.push({
+          Store: rpt.ParentStoreName,
+          StoreId: rpt.ParentStoreId,
+          ParentCategory: rpt.ParentCategory,
+          ParentCategoryId: rpt.ParentCategoryId,
+          Category: rpt.Category,
+          CategoryId: rpt.CategoryId,
+          StoreSale: rpt.StoreSale,
+          TotalSales: totalSales,
+          childreport:
+            rpt.StoreId == rpt.ParentStoreId
+              ? []
+              : this.categorywiserpt.Order.filter(
+                  (x: any) =>
+                    x.ParentStoreId == rpt.ParentStoreId &&
+                    x.CategoryId == rpt.CategoryId
+                ),
+        });
+      }
+    });
+    console.log(parentreport);
+    this.categorywiserpt.Order = parentreport;
+    this.TotalSales = +this.TotalSales.toFixed(2);
   }
 
   selectEvent(e: { Id: any }) {
@@ -349,6 +404,24 @@ export class CategorywisereportComponent implements OnInit {
       element.isselected = this.all;
     });
     this.change();
+  }
+
+  export2excel() {
+    this.excelservice.exportAsExcelFile(
+      this.categorywiserpt.Order.map((x: any) => {
+        return {
+          Store: x.Store,
+          ParentCategory: x.ParentCategory,
+          Category: x.Category,
+          TotalSales: x.TotalSales,
+          'Sales %': (x.TotalSales * 100) / x.StoreSale,
+        };
+      }),
+      'category-wise-report__' +
+        moment(this.startdate).format('DD-MM-YYYY') +
+        '_to_' +
+        moment(this.enddate).format('DD-MM-YYYY')
+    );
   }
 }
 class multiselectConfig {

@@ -33,6 +33,7 @@ import { VersionlistComponent } from './reports/versionlist/versionlist.componen
 import { CustomerdatarptComponent } from './reports/customerdatarpt/customerdatarpt.component';
 import { CTGReportPipe, CategoryPipe, OrderPipe, OrderfilterPipe, PtypefilterPipe } from './pipes/order.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { DenominationComponent } from './denomination/denomination.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     OrderfilterPipe,
     PtypefilterPipe,
     CategoryPipe,
-    CTGReportPipe
+    CTGReportPipe,
+    DenominationComponent
   ],
   imports: [
     BrowserModule,

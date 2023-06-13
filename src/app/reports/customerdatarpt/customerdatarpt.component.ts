@@ -18,6 +18,7 @@ export class CustomerdatarptComponent implements OnInit {
   enddate = moment().format('YYYY-MMM-DD');
   selected: any;
   OrderTypeId = 3;
+  BillAmount = 0;
   ranges: any = {
     Today: [moment(), moment()],
     Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -77,6 +78,15 @@ export class CustomerdatarptComponent implements OnInit {
   }
 
   cuslist: any;
+  ordertypes: any = {
+    '1': 'Dine In',
+    '2': 'Take Away',
+    '3': 'Delivery',
+    '4': 'Pick Up',
+    '5': 'Quick Order',
+    '6': 'SwMato Order',
+  };
+
   Submit() {
     // this.loaderService.show();
 
@@ -85,6 +95,7 @@ export class CustomerdatarptComponent implements OnInit {
     //   this.startdate.month = this.startdate.month - 1;
     //   this.enddate.month = this.enddate.month - 1;
     // }
+    this.Auth.isloading.next(true);
     var frmdate = moment(this.startdate).format('YYYY-MM-DD');
     var todate = moment(this.enddate).format('YYYY-MM-DD');
     console.log(this.OrderTypeId);
@@ -92,11 +103,16 @@ export class CustomerdatarptComponent implements OnInit {
       frmdate,
       todate,
       this.CompanyId,
-      this.OrderTypeId
+      this.OrderTypeId,
+      this.BillAmount
     ).subscribe((data: any) => {
+      this.Auth.isloading.next(false);
       console.log(data);
       this.cuslist = data.Order;
       console.log(this.cuslist);
+      this.cuslist.forEach((cl: any) => {
+        cl.OrderType = this.ordertypes[cl.OrderTypeId.toString()];
+      });
       this.importtocus = this.cuslist;
       // this.cuslist.OrderedDate = moment(
       //   this.cuslist.OrderedDate
@@ -129,7 +145,8 @@ export class CustomerdatarptComponent implements OnInit {
       frmdate,
       todate,
       this.CompanyId,
-      this.OrderTypeId
+      this.OrderTypeId,
+      this.BillAmount
     ).subscribe((data: any) => {
       console.log(data);
       this.importtocus = data.Order;
@@ -139,23 +156,16 @@ export class CustomerdatarptComponent implements OnInit {
       // // this.exceldata = obj
       // this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel')
 
-      this.importtocus.forEach(
-        (element: {
-          Store: any;
-          CusName: any;
-          CusPhone: any;
-          OrderedDate: any;
-          DeliveryDate: any;
-        }) => {
-          this.exceldata.push({
-            StoreName: element.Store,
-            CustomerName: element.CusName,
-            PhoneNumber: element.CusPhone,
-            OrderedDate: element.OrderedDate,
-            DeliveryDate: element.DeliveryDate,
-          });
-        }
-      );
+      this.importtocus.forEach((element: any) => {
+        this.exceldata.push({
+          StoreName: element.Store,
+          CustomerName: element.CusName,
+          PhoneNumber: element.CusPhone,
+          OrderedDate: element.OrderedDate,
+          DeliveryDate: element.DeliveryDate,
+          OrderType: element.OrderType
+        });
+      });
       this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel');
       this.exceldata = [];
     });
