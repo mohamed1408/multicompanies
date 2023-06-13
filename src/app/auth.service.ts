@@ -40,7 +40,7 @@ export class AuthService {
     true
   );
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) { }
 
   toFormData(formValue: any) {
     const formData = new FormData();
@@ -88,7 +88,7 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Dashboard/Dashboards?fromdate=${fromdate}&todate=${todate}&storeid=${storeid}&userid=${userid}&companyid=${companyid}`
+      `Dashboard/Dashboards?fromdate=${fromdate}&todate=${todate}&storeid=${storeid}&userid=${userid}&companyid=${companyid}`
     );
   }
 
@@ -111,41 +111,41 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Dashboard/Post?fromDate=${fromdate}&toDate=${totdate}&compId=${companyid}&storeId=${storeid}`
+      `Dashboard/Post?fromDate=${fromdate}&toDate=${totdate}&compId=${companyid}&storeId=${storeid}`
     );
   }
 
   GetStorewiseRpt(frmdate: string, todate: string, compId: number) {
     return this.http.get(
       this.baseurl +
-        'StoreRpt/GetStoreRpt?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&companyId=' +
-        compId
+      'StoreRpt/GetStoreRpt?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&companyId=' +
+      compId
     );
   }
 
   GetMultiStorewiseRpt(frmdate: string, todate: string, companykey: string) {
     return this.http.get(
       this.baseurl +
-        'StoreRpt/GetMultiCompanyStoreRpt?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&companykey=' +
-        companykey
+      'StoreRpt/GetMultiCompanyStoreRpt?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&companykey=' +
+      companykey
     );
   }
 
   getCompanyProducts(companyid: number, storeid: number) {
     return this.http.get(
       this.baseurl +
-        'Product/CompanyProducts?companyid=' +
-        companyid +
-        '&storeid=' +
-        storeid
+      'Product/CompanyProducts?companyid=' +
+      companyid +
+      '&storeid=' +
+      storeid
     );
   }
 
@@ -174,6 +174,24 @@ export class AuthService {
       this.baseurl + 'POSOrder/enquiryOrders?orderid=' + orderid
     );
   }
+  getenqordersbydate(fromdate: string, todate: string, companyid = 0, storeid = 0) {
+    return this.http.get(
+      this.baseurl +
+      'POSOrder/EnqOrdersByDate' +
+      '?companyid=' +
+      companyid +
+      '&storeid=' +
+      storeid +
+      '&fromdate=' +
+      fromdate +
+      '&todate=' +
+      todate
+    )
+  }
+  
+  getorderjson(orderid: number) {
+    return this.http.get(this.baseurl + 'Receipt/GetOrderJson?orderid=' + orderid)
+  }
 
   // Report Functions
   // copied from [post.biz1book.com]
@@ -188,18 +206,18 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        'OrderWise/GetRpt?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&Id=' +
-        Id +
-        '&compId=' +
-        compId +
-        '&sourceId=' +
-        sourceId +
-        '&cancelOrder=' +
-        cancelOrder
+      'OrderWise/GetRpt?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&Id=' +
+      Id +
+      '&compId=' +
+      compId +
+      '&sourceId=' +
+      sourceId +
+      '&cancelOrder=' +
+      cancelOrder
     );
   }
 
@@ -216,24 +234,24 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        'productwise/GetRpt?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&Id=' +
-        Id +
-        '&compId=' +
-        compId +
-        '&categoryId=' +
-        categoryId +
-        '&sourcekey=' +
-        sourcekey +
-        '&tagId=' +
-        tagId +
-        '&datatype=' +
-        datatype +
-        '&storekey=' +
-        storekey
+      'productwise/GetRpt?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&Id=' +
+      Id +
+      '&compId=' +
+      compId +
+      '&categoryId=' +
+      categoryId +
+      '&sourcekey=' +
+      sourcekey +
+      '&tagId=' +
+      tagId +
+      '&datatype=' +
+      datatype +
+      '&storekey=' +
+      storekey
     );
   }
 
@@ -283,20 +301,20 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        'StorewiseRpt/GetStoreRpt?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&categoryId=' +
-        categoryId +
-        '&companyId=' +
-        CompanyId +
-        '&sourceId=' +
-        sourceId +
-        '&productId=' +
-        productId +
-        '&tagId=' +
-        tagId
+      'StorewiseRpt/GetStoreRpt?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&categoryId=' +
+      categoryId +
+      '&companyId=' +
+      CompanyId +
+      '&sourceId=' +
+      sourceId +
+      '&productId=' +
+      productId +
+      '&tagId=' +
+      tagId
     );
   }
 
@@ -311,20 +329,20 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        'CategorywiseRpt/GetCategRpt?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&Id=' +
-        Id +
-        '&companyId=' +
-        CompanyId +
-        '&ParentCatId=' +
-        ParentCatId +
-        '&sourcekey=' +
-        sourcekey +
-        '&store_key=' +
-        store_key
+      'CategorywiseRpt/GetCategRpt?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&Id=' +
+      Id +
+      '&companyId=' +
+      CompanyId +
+      '&ParentCatId=' +
+      ParentCatId +
+      '&sourcekey=' +
+      sourcekey +
+      '&store_key=' +
+      store_key
     );
   }
 
@@ -339,20 +357,20 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        'StorewiseRpt/StorePrd?Id=' +
-        Id +
-        '&frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&companyId=' +
-        companyId +
-        '&sourceId=' +
-        sourceId +
-        '&categoryId=' +
-        categoryId +
-        '&tagId=' +
-        tagId
+      'StorewiseRpt/StorePrd?Id=' +
+      Id +
+      '&frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&companyId=' +
+      companyId +
+      '&sourceId=' +
+      sourceId +
+      '&categoryId=' +
+      categoryId +
+      '&tagId=' +
+      tagId
     );
   }
 
@@ -388,28 +406,28 @@ export class AuthService {
     );
     return this.http.get(
       this.baseurl +
-        'TimeWiseRpt/GetRpt?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&fromTime=' +
-        fromTime +
-        '&toTime=' +
-        toTime +
-        '&storeId=' +
-        storeId +
-        '&interval=' +
-        interval +
-        '&sourceId=' +
-        sourceId +
-        '&productId=' +
-        productId +
-        '&categoryId=' +
-        categoryId +
-        '&saleproductgroupid=' +
-        saleproductgroupid +
-        '&companyid=' +
-        companyid
+      'TimeWiseRpt/GetRpt?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&fromTime=' +
+      fromTime +
+      '&toTime=' +
+      toTime +
+      '&storeId=' +
+      storeId +
+      '&interval=' +
+      interval +
+      '&sourceId=' +
+      sourceId +
+      '&productId=' +
+      productId +
+      '&categoryId=' +
+      categoryId +
+      '&saleproductgroupid=' +
+      saleproductgroupid +
+      '&companyid=' +
+      companyid
     );
   }
 
@@ -424,20 +442,20 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        'TimeWiseRpt/GetPrdRpt?frmDate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&CompanyId=' +
-        CompanyId +
-        '&sourceId=' +
-        sourceId +
-        '&storeId=' +
-        storeId +
-        '&fromTime=' +
-        starttime +
-        '&toTime=' +
-        endtime
+      'TimeWiseRpt/GetPrdRpt?frmDate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&CompanyId=' +
+      CompanyId +
+      '&sourceId=' +
+      sourceId +
+      '&storeId=' +
+      storeId +
+      '&fromTime=' +
+      starttime +
+      '&toTime=' +
+      endtime
     );
   }
 
@@ -454,24 +472,24 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        'TimeWiseRpt/GetReportProducts?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&fromTime=' +
-        fromTime +
-        '&toTime=' +
-        toTime +
-        '&storeId=' +
-        storeId +
-        '&sourceId=' +
-        sourceId +
-        '&productId=' +
-        productId +
-        '&saleproductgroupid=' +
-        saleproductgroupid +
-        '&companyid=' +
-        companyid
+      'TimeWiseRpt/GetReportProducts?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&fromTime=' +
+      fromTime +
+      '&toTime=' +
+      toTime +
+      '&storeId=' +
+      storeId +
+      '&sourceId=' +
+      sourceId +
+      '&productId=' +
+      productId +
+      '&saleproductgroupid=' +
+      saleproductgroupid +
+      '&companyid=' +
+      companyid
     );
   }
 
@@ -487,22 +505,22 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        'Monthwise/GetRpt?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&companyId=' +
-        companyId +
-        '&groupBy=' +
-        grpby +
-        '&storeId=' +
-        Id +
-        '&sourceId=' +
-        sourceId +
-        '&categoryId=' +
-        categoryId +
-        '&productId=' +
-        productId
+      'Monthwise/GetRpt?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&companyId=' +
+      companyId +
+      '&groupBy=' +
+      grpby +
+      '&storeId=' +
+      Id +
+      '&sourceId=' +
+      sourceId +
+      '&categoryId=' +
+      categoryId +
+      '&productId=' +
+      productId
     );
   }
 
@@ -520,18 +538,18 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        'SaleProductGroupwise/GetRpt?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&Id=' +
-        Id +
-        '&compId=' +
-        compId +
-        '&sourceId=' +
-        sourceId +
-        '&saleProdId=' +
-        saleProdId
+      'SaleProductGroupwise/GetRpt?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&Id=' +
+      Id +
+      '&compId=' +
+      compId +
+      '&sourceId=' +
+      sourceId +
+      '&saleProdId=' +
+      saleProdId
     );
   }
 
@@ -546,20 +564,20 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        'SaleProductGroupwise/GetStockPrdwise?frmdate=' +
-        frmdate +
-        '&todate=' +
-        todate +
-        '&saleProdId=' +
-        saleProdId +
-        '&compId=' +
-        compId +
-        '&sourceId=' +
-        sourceId +
-        '&storeId=' +
-        storeId +
-        '&type=' +
-        type
+      'SaleProductGroupwise/GetStockPrdwise?frmdate=' +
+      frmdate +
+      '&todate=' +
+      todate +
+      '&saleProdId=' +
+      saleProdId +
+      '&compId=' +
+      compId +
+      '&sourceId=' +
+      sourceId +
+      '&storeId=' +
+      storeId +
+      '&type=' +
+      type
     );
   }
 
@@ -572,13 +590,13 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Report/DeliveryOrderReport?storeid=${storeid}&companyid=${companyid}&fromdate=${fromdate}&todate=${todate}&invoiceno=${invoiceno}`
+      `Report/DeliveryOrderReport?storeid=${storeid}&companyid=${companyid}&fromdate=${fromdate}&todate=${todate}&invoiceno=${invoiceno}`
     );
   }
   getSusOrders(companyid: number, storeid: number, from: string, to: string) {
     return this.http.get(
       this.baseurl +
-        `Report/SusOrders?companyid=${companyid}&storeid=${storeid}&from=${from}&to=${to}`
+      `Report/SusOrders?companyid=${companyid}&storeid=${storeid}&from=${from}&to=${to}`
     );
   }
   productsales(
@@ -591,7 +609,7 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Report/SalesByProducts?companyid=${companyid}&storeid=${storeid}&from=${from}&to=${to}&catgeoryid=${catgeoryid}&ordertypeid=${ordertypeid}`
+      `Report/SalesByProducts?companyid=${companyid}&storeid=${storeid}&from=${from}&to=${to}&catgeoryid=${catgeoryid}&ordertypeid=${ordertypeid}`
     );
   }
   GetOrdRpt(
@@ -635,32 +653,32 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Customer/GetCustomerList?companyid=${CompanyId}&frmdate=${frmdate}&todate=${todate}&ordertype=${OrderTypeId}`
+      `Customer/GetCustomerList?companyid=${CompanyId}&frmdate=${frmdate}&todate=${todate}&ordertype=${OrderTypeId}`
     );
   }
   getAppVersion(CompanyId: number, OrderedDate: string) {
     return this.http.get(
       this.baseurl +
-        `Electron/GetAppversion?companyid=${CompanyId}&orderdate=${OrderedDate}`
+      `Electron/GetAppversion?companyid=${CompanyId}&orderdate=${OrderedDate}`
     );
   }
 
   getpendingorder(CompanyId: string | number, storeId: string | number) {
     return this.http.get(
       this.baseurl +
-        'POSOrder/Getpendingorder?CompanyId=' +
-        CompanyId +
-        '&storeId=' +
-        storeId
+      'POSOrder/Getpendingorder?CompanyId=' +
+      CompanyId +
+      '&storeId=' +
+      storeId
     );
   }
   getpaymenttypes(companyid: number, storeid: number) {
     return this.http.get(
       this.baseurl +
-        'PaymentType/getpaymenttypes?companyid=' +
-        companyid +
-        '&storeid=' +
-        storeid
+      'PaymentType/getpaymenttypes?companyid=' +
+      companyid +
+      '&storeid=' +
+      storeid
     );
     // return this.http.get(this.baseurl + "PaymentType/getpaymenttypes?companyid=" + companyid + "&storeid=" + storeid);
   }
