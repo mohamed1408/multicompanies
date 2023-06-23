@@ -1,13 +1,14 @@
 <div class="hk-pg-wrapper">
-    <div class="container">
-        <div class="hk-pg-header">
-            <h4 class="hk-pg-title">Customer Data List</h4>
-        </div>
-        <div class="col-sm-14">
-            <div class="col-xl-12 pl-0 pr-0">
-                <section class="hk-sec-wrapper">
-                    <div class="form-group row">
-                    <!-- <div style="margin-left:50px;">
+  <div class="container">
+    <br>
+    <div class="hk-pg-header">
+      <h4 class="hk-pg-title">POS Version List</h4>
+    </div>
+    <div class="col-sm-14">
+      <div class="col-xl-12 pl-0 pr-0">
+        <section class="hk-sec-wrapper">
+          <div class="form-group row">
+            <!-- <div style="margin-left:50px;">
                             <label for="username">Date</label>
                             <input type="text" class="form-group" style="width:15em;margin-left:5px;"
                                 ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
@@ -24,7 +25,7 @@
                                 (change)="date($event)" placeholder="Select Date..." class="form-control" />
                         </div> -->
 
-                    <!-- <div class="form-group" style="width: 10em;margin-left:40px;">
+            <!-- <div class="form-group" style="width: 10em;margin-left:40px;">
                             <label for="username">Order Type</label>
                             <select class="form-control custom-select" [(ngModel)]=OrderTypeId name="OrderType">
                                 <option value="0">All</option>
@@ -36,47 +37,47 @@
                             </select>
                         </div> -->
 
-                    <div style="margin-top:35px;">
-                        <button class="btn btn-success btn-sm mx-100 w-30 pull-right" (click)="Submit()">Submit</button>
-                    </div>
-                    <div style="margin-top:35px;">
-                        <p>Submit to Refresh *** !</p>
-                    </div>
-
-
+            <div style="margin-top:35px;">
+              <button class="btn btn-success btn-sm mx-100 w-30 pull-right" (click)="Submit()">Submit</button>
+            </div>
+            <div style="margin-top:35px;">
+              <p>Submit to Refresh *** !</p>
             </div>
 
 
-            <div>
-                <table class="table mb-0 table-sm">
-                    <thead>
-                        <tr style="background-color:rgb(217, 226, 250);">
-                            <th>
-                                Store Name
-                            </th>
-                            <th>
-                                App Version
-                            </th>
-                            <th>
-                                Update
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of apkversion">
-                            <td class="font-12">{{item.store}}</td>
-                            <td class="font-12">{{item.appversion}}</td>
-                            <td class="font-12">{{item.OrderedDate | date : 'dd-MM-YYYY'}}</td>
-                        </tr>
+          </div>
 
-                    </tbody>
-                </table>
-            </div>
-            </section>
-        </div>
+
+          <div>
+            <table class="table mb-0 table-sm">
+              <thead>
+                <tr style="background-color:rgb(217, 226, 250);">
+                  <th>
+                    Store Name
+                  </th>
+                  <th>
+                    App Version
+                  </th>
+                  <th>
+                    Update
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of apkversion">
+                  <td class="font-12">{{item.store}}</td>
+                  <td class="font-12">{{item.appversion}}</td>
+                  <td class="font-12">{{item.OrderedDate | date : 'dd-MM-YYYY'}}</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
     </div>
     <div>
 
     </div>
-</div>
+  </div>
 </div>

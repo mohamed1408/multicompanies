@@ -34,6 +34,7 @@ import { CustomerdatarptComponent } from './reports/customerdatarpt/customerdata
 import { CTGReportPipe, CategoryPipe, OrderPipe, OrderfilterPipe, PtypefilterPipe } from './pipes/order.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DenominationComponent } from './denomination/denomination.component';
+import { Kb2chefComponent } from './reports/kb2chef/kb2chef.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { DenominationComponent } from './denomination/denomination.component';
     PtypefilterPipe,
     CategoryPipe,
     CTGReportPipe,
-    DenominationComponent
+    DenominationComponent,
+    Kb2chefComponent
   ],
   imports: [
     BrowserModule,

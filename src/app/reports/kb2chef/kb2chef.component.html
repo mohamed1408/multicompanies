@@ -1,0 +1,109 @@
+<div class="hk-pg-wrapper">
+    <div class="container">
+        <div class="hk-pg-header">
+            <h4 class="hk-pg-title">Kb2 Data</h4>
+        </div>
+        <div class="col-sm-14">
+            <div class="col-xl-12 pl-0 pr-0">
+                <section class="hk-sec-wrapper">
+                    <div class="form-group row">
+                        <div style="margin-left:30px ">
+                            <label for="username">Location</label>
+                            <ng-autocomplete [data]="stores" style="width:10em;  
+                             border-color: #c5d4d6;" [formControl]="myControl" [searchKeyword]="key"
+                                (selected)='selectEvent($event)' placeHolder="Choose Location"
+                                (inputCleared)="focusAutocomplete()" [itemTemplate]="itemTemplate1"
+                                [notFoundTemplate]="notFoundTemplate1" [(ngModel)]="storeId">
+                            </ng-autocomplete>
+                            <ng-template #itemTemplate1 let-item>
+                                <a [innerHTML]="item.Name"></a>
+                            </ng-template>
+
+                            <ng-template #notFoundTemplate1 let-notFound>
+                                <div [innerHTML]="notFound"></div>
+                            </ng-template>
+                        </div>
+                        <div style="margin-left:50px;">
+                            <label for="username">Date</label>
+                            <input type="text" class="form-group" style="width:15em;margin-left:5px;"
+                                ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
+                                [(ngModel)]="selected" [showCustomRangeLabel]="true" [alwaysShowCalendars]="true"
+                                [ranges]="ranges" [linkedCalendars]="true" [showClearButton]="true"
+                                (change)="date($event)" placeholder="Select Date..." class="form-control" />
+                        </div>
+                        <div hidden style="margin-left:120px;margin-top: 3px">
+                            <label for="username">Date</label>
+                            <input type="text" class="form-group" style="width:15em;margin-left:5px;"
+                                ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
+                                [(ngModel)]="selected" [showCustomRangeLabel]="true" [alwaysShowCalendars]="true"
+                                [ranges]="ranges" [linkedCalendars]="true" [showClearButton]="true"
+                                (change)="date($event)" placeholder="Select Date..." class="form-control" />
+                        </div>
+
+                        <div style="margin-top:35px;">
+                            <button class="btn btn-success btn-sm mx-100 w-30 pull-right"
+                                (click)="Getreport()">Submit</button>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div>
+                        <table class="table mb-0 table-sm">
+                            <thead>
+                                <tr style="background-color:rgb(217, 226, 250);">
+                                    <th>
+                                        Store Name
+                                    </th>
+                                    <th>
+                                        Date
+                                    </th>
+                                    <th>
+                                        Chef Name
+                                    </th>
+                                    <th>
+                                        Meat Qty
+                                    </th>
+                                    <th>
+                                        Meat Ratio
+                                    </th>
+                                    <th>
+                                        Rice Qty
+                                    </th>
+                                    <th>
+                                        Rice Ratio
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let ord of orders; let i = index;">
+                                    <td class="font-12">{{ord.Store}}</td>
+                                    <td class="font-12">{{ord.OrderedDate}}</td>
+                                    <td class="font-12">{{ord.Username}}</td>
+                                    <td class="font-12">{{ord.Meat+'Kg'}}</td>
+                                    <td class="font-12">{{ord.MeatRatio}}</td>
+                                    <td class="font-12">{{ord.Rice+'Kg'}}</td>
+                                    <td class="font-12">{{ord.RiceRatio}}</td>
+                                    <td class="font-12">
+                                        <span *ngIf="ord.OrderStatusId == 3" style="color: red;">
+                                            <strong>Pending</strong> </span>
+                                        <span *ngIf="ord.OrderStatusId == 0"
+                                            style="color: orange;"><strong>Received</strong></span>
+                                        <span *ngIf="ord.OrderStatusId == 1"
+                                            style="color: orange;"><strong>Received</strong></span>
+                                        <span *ngIf="ord.OrderStatusId == 5"
+                                            style="color: green;"><strong>Completed</strong></span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

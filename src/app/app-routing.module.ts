@@ -19,6 +19,7 @@ import { SigninComponent } from './signin/signin.component';
 import { StorewiseComponent } from './storewise/storewise.component';
 import { SusordersComponent } from './susorders/susorders.component';
 import { DenominationComponent } from './denomination/denomination.component';
+import { Kb2chefComponent } from './reports/kb2chef/kb2chef.component';
 
 const routes: Routes = [
   { path: '', component: SigninComponent },
@@ -43,6 +44,8 @@ const routes: Routes = [
   { path: 'customerdatareport', component: CustomerdatarptComponent },
   { path: 'versionlistreport', component: VersionlistComponent },
   { path: 'denominations', component: DenominationComponent },
+  { path: 'kb2chef', component: Kb2chefComponent },
+
 ];
 
 @NgModule({

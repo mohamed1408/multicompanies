@@ -633,7 +633,7 @@ export class AuthService {
     todate: string,
     CompanyId: number,
     OrderTypeId: number,
-    BillAmt : number
+    BillAmt: number
   ) {
     return this.http.get(
       this.baseurl +
@@ -678,11 +678,10 @@ export class AuthService {
   }
   completeOrders(payload: any) {
     return this.http.post(
-      new BizUrl(this.baseurl, "POSOrder", "completePayment", {}).url,
+      new BizUrl(this.baseurl, 'POSOrder', 'completePayment', {}).url,
       payload
     );
   }
-
 
   getstorecashsales(storeid: number, companyid: number, date: string) {
     return this.http.get(
@@ -690,19 +689,35 @@ export class AuthService {
         `Receipt/getStoreCashSales?storeid=${storeid}&companyid=${companyid}&date=${date}`
     );
   }
-  fetchDenominationEntries(storeid: number, date: string, companyid: number, entrytypeid: number | null) {
+  fetchDenominationEntries(
+    storeid: number,
+    date: string,
+    companyid: number,
+    entrytypeid: number | null
+  ) {
     return this.http.get(
       this.baseurl +
         `Denomination/getDenomEntry?storeid=${storeid}&date=${date}&companyid=${companyid}&entrytypeid=${entrytypeid}`
     );
   }
-  denomEntryReport(companyid: number, from: string, to: string, margin: number) {
+  denomEntryReport(
+    companyid: number,
+    from: string,
+    to: string,
+    margin: number
+  ) {
     return this.http.get(
       this.baseurl +
         `Denomination/denomReport_?companyid=${companyid}&from=${from}&to=${to}&margin=${margin}`
     );
   }
-  pettyCashTransfer(storeid: number, companyid: number, amount: number, to: string, reason: string) {
+  pettyCashTransfer(
+    storeid: number,
+    companyid: number,
+    amount: number,
+    to: string,
+    reason: string
+  ) {
     return this.http.get(
       this.baseurl +
         `Denomination/pettyCashTransfer?storeid=${storeid}&companyid=${companyid}&amount=${amount}&to=${to}&reason=${reason}`
@@ -712,7 +727,7 @@ export class AuthService {
     return this.http.get(this.baseurl + `Denomination/GetDenominationTypes`);
   }
 
-  base_url_ak = "https://fbakountz.azurewebsites.net/api/";
+  base_url_ak = 'https://fbakountz.azurewebsites.net/api/';
   dayclosing(companyid: number, storeid: number, date: string, time: string) {
     return this.http.get(
       this.base_url_ak +
@@ -727,7 +742,16 @@ export class AuthService {
   }
   deleteDenomEntry(denomentryid: number) {
     return this.http.get(
-      this.baseurl + `Denomination/delDenomEntry?denomeEntryId=${denomentryid}`);
+      this.baseurl + `Denomination/delDenomEntry?denomeEntryId=${denomentryid}`
+    );
+  }
+
+  //Kb2
+  GetKb2QtyRatio(companyId: number, storeId: number, from: string, to: string) {
+    return this.http.get(
+      this.baseurl +
+        `Kb2/ProdRatio?companyId=${companyId}&StoreId=${storeId}&frm=${from}&to=${to}`
+    );
   }
 }
 
@@ -737,16 +761,21 @@ class BizUrl {
   method: string;
   params: any;
   url: string;
-  constructor(baseUrl: string, controller: string, method: string, params: any) {
+  constructor(
+    baseUrl: string,
+    controller: string,
+    method: string,
+    params: any
+  ) {
     this.controller = controller;
     this.method = method;
     this.params = params;
-    this.url = baseUrl + controller + "/" + method + this.getParams();
+    this.url = baseUrl + controller + '/' + method + this.getParams();
   }
   getParams() {
-    let paramStr = "?";
+    let paramStr = '?';
     Object.keys(this.params).forEach((key) => {
-      paramStr += key + "=" + this.params[key] + "&";
+      paramStr += key + '=' + this.params[key] + '&';
     });
     return paramStr;
   }
