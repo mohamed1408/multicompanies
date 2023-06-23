@@ -7,6 +7,26 @@
     <div *ngIf="mode == 'list'" class="col-xl-12">
         <section class="hk-sec-wrapper">
             <div class="row">
+                <!-- <div class="col-sm"> -->
+                <div></div>
+                <div>
+                    <button class="btn btn-outline-success" (click)="getENQOrders()">show pending orders</button>
+                </div>
+                <div>
+                    <button [hidden]="showdatepicker" class="btn btn-outline-success"
+                        (click)="showdatepicker = true">get orders by date</button>
+                    <div id="myrangepicker" [hidden]="!showdatepicker" class="form-control text-truncate">
+                        <i class="fa fa-calendar text-light-40"></i>&nbsp; <span></span>
+                        <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
+                    </div>
+                </div>
+                <div>
+                    <button [hidden]="!showdatepicker" class="btn btn-success"
+                        (click)="getenquiryordersbydate()">Submit</button>
+                </div>
+                <!-- </div> -->
+            </div>
+            <div class="row">
                 <div class="col-sm">
                     <div class="table-wrap mb-30">
                         <div class="table-responsive">
@@ -24,7 +44,10 @@
                                 <tbody>
                                     <tr *ngFor="let order of orders">
                                         <td>
-                                            <button class="btn btn-link" (click)="viewOrder(order)">#{{order.InvoiceNo}}</button>
+                                            <button class="btn btn-link"
+                                                (click)="viewOrder(order)">#{{order.InvoiceNo}}</button>
+                                                <br>
+                                                <span class="px-15">{{order.location}}</span>
                                         </td>
                                         <td>
                                             <i class="fa fa-user mr-3"></i>{{order.CustomerDetails?.Name || '-'}} <br>
@@ -43,7 +66,7 @@
                                                 <i class="icon-clock font-13"></i> {{order.DeliveryDateTime | date: "MMM
                                                 d, y, h:mm a"}}</span>
                                         </td>
-                                        <td class="{{order.status_class}}">{{order.status}}</td>
+                                        <td class="{{order.status_class}}">{{order.orderstatus}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -412,18 +435,19 @@
                     <tbody>
                         <tr *ngFor="let item of temp_order.Items">
                             <td>{{item.showname}}</td>
-                            <td>{{item.Quantity}} <span *ngIf="item.ComplementryQty > 0">({{item.ComplementryQty}})</span></td>
+                            <td>{{item.Quantity}} <span
+                                    *ngIf="item.ComplementryQty > 0">({{item.ComplementryQty}})</span></td>
                             <td>{{item.TotalAmount}}</td>
                         </tr>
                         <tr *ngIf="(temp_order.Tax1 + temp_order.Tax2 + temp_order.Tax3) > 0">
                             <td></td>
                             <td><strong>Taxes</strong></td>
-                            <td>{{temp_order.Tax1 + temp_order.Tax2 + temp_order.Tax3}}</td>
+                            <td>{{temp_order.Tax1 + temp_order.Tax2 + temp_order.Tax3 | number : ".2"}}</td>
                         </tr>
                         <tr *ngIf="(temp_order.AllItemDisc + temp_order.OrderTotDisc) > 0">
                             <td></td>
                             <td><strong>Disc</strong></td>
-                            <td>{{temp_order.AllItemDisc + temp_order.OrderTotDisc}}</td>
+                            <td>{{temp_order.AllItemDisc + temp_order.OrderTotDisc | number : ".2"}}</td>
                         </tr>
                         <tr>
                             <td></td>

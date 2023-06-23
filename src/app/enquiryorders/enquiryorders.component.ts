@@ -15,6 +15,7 @@ import {
   OrderModule,
 } from './order.module';
 import { SignalrService } from '../services/signalr/signalr.service';
+import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
 
 declare function setHeightWidth(): any;
 declare const feather: any, $: any;
@@ -72,10 +73,15 @@ export class EnquiryordersComponent implements OnInit {
   status = [
     [-1, "Cancelled", "text-danger"],
     [0, "Not Accepted", "text-secondary"],
-    [1, "Accepted", "text-success"],
+    [1, "Accepted", "text-primary"],
     [3, "Preparing", "text-warning"],
-    [4, "Prepared", "text-Success"],
+    [4, "Prepared", "text-purple"],
+    [5, "Completed", "text-success"],
   ]
+
+  fromdate: string = ''
+  todate: string = ''
+  showdatepicker: boolean = false;
 
   constructor(
     private Auth: AuthService,
@@ -83,7 +89,6 @@ export class EnquiryordersComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private signalR: SignalrService
   ) {
-    this.getAllStores();
     this.order = new OrderModule(3);
     // this.customer.Address;
     this.plusIcon = sanitizer.bypassSecurityTrustHtml(
@@ -112,18 +117,28 @@ export class EnquiryordersComponent implements OnInit {
       this.orders = data["orders"]
       this.orders = this.orders.map((x: any) => {
         let json = JSON.parse(x.OrderJson)
-        let status = this.status.filter(x => x[0] == json.OrderStatusId)[0]
+        let status = this.status.filter(y => y[0] == json.OrderStatusId)[0]
         console.log(status)
-        json.status = status[1]
+        json.orderstatus = status[1]
         json.status_class = status[2]
+        json.location = this.stores.filter((y: any) => y.Id == json.StoreId)[0]?.Name || '-'
         return json
       })
+      daterangepicker('myrangepicker', (start: any, end: any) => {
+        // console.log(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
+        // this.startdate = start.format('YYYY-MM-DD');
+        // this.enddate = end.format('YYYY-MM-DD');
+        // this.storeRpt();
+        // console.log(document.getElementById("newdrp"))
+        this.fromdate = start.format('YYYY-MM-DD')
+        this.todate = end.format('YYYY-MM-DD')
+      })(moment(), moment());
     })
   }
   getAllStores() {
     this.Auth.getAllstores().subscribe((data: any) => {
       this.stores = data;
-      console.log(this.stores)
+      this.getENQOrders()
       // this.Stores.unshift()
     });
   }
@@ -148,7 +163,7 @@ export class EnquiryordersComponent implements OnInit {
     );
   }
   ngOnInit(): void {
-    this.getENQOrders()
+    this.getAllStores();
     setHeightWidth();
     this.feather = feather;
     console.log(this.feather);
@@ -442,6 +457,26 @@ export class EnquiryordersComponent implements OnInit {
     });
     this.setcurrentitemprice();
   }
+  test() {
+    console.log("clickedOutside")
+  }
+  getenquiryordersbydate() {
+    this.Auth.getenqordersbydate(this.fromdate, this.todate).subscribe((data: any) => {
+      console.log(data)
+      this.orders = data
+      this.orders = this.orders.map((order: any) => {
+        // let json = JSON.parse(x.OrderJson)
+        let status = this.status.filter(x => x[0] == order.OrderStatusId)[0]
+        console.log(status)
+        order.orderstatus = status[1]
+        order.status_class = status[2]
+        order.CustomerDetails = { Name: order.Name, PhoneNo: order.PhoneNo }
+        order.location = this.stores.filter((x: any) => x.Id == order.StoreId)[0]?.Name || '-'
+        return order
+      })
+      this.showdatepicker = false
+    })
+  }
   getSingleOrder(orderid: number) {
     this.Auth.getENQOrders(orderid).subscribe((data: any) => {
       console.log(data)
@@ -462,11 +497,19 @@ export class EnquiryordersComponent implements OnInit {
       console.log("updated", this.orders[index])
     })
   }
-  viewOrder(order: any) {
+  async viewOrder(order: any) {
+    if (!order.hasOwnProperty("Items")) {
+      let orderjson: any = await this.Auth.getorderjson(order.Id).toPromise()
+      console.log(orderjson)
+      orderjson = JSON.parse(orderjson.invoices[0].OrderJson)
+      this.orders[this.orders.findIndex((x: any) => x.Id == order.Id)] = { ...this.orders[this.orders.findIndex((x: any) => x.Id == order.Id)], ...orderjson }
+      order = { ...order, ...orderjson }
+      // return
+    }
     this.temp_order = order
     this.modalService.open(this.order_details, { size: 'lg', backdropClass: 'z-index-1' })
   }
-  change(){
+  change() {
     this.orders[0].status = "lkjadhlklksdh"
   }
 }
