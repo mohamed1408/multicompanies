@@ -169,6 +169,7 @@ export class SusordersComponent implements OnInit {
       });
   }
   getItemPrice = (item: any) => {
+    return item.TotalAmount
     item.TotalAmount = 0;
     if (item.Quantity == 0) return;
     item.TaxAmount1 = 0;

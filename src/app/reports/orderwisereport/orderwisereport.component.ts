@@ -334,7 +334,6 @@ export class OrderwisereportComponent implements OnInit {
   }
   All() {
     // this.loaderService.show();
-
     var frmdate = moment().format('YYYY-MM-DD  00:00:00');
     var todate = moment().format('YYYY-MM-DD  23:59:59');
     this.Auth.GetSalesRpt1(
