@@ -500,7 +500,7 @@ export class DenominationComponent implements OnInit {
   calculate() {
     this.denomEntry.TotalAmount = 0;
     this.denomEntry.Entries.forEach((entry) => {
-      entry.Amount = +entry.DenomName * (entry.Count || 1);
+      entry.Amount = +entry.DenomName * (entry.Count || 0);
       this.denomEntry.TotalAmount += entry.Amount;
     });
   }
