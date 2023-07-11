@@ -86,7 +86,20 @@ export class SusordersComponent implements OnInit {
       this.auth.companies.next(comps.filter((x) => x.CompanyId != 0));
     });
   }
-
+  sumitems(items: any[]) {
+    let _items: any[] = []
+    items.forEach(x => {
+      x.key = x.refid.split(":")[2]
+      if (_items.some(y => y.key === x.key)) {
+        _items.filter(y => y.key === x.key)[0].Quantity += x.Quantity
+        _items.filter(y => y.key === x.key)[0].ComplementryQty += x.ComplementryQty
+      } else {
+        _items.push(x)
+      }
+    })
+    console.log(_items)
+    return _items.filter(x => (x.ComplementryQty + x.Quantity) > 0)
+  }
   getSusOrders() {
     console.log(this.storeid, this.companyid);
     this.auth.isloading.next(true);
@@ -99,16 +112,17 @@ export class SusordersComponent implements OnInit {
 
           this.discountedOrders.forEach((order: any) => {
             order.json = JSON.parse(order.kots);
-            order.items = JSON.parse(order.items);
+            order.items = this.sumitems(JSON.parse(order.items));
             order.items.customerdetails = JSON.parse(order.CustomerDetails);
             order.items.OrderedDateTime = order.OrderedDateTime;
             order.items.Discount = order.Discount = +order.Discount.toFixed(2);
           });
           this.cancelledItemOrders.forEach((order: any) => {
             order.json = JSON.parse(order.kots);
-            order.items = JSON.parse(order.items);
+            order.items = this.sumitems(JSON.parse(order.items)); //JSON.parse(order.items);
             order.items.OrderedDateTime = order.OrderedDateTime;
             order.items.Discount = order.Discount;
+            console.log(order)
             let product = order.json
               .map((kot: any) => {
                 let _it = kot.Items.map((it: any) => {
@@ -139,12 +153,14 @@ export class SusordersComponent implements OnInit {
                 (ind + 1 == prodList.length ? '' : ' to ');
             });
             order.comment = 'quantity changed from ' + order.comment;
-            let added: any = [];
             order.pricechangemap = ``;
             order.isvaliddata = true;
             order.json.forEach((kot: any) => {
+              let added: any = [];
               kot.totalsofar = 0;
               added = [...added, ...kot.Items];
+              console.log(added, added
+                .map((x: any) => this.getItemPrice(x)))
               kot.totalsofar = added
                 .map((x: any) => this.getItemPrice(x))
                 .reduce((pv: any, cv: any) => pv + cv, 0);
@@ -162,14 +178,15 @@ export class SusordersComponent implements OnInit {
             let kot = order.json.filter(
               (x: any) => x.refid == order.kotrefid
             )[0];
-            console.log(added);
+            // console.log(added);
           });
         }
         this.auth.isloading.next(false);
       });
   }
   getItemPrice = (item: any) => {
-    return item.TotalAmount
+    // console.log(item, item.TotalAmount * (item.Quantity/Math.abs(item.Quantity)))
+    return item.TotalAmount * (item.Quantity/Math.abs(item.Quantity))
     item.TotalAmount = 0;
     if (item.Quantity == 0) return;
     item.TaxAmount1 = 0;
@@ -203,11 +220,11 @@ export class SusordersComponent implements OnInit {
         // (item.Price / (((item.Tax1 + item.Tax2 + item.Tax2) / 100) + 1) + optionprice) * item.Quantity
         (item.baseprice -
           (item.baseprice * (item.Tax1 + item.Tax2)) /
-            (item.Tax1 + item.Tax2 + 100)) *
-          item.Quantity +
+          (item.Tax1 + item.Tax2 + 100)) *
+        item.Quantity +
         (singleqtyoptionprice -
           (singleqtyoptionprice * (item.Tax1 + item.Tax2)) /
-            (item.Tax1 + item.Tax2 + 100));
+          (item.Tax1 + item.Tax2 + 100));
     } else {
       item.TotalAmount = item.baseprice * item.Quantity + singleqtyoptionprice;
     }
@@ -281,11 +298,11 @@ export class SusordersComponent implements OnInit {
         term.length < 1
           ? []
           : this.stores
-              .filter(
-                (v: any) =>
-                  v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10)
+            .filter(
+              (v: any) =>
+                v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+            )
+            .slice(0, 10)
       )
     );
 
@@ -351,8 +368,8 @@ export class SusordersComponent implements OnInit {
         centered: true,
       })
       .result.then(
-        (result) => {},
-        (reason) => {}
+        (result) => { },
+        (reason) => { }
       );
   }
   POStortesArray: any = [];
