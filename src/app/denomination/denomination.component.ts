@@ -73,12 +73,12 @@ export class DenominationComponent implements OnInit {
     transferReason: '',
   };
   shifts = [
-    { shift: "08:00 am to 11:59 am", shiftid: 1 },
-    { shift: "12:00 pm to 02:29 pm", shiftid: 2 },
-    { shift: "02:30 pm to 04:29 pm", shiftid: 3 },
-    { shift: "04:30 pm to 06:29 pm", shiftid: 4 },
-    { shift: "06:30 pm to 08:30 pm", shiftid: 5 },
-    { shift: "08:30 pm to closing ", shiftid: 6 },
+    { shift: '08:00 am to 11:59 am', shiftid: 1 },
+    { shift: '12:00 pm to 02:29 pm', shiftid: 2 },
+    { shift: '02:30 pm to 04:29 pm', shiftid: 3 },
+    { shift: '04:30 pm to 06:29 pm', shiftid: 4 },
+    { shift: '06:30 pm to 08:30 pm', shiftid: 5 },
+    { shift: '08:30 pm to closing ', shiftid: 6 },
   ];
 
   constructor(
@@ -241,6 +241,9 @@ export class DenominationComponent implements OnInit {
               : dentry.diff > 0
               ? 'Excess'
               : 'Shortage';
+          dentry.shift = this.shifts.filter(
+            (x) => x.shiftid == dentry.ShiftId
+          )[0].shift;
           console.log(dentry.TransactionJson);
           const PCT = JSON.parse(dentry.TransactionJson || '[]')
             .filter((x: any) => x.PaymentTypeId == 7)
@@ -400,12 +403,15 @@ export class DenominationComponent implements OnInit {
   }
 
   changeshift(denomentryid: number, shiftid: number, i: number) {
-    this.denomentries[i].loading = true
-    this.auth.changeshift(denomentryid, shiftid).subscribe(data => {
-      console.log(data)
-      this.denomentries[i].loading = false
-      this.denomentries[i].shift = this.shifts.filter(x => x.shiftid == shiftid)[0].shift
-    })
+    this.denomentries[i].loading = true;
+    this.auth.changeshift(denomentryid, shiftid).subscribe((data) => {
+      console.log(data);
+      this.denomentries[i].loading = false;
+      this.denomentries[i].dirty = false;
+      this.denomentries[i].shift = this.shifts.filter(
+        (x) => x.shiftid == shiftid
+      )[0].shift;
+    });
   }
 
   diffString(diff: number) {
