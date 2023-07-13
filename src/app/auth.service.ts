@@ -189,7 +189,7 @@ export class AuthService {
       todate
     )
   }
-  
+
   getorderjson(orderid: number) {
     return this.http.get(this.baseurl + 'Receipt/GetOrderJson?orderid=' + orderid)
   }
@@ -762,6 +762,12 @@ export class AuthService {
     return this.http.get(
       this.baseurl + `Denomination/delDenomEntry?denomeEntryId=${denomentryid}`
     );
+  }
+  getshifts() {
+    return this.http.get(this.baseurl + "Denomination/GetShifts")
+  }
+  changeshift(denomeEntryId: number, shiftid: number) {
+    return this.http.get(this.baseurl + "Denomination/changeshift?denomeEntryId=" + denomeEntryId + "&shiftid=" + shiftid)
   }
 
   //Kb2
