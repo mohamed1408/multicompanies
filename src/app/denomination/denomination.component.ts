@@ -770,6 +770,37 @@ export class DenominationComponent implements OnInit {
     console.log(this.exceldata);
     this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel');
   }
+  exportdenomcheck() {
+    let denomcheckreports: any[] = [];
+    const keys = [
+      'Name',
+      'date',
+      'shift1s',
+      'shift1e',
+      'shift2s',
+      'shift2e',
+      'shift3s',
+      'shift3e',
+      'shift4s',
+      'shift4e',
+      'shift5s',
+      'shift5e',
+      'shift6s',
+      'shift6e',
+    ];
+    this.denomcheckreports.forEach((rpt) => {
+      let obj: any = {};
+      keys.forEach((key) => {
+        obj[key] = rpt[key];
+      });
+      denomcheckreports.push(obj);
+    });
+    console.log(denomcheckreports);
+    this.excelservice.exportAsExcelFile(
+      denomcheckreports,
+      'denomcheckreport | ' + this.from + ' to ' + this.to
+    );
+  }
 }
 // var grouped = _.mapValues(_.groupBy(this.cars, 'make'),
 // clist => clist.map(car => _.omit(car, 'make')));
