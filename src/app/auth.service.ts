@@ -770,7 +770,7 @@ export class AuthService {
     return this.http.get(this.baseurl + "Denomination/changeshift?denomeEntryId=" + denomeEntryId + "&shiftid=" + shiftid)
   }
   denomcheckreport(companyid: number, from: string, to: string) {
-    return this.http.get(this.baseurl1 + "Denomination/denomcheckreport?companyid=" + companyid + "&from=" + from + "&to=" + to)
+    return this.http.get(this.baseurl + "Denomination/denomcheckreport?companyid=" + companyid + "&from=" + from + "&to=" + to)
   }
   //Kb2
   GetKb2QtyRatio(companyId: number, storeId: number, from: string, to: string) {

@@ -75,6 +75,7 @@ export class DenominationComponent implements OnInit {
     transferReason: '',
   };
   shifts = [
+    { shift: 'No Shift', shiftid: 0 },
     { shift: '08:00 am to 11:59 am', shiftid: 1 },
     { shift: '12:00 pm to 02:29 pm', shiftid: 2 },
     { shift: '02:30 pm to 04:29 pm', shiftid: 3 },
