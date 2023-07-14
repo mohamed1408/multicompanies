@@ -37,3 +37,37 @@ canvas {
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
+
+.pointer {
+  cursor: pointer;
+}
+
+.excess {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+.shortage {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.tallied {
+  background-color: #28a745;
+  color: #fff;
+}
+
+td {
+  position: relative;
+}
+
+.hover-info {
+  position: absolute;
+  background-color: rgb(54, 54, 56);
+  color: #fff;
+  width: max-content;
+  z-index: 1000;
+  right: 100%;
+  padding: 10px;
+  border-radius: 3px;
+}

@@ -35,6 +35,8 @@ export class DenominationComponent implements OnInit {
   denomReport!: ElementRef;
   @ViewChild('pettycashtransfermodal', { static: true })
   pettycashtransfermodal!: ElementRef;
+  @ViewChild('denomcheckreportmodal', { static: true })
+  denomcheckreportmodal!: ElementRef;
 
   model!: NgbDateStruct;
   companyid: number;
@@ -412,6 +414,21 @@ export class DenominationComponent implements OnInit {
         (x) => x.shiftid == shiftid
       )[0].shift;
     });
+  }
+  denomcheckreports: any[] = [];
+  denomcheckreport() {
+    var date = `${this.model.year}-${this.model.month}-${this.model.day}`;
+    this.auth
+      .denomcheckreport(this.companyid, date, date)
+      .subscribe((data: any) => {
+        console.log(data);
+        this.denomcheckreports = data['report'];
+        this.modalService.open(this.denomcheckreportmodal, {
+          centered: true,
+          size: 'lg',
+          backdropClass: 'z-index-1',
+        });
+      });
   }
 
   diffString(diff: number) {
