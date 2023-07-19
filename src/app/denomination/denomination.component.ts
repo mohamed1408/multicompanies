@@ -18,6 +18,7 @@ import * as moment from 'moment';
 import { DenomEntry, Entry } from './denomination.module';
 import { ExcelService } from '../services/excel/excel.service';
 import * as _ from 'lodash';
+import html2canvas from 'html2canvas';
 
 declare function setHeightWidth(): any;
 
@@ -801,6 +802,33 @@ export class DenominationComponent implements OnInit {
       denomcheckreports,
       'denomcheckreport | ' + this.from + ' to ' + this.to
     );
+  }
+
+  downloadTableAsImage() {
+    const tableElement = document.querySelector('.table') as HTMLElement;
+    if (!tableElement) {
+      return;
+    }
+
+    html2canvas(tableElement).then((canvas) => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'Denom_Report.png';
+      link.click();
+    });
+  }
+
+  hideHeader1 = false;
+  hideHeader2 = false;
+
+  onCheckboxChange(value: boolean, propertyName: string) {
+    if (value) {
+      this.hideHeader1 = propertyName === 'hideHeader1';
+      this.hideHeader2 = propertyName === 'hideHeader2';
+    } else {
+      this.hideHeader1 = false;
+      this.hideHeader2 = false;
+    }
   }
 }
 // var grouped = _.mapValues(_.groupBy(this.cars, 'make'),

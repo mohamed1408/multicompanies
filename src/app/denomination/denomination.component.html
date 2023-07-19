@@ -470,99 +470,129 @@
   <div class="modal-body" style="overflow: auto;">
     <div class="table-wrap" style="width: max-content;">
       <div class="table-responsive">
+        <table>
+          <table>
+            <tr>
+              <th>
+                <input type="checkbox" [(ngModel)]="hideHeader2"
+                  (change)="onCheckboxChange(hideHeader2, 'hideHeader2')" />
+                First Shift
+              </th>&nbsp;&nbsp;
+              <th>
+                <input type="checkbox" [(ngModel)]="hideHeader1"
+                  (change)="onCheckboxChange(hideHeader1, 'hideHeader1')" />
+                Second Shift
+              </th>
+            </tr>
+          </table>
+        </table>
+
+
         <table class="table table-hover table-bordered mb-0">
           <thead>
             <tr>
               <th>Store</th>
-              <th colspan="2">08:00 am to 11:59 am</th>
-              <th colspan="2">12:00 pm to 02:29 pm</th>
-              <th colspan="2">02:30 pm to 04:29 pm</th>
-              <th colspan="2">04:30 pm to 06:29 pm</th>
-              <th colspan="2">06:30 pm to 08:30 pm</th>
-              <th colspan="2">08:30 pm to closing</th>
+              <th colspan="2" *ngIf="!hideHeader1">08:00 am to 11:59 am</th>
+              <th colspan="2" *ngIf="!hideHeader1">12:00 pm to 02:29 pm</th>
+              <th colspan="2" *ngIf="!hideHeader1">02:30 pm to 04:29 pm</th>
+              <th colspan="2" *ngIf="!hideHeader1">04:30 pm to 06:29 pm</th>
+              <th colspan="2" *ngIf="!hideHeader2">06:30 pm to 08:30 pm</th>
+              <th colspan="2" *ngIf="!hideHeader2">08:30 pm to closing</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let rpt of denomcheckreports; let i = index">
               <td>{{rpt.Name}}</td>
-              <td [ngClass]="{'excess': rpt.shift1s > 0, 'shortage': rpt.shift1s < 0, 'tallied': rpt.shift1s == 0}" (mouseenter)="rpt['1s'+i] = true" (mouseleave)="rpt['1s'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift1s > 0, 'shortage': rpt.shift1s < 0, 'tallied': rpt.shift1s == 0}"
+                (mouseenter)="rpt['1s'+i] = true" (mouseleave)="rpt['1s'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift1s == null ? 'No Rec' : rpt.shift1s}}
                 <span *ngIf="rpt['1s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>08:00 am to 11:59 am</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift1e > 0, 'shortage': rpt.shift1e < 0, 'tallied': rpt.shift1e == 0}" (mouseenter)="rpt['1e'+i] = true" (mouseleave)="rpt['1e'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift1e > 0, 'shortage': rpt.shift1e < 0, 'tallied': rpt.shift1e == 0}"
+                (mouseenter)="rpt['1e'+i] = true" (mouseleave)="rpt['1e'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift1e == null ? 'No Rec' : rpt.shift1e}}
                 <span *ngIf="rpt['1e'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>08:00 am to 11:59 am</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift2s > 0, 'shortage': rpt.shift2s < 0, 'tallied': rpt.shift2s == 0}" (mouseenter)="rpt['2s'+i] = true" (mouseleave)="rpt['2s'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift2s > 0, 'shortage': rpt.shift2s < 0, 'tallied': rpt.shift2s == 0}"
+                (mouseenter)="rpt['2s'+i] = true" (mouseleave)="rpt['2s'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift2s == null ? 'No Rec' : rpt.shift2s}}
                 <span *ngIf="rpt['2s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>12:00 pm to 02:29 pm</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift2e > 0, 'shortage': rpt.shift2e < 0, 'tallied': rpt.shift2e == 0}" (mouseenter)="rpt['2e'+i] = true" (mouseleave)="rpt['2e'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift2e > 0, 'shortage': rpt.shift2e < 0, 'tallied': rpt.shift2e == 0}"
+                (mouseenter)="rpt['2e'+i] = true" (mouseleave)="rpt['2e'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift2e == null ? 'No Rec' : rpt.shift2e}}
                 <span *ngIf="rpt['2e'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>12:00 pm to 02:29 pm</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift3s > 0, 'shortage': rpt.shift3s < 0, 'tallied': rpt.shift3s == 0}" (mouseenter)="rpt['3s'+i] = true" (mouseleave)="rpt['3s'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift3s > 0, 'shortage': rpt.shift3s < 0, 'tallied': rpt.shift3s == 0}"
+                (mouseenter)="rpt['3s'+i] = true" (mouseleave)="rpt['3s'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift3s == null ? 'No Rec' : rpt.shift3s}}
                 <span *ngIf="rpt['3s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>02:30 pm to 04:29 pm</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift3e > 0, 'shortage': rpt.shift3e < 0, 'tallied': rpt.shift3e == 0}" (mouseenter)="rpt['3e'+i] = true" (mouseleave)="rpt['3e'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift3e > 0, 'shortage': rpt.shift3e < 0, 'tallied': rpt.shift3e == 0}"
+                (mouseenter)="rpt['3e'+i] = true" (mouseleave)="rpt['3e'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift3e == null ? 'No Rec' : rpt.shift3e}}
                 <span *ngIf="rpt['3e'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>02:30 pm to 04:29 pm</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift4s > 0, 'shortage': rpt.shift4s < 0, 'tallied': rpt.shift4s == 0}" (mouseenter)="rpt['4s'+i] = true" (mouseleave)="rpt['4s'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift4s > 0, 'shortage': rpt.shift4s < 0, 'tallied': rpt.shift4s == 0}"
+                (mouseenter)="rpt['4s'+i] = true" (mouseleave)="rpt['4s'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift4s == null ? 'No Rec' : rpt.shift4s}}
                 <span *ngIf="rpt['4s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>04:30 pm to 06:29 pm</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift4e > 0, 'shortage': rpt.shift4e < 0, 'tallied': rpt.shift4e == 0}" (mouseenter)="rpt['4e'+i] = true" (mouseleave)="rpt['4e'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift4e > 0, 'shortage': rpt.shift4e < 0, 'tallied': rpt.shift4e == 0}"
+                (mouseenter)="rpt['4e'+i] = true" (mouseleave)="rpt['4e'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift4e == null ? 'No Rec' : rpt.shift4e}}
                 <span *ngIf="rpt['4e'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>04:30 pm to 06:29 pm</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift5s > 0, 'shortage': rpt.shift5s < 0, 'tallied': rpt.shift5s == 0}" (mouseenter)="rpt['5s'+i] = true" (mouseleave)="rpt['5s'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift5s > 0, 'shortage': rpt.shift5s < 0, 'tallied': rpt.shift5s == 0}"
+                (mouseenter)="rpt['5s'+i] = true" (mouseleave)="rpt['5s'+i] = false" *ngIf="!hideHeader2">
                 {{rpt.shift5s == null ? 'No Rec' : rpt.shift5s}}
                 <span *ngIf="rpt['5s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>06:30 pm to 08:30 pm</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift5e > 0, 'shortage': rpt.shift5e < 0, 'tallied': rpt.shift5e == 0}" (mouseenter)="rpt['5e'+i] = true" (mouseleave)="rpt['5e'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift5e > 0, 'shortage': rpt.shift5e < 0, 'tallied': rpt.shift5e == 0}"
+                (mouseenter)="rpt['5e'+i] = true" (mouseleave)="rpt['5e'+i] = false" *ngIf="!hideHeader2">
                 {{rpt.shift5e == null ? 'No Rec' : rpt.shift5e}}
                 <span *ngIf="rpt['5e'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>06:30 pm to 08:30 pm</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift6s > 0, 'shortage': rpt.shift6s < 0, 'tallied': rpt.shift6s == 0}" (mouseenter)="rpt['6s'+i] = true" (mouseleave)="rpt['6s'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift6s > 0, 'shortage': rpt.shift6s < 0, 'tallied': rpt.shift6s == 0}"
+                (mouseenter)="rpt['6s'+i] = true" (mouseleave)="rpt['6s'+i] = false" *ngIf="!hideHeader2">
                 {{rpt.shift6s == null ? 'No Rec' : rpt.shift6s}}
                 <span *ngIf="rpt['6s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>08:30 pm to closing</span>
                 </span>
               </td>
-              <td [ngClass]="{'excess': rpt.shift6e > 0, 'shortage': rpt.shift6e < 0, 'tallied': rpt.shift6e == 0}" (mouseenter)="rpt['6e'+i] = true" (mouseleave)="rpt['6e'+i] = false">
+              <td [ngClass]="{'excess': rpt.shift6e > 0, 'shortage': rpt.shift6e < 0, 'tallied': rpt.shift6e == 0}"
+                (mouseenter)="rpt['6e'+i] = true" (mouseleave)="rpt['6e'+i] = false" *ngIf="!hideHeader2">
                 {{rpt.shift6e == null ? 'No Rec' : rpt.shift6e}}
                 <span *ngIf="rpt['6e'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
@@ -575,7 +605,9 @@
       </div>
     </div>
   </div>
+
   <div class="modal-footer">
+    <button class="btn btn-primary" (click)="downloadTableAsImage()">Download as Image</button>
     <button type="button" class="btn btn-primary" (click)="exportdenomcheck()">Excel Download</button>
   </div>
 </ng-template>
