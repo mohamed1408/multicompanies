@@ -3,6 +3,7 @@ import { AuthService } from '../auth.service';
 import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
 import * as moment from 'moment';
 import { Ng2SearchPipe } from 'ng2-search-filter';
+import { ExcelService } from '../services/excel/excel.service';
 
 declare function setHeightWidth(): any;
 declare const $wrapper: any;
@@ -42,7 +43,7 @@ export class StorewiseComponent implements OnInit {
     DiscAmount: ['DiscAmount', 0],
   };
 
-  constructor(private Auth: AuthService, private ng2filterpipe: Ng2SearchPipe) {
+  constructor(private Auth: AuthService, private ng2filterpipe: Ng2SearchPipe, private excelService: ExcelService) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
     this.rangeSettings = JSON.parse(
       localStorage.getItem('rangeSettings') || '[]'
@@ -233,6 +234,27 @@ export class StorewiseComponent implements OnInit {
       }
     });
   }
+
+  // HyperTech
+  exportTableToExcel(): void {
+    const jsonData = this.storereport.map((row: TableRow) => ({
+      'Store Name': row.Name,
+      'Bill Amount': row.BillAmount,
+      'Paid Amount': row.PaidAmount,
+      POS: row.Pos,
+      Swiggy: row.Swiggy,
+      Zomato: row.Zomato,
+      Discount: row.DiscAmount,
+    }));
+
+    this.excelService.exportAsExcelFile(jsonData, 'store_report');
+  }
+
+
+
+
+
+
 }
 
 class RangeSetting {
@@ -247,4 +269,15 @@ class RangeSetting {
     this.to = 0;
     this.editmode = false;
   }
+}
+
+// HyperTech
+interface TableRow {
+  Name: string;
+  BillAmount: number;
+  PaidAmount: number;
+  Pos: number;
+  Swiggy: number;
+  Zomato: number;
+  DiscAmount: number;
 }

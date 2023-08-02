@@ -45,7 +45,6 @@ const routes: Routes = [
   { path: 'versionlistreport', component: VersionlistComponent },
   { path: 'denominations', component: DenominationComponent },
   { path: 'kb2chef', component: Kb2chefComponent },
-
 ];
 
 @NgModule({

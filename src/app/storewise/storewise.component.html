@@ -3,7 +3,7 @@
     <ol class="breadcrumb breadcrumb-light bg-transparent">
       <!-- <li class="breadcrumb-item"><a href="javascript:void(0);">Company Management</a></li> -->
       <li class="breadcrumb-item active" aria-current="page">
-        Store Wise Report
+        Maintenance Report
       </li>
     </ol>
   </nav>
@@ -29,36 +29,21 @@
             </div>
           </div>
           <div class="col-sm">
-            <button
-              (click)="storeRpt()"
-              class="btn btn-icon btn-success btn-icon-style-1"
-              
-            >
-              <span class="btn-icon-wrap"
-                ><img
-                  src="../../assets/svg/arrow-down-circle.svg"
-                  alt=""
-                  srcset=""
-              /></span>
+            <button (click)="storeRpt()" class="btn btn-icon btn-success btn-icon-style-1">
+              <span class="btn-icon-wrap"><img src="../../assets/svg/arrow-down-circle.svg" alt="" srcset="" /></span>
             </button>
-            <button
-              (click)="openDrawer()"
-              class="btn btn-icon btn-icon-style-1"
-              
-            >
-              <span class="btn-icon-wrap"
-                ><img src="../../assets/svg/settings.svg" alt="" srcset=""
-              /></span>
+            <button (click)="openDrawer()" class="btn btn-icon btn-icon-style-1">
+              <span class="btn-icon-wrap"><img src="../../assets/svg/settings.svg" alt="" srcset="" /></span>
             </button>
+            <!-- HyperTech -->
+            <button type="button" class="btn btn-primary" (click)="exportTableToExcel()" style="height: 50px;">Excel
+              Download</button>
+
           </div>
+
           <div class="form-group col-sm-3">
             <label>Search</label>
-            <input
-              type="text"
-              [(ngModel)]="term"
-              (input)="calculate()"
-              class="form-control"
-            />
+            <input type="text" [(ngModel)]="term" (input)="calculate()" class="form-control" />
           </div>
           <!-- <div class="col-sm">
             <button
@@ -72,7 +57,7 @@
           </div> -->
         </section>
       </div>
-      <div class="col-xl-9">
+      <div class="col-xl-12">
         <section class="hk-sec-wrapper">
           <div class="table-wrap">
             <div class="table-responsive">
@@ -80,107 +65,110 @@
                 <thead>
                   <tr>
                     <th class="unselectable pointer" (click)="sort('Name')">
-                      <span *ngIf="sortSetting['Name'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
-                      Store Name 
-                      <i *ngIf="sortSetting['Name'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['Name'][1]>0,'fa-caret-down text-danger': sortSetting['Name'][1]<0}" class="fa font-12"></i>
+                      <span *ngIf="sortSetting['Name'][1] != 0" class="font-11"
+                        style="font-style: italic; position: absolute; top: 20px;">Sorted by</span>
+                      Store Name
+                      <i *ngIf="sortSetting['Name'][1] != 0"
+                        [ngClass]="{'fa-caret-up text-blue': sortSetting['Name'][1]>0,'fa-caret-down text-danger': sortSetting['Name'][1]<0}"
+                        class="fa font-12"></i>
                     </th>
                     <th class="text-right unselectable pointer" (click)="sort('BillAmount')">
-                      <span *ngIf="sortSetting['BillAmount'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
-                      Bill Amount 
-                      <i *ngIf="sortSetting['BillAmount'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['BillAmount'][1]>0,'fa-caret-down text-danger': sortSetting['BillAmount'][1]<0}" class="fa font-12"></i></th>
+                      <span *ngIf="sortSetting['BillAmount'][1] != 0" class="font-11"
+                        style="font-style: italic; position: absolute; top: 20px;">Sorted by</span>
+                      Bill Amount
+                      <i *ngIf="sortSetting['BillAmount'][1] != 0"
+                        [ngClass]="{'fa-caret-up text-blue': sortSetting['BillAmount'][1]>0,'fa-caret-down text-danger': sortSetting['BillAmount'][1]<0}"
+                        class="fa font-12"></i>
+                    </th>
                     <th class="text-right unselectable pointer" (click)="sort('PaidAmount')">
-                      <span *ngIf="sortSetting['PaidAmount'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
-                      Paid Amount 
-                      <i *ngIf="sortSetting['PaidAmount'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['PaidAmount'][1]>0,'fa-caret-down text-danger': sortSetting['PaidAmount'][1]<0}" class="fa font-12"></i>
+                      <span *ngIf="sortSetting['PaidAmount'][1] != 0" class="font-11"
+                        style="font-style: italic; position: absolute; top: 20px;">Sorted by</span>
+                      Paid Amount
+                      <i *ngIf="sortSetting['PaidAmount'][1] != 0"
+                        [ngClass]="{'fa-caret-up text-blue': sortSetting['PaidAmount'][1]>0,'fa-caret-down text-danger': sortSetting['PaidAmount'][1]<0}"
+                        class="fa font-12"></i>
                     </th>
                     <th class="text-right unselectable pointer" (click)="sort('Pos')">
-                      <span *ngIf="sortSetting['Pos'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
-                      POS 
-                      <i *ngIf="sortSetting['Pos'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['Pos'][1]>0,'fa-caret-down text-danger': sortSetting['Pos'][1]<0}" class="fa font-12"></i></th>
+                      <span *ngIf="sortSetting['Pos'][1] != 0" class="font-11"
+                        style="font-style: italic; position: absolute; top: 20px;">Sorted by</span>
+                      POS
+                      <i *ngIf="sortSetting['Pos'][1] != 0"
+                        [ngClass]="{'fa-caret-up text-blue': sortSetting['Pos'][1]>0,'fa-caret-down text-danger': sortSetting['Pos'][1]<0}"
+                        class="fa font-12"></i>
+                    </th>
                     <th class="text-right unselectable pointer" (click)="sort('Swiggy')">
-                      <span *ngIf="sortSetting['Swiggy'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
+                      <span *ngIf="sortSetting['Swiggy'][1] != 0" class="font-11"
+                        style="font-style: italic; position: absolute; top: 20px;">Sorted by</span>
                       Swiggy
-                      <i *ngIf="sortSetting['Swiggy'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['Swiggy'][1]>0,'fa-caret-down text-danger': sortSetting['Swiggy'][1]<0}" class="fa font-12"></i></th>
+                      <i *ngIf="sortSetting['Swiggy'][1] != 0"
+                        [ngClass]="{'fa-caret-up text-blue': sortSetting['Swiggy'][1]>0,'fa-caret-down text-danger': sortSetting['Swiggy'][1]<0}"
+                        class="fa font-12"></i>
+                    </th>
                     <th class="text-right unselectable pointer" (click)="sort('Zomato')">
-                      <span *ngIf="sortSetting['Zomato'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
+                      <span *ngIf="sortSetting['Zomato'][1] != 0" class="font-11"
+                        style="font-style: italic; position: absolute; top: 20px;">Sorted by</span>
                       Zomato
-                      <i *ngIf="sortSetting['Zomato'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['Zomato'][1]>0,'fa-caret-down text-danger': sortSetting['Zomato'][1]<0}" class="fa font-12"></i></th>
+                      <i *ngIf="sortSetting['Zomato'][1] != 0"
+                        [ngClass]="{'fa-caret-up text-blue': sortSetting['Zomato'][1]>0,'fa-caret-down text-danger': sortSetting['Zomato'][1]<0}"
+                        class="fa font-12"></i>
+                    </th>
                     <th class="text-right unselectable pointer" (click)="sort('DiscAmount')">
-                      <span *ngIf="sortSetting['DiscAmount'][1] != 0" class="font-11" style="font-style: italic; position: absolute; top: 20px;">Sorted by</span> 
-                      Discount 
-                      <i *ngIf="sortSetting['DiscAmount'][1] != 0" [ngClass]="{'fa-caret-up text-blue': sortSetting['DiscAmount'][1]>0,'fa-caret-down text-danger': sortSetting['DiscAmount'][1]<0}" class="fa font-12"></i></th>
+                      <span *ngIf="sortSetting['DiscAmount'][1] != 0" class="font-11"
+                        style="font-style: italic; position: absolute; top: 20px;">Sorted by</span>
+                      Discount
+                      <i *ngIf="sortSetting['DiscAmount'][1] != 0"
+                        [ngClass]="{'fa-caret-up text-blue': sortSetting['DiscAmount'][1]>0,'fa-caret-down text-danger': sortSetting['DiscAmount'][1]<0}"
+                        class="fa font-12"></i>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    *ngFor="let row of storereport | filter: term"
-                    [style.color]="row.setting.color"
-                    [style.background]="row.setting.color"
-                  >
-                    <td
-                      style="
+                  <tr *ngFor="let row of storereport | filter: term" [style.color]="row.setting.color"
+                    [style.background]="row.setting.color">
+                    <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
-                      "
-                    >
+                      ">
                       {{ row.Name }}
                     </td>
-                    <td
-                      style="
+                    <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
-                      "
-                      class="text-right"
-                    >
-                      {{ row.BillAmount | number: ".2" }}
+                      " class="text-right">
+                      {{ row.BillAmount /10 | number: ".2" }}
                     </td>
-                    <td
-                      style="
+                    <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
-                      "
-                      class="text-right"
-                    >
-                      {{ row.PaidAmount | number: ".2" }}
+                      " class="text-right">
+                      {{ row.PaidAmount / 10 | number: ".2" }}
                     </td>
-                    <td
-                      style="
+                    <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
-                      "
-                      class="text-right"
-                    >
-                      {{ row.Pos | number: ".0-0" }} <br />
+                      " class="text-right">
+                      {{ row.Pos / 10| number: ".0-0" }} <br />
                       {{
-                        row.PaidAmount - row.Swiggy - row.Zomato | number: ".0"
+                      row.PaidAmount / 10 - row.Swiggy / 10 - row.Zomato / 10 | number: ".0"
                       }}
                     </td>
-                    <td
-                      style="
+                    <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
-                      "
-                      class="text-right"
-                    >
-                      {{ row.Swiggy | number: ".0" }}
+                      " class="text-right">
+                      {{ row.Swiggy /10 | number: ".0" }}
                     </td>
-                    <td
-                      style="
+                    <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
-                      "
-                      class="text-right"
-                    >
-                      {{ row.Zomato | number: ".0" }}
+                      " class="text-right">
+                      {{ row.Zomato /10 | number: ".0" }}
                     </td>
-                    <td
-                      style="
+                    <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
-                      "
-                      class="text-right"
-                    >
-                      {{ row.DiscAmount | number: ".0" }}
+                      " class="text-right">
+                      {{ row.DiscAmount / 10| number: ".0" }}
                     </td>
                   </tr>
                 </tbody>
@@ -189,7 +177,7 @@
           </div>
         </section>
       </div>
-      <div class="col-xl-3">
+      <!-- <div class="col-xl-3">
         <section class="hk-sec-wrapper sticky" style="top: 220px">
           <strong>[Tax]</strong>
           <span class="float-right">{{ Tax | number: ".0" }}</span> <br />
@@ -210,7 +198,7 @@
           <span class="float-right">{{ TotalZomato | number: ".0" }}</span>
           <br />
         </section>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
@@ -220,24 +208,17 @@
     <div class="settings-panel-wrap">
       <div class="settings-panel-head">
         <h4>Coloring</h4>
-        <a
-          href="javascript:void(0);"
-          id="settings_panel_close"
-          class="settings-panel-close"
-          ><span class="feather-icon"><i data-feather="x"></i></span
-        ></a>
+        <a href="javascript:void(0);" id="settings_panel_close" class="settings-panel-close"><span
+            class="feather-icon"><i data-feather="x"></i></span></a>
       </div>
       <hr />
       <div *ngIf="rangeSetting == null" class="row">
-        <button
-          style="
+        <button style="
             background: white;
             border: 1px dashed;
             margin: auto;
             border-radius: 5px;
-          "
-          (click)="newSetting()"
-        >
+          " (click)="newSetting()">
           Add Preference
         </button>
       </div>
@@ -245,41 +226,23 @@
         <div class="row">
           <div class="form-group col-xl-6">
             <label>FROM</label>
-            <input
-              type="number"
-              class="form-control"
-              [(ngModel)]="rangeSetting.from"
-              onfocus="this.select()"
-              (keyup.enter)="addSetting()"
-            />
+            <input type="number" class="form-control" [(ngModel)]="rangeSetting.from" onfocus="this.select()"
+              (keyup.enter)="addSetting()" />
           </div>
           <div class="form-group col-xl-6">
             <label>To</label>
-            <input
-              type="number"
-              class="form-control"
-              [(ngModel)]="rangeSetting.to"
-              onfocus="this.select()"
-              (keyup.enter)="addSetting()"
-            />
+            <input type="number" class="form-control" [(ngModel)]="rangeSetting.to" onfocus="this.select()"
+              (keyup.enter)="addSetting()" />
           </div>
         </div>
         <div class="form-group">
-          <input
-            type="color"
-            class="form-control"
-            [(ngModel)]="rangeSetting.color"
-            (keyup.enter)="addSetting()"
-          />
+          <input type="color" class="form-control" [(ngModel)]="rangeSetting.color" (keyup.enter)="addSetting()" />
         </div>
         <div class="row px-15">
           <button class="btn btn-primary col-sm-9" (click)="addSetting()">
             Add
           </button>
-          <button
-            class="btn text-danger col-sm-3"
-            (click)="rangeSetting = null"
-          >
+          <button class="btn text-danger col-sm-3" (click)="rangeSetting = null">
             &#x2715;
           </button>
         </div>
@@ -291,63 +254,29 @@
             <!-- <h6 class="mb-5 w-100">{{setting.from}} to {{setting.to}}</h6> -->
             <div class="form-group form-control-sm col-sm-6">
               <label>From</label>
-              <input
-                [disabled]="!setting.editmode"
-                type="number"
-                class="form-control form-control-sm"
-                [(ngModel)]="setting.from"
-                onfocus="this.select()"
-                (keyup.enter)="updateSettings()"
-              />
+              <input [disabled]="!setting.editmode" type="number" class="form-control form-control-sm"
+                [(ngModel)]="setting.from" onfocus="this.select()" (keyup.enter)="updateSettings()" />
             </div>
             <div class="form-group form-control-sm col-sm-6">
               <label>To</label>
-              <input
-                [disabled]="!setting.editmode"
-                type="number"
-                class="form-control form-control-sm"
-                [(ngModel)]="setting.to"
-                onfocus="this.select()"
-                (keyup.enter)="updateSettings()"
-              />
+              <input [disabled]="!setting.editmode" type="number" class="form-control form-control-sm"
+                [(ngModel)]="setting.to" onfocus="this.select()" (keyup.enter)="updateSettings()" />
             </div>
             <div class="form-group form-control-sm w-100">
               <label>{{ setting.color }}</label>
-              <input
-                [disabled]="!setting.editmode"
-                type="color"
-                class="form-control form-control-sm"
-                [(ngModel)]="setting.color"
-                (keyup.enter)="updateSettings()"
-              />
+              <input [disabled]="!setting.editmode" type="color" class="form-control form-control-sm"
+                [(ngModel)]="setting.color" (keyup.enter)="updateSettings()" />
             </div>
           </div>
           <div class="col-xl-3">
-            <button
-              *ngIf="setting.editmode"
-              (click)="updateSettings()"
-              class="btn btn-icon btn-icon-style-1"
-            >
-              <span class="btn-icon-wrap"
-                ><img src="../../assets//svg/upload.svg" alt="" srcset=""
-              /></span>
+            <button *ngIf="setting.editmode" (click)="updateSettings()" class="btn btn-icon btn-icon-style-1">
+              <span class="btn-icon-wrap"><img src="../../assets//svg/upload.svg" alt="" srcset="" /></span>
             </button>
-            <button
-              *ngIf="!setting.editmode"
-              (click)="setting.editmode = true"
-              class="btn btn-icon btn-icon-style-1"
-            >
-              <span class="btn-icon-wrap"
-                ><img src="../../assets//svg/edit-2.svg" alt="" srcset=""
-              /></span>
+            <button *ngIf="!setting.editmode" (click)="setting.editmode = true" class="btn btn-icon btn-icon-style-1">
+              <span class="btn-icon-wrap"><img src="../../assets//svg/edit-2.svg" alt="" srcset="" /></span>
             </button>
-            <button
-              (click)="deleteSetting(i)"
-              class="btn btn-icon btn-icon-style-1"
-            >
-              <span class="btn-icon-wrap"
-                ><img src="../../assets//svg/trash.svg" alt="" srcset=""
-              /></span>
+            <button (click)="deleteSetting(i)" class="btn btn-icon btn-icon-style-1">
+              <span class="btn-icon-wrap"><img src="../../assets//svg/trash.svg" alt="" srcset="" /></span>
             </button>
           </div>
         </div>
