@@ -57,7 +57,7 @@
           </div> -->
         </section>
       </div>
-      <div class="col-xl-12">
+      <div class="col-xl-9">
         <section class="hk-sec-wrapper">
           <div class="table-wrap">
             <div class="table-responsive">
@@ -88,6 +88,18 @@
                         [ngClass]="{'fa-caret-up text-blue': sortSetting['PaidAmount'][1]>0,'fa-caret-down text-danger': sortSetting['PaidAmount'][1]<0}"
                         class="fa font-12"></i>
                     </th>
+
+                    <!-- HyperTech -->
+                    <th class="text-right unselectable pointer" (click)="sort('NetAmount')">
+                      <span *ngIf="sortSetting['NetAmount'][1] != 0" class="font-11"
+                        style="font-style: italic; position: absolute; top: 20px;">Sorted by</span>
+                      Net Amount
+                      <i *ngIf="sortSetting['NetAmount'][1] != 0"
+                        [ngClass]="{'fa-caret-up text-blue': sortSetting['NetAmount'][1]>0,'fa-caret-down text-danger': sortSetting['NetAmount'][1]<0}"
+                        class="fa font-12"></i>
+                    </th>
+                    <!-- HyperTech-->
+
                     <!-- <th class="text-right unselectable pointer" (click)="sort('Pos')">
                       <span *ngIf="sortSetting['Pos'][1] != 0" class="font-11"
                         style="font-style: italic; position: absolute; top: 20px;">Sorted by</span>
@@ -143,6 +155,14 @@
                       " class="text-right">
                       {{ row.PaidAmount / 10 | number: ".2" }}
                     </td>
+
+                    <td style="
+                        filter: saturate(0) grayscale(1) brightness(0.7)
+                          contrast(1000%) invert(1);
+                      " class="text-right">
+                      {{ row.Swiggy + row.Zomato /10 | number: ".0" }}
+                    </td>
+
                     <!-- <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
@@ -177,9 +197,13 @@
           </div>
         </section>
       </div>
-      <!-- <div class="col-xl-3">
+      <div class="col-xl-3">
         <section class="hk-sec-wrapper sticky" style="top: 220px">
-          <strong>[Tax]</strong>
+          <strong>[Total Amt]</strong>
+          <span class="float-right"> {{ getTotalPaidAmount() | number: ".0" }}</span> <br />
+          <strong>[Total Net Amt]</strong>
+          <span class="float-right">{{ calculateNetPaid() | number: ".0" }}</span> <br />
+          <!-- <strong>[Tax]</strong>
           <span class="float-right">{{ Tax | number: ".0" }}</span> <br />
           <strong>[Disc]</strong>
           <span class="float-right">{{ TotalDisc | number: ".0" }}</span> <br />
@@ -196,9 +220,9 @@
           <br />
           <strong>[ZOMATO]</strong>
           <span class="float-right">{{ TotalZomato | number: ".0" }}</span>
-          <br />
+          <br /> -->
         </section>
-      </div> -->
+      </div>
     </div>
   </div>
 </div>

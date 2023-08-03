@@ -36,6 +36,7 @@ export class StorewiseComponent implements OnInit {
   sortSetting: any = {
     Name: ['Name', 0],
     PaidAmount: ['PaidAmount', 0],
+    NetAmount: ['NetAmount', 0],
     BillAmount: ['BillAmount', 0],
     Pos: ['Pos', 0],
     Swiggy: ['Swiggy', 0],
@@ -239,19 +240,34 @@ export class StorewiseComponent implements OnInit {
   exportTableToExcel(): void {
     const jsonData = this.storereport.map((row: TableRow) => ({
       'Store Name': row.Name,
-      'Bill Amount': row.BillAmount,
-      'Paid Amount': row.PaidAmount,
-      POS: row.Pos,
-      Swiggy: row.Swiggy,
-      Zomato: row.Zomato,
-      Discount: row.DiscAmount,
+      // 'Bill Amount': row.BillAmount,
+      'Amount': row.PaidAmount,
+      'Net Amount': row.Swiggy + row.Zomato
+      // POS: row.Pos,
+      // Swiggy: row.Swiggy,
+      // Zomato: row.Zomato,
+      // Discount: row.DiscAmount,
     }));
 
     this.excelService.exportAsExcelFile(jsonData, 'store_report');
   }
 
 
+  calculateNetPaid(): number {
+    let totalPaid = 0;
+    for (const row of this.storereport) {
+      totalPaid += row.Swiggy + row.Zomato;
+    }
+    return totalPaid;
+  }
 
+  getTotalPaidAmount() {
+    let totalPaidAmount = 0;
+    for (const row of this.storereport) {
+      totalPaidAmount += row.PaidAmount;
+    }
+    return totalPaidAmount;
+  }
 
 
 
