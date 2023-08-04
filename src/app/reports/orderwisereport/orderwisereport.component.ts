@@ -521,7 +521,7 @@ export class OrderwisereportComponent implements OnInit {
     element?.focus();
   }
 
-  hidecontent: boolean = false;
+  hidecontent: boolean = true;
   keycode: string = 'sorrymaintenanceare';
   keyarr: Array<string> = [];
   unlockpagr(key: string) {

@@ -1,5 +1,45 @@
 <!-- HK Wrapper -->
-<div class="hk-pg-wrapper">
+<div *ngIf="hidecontent" class="hk-wrapper">
+
+  <!-- Main Content -->
+  <div class="hk-pg-wrapper hk-auth-wrapper">
+    <header class="d-flex justify-content-end align-items-center">
+      <div class="btn-group btn-group-sm">
+        <a href="#" class="btn btn-outline-secondary">Help</a>
+        <a href="#" class="btn btn-outline-secondary">About Us</a>
+      </div>
+    </header>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-12 pa-0">
+          <div class="auth-form-wrap pt-xl-0 pt-70">
+            <div class="auth-form w-xl-25 w-lg-30 w-sm-50 w-100">
+
+              <form>
+                <div
+                  class="d-62 bg-white rounded-circle mb-10 d-flex align-items-center justify-content-center mx-auto">
+                  <i class="zmdi zmdi-settings font-28"></i>
+                </div>
+                <h1 class="display-4 mb-10 text-center"> <span unselectable="on" class="no-select"
+                    (click)="unlockpagr('sorry')">Sorry</span>
+                  we <span unselectable="on" class="no-select" (click)="unlockpagr('are')">are</span>
+                  down for <span (click)="unlockpagr('maintenance')">maintenance</span></h1>
+                <p class="mb-30 text-center">We apologize for the inconvenience, we are doing our best
+                  to get things back in order for you. Please feel free to <a href="#"><u>contact
+                      us</u></a> for any queries.</p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Main Content -->
+
+</div>
+
+
+<div *ngIf="!hidecontent" class="hk-pg-wrapper">
     <div class="container">
         <div class="hk-pg-header">
             <h4 class="hk-pg-title">MonthWiseSales</h4>
@@ -12,7 +52,7 @@
                     placeHolder="Select Store" [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate"
                     [(ngModel)]="str"></ng-autocomplete>
 
-                <!-- <ng-autocomplete [data]="stores" style="width:10em;margin-left:30px;  
+                <!-- <ng-autocomplete [data]="stores" style="width:10em;margin-left:30px;
         border-color: #c5d4d6;" [formControl]="myControl" [searchKeyword]="key" (selected)='selectEvent($event)' placeHolder="Choose Location" [itemTemplate]="itemTemplate1" [notFoundTemplate]="notFoundTemplate1" [(ngModel)]="all"></ng-autocomplete> -->
                 <ng-template #itemTemplate let-item>
                     <a [innerHTML]="item.Name"></a>
@@ -200,7 +240,7 @@
                                                             item1.VariancePct}}</td>
                                                     </tr>
                                                     <!-- <tr>
-                            <td>Total</td>   
+                            <td>Total</td>
                             <td>{{Quantity | number:".2"}}</td>
                             <td>&#8377;{{TotalSale | number:".2"}}</td>
                             <td>{{percent | number:".2" }}%</td>

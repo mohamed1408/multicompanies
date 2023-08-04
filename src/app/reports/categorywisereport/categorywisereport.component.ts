@@ -423,6 +423,16 @@ export class CategorywisereportComponent implements OnInit {
         moment(this.enddate).format('DD-MM-YYYY')
     );
   }
+
+  hidecontent: boolean = true;
+  keycode: string = 'sorrymaintenanceare';
+  keyarr: Array<string> = [];
+  unlockpagr(key: string) {
+    this.keyarr = [...this.keyarr, key];
+    if (this.keyarr.length == 3) {
+      this.hidecontent = !(this.keyarr.join('') == this.keycode);
+    }
+  }
 }
 class multiselectConfig {
   // @HostListener('keydown') newColor(key: any) {

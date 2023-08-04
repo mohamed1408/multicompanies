@@ -87,4 +87,14 @@ export class VersionlistComponent implements OnInit {
       this.Auth.isloading.next(false);
     })
   }
+
+  hidecontent: boolean = true;
+  keycode: string = 'sorrymaintenanceare';
+  keyarr: Array<string> = [];
+  unlockpagr(key: string) {
+    this.keyarr = [...this.keyarr, key];
+    if (this.keyarr.length == 3) {
+      this.hidecontent = !(this.keyarr.join('') == this.keycode);
+    }
+  }
 }

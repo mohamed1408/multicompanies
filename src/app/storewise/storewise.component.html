@@ -153,14 +153,14 @@
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
                       " class="text-right">
-                      {{ row.PaidAmount / 10 | number: ".2" }}
+                      {{ row.PaidAmount | number: ".2" }}
                     </td>
 
                     <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
                       " class="text-right">
-                      {{ row.Swiggy + row.Zomato /10 | number: ".0" }}
+                      {{ row.Swiggy + row.Zomato | number: ".0" }}
                     </td>
 
                     <!-- <td style="

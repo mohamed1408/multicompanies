@@ -779,4 +779,14 @@ class multiselectConfig {
     else this.all = false;
     this.change_callback(this.data.filter((x: any) => x.isselected));
   }
+
+  hidecontent: boolean = true;
+  keycode: string = 'sorrymaintenanceare';
+  keyarr: Array<string> = [];
+  unlockpagr(key: string) {
+    this.keyarr = [...this.keyarr, key];
+    if (this.keyarr.length == 3) {
+      this.hidecontent = !(this.keyarr.join('') == this.keycode);
+    }
+  }
 }

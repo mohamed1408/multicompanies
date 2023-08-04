@@ -56,7 +56,7 @@ export class AppComponent {
   isLoggedIn$: Observable<boolean>;
   isLocked$: Observable<boolean>;
   isLoading$: Observable<boolean>;
-  companyid: number
+  companyid: number;
 
   constructor(
     private auth: AuthService,
@@ -69,7 +69,8 @@ export class AppComponent {
     this.isLoggedIn$ = this.auth.isLoggedIn;
     this.isLocked$ = this.auth.accLocked;
     this.isLoading$ = this.auth.isloading;
-    this.companyid = +JSON.parse(localStorage.getItem('company') || '{}').CompanyId;
+    this.companyid = +JSON.parse(localStorage.getItem('company') || '{}')
+      .CompanyId;
     this.auth.companyid.subscribe((cid) => {
       console.log(cid);
     });
@@ -78,7 +79,7 @@ export class AppComponent {
     if (ctoken != '') {
       this.auth.loggedIn.next(true);
     }
-    // if (utoken == '' || this.jwtHelper.isTokenExpired(utoken)) {
+    if (!(utoken == '' || this.jwtHelper.isTokenExpired(utoken))) {
       const token_parsed = this.jwtHelper.decodeToken(utoken);
       localStorage.setItem('utoken', utoken);
       localStorage.setItem('user', JSON.stringify(token_parsed));
@@ -99,22 +100,25 @@ export class AppComponent {
         ]);
         this.auth.companyid.next(this.companyid);
       });
-    // }
+    } else {
+      this.auth.accLocked.next(true)
+    }
     this.isLoggedIn$.subscribe((data) => {
       console.log(data);
       if (!data) {
         this.router.navigate(['/']);
       } else {
         this.isLocked$.subscribe((bool) => {
-          if (data) {
-            if (!bool) {
-              // this.router.navigate(['/maintenance']);
-            } else {
-              this.router.navigate(['/lock']);
-            }
+          // if (data) {
+          if (!bool) {
+            console.log(this.router.url);
+            // this.router.navigate(['/maintenance']);
           } else {
-            this.router.navigate(['/']);
+            this.router.navigate(['/lock']);
           }
+          // } else {
+          //   this.router.navigate(['/']);
+          // }
         });
         // if (utoken != '' && !this.jwtHelper.isTokenExpired(utoken)) {
         //   this.router.navigate(['/storewisereport']);

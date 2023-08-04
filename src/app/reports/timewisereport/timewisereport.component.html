@@ -1,4 +1,4 @@
-<div *ngIf="!hidecontent" class="hk-wrapper">
+<div *ngIf="hidecontent" class="hk-wrapper">
 
   <!-- Main Content -->
   <div class="hk-pg-wrapper hk-auth-wrapper">
@@ -37,7 +37,7 @@
 
 </div>
 
-<div *ngIf="hidecontent" class="hk-pg-wrapper">
+<div *ngIf="!hidecontent" class="hk-pg-wrapper">
   <!-- <div class="drawer-control bg-dark">
         <a href="javascript:void(0);" (click)="openDrawer()">
             <span class="feather-icon" style="margin: 5px;"><i data-feather="settings"></i></span></a>

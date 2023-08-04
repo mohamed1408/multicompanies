@@ -58,6 +58,7 @@ export class LockscreenComponent implements OnInit {
               ...data['userCompanies'],
             ]);
             this.auth.companyid.next(this.companyid);
+            this.router.navigate(['/maintenance']);
           });
       } else {
         this.errorMsg = 'INALID PIN!';

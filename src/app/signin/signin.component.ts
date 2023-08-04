@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OwlCarousel } from '../../assets/dist/js/login-data';
 import { AuthService } from '../auth.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -13,7 +14,7 @@ export class SigninComponent implements OnInit {
   Password: string = '';
   showpassword: string = 'password';
 
-  constructor(private auth: AuthService, private jwtHelper: JwtHelperService) {}
+  constructor(private auth: AuthService, public router: Router, private jwtHelper: JwtHelperService) {}
 
   ngOnInit(): void {
     OwlCarousel('login_owl_carousel');
@@ -35,6 +36,7 @@ export class SigninComponent implements OnInit {
         if (data['status'] == 200) {
           this.auth.loggedIn.next(true);
           this.auth.companyid.next(data.company.Id)
+          this.router.navigate(['/lock']);
         }
       });
   }

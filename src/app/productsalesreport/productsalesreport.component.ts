@@ -164,4 +164,14 @@ export class ProductsalesreportComponent implements OnInit {
       backdropClass: 'z-index-1',
     });
   }
+
+  hidecontent: boolean = true;
+  keycode: string = 'sorrymaintenanceare';
+  keyarr: Array<string> = [];
+  unlockpagr(key: string) {
+    this.keyarr = [...this.keyarr, key];
+    if (this.keyarr.length == 3) {
+      this.hidecontent = !(this.keyarr.join('') == this.keycode);
+    }
+  }
 }

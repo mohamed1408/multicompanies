@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit {
     this.showdropdown = auth.showdropdown;
     // console.log(router.url)
     this.menuActiveConfig(router.url, getMenuData);
-    if (router.url == '/storewisereport') {
+    if (router.url == '/maintenance') {
       this.multicompanies = true;
     } else {
       this.multicompanies = false;
@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit {
         this.auth.isloading.next(false);
         const pageName = event['url'].replace('/', '');
         this.menuActiveConfig(event['url'], getMenuData);
-        if (event['url'] == '/storewisereport') {
+        if (event['url'] == '/maintenance') {
           this.multicompanies = true;
         } else {
           this.multicompanies = false;
@@ -189,7 +189,7 @@ interface navlink {
 let getMenuData: Array<navlink> = [
   {
     title: 'Maintenance Report',
-    url: '/storewisereport',
+    url: '/maintenance',
     icon: 'fa fa-pie-chart',
     svg: '../../assets/svg/file-text.svg',
     icon_res: 'svg',
@@ -291,7 +291,7 @@ let getMenuData: Array<navlink> = [
   //     },
   //     {
   //       title: 'Store Wise',
-  //       url: '/storewisereportpd',
+  //       url: '/maintenancepd',
   //       icon: 'fa fa-pie-chart',
   //       svg: '../../assets/svg/phone-incoming.svg',
   //       icon_res: 'svg',
