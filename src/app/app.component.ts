@@ -26,21 +26,27 @@ export class AppComponent {
       let sdd: any = document.getElementById('sourcemultiselectdd');
       let sTdd: any = document.getElementById('storemultiselectdd');
 
-      if (btn.classList.value.includes('sourcemultiselect')) {        
+      if (btn.classList.value.includes('sourcemultiselect')) {
         sdd.hidden = false;
-      } else if(sdd) {
+      } else if (sdd) {
         sdd.hidden = true;
       }
 
-      if (btn.classList.value.includes('storemultiselect')) {        
+      if (btn.classList.value.includes('storemultiselect')) {
         sTdd.hidden = false;
-      } else if(sTdd) {
+      } else if (sTdd) {
         sTdd.hidden = true;
       }
     } else {
-      for(let i=0; i<document.getElementsByClassName("multidd").length; i++) {
-        let a = document.getElementsByClassName("multidd").item(i) as HTMLElement || {hidden: false}//.hidden = true
-        a.hidden = true
+      for (
+        let i = 0;
+        i < document.getElementsByClassName('multidd').length;
+        i++
+      ) {
+        let a = (document
+          .getElementsByClassName('multidd')
+          .item(i) as HTMLElement) || { hidden: false }; //.hidden = true
+        a.hidden = true;
       }
     }
   }
@@ -50,6 +56,7 @@ export class AppComponent {
   isLoggedIn$: Observable<boolean>;
   isLocked$: Observable<boolean>;
   isLoading$: Observable<boolean>;
+  companyid: number
 
   constructor(
     private auth: AuthService,
@@ -62,6 +69,7 @@ export class AppComponent {
     this.isLoggedIn$ = this.auth.isLoggedIn;
     this.isLocked$ = this.auth.accLocked;
     this.isLoading$ = this.auth.isloading;
+    this.companyid = +JSON.parse(localStorage.getItem('company') || '{}').CompanyId;
     this.auth.companyid.subscribe((cid) => {
       console.log(cid);
     });
@@ -70,9 +78,28 @@ export class AppComponent {
     if (ctoken != '') {
       this.auth.loggedIn.next(true);
     }
-    if (utoken == '' || this.jwtHelper.isTokenExpired(utoken)) {
-      this.auth.accLocked.next(true);
-    }
+    // if (utoken == '' || this.jwtHelper.isTokenExpired(utoken)) {
+      const token_parsed = this.jwtHelper.decodeToken(utoken);
+      localStorage.setItem('utoken', utoken);
+      localStorage.setItem('user', JSON.stringify(token_parsed));
+      this.auth.user.next(token_parsed);
+      this.auth.accLocked.next(false);
+      this.auth.getusercompanies(token_parsed.userid).subscribe((data: any) => {
+        this.auth.companies.next([
+          {
+            AccountId: 0,
+            AccountName: 'All',
+            Address: '',
+            CompanyId: 0,
+            CompanyName: 'All Companies',
+            Email: 'all@gmail.com',
+            UserId: 149,
+          },
+          ...data['userCompanies'],
+        ]);
+        this.auth.companyid.next(this.companyid);
+      });
+    // }
     this.isLoggedIn$.subscribe((data) => {
       console.log(data);
       if (!data) {
@@ -81,7 +108,7 @@ export class AppComponent {
         this.isLocked$.subscribe((bool) => {
           if (data) {
             if (!bool) {
-              this.router.navigate(['/storewisereport']);
+              // this.router.navigate(['/maintenance']);
             } else {
               this.router.navigate(['/lock']);
             }

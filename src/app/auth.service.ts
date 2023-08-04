@@ -17,7 +17,7 @@ export class AuthService {
     false
   );
   public accLocked: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    true
+    false
   );
   public isloading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false

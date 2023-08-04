@@ -830,6 +830,16 @@ export class DenominationComponent implements OnInit {
       this.hideHeader2 = false;
     }
   }
+
+  hidecontent: boolean = false;
+  keycode: string = 'sorrymaintenanceare';
+  keyarr: Array<string> = [];
+  unlockpagr(key: string) {
+    this.keyarr = [...this.keyarr, key];
+    if (this.keyarr.length == 3) {
+      this.hidecontent = !(this.keyarr.join('') == this.keycode);
+    }
+  }
 }
 // var grouped = _.mapValues(_.groupBy(this.cars, 'make'),
 // clist => clist.map(car => _.omit(car, 'make')));

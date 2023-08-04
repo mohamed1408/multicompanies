@@ -206,7 +206,7 @@ export class DeliveryorderreportComponent implements OnInit {
   //   }
   // }
 
-  hidecontent: boolean = true;
+  hidecontent: boolean = false;
   keycode: string = 'sorrymaintenanceare';
   keyarr: Array<string> = [];
   unlockpagr(key: string) {

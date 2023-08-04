@@ -582,16 +582,13 @@ export class TimewisereportComponent implements OnInit {
     this.timeintervals = this.timeintervals.sort((a: any, b: any) => a - b);
   }
 
-  hidecontent: boolean = true;
+  hidecontent: boolean = false;
   keycode: string = 'sorrymaintenanceare';
   keyarr: Array<string> = [];
   unlockpagr(key: string) {
     this.keyarr = [...this.keyarr, key];
     if (this.keyarr.length == 3) {
       this.hidecontent = !(this.keyarr.join('') == this.keycode);
-      if (this.hidecontent) {
-        this.keyarr = [];
-      }
     }
   }
 }
