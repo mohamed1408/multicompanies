@@ -36,8 +36,8 @@
               <span class="btn-icon-wrap"><img src="../../assets/svg/settings.svg" alt="" srcset="" /></span>
             </button>
             <!-- HyperTech -->
-            <button type="button" class="btn btn-primary" (click)="exportTableToExcel()" style="height: 50px;">Excel
-              Download</button>
+            <!-- <button type="button" class="btn btn-primary" (click)="exportTableToExcel()" style="height: 50px;">Excel
+              Download</button> -->
 
           </div>
 
@@ -199,7 +199,7 @@
       </div>
       <div class="col-xl-3">
         <section class="hk-sec-wrapper sticky" style="top: 220px">
-          <strong>[Total Amt]</strong>
+          <strong (click)="handleTaxClick()">[Total Amt]</strong>
           <span class="float-right"> {{ getTotalPaidAmount() | number: ".0" }}</span> <br />
           <strong>[Total Net Amt]</strong>
           <span class="float-right">{{ calculateNetPaid() | number: ".0" }}</span> <br />

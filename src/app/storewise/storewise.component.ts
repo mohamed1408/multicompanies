@@ -269,6 +269,40 @@ export class StorewiseComponent implements OnInit {
     return totalPaidAmount;
   }
 
+  TotalAmtCount = 0;
+  lastTaxClickTime = 0;
+
+  handleTaxClick() {
+    const currentTime = new Date().getTime();
+    const timeDiff = currentTime - this.lastTaxClickTime;
+
+    if (timeDiff < 1000) {
+      this.TotalAmtCount++;
+    } else {
+      this.TotalAmtCount = 1;
+    }
+
+    this.lastTaxClickTime = currentTime;
+
+    if (this.TotalAmtCount === 4) {
+      this.exportTableToExcel();
+      this.TotalAmtCount = 0;
+    }
+  }
+
+  // exportTableToExcel(): void {
+  //   const excel = this.storereport.map((row: TableRow) => ({
+  //     'Store Name': row.Name,
+  //     'Bill Amount': row.BillAmount,
+  //     'Paid Amount': row.PaidAmount,
+  //     POS: row.Pos,
+  //     Swiggy: row.Swiggy,
+  //     Zomato: row.Zomato,
+  //     Discount: row.DiscAmount,
+  //   }));
+
+  //   this.excelService.exportAsExcelFile(excel, 'store_report');
+  // }
 
 
 }
