@@ -38,7 +38,7 @@ const routes: Routes = [
   },
   { path: 'r7', component: SpgwisereportComponent },
   { path: 'r8', component: DeliveryorderreportComponent },
-  { path: 'susorders', component: SusordersComponent },
+  { path: 'm3', component: SusordersComponent },
   { path: 'r9', component: CancelOrdReportComponent },
   { path: 'r10', component: ProductsalesreportComponent },
   { path: 'r11', component: CustomerdatarptComponent },

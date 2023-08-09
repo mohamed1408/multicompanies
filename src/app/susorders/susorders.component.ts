@@ -548,6 +548,16 @@ export class SusordersComponent implements OnInit {
           !this.hidepaidorders)
     );
   }
+
+  hidecontent: boolean = true;
+  keycode: string = 'sorrymaintenanceare';
+  keyarr: Array<string> = [];
+  unlockpagr(key: string) {
+    this.keyarr = [...this.keyarr, key];
+    if (this.keyarr.length == 3) {
+      this.hidecontent = !(this.keyarr.join('') == this.keycode);
+    }
+  }
 }
 
 class CompleteOrderPayload {
@@ -606,4 +616,6 @@ class CompleteOrderPayload {
     this.transdatetime = this.transdate + moment().format('THH:mm:ss.SSS');
     console.log(this.transdatetime, this.transdate);
   }
+
+
 }
