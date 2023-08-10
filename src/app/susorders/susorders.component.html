@@ -1,5 +1,5 @@
 <!-- <p>susorders works!</p> -->
-<div *ngIf="hidecontent" class="hk-wrapper">
+<div [hidden]="!hidecontent" class="hk-wrapper">
 
   <!-- Main Content -->
   <div class="hk-pg-wrapper hk-auth-wrapper">
@@ -38,7 +38,7 @@
 
 </div>
 
-<div *ngIf="!hidecontent" class="hk-pg-wrapper">
+<div [hidden]="hidecontent" class="hk-pg-wrapper">
   <div class="hk-pg-header">
     <h4 class="hk-pg-title">&nbsp; Sus Orders</h4>
   </div>
