@@ -793,7 +793,12 @@ export class DenominationComponent implements OnInit {
     this.denomcheckreports.forEach((rpt) => {
       let obj: any = {};
       keys.forEach((key) => {
-        obj[key] = rpt[key];
+        let _key = key
+        if(!["Name", "date"].includes(key)) {
+          console.log(key, this.shifts)
+          _key = this.shifts[+key.slice(-2, -1)].shift
+        }
+        obj[_key] = rpt[key];
       });
       denomcheckreports.push(obj);
     });

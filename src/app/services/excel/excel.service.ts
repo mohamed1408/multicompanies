@@ -17,6 +17,28 @@ export class ExcelService {
   public exportAsExcelFile(json: any[], excelFileName: string): void {
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+    worksheet.s = { // styling for all cells
+        font: {
+            name: "arial"
+        },
+        alignment: {
+            vertical: "center",
+            horizontal: "center",
+            wrapText: '1', // any truthy value here
+        },
+        border: {
+            right: {
+                style: "thin",
+                color: "000000"
+            },
+            left: {
+                style: "thin",
+                color: "000000"
+            },
+        }
+    }
+    // worksheet["A1"].s = { fill: { fgColor: { type: 'pattern', pattern: 'solid',rgb: "FFC000" } } }
+    // worksheet["A2"].s = { fill: { fgColor: { type: 'pattern', pattern: 'solid',rgb: "70AD47" } } }
     console.log('worksheet', worksheet);
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
