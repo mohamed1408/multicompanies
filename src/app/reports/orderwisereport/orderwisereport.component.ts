@@ -431,7 +431,7 @@ export class OrderwisereportComponent implements OnInit {
       };
       this.stores.push(obj);
       var response: any = data;
-      this.All();
+      // this.All();
 
       if (response.status == 0) {
         this.status = 0;
