@@ -6,7 +6,7 @@ import * as signalR from '@microsoft/signalr'
 })
 export class SignalrService {
   base_url1 = 'https://localhost:44383/'
-  base_url = 'https://biz1pos.azurewebsites.net/'
+  base_url = 'https://biz1ps.azurewebsites.net/'
   base_urlc = 'https://biz1posapi-rv7.conveyor.cloud/'
 
   hubconnection: signalR.HubConnection = new signalR.HubConnectionBuilder()

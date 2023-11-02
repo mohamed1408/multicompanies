@@ -41,7 +41,9 @@ export class AuthService {
     true
   );
 
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient) {
+    this.baseurl = this.baseurl1
+  }
 
   toFormData(formValue: any) {
     const formData = new FormData();
@@ -207,7 +209,7 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-      'OrderWise/GetRpt?frmdate=' +
+      'OrderWise/GetReport?frmdate=' +
       frmdate +
       '&todate=' +
       todate +
@@ -655,7 +657,7 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Customer/GetCustomerList?companyid=${CompanyId}&frmdate=${frmdate}&todate=${todate}&ordertype=${OrderTypeId}&billamt=${BillAmt}`
+      `Customer/GetCustomerList?companyid=${CompanyId}&frmdate=${frmdate}&todate=${todate}&ordertype=${OrderTypeId}&billamt=${BillAmt}`
     );
   }
   getAppVersion(CompanyId: number, OrderedDate: string) {
@@ -704,7 +706,7 @@ export class AuthService {
   getstorecashsales(storeid: number, companyid: number, date: string) {
     return this.http.get(
       this.baseurl +
-        `Receipt/getStoreCashSales?storeid=${storeid}&companyid=${companyid}&date=${date}`
+      `Receipt/getStoreCashSales?storeid=${storeid}&companyid=${companyid}&date=${date}`
     );
   }
   fetchDenominationEntries(
@@ -715,7 +717,7 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Denomination/getDenomEntry?storeid=${storeid}&date=${date}&companyid=${companyid}&entrytypeid=${entrytypeid}`
+      `Denomination/getDenomEntry?storeid=${storeid}&date=${date}&companyid=${companyid}&entrytypeid=${entrytypeid}`
     );
   }
   denomEntryReport(
@@ -726,7 +728,7 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Denomination/denomReport_?companyid=${companyid}&from=${from}&to=${to}&margin=${margin}`
+      `Denomination/denomReport_?companyid=${companyid}&from=${from}&to=${to}&margin=${margin}`
     );
   }
   pettyCashTransfer(
@@ -738,7 +740,7 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `Denomination/pettyCashTransfer?storeid=${storeid}&companyid=${companyid}&amount=${amount}&to=${to}&reason=${reason}`
+      `Denomination/pettyCashTransfer?storeid=${storeid}&companyid=${companyid}&amount=${amount}&to=${to}&reason=${reason}`
     );
   }
   denominationTypes() {
@@ -749,7 +751,7 @@ export class AuthService {
   dayclosing(companyid: number, storeid: number, date: string, time: string) {
     return this.http.get(
       this.base_url_ak +
-        `DayClosing/TransDetails?posCompId=${companyid}&posStoreId=${storeid}&dateStr=${date}&time=${time}`
+      `DayClosing/TransDetails?posCompId=${companyid}&posStoreId=${storeid}&dateStr=${date}&time=${time}`
     );
   }
   addDenomEntry(denomentry: DenomEntry) {
@@ -776,7 +778,7 @@ export class AuthService {
   GetKb2QtyRatio(companyId: number, storeId: number, from: string, to: string) {
     return this.http.get(
       this.baseurl +
-        `Kb2/ProdRatio?companyId=${companyId}&StoreId=${storeId}&frm=${from}&to=${to}`
+      `Kb2/ProdRatio?companyId=${companyId}&StoreId=${storeId}&frm=${from}&to=${to}`
     );
   }
 }

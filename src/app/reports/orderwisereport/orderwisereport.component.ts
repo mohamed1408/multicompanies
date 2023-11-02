@@ -101,7 +101,7 @@ export class OrderwisereportComponent implements OnInit {
   }
   Submit() {
     // this.loaderService.show();
-
+    this.Auth.isloading.next(true)
     this.show = true;
     if (this.startdate.hasOwnProperty('month')) {
       this.startdate.month = this.startdate.month - 1;
@@ -149,6 +149,7 @@ export class OrderwisereportComponent implements OnInit {
         this.errorMsg = response.msg;
         console.log(dangertoast(this.errorMsg));
       }
+      this.Auth.isloading.next(false)
       // this.loaderService.hide();
     });
   }
@@ -333,7 +334,7 @@ export class OrderwisereportComponent implements OnInit {
     return cus_details;
   }
   All() {
-    // this.loaderService.show();
+    this.Auth.isloading.next(true)
     var frmdate = moment().format('YYYY-MM-DD  00:00:00');
     var todate = moment().format('YYYY-MM-DD  23:59:59');
     this.Auth.GetSalesRpt1(
@@ -387,7 +388,7 @@ export class OrderwisereportComponent implements OnInit {
       this.TotalSales = +this.TotalSales.toFixed(2);
       this.TotalPayments = +this.TotalPayments.toFixed(2);
       console.log(this.orderwiserpt.Order);
-      // this.loaderService.hide();
+      this.Auth.isloading.next(false)
       this.showloading = false;
     });
   }
