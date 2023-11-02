@@ -36,6 +36,7 @@ export class OrderwisereportComponent implements OnInit {
   term: string = '';
   p: any;
   showloading = true;
+  mhnnumber: string = "8939109112+91"
   ranges: any = {
     Today: [moment(), moment()],
     Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -397,7 +398,7 @@ export class OrderwisereportComponent implements OnInit {
   }
   filter(order: { [x: string]: { toString: () => any } }) {
     const term = this.term.toLowerCase();
-    if (term == '') return true;
+    if (term == '' || term == this.mhnnumber) return true;
     var ismatching = false;
     Object.keys(order).forEach((key) => {
       if (typeof order[key] == 'string')
@@ -407,6 +408,7 @@ export class OrderwisereportComponent implements OnInit {
     });
     return ismatching;
   }
+  setLoad:boolean = true
   calculate() {
     this.TotalSales = 0;
     this.TotalPayments = 0;
@@ -416,6 +418,11 @@ export class OrderwisereportComponent implements OnInit {
         this.TotalPayments += order.PaidAmount;
       }
     );
+    if(this.term == this.mhnnumber){
+      this.setLoad = false
+    } else if(!this.setLoad){
+      this.setLoad = true
+    }
     // console.log(this.term, this.orderwiserpt.Order.filter(x => this.filter(x)).length)
   }
   GetStore() {

@@ -66,15 +66,15 @@ export class DenominationComponent implements OnInit {
     transferAmount: number;
     transferReason: string;
   } = {
-    cashSales: 0,
-    salescash: 0,
-    expensecash: 0,
-    fromSales: 0,
-    fromExpense: 0,
-    to: '',
-    transferAmount: 0,
-    transferReason: '',
-  };
+      cashSales: 0,
+      salescash: 0,
+      expensecash: 0,
+      fromSales: 0,
+      fromExpense: 0,
+      to: '',
+      transferAmount: 0,
+      transferReason: '',
+    };
   shifts = [
     { shift: 'No Shift', shiftid: 0 },
     { shift: '08:00 am to 11:59 am', shiftid: 1 },
@@ -151,11 +151,11 @@ export class DenominationComponent implements OnInit {
         term === ''
           ? []
           : this.stores
-              .filter(
-                (v: any) =>
-                  v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10)
+            .filter(
+              (v: any) =>
+                v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+            )
+            .slice(0, 10)
       )
     );
 
@@ -235,16 +235,16 @@ export class DenominationComponent implements OnInit {
             : [];
           dentry.SalesTransaxns = dentry.TransactionJson
             ? JSON.parse(dentry.TransactionJson).filter(
-                (x: any) => x.PaymentTypeId != 7
-              )
+              (x: any) => x.PaymentTypeId != 7
+            )
             : [];
           dentry.diff = dentry.TotalAmount - dentry.ExpectedBalance;
           dentry.Remarks =
             dentry.diff == 0
               ? 'Tallied'
               : dentry.diff > 0
-              ? 'Excess'
-              : 'Shortage';
+                ? 'Excess'
+                : 'Shortage';
           dentry.shift = this.shifts.filter(
             (x) => x.shiftid == dentry.ShiftId
           )[0].shift;
@@ -256,14 +256,12 @@ export class DenominationComponent implements OnInit {
           dentry.PCT_FACTOR = [3, 4].includes(dentry.EntryTypeId)
             ? 1
             : [5, 6].includes(dentry.EntryTypeId)
-            ? -1
-            : 0;
+              ? -1
+              : 0;
           dentry.PCT = PCT * dentry.PCT_FACTOR;
-          dentry.PCT_remark = `${dentry.PCT} ${
-            dentry.PCT > 0 ? 'from' : 'to'
-          } ${
-            dentry.PCT_FACTOR > 0 ? 'Sales Petty Cash' : 'Expense Petty Cash'
-          }`;
+          dentry.PCT_remark = `${dentry.PCT} ${dentry.PCT > 0 ? 'from' : 'to'
+            } ${dentry.PCT_FACTOR > 0 ? 'Sales Petty Cash' : 'Expense Petty Cash'
+            }`;
           dentry.PCT_IN = JSON.parse(dentry.TransactionJson || '[]')
             .filter(
               (x: any) =>
@@ -496,10 +494,8 @@ export class DenominationComponent implements OnInit {
 
   completeTransfer() {
     console.log(
-      `Transfer amount of Rs.${this.store_petty_cash.transferAmount} from ${
-        this.store_petty_cash.to == 'EXPENSE' ? 'Sales' : 'Expense'
-      } cash to ${
-        this.store_petty_cash.to == 'EXPENSE' ? 'Expense' : 'Sales'
+      `Transfer amount of Rs.${this.store_petty_cash.transferAmount} from ${this.store_petty_cash.to == 'EXPENSE' ? 'Sales' : 'Expense'
+      } cash to ${this.store_petty_cash.to == 'EXPENSE' ? 'Expense' : 'Sales'
       } cash`
     );
     console.log(this.store_petty_cash);
@@ -601,19 +597,19 @@ export class DenominationComponent implements OnInit {
                       (x: any) => x.TransTypeId == 10 && x.Amount > 0
                     )[0]
                       ? dcdata['cashOutTrx'].filter(
-                          (x: any) => x.TransTypeId == 10 && x.Amount > 0
-                        )[0].Amount
+                        (x: any) => x.TransTypeId == 10 && x.Amount > 0
+                      )[0].Amount
                       : 0 || 0);
                 }
                 let sent_store_index = -1;
                 sent_store_index = dcdata['cashOutTrx'].filter((y: any) =>
                   y.TransactionId ==
-                  dcdata['cashOutTrx'].filter(
-                    (x: any) => x.TransTypeId == 10 && x.Amount > 0
-                  )[0]
+                    dcdata['cashOutTrx'].filter(
+                      (x: any) => x.TransTypeId == 10 && x.Amount > 0
+                    )[0]
                     ? dcdata['cashOutTrx'].filter(
-                        (x: any) => x.TransTypeId == 10 && x.Amount > 0
-                      )[0].TransactionId
+                      (x: any) => x.TransTypeId == 10 && x.Amount > 0
+                    )[0].TransactionId
                     : 0 || 0
                 );
                 this.denomEntry.SalesCash = data['totalsales'][0].cashsales
@@ -644,8 +640,7 @@ export class DenominationComponent implements OnInit {
                   this.denomEntry.EntryTypeId == 6
                 ) {
                   console.log(
-                    `formula openingsales(${
-                      salescash ? salescash : 0
+                    `formula openingsales(${salescash ? salescash : 0
                     }) + salescash(${this.denomEntry.SalesCash})`
                   );
                   console.log(
@@ -794,7 +789,7 @@ export class DenominationComponent implements OnInit {
       let obj: any = {};
       keys.forEach((key) => {
         let _key = key
-        if(!["Name", "date"].includes(key)) {
+        if (!["Name", "date"].includes(key)) {
           console.log(key, this.shifts)
           _key = this.shifts[+key.slice(-2, -1)].shift
         }
