@@ -179,7 +179,7 @@
                                                 *ngFor="let item of sortData | filter:mhnnumber == term ? '' : term; index as i;"
                                                 (click)="itemdetails(item.ItemJson, item.ChargeJson, item.SourceId, item.InvoiceNo, item.OrderJson, item.TransactionDetails);">
                                                 <td class="font-12">
-                                                    {{item.InvoiceNo}} <br>
+                                                    <code class="text-danger">#{{i+1}}</code>{{item.InvoiceNo}} <br>
                                                     <span
                                                         class="font-11 font-italic text-light">{{item.itemnames}}</span>
                                                 </td>

@@ -278,6 +278,7 @@ export class SusordersComponent implements OnInit {
     });
   }
   viewKotInfo_discounted(i: number) {
+    console.log(this.discountedOrders[i])
     this.selectedKots = this.discountedOrders[i].json;
     this.selectedItems = this.discountedOrders[i].items;
     console.log(this.selectedItems, this.selectedKots);
