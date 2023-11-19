@@ -701,7 +701,7 @@ export class ProductwisereportComponent implements OnInit {
       this.hidecontent = !(this.keyarr.join('') == this.keycode);
       if (!this.hidecontent) {
         this.GetStore();
-        this.Submit();
+        // this.Submit();
         this.getCategory();
         this.gettags();
         this._localorders();

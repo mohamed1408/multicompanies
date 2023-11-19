@@ -448,10 +448,11 @@ export class TimewisereportComponent implements OnInit {
       .open(contentdetail, {
         ariaLabelledBy: 'modal-basic-title',
         centered: true,
+        backdropClass: 'z-index-1'
       })
       .result.then(
-        (result) => {},
-        (reason) => {}
+        (result) => { },
+        (reason) => { }
       );
   }
   reportProducts: any = [];
@@ -494,7 +495,7 @@ export class TimewisereportComponent implements OnInit {
       this.reportProducts.forEach((prod: any) => {
         this.reportProductsTotal.quantity += prod.Quantity * prod.Factor;
       });
-      this.modalS.open(this.productmodal, {backdropClass: 'z-index-1'});
+      this.modalS.open(this.productmodal, { backdropClass: 'z-index-1' });
       this.Auth.isloading.next(false);
     });
   }
@@ -543,7 +544,7 @@ export class TimewisereportComponent implements OnInit {
   fromInt: number | null = null;
   toInt: number | null = null;
   openTimeIntervalModal() {
-    const modalRef = this.modalS.open(this.timeintervalmodal);
+    const modalRef = this.modalS.open(this.timeintervalmodal, { backdropClass: 'z-index-1' });
     this.sliderControl = true;
     modalRef.result.then(
       (data) => {

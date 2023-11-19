@@ -26,3 +26,21 @@
 .option:hover label {
     color: white;
 }
+
+.slider {
+    position: relative;
+    width: 50vw;
+    height: 10px;
+    background: #f4f6f7;
+}
+
+.thumb {
+    position: absolute;
+    background: #233c46;
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    top: -5px;
+    left: 0;
+    cursor: pointer;
+}
