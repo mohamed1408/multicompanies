@@ -167,28 +167,28 @@
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
                       " class="text-right">
-                      {{ row.Pos / 10| number: ".0-0" }} <br />
+                      {{ row.Pos | number: ".0-0" }} <br />
                       {{
-                      row.PaidAmount / 10 - row.Swiggy / 10 - row.Zomato / 10 | number: ".0"
+                      row.PaidAmount  - row.Swiggy  - row.Zomato  | number: ".0"
                       }}
                     </td>
                     <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
                       " class="text-right">
-                      {{ row.Swiggy /10 | number: ".0" }}
+                      {{ row.Swiggy | number: ".0" }}
                     </td>
                     <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
                       " class="text-right">
-                      {{ row.Zomato /10 | number: ".0" }}
+                      {{ row.Zomato | number: ".0" }}
                     </td>
                     <td style="
                         filter: saturate(0) grayscale(1) brightness(0.7)
                           contrast(1000%) invert(1);
                       " class="text-right">
-                      {{ row.DiscAmount / 10| number: ".0" }}
+                      {{ row.DiscAmount | number: ".0" }}
                     </td>
                   </tr>
                 </tbody>
