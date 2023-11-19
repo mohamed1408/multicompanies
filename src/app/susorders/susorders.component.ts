@@ -93,6 +93,7 @@ export class SusordersComponent implements OnInit {
       if (_items.some(y => y.key === x.key)) {
         _items.filter(y => y.key === x.key)[0].Quantity += x.Quantity
         _items.filter(y => y.key === x.key)[0].ComplementryQty += x.ComplementryQty
+        _items.filter(y => y.key === x.key)[0].TotalAmount += x.TotalAmount * (x.Quantity / Math.abs(x.Quantity))
       } else {
         _items.push(x)
       }
@@ -141,7 +142,8 @@ export class SusordersComponent implements OnInit {
                 if (_it) return _it;
               })
               .filter((x: any) => x);
-            // console.log(prodList);
+            console.log(order.InvoiceNo);
+            console.log(prodList);
             order.comment = '';
             order.grossQty = 0;
             prodList.forEach((prod: any, ind: number) => {
@@ -155,15 +157,15 @@ export class SusordersComponent implements OnInit {
             order.comment = 'quantity changed from ' + order.comment;
             order.pricechangemap = ``;
             order.isvaliddata = true;
-            order.json.forEach((kot: any) => {
+            order.json.forEach((kot: any, i: number) => {
               let added: any = [];
               kot.totalsofar = 0;
               added = [...added, ...kot.Items];
               console.log(added, added
                 .map((x: any) => this.getItemPrice(x)))
-              kot.totalsofar = added
+              kot.totalsofar = ((i > 0) ? order.json[i - 1].totalsofar : 0) + (added
                 .map((x: any) => this.getItemPrice(x))
-                .reduce((pv: any, cv: any) => pv + cv, 0);
+                .reduce((pv: any, cv: any) => pv + cv, 0));
               order.pricechangemap += ' -> ' + kot.totalsofar.toFixed(2);
               // console.log(
               //   added.map(
@@ -184,9 +186,19 @@ export class SusordersComponent implements OnInit {
         this.auth.isloading.next(false);
       });
   }
+  getUnitPrice(item: any) {
+    let refItem = this.cancelledItemOrders.filter((x: any) => x.InvoiceNo == item.kotrefid.split(":")[0])[0]?.items.filter((x: any) => x.Quantity > 1)[0]
+    console.log(refItem.TotalAmount/refItem.Quantity, refItem)
+    return refItem ? (refItem.TotalAmount/refItem.Quantity) : item.Price
+  }
   getItemPrice = (item: any) => {
-    // console.log(item, item.TotalAmount * (item.Quantity/Math.abs(item.Quantity)))
-    return item.TotalAmount * (item.Quantity/Math.abs(item.Quantity))
+    console.log(item.showname, 'X', item.Quantity)
+    if(item.Quantity < 0) {
+      console.log(this.getUnitPrice(item) * item.Quantity)
+      // return this.getUnitPrice(item) * item.Quantity
+    }
+    console.log(item.TotalAmount)
+    return item.TotalAmount * (item.Quantity / Math.abs(item.Quantity))
     item.TotalAmount = 0;
     if (item.Quantity == 0) return;
     item.TaxAmount1 = 0;
@@ -267,10 +279,12 @@ export class SusordersComponent implements OnInit {
     console.log(item.TotalAmount, item.TaxAmount);
     return item.TotalAmount + item.TaxAmount;
   };
+  selectedOrder: any
   viewKotInfo(i: number) {
     this.selectedKots = this.cancelledItemOrders[i].json;
     this.selectedItems = this.cancelledItemOrders[i].items;
-    console.log(this.selectedItems, this.selectedKots);
+    this.selectedOrder = this.cancelledItemOrders[i]
+    console.log(this.selectedItems, this.selectedKots, this.selectedOrder);
     this.modalService.open(this.kotInfo, {
       centered: true,
       size: 'lg',
