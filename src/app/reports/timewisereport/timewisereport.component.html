@@ -254,16 +254,18 @@
                     </thead>
                     <tbody>
                       <tr *ngFor="let item of salesrpt.Order | filter:term  ">
-                        <td class="font-12">{{item.storeName}}</td>
-                        <td class="font-12 text-right">{{item.TotSales | number:".2" }}</td>
-                        <td class="font-12 text-right" *ngIf="showPaidAmount">{{item.payments |
-                          number:".2" }}</td>
-                        <td class="font-12 text-right">{{item.quantity | number:".2" }}</td>
-                        <td class="font-12 text-right">{{(item.quantity/5).toFixed(2) | number:".2" }}</td>
-                        <td class="font-12 text-right">{{(item.quantity/90).toFixed(2) | number:".2" }}
+                        <td><strong>{{item.storeName}}</strong></td>
+                        <td [ngClass]="item.TotSales > 0 ? 'text-dark' : 'text-light'" class="text-right"><strong>{{item.TotSales | number:".2" }}</strong></td>
+                        <td [ngClass]="item.payments > 0 ? 'text-dark' : 'text-light'" class="text-right" *ngIf="showPaidAmount"><strong>
+                          {{item.payments |
+                            number:".2" }}
+                        </strong></td>
+                        <td [ngClass]="item.quantity > 0 ? 'text-dark' : 'text-light'" class="text-right"><strong>{{item.quantity | number:".2" }}</strong></td>
+                        <td [ngClass]="item.quantity > 0 ? 'text-dark' : 'text-light'" class="text-right"><strong>{{(item.quantity/5).toFixed(2) | number:".2" }}</strong></td>
+                        <td [ngClass]="item.quantity > 0 ? 'text-dark' : 'text-light'" class="text-right"><strong>{{(item.quantity/90).toFixed(2) | number:".2" }}</strong>
                         </td>
-                        <td class="font-12">{{item.StartTime}}</td>
-                        <td class="font-12">{{item.EndTime}}</td>
+                        <td><strong>{{item.StartTime}}</strong></td>
+                        <td><strong>{{item.EndTime}}</strong></td>
                         <td>
                           <button (click)="viewproducts(item)" class="btn btn-sm btn-link">
                             <i class="material-icons">visibility</i>
