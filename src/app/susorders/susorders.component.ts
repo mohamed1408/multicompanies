@@ -1425,6 +1425,7 @@ export class SusordersComponent implements OnInit {
     console.log(_items)
     return _items.filter(x => (x.ComplementryQty + x.Quantity) > 0)
   }
+  totaldiscount: number = 0;
   getSusOrders() {
     console.log(this.storeid, this.companyid);
     this.auth.isloading.next(true);
@@ -1441,7 +1442,9 @@ export class SusordersComponent implements OnInit {
             order.items.customerdetails = JSON.parse(order.CustomerDetails);
             order.items.OrderedDateTime = order.OrderedDateTime;
             order.items.Discount = order.Discount = +order.Discount.toFixed(2);
+            this.totaldiscount += order.Discount
           });
+          this.totaldiscount = +this.totaldiscount.toFixed(2)
           this.cancelledItemOrders.forEach((order: any) => {
             order.json = JSON.parse(order.kotjson);
             order.items = this.sumitems(JSON.parse(order.itemjson)); //JSON.parse(order.items);

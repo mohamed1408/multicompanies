@@ -39,3 +39,15 @@ button.tab-active {
 .store-card.selected {
     background-color: #172a32;
 }
+
+.info-card {
+    background: #2b2b2b;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 10px;
+    position: absolute;
+    right: 0;
+    top: -50px;
+    border-radius: 50px;
+}

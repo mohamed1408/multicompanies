@@ -53,7 +53,7 @@ export class OrderwisereportComponent implements OnInit {
     moment().add(3, 'days'),
     moment().add(5, 'days'),
   ];
-
+  pkey:string = ""
   isInvalidDate = (m: moment.Moment) => {
     return this.invalidDates.some((d) => d.isSame(m, 'day'));
   };
