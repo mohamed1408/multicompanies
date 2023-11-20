@@ -15,7 +15,7 @@ declare function setHeightWidth(): any;
 export class AppComponent {
   @HostListener('click', ['$event.target'])
   onClick(btn: any) {
-    console.log('button', btn, btn.classList.value);
+    // console.log('button', btn, btn.classList.value);
     if (!btn.classList.value.includes('cbselectels')) {
       this.auth.showdropdown.next(false);
     }
