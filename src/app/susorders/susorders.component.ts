@@ -1661,7 +1661,6 @@ export class SusordersComponent implements OnInit {
       this.storeid = 0
       this.stores = [{ Id: 0, Name: 'All' }, ...data];
       this.auth.isloading.next(false);
-      // console.log(this.stores)
     });
   }
 

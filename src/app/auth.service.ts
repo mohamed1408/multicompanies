@@ -781,6 +781,18 @@ export class AuthService {
       `Kb2/ProdRatio?companyId=${companyId}&StoreId=${storeId}&frm=${from}&to=${to}`
     );
   }
+  getstorepaymentsbytype(storeid: number, companyid: number, from: string, to: string) {
+    return this.http.get(this.baseurl + `Receipt/storepaymentsbytype?storeid=${storeid}&companyid=${companyid}&from=${from}&to=${to}`);
+  }
+
+  getspt(storeid: number) {
+    return this.http.get(this.baseurl + `Receipt/spt?storeid=${storeid}`);
+  }
+
+  savetransaction(transaction: any) {
+    return this.http.post(this.baseurl + `Receipt/saveTransaction`, transaction)
+  }
+
 }
 
 // baseurl

@@ -1,0 +1,128 @@
+<!-- <p>transaction-list works!</p> -->
+<div [hidden]="!hidecontent" class="hk-wrapper">
+
+    <!-- Main Content -->
+    <div class="hk-pg-wrapper hk-auth-wrapper">
+        <header class="d-flex justify-content-end align-items-center">
+            <div class="btn-group btn-group-sm">
+                <a href="#" class="btn btn-outline-secondary">Help</a>
+                <a href="#" class="btn btn-outline-secondary">About Us</a>
+            </div>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12 pa-0">
+                    <div class="auth-form-wrap pt-xl-0 pt-70">
+                        <div class="auth-form w-xl-25 w-lg-30 w-sm-50 w-100">
+
+                            <form>
+                                <div
+                                    class="d-62 bg-white rounded-circle mb-10 d-flex align-items-center justify-content-center mx-auto">
+                                    <i class="zmdi zmdi-settings font-28"></i>
+                                </div>
+                                <h1 class="display-4 mb-10 text-center"> <span unselectable="on" class="no-select"
+                                        (click)="unlockpagr('sorry')">Sorry</span>
+                                    we <span unselectable="on" class="no-select" (click)="unlockpagr('are')">are</span>
+                                    down for <span (click)="unlockpagr('maintenance')">maintenance</span></h1>
+                                <p class="mb-30 text-center">We apologize for the inconvenience, we are doing our best
+                                    to get things back in order for you. Please feel free to <a href="#"><u>contact
+                                            us</u></a> for any queries.</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Main Content -->
+
+</div>
+<div [hidden]="hidecontent" class="hk-pg-wrapper">
+    <!-- <div class="hk-pg-header">
+        <h4 class="hk-pg-title">&nbsp; Transactions</h4>
+    </div> -->
+    <div class="title">
+        Transactions
+    </div>
+    <div class="container">
+        <section class="hk-sec-wrapper">
+            <div class="row">
+                <div class="col-xl-3">
+                    <ng-template #rt let-r="result" let-t="term">
+                        <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+                    </ng-template>
+                    <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
+                        [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
+                        placeholder="Search Stores..." (selectItem)="selected($event.item)" (keydown.enter)="storeid > 0 && searchTerm != '' && getTransactionList()" />
+                </div>
+                <div class="col-xl-5">
+                    <div id="myrangepicker" class="form-control text-truncate">
+                        <i class="fa fa-calendar text-light-40"></i>&nbsp; <span></span>
+                        <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
+                    </div>
+                </div>
+                <div class="col-xl-1">
+                    <button class="btn btn-success btn-rounded" (click)="getTransactionList()">Fetch</button>
+                </div>
+                <div class="col-xl-3">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-white border-0" id="basic-addon1"><span
+                                        class="feather-icon"><i data-feather="search"></i></span></span>
+                            </div>
+                            <input type="text" class="form-control border-0" placeholder="Search by invoice..."
+                                aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="pos_report.summary.length">
+            <div *ngIf="pos_report.summary.length" class="row col-xl-12">
+                <div class="col-xl-9">
+                    <table class="table table-flush">
+                        <thead>
+                            <tr style="background-color: #2b2b2b;">
+                                <th class="sptitle">Id</th>
+                                <th class="sptitle">Amount</th>
+                                <th class="sptitle">Payment Type</th>
+                                <th class="sptitle">Transaction Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let transaxn of pos_report.showtransaxns; let i = index;">
+                                <td>{{transaxn.TransactionId}}</td>
+                                <td class="text-right">{{transaxn.Amount | number: ".2"}}</td>
+                                <td><a class="biza" href="javascript:void(0);" (click)="editTransaction(i, $event)">{{transaxn.PaymentType}}</a></td>
+                                <td class="text-right">{{transaxn.TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-xl-3">
+                    <table class="table table-flush">
+                        <tbody>
+                            <div id="selection" class="border border-primary selection" style="transform: translate3d(0px, 0px, 0px);"></div>
+                            <tr style="position: relative;" class="pointer" *ngFor="let rpt of pos_report.summary; let i = index;" (click)="selectptype(i)">
+                                <td>{{rpt.PaymentType}}</td>
+                                <td class="text-right">{{rpt.Amount}}</td>
+                                <td class="text-left"><span class="info-badge">{{rpt.BillCount}}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div [hidden]="!selectedtransaxn" id="ptype-pop" class="position-absolute shadow">
+    <div class="d-flex justify-content-between">
+        <h6>PTYPES</h6>
+        <button class="btn btn-icon btn-icon-only btn-secondary btn-icon-style-4" (click)="selectedtransaxn = null"><i class="fa fa-close"></i></button>
+    </div>
+    <div *ngFor="let ptype of ptypes" class="py-10" style="cursor: pointer;" (click)="selectedtransaxn.StorePaymentTypeId = ptype.Id">
+        <span class="px-10"><span [class.badge-primary]="ptype.Id == selectedtransaxn?.StorePaymentTypeId" class="badge badge-indicator"></span></span>
+        <span>{{ptype.Name}}</span>
+    </div>
+    <button class="btn btn-primary w-100" (click)="updatetransaction()">SAVE</button>
+</div>
