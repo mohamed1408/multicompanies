@@ -48,13 +48,13 @@
         <div class="col-xl-6">
           <!-- <div> -->
           <button class="btn btn-link" style="margin-left: 50%;" [disabled]="sectionid == 0"
-            [class.tab-active]="sectionid == 0" (click)="changeSection(0)">Pending Orders</button>
+            [class.tab-active]="sectionid == 0" (click)="changeSection(0);term = ''">Pending Orders</button>
           <!-- </div> -->
         </div>
         <div class="col-xl-6">
           <!-- <div> -->
           <button class="btn btn-link" style="margin-left: 50%;" [disabled]="sectionid == 1"
-            [class.tab-active]="sectionid == 1" (click)="changeSection(1)">Sus Order</button>
+            [class.tab-active]="sectionid == 1" (click)="changeSection(1);term = ''">Sus Order</button>
           <!-- </div> -->
         </div>
       </div>
@@ -248,7 +248,7 @@
                 <span class="input-group-text bg-white border-0" id="basic-addon1"><span class="feather-icon"><i
                       data-feather="search"></i></span></span>
               </div>
-              <input type="text" class="form-control border-0" placeholder="Search by invoice..." aria-label="Username"
+              <input type="text" class="form-control border-0" [(ngModel)]="term" placeholder="Search by invoice..." aria-label="Username"
                 aria-describedby="basic-addon1">
             </div>
           </div>
@@ -257,10 +257,10 @@
       <div>
         <ul class="nav nav-tabs" role="tablist">
           <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#cancelleditems">By Cancelled Items</a>
+            <a class="nav-link active" (click)="term = ''" data-toggle="tab" href="#cancelleditems">By Cancelled Items</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#discountedorders">By Discount Orders</a>
+            <a class="nav-link" (click)="term = ''" data-toggle="tab" href="#discountedorders">By Discount Orders</a>
           </li>
         </ul>
 
@@ -283,7 +283,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let item of cancelledItemOrders; let i = index;">
+                        <tr *ngFor="let item of cancelledItemOrders | filter : term; let i = index;">
                           <th>
                             <button (click)="viewKotInfo(i)"
                               class="bg-white btn p-0"><strong>{{item.InvoiceNo}}</strong></button> <br>
