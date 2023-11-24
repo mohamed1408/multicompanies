@@ -30153,3 +30153,8 @@ table.dataTable>tbody>tr.child span.dtr-data {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.extra-modal-class {
+    max-width: 100vw;
+    z-index: 2;
+}

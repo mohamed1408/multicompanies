@@ -81,7 +81,7 @@ export class DenominationComponent implements OnInit {
     { shift: '12:00 pm to 02:29 pm', shiftid: 2 },
     { shift: '02:30 pm to 04:29 pm', shiftid: 3 },
     { shift: '04:30 pm to 06:29 pm', shiftid: 4 },
-    { shift: '06:30 pm to 08:30 pm', shiftid: 5 },
+    { shift: '06:30 pm to 08:29 pm', shiftid: 5 },
     { shift: '08:30 pm to closing ', shiftid: 6 },
   ];
 
@@ -427,6 +427,8 @@ export class DenominationComponent implements OnInit {
           centered: true,
           size: 'lg',
           backdropClass: 'z-index-1',
+          windowClass: 'window-class-test',
+          modalDialogClass: 'extra-modal-class'
         });
       });
   }

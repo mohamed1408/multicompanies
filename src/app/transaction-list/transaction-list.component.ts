@@ -136,7 +136,10 @@ export class TransactionListComponent implements OnInit {
     this.keyarr = [...this.keyarr, key];
     if (this.keyarr.length == 3) {
       this.hidecontent = !(this.keyarr.join('') == this.keycode);
-      this.initial()
+      if (!this.hidecontent) {
+        this.initial()
+      }
+      this.keyarr = []
     }
   }
   copyworef(obj: any) {
