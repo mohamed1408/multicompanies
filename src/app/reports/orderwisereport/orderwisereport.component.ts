@@ -538,4 +538,9 @@ export class OrderwisereportComponent implements OnInit {
       this.hidecontent = !(this.keyarr.join('') == this.keycode);
     }
   }
+  clearselection() {
+    this.orderwiserpt.Order.forEach((ord: any) => {
+      ord.selected = false
+    });
+  }
 }

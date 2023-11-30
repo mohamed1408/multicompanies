@@ -354,7 +354,7 @@ export class DenominationComponent implements OnInit {
   missingStoresString: string = '';
   withDifference: boolean = false;
   diffMargin: number = 100;
-
+  margin: number = 100;
   getDateFormated(time: any) {
     return moment(this.today + ' ' + time).format('YYYY-MM-DD hh:mm A');
   }
