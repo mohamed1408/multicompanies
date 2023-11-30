@@ -91,7 +91,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let transaxn of pos_report.showtransaxns; let i = index;">
-                                <td>{{transaxn.TransactionId}}</td>
+                                <td>{{transaxn.ino}}</td>
                                 <td class="text-right">{{transaxn.Amount | number: ".2"}}</td>
                                 <td><a class="biza" href="javascript:void(0);" (click)="editTransaction(i, $event)">{{transaxn.PaymentType}}</a></td>
                                 <td class="text-right">{{transaxn.TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
