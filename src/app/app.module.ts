@@ -36,6 +36,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { DenominationComponent } from './denomination/denomination.component';
 import { Kb2chefComponent } from './reports/kb2chef/kb2chef.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
+import { OrderWiseComponent } from './reports/order-wise/order-wise.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { TransactionListComponent } from './transaction-list/transaction-list.co
     CTGReportPipe,
     DenominationComponent,
     Kb2chefComponent,
-    TransactionListComponent
+    TransactionListComponent,
+    OrderWiseComponent
   ],
   imports: [
     BrowserModule,

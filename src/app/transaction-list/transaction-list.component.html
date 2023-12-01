@@ -53,7 +53,8 @@
                     </ng-template>
                     <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
                         [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
-                        placeholder="Search Stores..." (selectItem)="selected($event.item)" (keydown.enter)="storeid > 0 && searchTerm != '' && getTransactionList()" />
+                        placeholder="Search Stores..." (selectItem)="selected($event.item)"
+                        (keydown.enter)="storeid > 0 && searchTerm != '' && getTransactionList()" />
                 </div>
                 <div class="col-xl-5">
                     <div id="myrangepicker" class="form-control text-truncate">
@@ -93,7 +94,8 @@
                             <tr *ngFor="let transaxn of pos_report.showtransaxns; let i = index;">
                                 <td>{{transaxn.ino}}</td>
                                 <td class="text-right">{{transaxn.Amount | number: ".2"}}</td>
-                                <td><a class="biza" href="javascript:void(0);" (click)="editTransaction(i, $event)">{{transaxn.PaymentType}}</a></td>
+                                <td><a class="biza" href="javascript:void(0);"
+                                        (click)="editTransaction(i, $event)">{{transaxn.PaymentType}}</a></td>
                                 <td class="text-right">{{transaxn.TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
                             </tr>
                         </tbody>
@@ -102,8 +104,10 @@
                 <div class="col-xl-3">
                     <table class="table table-flush">
                         <tbody>
-                            <div id="selection" class="border border-primary selection" style="transform: translate3d(0px, 0px, 0px);"></div>
-                            <tr style="position: relative;" class="pointer" *ngFor="let rpt of pos_report.summary; let i = index;" (click)="selectptype(i)">
+                            <div id="selection" class="border border-primary selection"
+                                style="transform: translate3d(0px, 0px, 0px);"></div>
+                            <tr style="position: relative;" class="pointer"
+                                *ngFor="let rpt of pos_report.summary; let i = index;" (click)="selectptype(i)">
                                 <td>{{rpt.PaymentType}}</td>
                                 <td class="text-right">{{rpt.Amount}}</td>
                                 <td class="text-left"><span class="info-badge">{{rpt.BillCount}}</span></td>
@@ -118,14 +122,18 @@
 <div [hidden]="!selectedtransaxn" id="ptype-pop" class="position-absolute shadow">
     <div class="d-flex justify-content-between">
         <h6>PTYPES</h6>
-        <button class="btn btn-icon btn-icon-only btn-secondary btn-icon-style-4" (click)="selectedtransaxn = null"><i class="fa fa-close"></i></button>
+        <button class="btn btn-icon btn-icon-only btn-secondary btn-icon-style-4" (click)="selectedtransaxn = null"><i
+                class="fa fa-close"></i></button>
     </div>
-    <div *ngFor="let ptype of ptypes" class="py-10" style="cursor: pointer;" (click)="selectedtransaxn.StorePaymentTypeId = ptype.Id">
-        <span class="px-10"><span [class.badge-primary]="ptype.Id == selectedtransaxn?.StorePaymentTypeId" class="badge badge-indicator"></span></span>
+    <div *ngFor="let ptype of ptypes" class="py-10" style="cursor: pointer;"
+        (click)="selectedtransaxn.StorePaymentTypeId = ptype.Id">
+        <span class="px-10"><span [class.badge-primary]="ptype.Id == selectedtransaxn?.StorePaymentTypeId"
+                class="badge badge-indicator"></span></span>
         <span>{{ptype.Name}}</span>
     </div>
     <button class="btn btn-primary w-100" (click)="updatetransaction()">SAVE</button>
 </div>
 <div class="position-absolute" style="right: 30px; bottom: 30px;">
-    <div><button class="btn btn-icon btn-icon-only btn-secondary btn-icon-style-4" (click)="selectedtransaxn = null"><i class="fa fa-pencil"></i></button></div>
+    <div><button class="btn btn-icon btn-icon-only btn-secondary btn-icon-style-4" (click)="selectedtransaxn = null"><i
+                class="fa fa-pencil"></i></button></div>
 </div>

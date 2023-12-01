@@ -151,7 +151,11 @@ export class AuthService {
       storeid
     );
   }
-
+  getAllOld() {
+    return this.http.get(
+      this.baseurl1 +
+      'Product/GetAllOld');
+  }
   getCompanySPG(companyid: number) {
     return this.http.get(
       this.baseurl + 'SaleProductGroup/GetSaleProducts?companyid=' + companyid
@@ -223,7 +227,22 @@ export class AuthService {
       cancelOrder
     );
   }
-
+  orderwiseV2(fromdate: string, todate: string, storeid: number, companyid: number, sourceid: number) {
+    return this.http.get(
+      this.baseurl +
+      'OrderWise/GetReportV2?fromdate=' +
+      fromdate +
+      '&todate=' +
+      todate +
+      '&storeid=' +
+      storeid +
+      '&companyid=' +
+      companyid +
+      '&sourceid=' +
+      sourceid +
+      '&cancelorder=0'
+    )
+  }
   GetproductRpt(
     Id: number,
     frmdate: string,

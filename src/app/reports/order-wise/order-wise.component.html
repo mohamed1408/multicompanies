@@ -1,0 +1,139 @@
+<!-- <p>transaction-list works!</p> -->
+<div [hidden]="!hidecontent" class="hk-wrapper">
+
+    <!-- Main Content -->
+    <div class="hk-pg-wrapper hk-auth-wrapper">
+        <header class="d-flex justify-content-end align-items-center">
+            <div class="btn-group btn-group-sm">
+                <a href="#" class="btn btn-outline-secondary">Help</a>
+                <a href="#" class="btn btn-outline-secondary">About Us</a>
+            </div>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12 pa-0">
+                    <div class="auth-form-wrap pt-xl-0 pt-70">
+                        <div class="auth-form w-xl-25 w-lg-30 w-sm-50 w-100">
+
+                            <form>
+                                <div
+                                    class="d-62 bg-white rounded-circle mb-10 d-flex align-items-center justify-content-center mx-auto">
+                                    <i class="zmdi zmdi-settings font-28"></i>
+                                </div>
+                                <h1 class="display-4 mb-10 text-center"> <span unselectable="on" class="no-select"
+                                        (click)="unlockpagr('sorry')">Sorry</span>
+                                    we <span unselectable="on" class="no-select" (click)="unlockpagr('are')">are</span>
+                                    down for <span (click)="unlockpagr('maintenance')">maintenance</span></h1>
+                                <p class="mb-30 text-center">We apologize for the inconvenience, we are doing our best
+                                    to get things back in order for you. Please feel free to <a href="#"><u>contact
+                                            us</u></a> for any queries.</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Main Content -->
+</div>
+<div [hidden]="hidecontent" class="hk-pg-wrapper">
+    <div class="title">
+        Order Wise Report
+    </div>
+    <div class="container d-flex">
+        <div class="col-xl-3">
+            <section style="zoom: 75%; top: 220px;" *ngIf="selectedOrder" class="hk-sec-wrapper sticky-top">
+                <h5>{{selectedOrder.ino}}</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Amt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let it of selectedOrder.items">
+                            <td>
+                                <span>{{it.pd}}</span><br>
+                                <span class="font-italic text-light-50">GST {{it.t}}%</span>
+                            </td>
+                            <td>{{it.qy}}</td>
+                            <td>{{it.ta}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+        <div class="col-xl-9">
+            <section class="hk-sec-wrapper">
+                <div class="row">
+                    <div class="col-xl-3">
+                        <ng-template #rt let-r="result" let-t="term">
+                            <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+                        </ng-template>
+                        <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
+                            [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
+                            placeholder="Search Stores..." (selectItem)="selected($event.item)" />
+                    </div>
+                    <div class="col-xl-5">
+                        <div id="myrangepicker" class="form-control text-truncate">
+                            <i class="fa fa-calendar text-light-40"></i>&nbsp; <span></span>
+                            <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
+                        </div>
+                    </div>
+                    <div class="col-xl-1">
+                        <button class="btn btn-success btn-rounded" (click)="getorderreport()">Fetch</button>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-0" id="basic-addon1"><span
+                                            class="feather-icon"><i data-feather="search"></i></span></span>
+                                </div>
+                                <input [(ngModel)]="term" type="text" class="form-control border-0" (input)="filter()"
+                                    placeholder="Search by invoice..." aria-label="Username"
+                                    aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-12" *ngIf="report.length > 0" style="overflow: auto; max-height: 60vh;">
+                        <table class="table table-flush">
+                            <thead>
+                                <tr style="background-color: #2b2b2b;">
+                                    <th class="sptitle">Invoice</th>
+                                    <th class="sptitle">Date</th>
+                                    <th class="sptitle">Store</th>
+                                    <th class="sptitle">Bill</th>
+                                    <th class="sptitle">Paid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let r of report | filter : term; let i = index;">
+                                    <td>
+                                        <a class="biza" href="javascript:void(0);"
+                                            (click)="selectOrder(r.OdrsId)">{{r.ino}}</a>
+                                        <span class="item-details font-12 font-italic text-blue">{{r.itemlist}}</span>
+                                    </td>
+                                    <td class="text-right">{{r.oddt}}</td>
+                                    <td>{{r.Store}}</td>
+                                    <td class="text-right">{{r.ba | number : '.2'}}</td>
+                                    <td class="text-right">{{r.pa | number : '.2'}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr style="background-color: #2b2b2b;">
+                                    <th colspan="2"></th>
+                                    <th class="sptitle">Total</th>
+                                    <th class="sptitle">{{totalba}}</th>
+                                    <th class="sptitle">{{totalpa}}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

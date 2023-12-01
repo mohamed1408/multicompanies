@@ -21,6 +21,7 @@ import { SusordersComponent } from './susorders/susorders.component';
 import { DenominationComponent } from './denomination/denomination.component';
 import { Kb2chefComponent } from './reports/kb2chef/kb2chef.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
+import { OrderWiseComponent } from './reports/order-wise/order-wise.component';
 
 const routes: Routes = [
   { path: '', component: SigninComponent },
@@ -28,7 +29,7 @@ const routes: Routes = [
   { path: 'products', component: ProductsComponent },
   { path: 'maintenance', component: StorewiseComponent },
   { path: 'm1', component: EnquiryordersComponent },
-  { path: 'r1', component: OrderwisereportComponent },
+  { path: 'r1', component: OrderWiseComponent }, // old component: [OrderwisereportComponent]
   { path: 'r2', component: ProductwisereportComponent },
   { path: 'r3', component: CategorywisereportComponent },
   { path: 'r4', component: StorewisereportComponent },
