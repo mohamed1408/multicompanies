@@ -137,7 +137,7 @@ export class OrderWiseComponent implements OnInit {
           this.report.filter(x => x.OdrsId == r.OdrsId)[0].addkot(r.json)
         } else {
           r.kots = []
-          r.oddt = moment(r.oddt).format('MMM d, YYYY HH:mm A')
+          r.oddt = moment(r.oddt).format('MMM DD, YYYY HH:mm A')
           r.addkot = (json: string) => {
             r.kots.push(JSON.parse(json))
             r.items = this.itemagg(r.kots.map((x: any) => x.its || x.Items).flat())
@@ -163,9 +163,13 @@ export class OrderWiseComponent implements OnInit {
     })
   }
   selectedOrder: any
-  selectOrder(odrsid: number) {
+  selectOrder(odrsid: number, e: Event) {
+    e.stopPropagation()
     this.selectedOrder = this.report.filter((x: any) => x.OdrsId == odrsid)[0]
     console.log(this.selectedOrder)
+  }
+  clearselection() {
+    this.report.forEach(x => x.selected = false)
   }
   hidecontent: boolean = true;
   keycode: string = 'sorrymaintenanceare';

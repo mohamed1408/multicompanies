@@ -63,3 +63,17 @@ table tfoot {
     inset-block-end: 0;
     /* "bottom" */
 }
+
+td {
+    padding-bottom: 20px;
+}
+
+tr.tbody-tr.selected {
+    background: #24b9c92b !important;
+    outline: 1px solid #24b9c9 !important;
+    outline-offset: -3px;
+}
+
+tr.tbody-tr:hover {
+    background: #24b9c92b !important;
+}
