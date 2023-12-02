@@ -132,7 +132,7 @@ export class OrderWiseComponent implements OnInit {
       this.totalba = 0
       this.totalpa = 0
       this.report = []
-      report.forEach(r => {
+      report.filter(x => x.json).forEach(r => {
         if (this.report.some(x => x.OdrsId == r.OdrsId)) {
           this.report.filter(x => x.OdrsId == r.OdrsId)[0].addkot(r.json)
         } else {
@@ -162,11 +162,24 @@ export class OrderWiseComponent implements OnInit {
       this.totalpa += x.pa
     })
   }
+  gds: GDS = new GDS()
+  groupdatabystore() {
+    this.gds = new GDS(this.term)
+    this.report.forEach(r => {
+      if (r.itemlist.toLowerCase().includes(this.term.toLowerCase())) {
+        this.gds.add(r)
+      }
+    })
+  }
   selectedOrder: any
   selectOrder(odrsid: number, e: Event) {
     e.stopPropagation()
     this.selectedOrder = this.report.filter((x: any) => x.OdrsId == odrsid)[0]
     console.log(this.selectedOrder)
+    setTimeout(() => {
+      let top_offset = (document.querySelectorAll("section.sticky-top")[0] as HTMLElement).offsetHeight+14;
+      (document.querySelectorAll("section.sticky-top")[1] as HTMLElement).style.top = `calc(${top_offset}px + 220px)`
+    }, 500);
   }
   clearselection() {
     this.report.forEach(x => x.selected = false)
@@ -201,5 +214,20 @@ class oprep {
   }
   f(id: number) {
     return this.products.filter(x => x.OldId == id)[0]
+  }
+}
+class GDS {
+  sterm: string
+  data: {storeid: number, Store: string, ordercount: number, qty: number}[]
+  constructor(term: string = "") {
+    this.sterm = term
+    this.data = []
+  }
+  add(order: any) {
+    if(!this.data.some(x => x.storeid == order.si)){
+      this.data.push({storeid: order.si, Store: order.Store, ordercount: 0, qty: 0})
+    }
+    this.data.filter(x => x.storeid == order.si)[0].ordercount++
+    this.data.filter(x => x.storeid == order.si)[0].qty += order.items.filter((x: any) => x.pd.toLowerCase().includes(this.sterm.toLowerCase())).map((x: any) => x.qy).reduce((a: number, c: number) => a + c, 0)
   }
 }
