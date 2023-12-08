@@ -13,7 +13,7 @@ import { SigninComponent } from './signin/signin.component';
 import { LockscreenComponent } from './lockscreen/lockscreen.component';
 import { HeaderComponent } from './header/header.component';
 import { StorewiseComponent } from './storewise/storewise.component';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { Ng2SearchPipe, Ng2SearchPipeModule } from 'ng2-search-filter';
 import { ProductsComponent } from './products/products.component';
 import { EnquiryordersComponent } from './enquiryorders/enquiryorders.component';
 import { OrderwisereportComponent } from './reports/orderwisereport/orderwisereport.component';
@@ -37,6 +37,10 @@ import { DenominationComponent } from './denomination/denomination.component';
 import { Kb2chefComponent } from './reports/kb2chef/kb2chef.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { OrderWiseComponent } from './reports/order-wise/order-wise.component';
+import { OrderManagerComponent } from './order-manager/order-manager.component';
+import { PreloaderComponent } from './customelements/preloader/preloader.component';
+import { TabheaderComponent } from './customelements/tabheader/tabheader.component';
+import { FeatherIconComponent } from './customelements/feather-icon/feather-icon.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +74,11 @@ import { OrderWiseComponent } from './reports/order-wise/order-wise.component';
     DenominationComponent,
     Kb2chefComponent,
     TransactionListComponent,
-    OrderWiseComponent
+    OrderWiseComponent,
+    OrderManagerComponent,
+    PreloaderComponent,
+    TabheaderComponent,
+    FeatherIconComponent
   ],
   imports: [
     BrowserModule,
@@ -87,6 +95,7 @@ import { OrderWiseComponent } from './reports/order-wise/order-wise.component';
   providers: [
     JwtHelperService,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    Ng2SearchPipe
   ],
   bootstrap: [AppComponent],
 })

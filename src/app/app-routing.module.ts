@@ -22,6 +22,7 @@ import { DenominationComponent } from './denomination/denomination.component';
 import { Kb2chefComponent } from './reports/kb2chef/kb2chef.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { OrderWiseComponent } from './reports/order-wise/order-wise.component';
+import { OrderManagerComponent } from './order-manager/order-manager.component';
 
 const routes: Routes = [
   { path: '', component: SigninComponent },
@@ -47,7 +48,8 @@ const routes: Routes = [
   { path: 'r12', component: VersionlistComponent },
   { path: 'm2', component: DenominationComponent },
   { path: 'kb2chef', component: Kb2chefComponent },
-  { path: 't1', component: TransactionListComponent },
+  { path: 'u1', component: TransactionListComponent },
+  { path: 'u2', component: OrderManagerComponent },
 ];
 
 @NgModule({

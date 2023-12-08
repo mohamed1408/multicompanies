@@ -29,11 +29,25 @@ export class OrderWiseComponent implements OnInit {
 
   report: any[] = []
   stores: any[] = []
+  ordertypes: { id: number, title: string }[] | any = []
+  sortSetting: any = { key: "oddt", ss: 0, sort: () => {
+    console.log("sorting...")
+    this.sortSetting.ss = (this.sortSetting.ss > -1) ? -1 : 1
+    this.report = this.report.sort((a,b) => (a.oddt.unix() - b.oddt.unix())*(this.sortSetting.ss))
+  } }
 
   products: oprep
 
   constructor(private auth: AuthService, private ng2filterpipe: Ng2SearchPipe) {
     this.products = new oprep([])
+    this.ordertypes = [
+      {id: 1, title: "Dine In"},
+      {id: 2, title: "Take Away"},
+      {id: 3, title: "Delivery"},
+      {id: 4, title: "Pick Up"},
+      {id: 5, title: "Quick"},
+    ]
+    this.ordertypes["selected"] = 0
   }
 
   ngOnInit(): void {
@@ -137,13 +151,14 @@ export class OrderWiseComponent implements OnInit {
           this.report.filter(x => x.OdrsId == r.OdrsId)[0].addkot(r.json)
         } else {
           r.kots = []
-          r.oddt = moment(r.oddt).format('MMM DD, YYYY HH:mm A')
+          r.oddt = moment(r.oddt)
           r.addkot = (json: string) => {
             r.kots.push(JSON.parse(json))
             r.items = this.itemagg(r.kots.map((x: any) => x.its || x.Items).flat())
           }
           r.addkot(r.json)
           r.itemlist = r.items.map((x: any) => x.pd + ` [${x.qy}]`).join(", ")
+          r.transaxnlist = data["transaxns"].filter((x: any) => x.OdrsId == r.OdrsId).map((x: any) => x.spt + ": " + x.Amount).join('|')
           delete r.json
           this.report.push(r)
           this.totalba += r.ba
@@ -177,7 +192,7 @@ export class OrderWiseComponent implements OnInit {
     this.selectedOrder = this.report.filter((x: any) => x.OdrsId == odrsid)[0]
     console.log(this.selectedOrder)
     setTimeout(() => {
-      let top_offset = (document.querySelectorAll("section.sticky-top")[0] as HTMLElement).offsetHeight+14;
+      let top_offset = (document.querySelectorAll("section.sticky-top")[0] as HTMLElement).offsetHeight + 14;
       (document.querySelectorAll("section.sticky-top")[1] as HTMLElement).style.top = `calc(${top_offset}px + 220px)`
     }, 500);
   }
@@ -218,14 +233,14 @@ class oprep {
 }
 class GDS {
   sterm: string
-  data: {storeid: number, Store: string, ordercount: number, qty: number}[]
+  data: { storeid: number, Store: string, ordercount: number, qty: number }[]
   constructor(term: string = "") {
     this.sterm = term
     this.data = []
   }
   add(order: any) {
-    if(!this.data.some(x => x.storeid == order.si)){
-      this.data.push({storeid: order.si, Store: order.Store, ordercount: 0, qty: 0})
+    if (!this.data.some(x => x.storeid == order.si)) {
+      this.data.push({ storeid: order.si, Store: order.Store, ordercount: 0, qty: 0 })
     }
     this.data.filter(x => x.storeid == order.si)[0].ordercount++
     this.data.filter(x => x.storeid == order.si)[0].qty += order.items.filter((x: any) => x.pd.toLowerCase().includes(this.sterm.toLowerCase())).map((x: any) => x.qy).reduce((a: number, c: number) => a + c, 0)

@@ -615,6 +615,18 @@ export class AuthService {
       `Report/DeliveryOrderReport?storeid=${storeid}&companyid=${companyid}&fromdate=${fromdate}&todate=${todate}&invoiceno=${invoiceno}`
     );
   }
+  DeliveryOrderCount(
+    storeid: number,
+    companyid: number,
+    fromdate: any,
+    todate: any,
+    invoiceno: string
+  ) {
+    return this.http.get(
+      this.baseurl +
+      `Report/DeliveryOrderCount?storeid=${storeid}&companyid=${companyid}&fromdate=${fromdate}&todate=${todate}&invoiceno=${invoiceno}`
+    );
+  }
   getSusOrders(companyid: number, storeid: number, from: string, to: string) {
     return this.http.get(
       this.baseurl +
@@ -811,7 +823,9 @@ export class AuthService {
   savetransaction(transaction: any) {
     return this.http.post(this.baseurl + `Receipt/saveTransaction`, transaction)
   }
-
+  getpendingorders(storeid: number, companyid: number) {
+    return this.http.get(this.baseurl + `StoreData/getstoredatav2?storeid=${storeid}&companyid=${companyid}&data=ORDERS_`)
+  }
 }
 
 // baseurl

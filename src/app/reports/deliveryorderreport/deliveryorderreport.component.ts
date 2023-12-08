@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {
   NgbDateStruct,
   NgbCalendar,
@@ -9,7 +10,10 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
+
 declare function setHeightWidth(): any;
+declare var $: any;
+declare var feather: any;
 
 @Component({
   selector: 'app-deliveryorderreport',
@@ -25,9 +29,11 @@ export class DeliveryorderreportComponent implements OnInit {
   todate: string = '';
   smodel = '';
   dmodel = '';
+  feather: any = feather
   // date: { year: number; month: number }
   showcalender = false;
   stores: any = [];
+  storeOrderCount: any = []
   displaydate = moment().format('Do MMM YYYY');
   daterange: any;
   orders: any = [];
@@ -65,28 +71,37 @@ export class DeliveryorderreportComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private calendar: NgbCalendar,
-    public modalService: NgbModal
+    public modalService: NgbModal,
+    private sanitizer: DomSanitizer
   ) {
     // this.loginfo = JSON.parse(localStorage.getItem('loginInfo'))
     // this.companyid = this.loginfo.CompanyId;
   }
 
   ngOnInit() {
+    feather.replace();
+    setHeightWidth();
     this.auth.companyid.subscribe((companyid) => {
       this.companyid = companyid;
       // this.Auth.isloading.next(true);
-      setHeightWidth();
       this.model = this.calendar.getToday();
-      this.startdate = moment().subtract(7, 'days').format('YYYY-MM-DD');
-      this.enddate = moment().format('YYYY-MM-DD');
+      // this.startdate = moment().subtract(7, 'days').format('YYYY-MM-DD');
+      // this.enddate = moment().format('YYYY-MM-DD');
       this.getstores();
-      this.deliveryOrderReport();
+      this.showmenu = false
+      this.smodel = '';
+      this.storeid = 0
+      // this.deliveryOrderReport();
       // document.getElementById("date-range").addEventListener('onselected', e => {
       //   console.log(e)
       // })
     });
   }
-
+  // ngAfterViewInit(): void {
+  //   feather.replace();
+  //   setHeightWidth();
+  // }
+  icon: SafeHtml = feather.icons.copy.toSvg()
   onDateSelect(date: NgbDate) {
     console.log(date);
     this.model = date;
@@ -110,10 +125,10 @@ export class DeliveryorderreportComponent implements OnInit {
         term === ''
           ? []
           : this.stores
-              .filter(
-                (v: any) => v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10)
+            .filter(
+              (v: any) => v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+            )
+            .slice(0, 10)
       )
     );
   search1 = (text$: Observable<string>) =>
@@ -122,10 +137,10 @@ export class DeliveryorderreportComponent implements OnInit {
         term === ''
           ? []
           : this.stores
-              .filter(
-                (v: any) => v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10)
+            .filter(
+              (v: any) => v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+            )
+            .slice(0, 10)
       )
     );
 
@@ -146,15 +161,35 @@ export class DeliveryorderreportComponent implements OnInit {
       .DeliveryOrderReport(
         this.storeid,
         this.companyid,
-        this.startdate,
-        this.enddate,
+        this.startdate.format('YYYY-MM-DD HH:mm A'),
+        this.enddate.format('YYYY-MM-DD HH:mm A'),
         this.invoiceno
       )
       .subscribe((data: any) => {
         console.log(data);
         this.orders = data['report'];
+        // this.storeOrderCount = data['ordercountreport'];
         console.log(this.orders);
-        this.orders = this.temporder.filter((x: any) => x.OrderId);
+        // this.orders = this.temporder.filter((x: any) => x.OrderId);
+      });
+  }
+
+  showmenu: boolean = false
+  DeliveryOrderCount() {
+    this.storeOrderCount["isloading"] = true
+    this.auth
+      .DeliveryOrderCount(
+        this.storeid,
+        this.companyid,
+        this.startdate.format('YYYY-MM-DD HH:mm A'),
+        this.enddate.format('YYYY-MM-DD HH:mm A'),
+        this.invoiceno
+      )
+      .subscribe((data: any) => {
+        console.log(data);
+        feather.replace();
+        this.showmenu = true
+        this.storeOrderCount = data['report'];
       });
   }
 
@@ -162,8 +197,8 @@ export class DeliveryorderreportComponent implements OnInit {
     console.log(e);
   }
 
-  startdate: any;
-  enddate: any;
+  startdate: moment.Moment = moment().startOf('day').subtract(16, 'hour');
+  enddate: moment.Moment = moment().endOf('day');
 
   date(e: any) {
     if (e.startDate && e.endDate) {
@@ -171,6 +206,7 @@ export class DeliveryorderreportComponent implements OnInit {
       this.enddate = e.endDate.format('YYYY-MM-DD');
     }
   }
+
   selectOrder(order: any) {
     console.log(order);
     this.temporder = order;
@@ -206,6 +242,37 @@ export class DeliveryorderreportComponent implements OnInit {
   //   }
   // }
 
+  setDateRange() {
+    setTimeout(() => {
+      $('input[name="datetimes"]').daterangepicker({
+        timePicker: true,
+        startDate: this.startdate,
+        endDate: this.enddate,
+        "cancelClass": "btn-secondary",
+        locale: {
+          format: 'DD/M hh:mm A'
+        }
+      }, (a: moment.Moment, b: moment.Moment) => {
+        this.startdate = a;
+        this.enddate = b;
+        console.log(a.format('YYYY-MM-DD HH:mm A'), b.format('YYYY-MM-DD HH:mm A'))
+      });
+    }, 500);
+  }
+  getstorereport(store: any) {
+    this.storeid = store.Id
+    this.smodel = store
+    this.deliveryOrderReport()
+  }
+oti: number = 0
+  toClipBoard() {
+    // Clipboard
+    let cbt: string = "STORE \t TAK \t DEL \t PICK \n"
+    this.storeOrderCount.forEach((r: any) => {
+      cbt += `${r.Name} \t ${r.takeaway} \t ${r.delivery} \t ${r.pickup} \n`
+    });
+    navigator.clipboard.writeText(cbt)
+  }
   hidecontent: boolean = true;
   keycode: string = 'sorrymaintenanceare';
   keyarr: Array<string> = [];
@@ -213,6 +280,7 @@ export class DeliveryorderreportComponent implements OnInit {
     this.keyarr = [...this.keyarr, key];
     if (this.keyarr.length == 3) {
       this.hidecontent = !(this.keyarr.join('') == this.keycode);
+      this.setDateRange()
       if (this.hidecontent) {
         this.keyarr = [];
       }

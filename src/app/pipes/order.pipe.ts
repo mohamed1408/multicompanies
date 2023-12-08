@@ -18,11 +18,11 @@ export class OrderPipe implements PipeTransform {
 })
 export class OrderfilterPipe implements PipeTransform {
   transform(orders: any[], ordertypeid?: number): any {
-    console.log(ordertypeid);
+    // console.log(ordertypeid);
     return orders
       ? orders.filter(
           (x) =>
-            x.OrderTypeId == ordertypeid || ordertypeid == 0 || !ordertypeid
+            (x.oti || x.OrderTypeId) == ordertypeid || ordertypeid == 0 || !ordertypeid
         )
       : [];
   }

@@ -128,20 +128,31 @@
                         </div>
                     </div>
                     <div class="col-xl-12" *ngIf="report.length > 0" style="overflow: auto; max-height: 60vh;">
+                        <div class="col-xl-12 d-flex mb-2">
+                            <div class="col-xl" *ngFor="let ot of ordertypes">
+                                <span *ngIf="ordertypes['selected'] == ot.id">{{ot.title}}</span>
+                                <a *ngIf="ordertypes['selected'] != ot.id" href="javascript:void(0);" class="biza" (click)="ordertypes['selected'] = ot.id">{{ot.title}}</a>
+                            </div>
+                        </div>
                         <table class="table table-flush">
                             <thead class="z-index-1">
                                 <tr style="background-color: #2b2b2b; position: relative;">
                                     <th><i class="fa fa-ban" style="cursor: pointer; color: white;"
                                             (click)="clearselection()"></i></th>
                                     <th class="sptitle">Invoice</th>
-                                    <th class="sptitle">Date</th>
+                                    <th class="sptitle pointer" (click)="sortSetting.sort()">
+                                        Date
+                                        <i *ngIf="sortSetting.ss == 0" class="fa fa-sort"></i>
+                                        <i *ngIf="sortSetting.ss == 1" class="fa fa-sort-down"></i>
+                                        <i *ngIf="sortSetting.ss == -1" class="fa fa-sort-up"></i>
+                                    </th>
                                     <th class="sptitle">Store</th>
                                     <th class="sptitle text-right">Bill</th>
                                     <th class="sptitle text-right">Paid</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let r of report | filter : term; let i = index;" class="tbody-tr"
+                                <tr *ngFor="let r of report | filter : term | orderfilter : ordertypes['selected']; let i = index;" class="tbody-tr"
                                     [class.selected]="r.selected" (click)="r.selected = !r.selected">
                                     <td><code>#{{i+1}}</code></td>
                                     <td>
@@ -149,7 +160,7 @@
                                             (click)="selectOrder(r.OdrsId, $event)">{{r.ino}}</a>
                                         <span class="item-details font-12 font-italic text-blue">{{r.itemlist}}</span>
                                     </td>
-                                    <td class="text-center">{{r.oddt}}</td>
+                                    <td class="text-center">{{r.oddt.format('MMM DD, YYYY HH:mm A')}}</td>
                                     <td class="text-center">{{r.Store}}</td>
                                     <td class="text-right">{{r.ba | number : '.2'}}</td>
                                     <td class="text-right">{{r.pa | number : '.2'}}</td>

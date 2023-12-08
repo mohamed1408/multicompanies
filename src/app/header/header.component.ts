@@ -450,7 +450,7 @@ let getMenuData: Array<navlink> = [
     active: false,
   },
   {
-    title: 'Transaction',
+    title: 'Utils',
     url: '',
     icon: 'fa fa-pie-chart',
     svg: '../../assets/svg/file-text.svg',
@@ -462,7 +462,20 @@ let getMenuData: Array<navlink> = [
     children: [
       {
         title: 'Transaction List',
-        url: '/t1',
+        url: '/u1',
+        icon: 'fa fa-pie-chart',
+        svg: '../../assets/svg/phone-incoming.svg',
+        icon_res: 'svg',
+        hidden: false,
+        roles: ['admin', 'cashier'],
+        notification_count: 4,
+        isCollapsed: true,
+        children: [],
+        active: false,
+      },
+      {
+        title: 'Order Manager',
+        url: '/u2',
         icon: 'fa fa-pie-chart',
         svg: '../../assets/svg/phone-incoming.svg',
         icon_res: 'svg',

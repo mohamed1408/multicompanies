@@ -1,0 +1,7 @@
+<div class="d-flex mb-10" style="position: relative;">
+    <div *ngFor="let tab of tablist; let i = index;">
+        <button [class.selected]="selectedI == i" class="tab-header" (click)="selecttab(i)">{{tab}}</button>
+    </div>
+    <div id="bz-selector" class="bz-selector shadow"></div>
+</div>
+<hr>

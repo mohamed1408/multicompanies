@@ -1,0 +1,79 @@
+<!-- <p>order-manager works!</p> -->
+<app-preloader [hidden]="!hidecontent" (onUnlock)="initial()"></app-preloader>
+
+<div class="container">
+    <div [hidden]="hidecontent" class="hk-pg-wrapper">
+        <div class="title">
+            Order Manager
+        </div>
+        <div class="container">
+            <bz-tab-header [tablist]="tablist" (onChange)="tabid = $event[0]"></bz-tab-header>
+            <div class="d-flex">
+                <div class="col-xl-3"></div>
+                <div class="col-xl-9">
+                    <section class="hk-sec-wrapper">
+                        <div class="row">
+                            <div class="col-xl-3">
+                                <ng-template #rt let-r="result" let-t="term">
+                                    <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+                                </ng-template>
+                                <input id="typeahead-template" type="text" class="form-control col"
+                                    [(ngModel)]="searchTerm" [ngbTypeahead]="search" [resultTemplate]="rt"
+                                    [inputFormatter]="formatter" placeholder="Search Stores..."
+                                    (selectItem)="selected($event.item)" />
+                            </div>
+                            <div class="col-xl-2">
+                                <button class="btn btn-success" (click)="getorderreport()">Fetch</button>
+                            </div>
+                            <div class="col-xl-2"></div>
+                            <div class="col-xl-5">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-white border-0" id="basic-addon1"><span
+                                                    class="feather-icon"><i data-feather="search"></i></span></span>
+                                        </div>
+                                        <input [(ngModel)]="term" type="text" class="form-control border-0"
+                                            placeholder="Search by invoice..." aria-label="Username"
+                                            aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-12" *ngIf="orders.length > 0" style="overflow: auto; max-height: 60vh;">
+                                <table class="table table-flush">
+                                    <thead class="z-index-1">
+                                        <tr style="background-color: #2b2b2b; position: relative;">
+                                            <th><i class="fa fa-ban" style="cursor: pointer; color: white;"
+                                                    (click)="clearselection()"></i></th>
+                                            <th class="sptitle">Invoice</th>
+                                            <th class="sptitle">Date</th>
+                                            <th class="sptitle">Store</th>
+                                            <th class="sptitle text-right">Bill</th>
+                                            <th class="sptitle text-right">Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let r of orders | filter : term; let i = index;" class="tbody-tr"
+                                            [class.selected]="r.selected" (click)="r.selected = !r.selected">
+                                            <td><code>#{{i+1}}</code></td>
+                                            <td>
+                                                <a class="biza" href="javascript:void(0);"
+                                                    (click)="selectOrder(r.OdrsId, $event)">{{r.in}}</a>
+                                                <span
+                                                    class="item-details font-12 font-italic text-blue">{{r.itemlist}}</span>
+                                            </td>
+                                            <td class="text-center">{{moment(r.ordt).format('MMM d, y, h:mm:ss a')}}</td>
+                                            <td class="text-center">{{r.Store}}</td>
+                                            <td class="text-right">{{r.ba | number : '.2'}}</td>
+                                            <td class="text-right">{{r.pa | number : '.2'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
