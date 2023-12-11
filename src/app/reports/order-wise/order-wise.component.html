@@ -68,6 +68,16 @@
                         </tr>
                     </tbody>
                 </table>
+                <hr class="hr-text" data-content="T R A N S A X N S">
+                <table class="table table-bordered">
+                    <tbody style="border-top: 1px solid #e0e3e4;">
+                        <tr *ngFor="let txn of selectedOrder.transaxns">
+                            <td>{{txn.TransDateTime.format('MMM DD, YYYY HH:mm A')}}</td>
+                            <td>{{txn.Amount | number : ".2"}}</td>
+                            <td>{{txn.spt}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
             <section *ngIf="gds.sterm != ''" style="zoom: 75%; top: 0;" class="hk-sec-wrapper sticky-top">
                 <!-- <h5 class="biza">Data for search term “{{gds.sterm}}”</h5> -->
@@ -131,7 +141,8 @@
                         <div class="col-xl-12 d-flex mb-2">
                             <div class="col-xl" *ngFor="let ot of ordertypes">
                                 <span *ngIf="ordertypes['selected'] == ot.id">{{ot.title}}</span>
-                                <a *ngIf="ordertypes['selected'] != ot.id" href="javascript:void(0);" class="biza" (click)="ordertypes['selected'] = ot.id">{{ot.title}}</a>
+                                <a *ngIf="ordertypes['selected'] != ot.id" href="javascript:void(0);" class="biza"
+                                    (click)="ordertypes['selected'] = ot.id">{{ot.title}}</a>
                             </div>
                         </div>
                         <table class="table table-flush">
@@ -152,8 +163,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let r of report | filter : term | orderfilter : ordertypes['selected']; let i = index;" class="tbody-tr"
-                                    [class.selected]="r.selected" (click)="r.selected = !r.selected">
+                                <tr *ngFor="let r of report | filter : term | orderfilter : ordertypes['selected']; let i = index;"
+                                    class="tbody-tr" [class.selected]="r.selected" (click)="r.selected = !r.selected">
                                     <td><code>#{{i+1}}</code></td>
                                     <td>
                                         <a class="biza" href="javascript:void(0);"

@@ -30,22 +30,25 @@ export class OrderWiseComponent implements OnInit {
   report: any[] = []
   stores: any[] = []
   ordertypes: { id: number, title: string }[] | any = []
-  sortSetting: any = { key: "oddt", ss: 0, sort: () => {
-    console.log("sorting...")
-    this.sortSetting.ss = (this.sortSetting.ss > -1) ? -1 : 1
-    this.report = this.report.sort((a,b) => (a.oddt.unix() - b.oddt.unix())*(this.sortSetting.ss))
-  } }
+  sortSetting: any = {
+    key: "oddt", ss: 0, sort: () => {
+      console.log("sorting...")
+      this.sortSetting.ss = (this.sortSetting.ss > -1) ? -1 : 1
+      this.report = this.report.sort((a, b) => (a.oddt.unix() - b.oddt.unix()) * (this.sortSetting.ss))
+    }
+  }
 
   products: oprep
 
   constructor(private auth: AuthService, private ng2filterpipe: Ng2SearchPipe) {
     this.products = new oprep([])
     this.ordertypes = [
-      {id: 1, title: "Dine In"},
-      {id: 2, title: "Take Away"},
-      {id: 3, title: "Delivery"},
-      {id: 4, title: "Pick Up"},
-      {id: 5, title: "Quick"},
+      { id: 0, title: "All" },
+      { id: 1, title: "Dine In" },
+      { id: 2, title: "Take Away" },
+      { id: 3, title: "Delivery" },
+      { id: 4, title: "Pick Up" },
+      { id: 5, title: "Quick" },
     ]
     this.ordertypes["selected"] = 0
   }
@@ -140,9 +143,11 @@ export class OrderWiseComponent implements OnInit {
     return ci
   }
   Report: any[] = []
+  transaxns: any[] = []
   getorderreport() {
     this.auth.orderwiseV2(this.fromdate, this.todate, this.storeid, this.companyid, this.sourceid).subscribe((data: any) => {
       let report: any[] = data["report"]
+      this.transaxns = data["transaxns"]
       this.totalba = 0
       this.totalpa = 0
       this.report = []
@@ -190,10 +195,15 @@ export class OrderWiseComponent implements OnInit {
   selectOrder(odrsid: number, e: Event) {
     e.stopPropagation()
     this.selectedOrder = this.report.filter((x: any) => x.OdrsId == odrsid)[0]
+    this.selectedOrder.transaxns = this.transaxns.filter((x: any) => x.OdrsId == odrsid).map(x => {
+      x.TransDateTime = moment(x.TransDateTime)
+      return x
+    })
     console.log(this.selectedOrder)
     setTimeout(() => {
       let top_offset = (document.querySelectorAll("section.sticky-top")[0] as HTMLElement).offsetHeight + 14;
-      (document.querySelectorAll("section.sticky-top")[1] as HTMLElement).style.top = `calc(${top_offset}px + 220px)`
+      if (document.querySelectorAll("section.sticky-top")[1])
+        (document.querySelectorAll("section.sticky-top")[1] as HTMLElement).style.top = `calc(${top_offset}px + 220px)`
     }, 500);
   }
   clearselection() {

@@ -41,6 +41,9 @@ import { OrderManagerComponent } from './order-manager/order-manager.component';
 import { PreloaderComponent } from './customelements/preloader/preloader.component';
 import { TabheaderComponent } from './customelements/tabheader/tabheader.component';
 import { FeatherIconComponent } from './customelements/feather-icon/feather-icon.component';
+import { LayoutComponent } from './layout/layout.component';
+import { TopBarComponent } from './layout/top-bar/top-bar.component';
+import { SideMenuComponent } from './layout/side-menu/side-menu.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +81,10 @@ import { FeatherIconComponent } from './customelements/feather-icon/feather-icon
     OrderManagerComponent,
     PreloaderComponent,
     TabheaderComponent,
-    FeatherIconComponent
+    FeatherIconComponent,
+    LayoutComponent,
+    TopBarComponent,
+    SideMenuComponent,
   ],
   imports: [
     BrowserModule,
