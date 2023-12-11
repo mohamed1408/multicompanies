@@ -1,0 +1,20 @@
+.bz-menu-container {
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    background: #282828;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.bz-menu {
+    padding: 5px;
+}
+.bz-menu-icon{
+    padding: 0 10px 0 0;
+}
+.bz-menu-title {
+    color: white;
+}

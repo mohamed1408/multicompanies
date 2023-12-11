@@ -1,0 +1,11 @@
+<div class="bz-menu-container">
+    <div class="bz-menu" *ngFor="let menu of menudata">
+        <div class="d-flex">
+            <div class="d-flex"><img class="bz-menu-icon" src="{{menu.iconurl}}" alt="" srcset=""></div>
+            <a class="bz-menu-title" href="{{menu.url}}">{{menu.title}}</a>
+        </div>
+        <!-- <div *ngFor="let cmenu of menu.children">
+            <div><a href="{{cmenu.url}}">{{cmenu.title}}</a></div>
+        </div> -->
+    </div>
+</div>
