@@ -137,7 +137,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-12" *ngIf="report.length > 0" style="overflow: auto; max-height: 60vh;">
+                    <div class="col-xl-12" *ngIf="report.length > 0" style="overflow: auto; max-height: 75vh;">
                         <div class="col-xl-12 d-flex mb-2">
                             <div class="col-xl" *ngFor="let ot of ordertypes">
                                 <span *ngIf="ordertypes['selected'] == ot.id">{{ot.title}}</span>
@@ -173,7 +173,10 @@
                                     </td>
                                     <td class="text-center">{{r.oddt.format('MMM DD, YYYY HH:mm A')}}</td>
                                     <td class="text-center">{{r.Store}}</td>
-                                    <td class="text-right">{{r.ba | number : '.2'}}</td>
+                                    <td class="text-right">
+                                        {{r.ba | number : '.2'}}
+                                        <span class="item-details font-12 font-italic text-blue text-left">{{r.transaxnlist}}</span>
+                                    </td>
                                     <td class="text-right">{{r.pa | number : '.2'}}</td>
                                 </tr>
                             </tbody>
