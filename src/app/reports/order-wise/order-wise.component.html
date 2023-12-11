@@ -140,9 +140,9 @@
                     <div class="col-xl-12" *ngIf="report.length > 0" style="overflow: auto; max-height: 75vh;">
                         <div class="col-xl-12 d-flex mb-2">
                             <div class="col-xl" *ngFor="let ot of ordertypes">
-                                <span *ngIf="ordertypes['selected'] == ot.id">{{ot.title}}</span>
-                                <a *ngIf="ordertypes['selected'] != ot.id" href="javascript:void(0);" class="biza"
-                                    (click)="ordertypes['selected'] = ot.id">{{ot.title}}</a>
+                                <span class="biza" *ngIf="ordertypes['selected'] == ot.id">{{ot.title}} ({{ot.count}})</span>
+                                <a *ngIf="ordertypes['selected'] != ot.id" href="javascript:void(0);" [class.disabled]="ot.count == 0" class="biza"
+                                    (click)="ordertypes['selected'] = ot.id">{{ot.title}} ({{ot.count}})</a>
                             </div>
                         </div>
                         <table class="table table-flush">
@@ -173,11 +173,11 @@
                                     </td>
                                     <td class="text-center">{{r.oddt.format('MMM DD, YYYY HH:mm A')}}</td>
                                     <td class="text-center">{{r.Store}}</td>
+                                    <td class="text-right">{{r.ba | number : '.2'}}</td>
                                     <td class="text-right">
-                                        {{r.ba | number : '.2'}}
-                                        <span class="item-details font-12 font-italic text-blue text-left">{{r.transaxnlist}}</span>
+                                        {{r.pa | number : '.2'}}
+                                        <span class="txn-details font-12 font-italic text-blue">{{r.transaxnlist}}</span>
                                     </td>
-                                    <td class="text-right">{{r.pa | number : '.2'}}</td>
                                 </tr>
                             </tbody>
                             <tfoot>

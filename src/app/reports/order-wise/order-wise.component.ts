@@ -43,12 +43,12 @@ export class OrderWiseComponent implements OnInit {
   constructor(private auth: AuthService, private ng2filterpipe: Ng2SearchPipe) {
     this.products = new oprep([])
     this.ordertypes = [
-      { id: 0, title: "All" },
-      { id: 1, title: "Dine In" },
-      { id: 2, title: "Take Away" },
-      { id: 3, title: "Delivery" },
-      { id: 4, title: "Pick Up" },
-      { id: 5, title: "Quick" },
+      { id: 0, title: "All", count: 0 },
+      { id: 1, title: "Dine In", count: 0 },
+      { id: 2, title: "Take Away", count: 0 },
+      { id: 3, title: "Delivery", count: 0 },
+      { id: 4, title: "Pick Up", count: 0 },
+      { id: 5, title: "Quick", count: 0 },
     ]
     this.ordertypes["selected"] = 0
   }
@@ -145,6 +145,15 @@ export class OrderWiseComponent implements OnInit {
   Report: any[] = []
   transaxns: any[] = []
   getorderreport() {
+    this.ordertypes = [
+      { id: 0, title: "All", count: 0 },
+      { id: 1, title: "Dine In", count: 0 },
+      { id: 2, title: "Take Away", count: 0 },
+      { id: 3, title: "Delivery", count: 0 },
+      { id: 4, title: "Pick Up", count: 0 },
+      { id: 5, title: "Quick", count: 0 },
+    ]
+    this.ordertypes["selected"] = 0
     this.auth.orderwiseV2(this.fromdate, this.todate, this.storeid, this.companyid, this.sourceid).subscribe((data: any) => {
       let report: any[] = data["report"]
       this.transaxns = data["transaxns"]
@@ -168,6 +177,8 @@ export class OrderWiseComponent implements OnInit {
           this.report.push(r)
           this.totalba += r.ba
           this.totalpa += r.pa
+          this.ordertypes.filter((x: any) => x.id == r.oti)[0].count++
+          this.ordertypes[0].count++
         }
       })
       console.log(this.report)

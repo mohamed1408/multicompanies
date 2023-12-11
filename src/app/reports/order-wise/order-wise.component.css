@@ -24,12 +24,32 @@ div.container {
     width: fit-content;
 }
 
-.biza:after {
+a.biza:after {
     content: '';
     width: 100%;
     height: 2px;
     display: block;
-    background: #707070;
+    background: currentColor;
+}
+
+a.biza.disabled {
+    pointer-events: none;
+    cursor: default;
+    color: #d1d1d1;
+}
+
+/* a.biza.disabled:after {
+    background: #d1d1d1;
+} */
+
+.txn-details {
+    position: absolute;
+    /* overflow: hidden; */
+    /* white-space: nowrap; */
+    display: block;
+    /* text-overflow: ellipsis; */
+    /* width: 150px; */
+    right: 2.5rem;
 }
 
 .item-details {
@@ -88,24 +108,25 @@ tr.tbody-tr:hover {
     height: 1.5em;
     opacity: 0.5;
 }
-.hr-text:before {
-  content: "";
-  background: linear-gradient(to right, transparent, #818078, transparent);
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 100%;
-  height: 1px;
-}
-.hr-text:after {
-  content: attr(data-content);
-  position: relative;
-  display: inline-block;
-  color: black;
 
-  padding: 0 0.5em;
-  line-height: 1.5em;
-  color: #818078;
-  background-color: #fcfcfa;
+.hr-text:before {
+    content: "";
+    background: linear-gradient(to right, transparent, #818078, transparent);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
 }
-  
+
+.hr-text:after {
+    content: attr(data-content);
+    position: relative;
+    display: inline-block;
+    color: black;
+
+    padding: 0 0.5em;
+    line-height: 1.5em;
+    color: #818078;
+    background-color: #fcfcfa;
+}
