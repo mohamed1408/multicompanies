@@ -150,27 +150,98 @@
         </div>
         <div toggler="#headingOne" class="collapse" [ngbCollapse]="!denomentry.isCollapsed">
           <div class="card-body col-xl-12 row">
-            <div class="mb-5 col-xl-6">
+            <div class="mb-5 col-xl-4">
               <ul class="list-group mb-4">
                 <li class="list-group-item" *ngFor="let entry of denomentry.Entries">
                   Rs.{{entry.DenomName}} x {{entry.Count}}
                   <span class="float-right">{{entry.Amount}}</span>
                 </li>
               </ul>
+              <hr class="hr-text" data-content="O N L I N E">
+              <ul class="list-group mb-4">
+                <li class="list-group-item">
+                  Phone Pe
+                  <span class="float-right">{{denomentry.PhonePe}}</span>
+                </li>
+                <li class="list-group-item">
+                  Card
+                  <span class="float-right">{{denomentry.Card}}</span>
+                </li>
+              </ul>
             </div>
-            <div class="col-xl-6">
-              <div class="row">
-                <select class="form-control col-xl-5" [(ngModel)]="denomentry.ShiftId"
-                  (change)="denomentry.dirty = true">
-                  <option *ngFor="let shift of shifts" value="{{shift.shiftid}}">{{shift.shift}}</option>
-                </select>
-                <button [disabled]="!denomentry.dirty || denomentry.loading" class="btn btn-sm btn-warning ml-1"
-                  (click)="changeshift(denomentry.Id, denomentry.ShiftId, i)">
-                  {{denomentry.loading ? "Changing..." : "Change"}}
-                </button>
-              </div>
+            <div class="col-xl-8">
+              <section class="hk-sec-wrapper">
+                <div class="d-flex mb-3">
+                  <select class="form-control col-xl-5" [(ngModel)]="denomentry.ShiftId"
+                    (change)="denomentry.dirty = true">
+                    <option *ngFor="let shift of shifts" value="{{shift.shiftid}}">{{shift.shift}}</option>
+                  </select>
+                  <button [disabled]="!denomentry.dirty || denomentry.loading" class="btn btn-sm btn-warning ml-1"
+                    (click)="changeshift(denomentry.Id, denomentry.ShiftId, i)">
+                    {{denomentry.loading ? "Changing..." : "Change"}}
+                  </button>
+                </div>
+                <div class="d-flex">
+                  <div class="col-xl-4">
+                    <table class="flat table table-bordered table-sm">
+                      <tbody class="border">
+                        <tr>
+                          <td>Opening Bal.</td>
+                          <td>{{denomentry.OpeningBalance}}</td>
+                        </tr>
+                        <tr>
+                          <td>Cash In</td>
+                          <td>{{denomentry.CashIn}} - {{denomentry.PCT_IN}}</td>
+                        </tr>
+                        <tr>
+                          <td>Cash Out</td>
+                          <td>{{denomentry.CashOut}} - {{denomentry.PCT_OUT}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-xl-8">
+                    <table class="flat table table-bordered table-sm">
+                      <tbody class="border">
+                        <tr>
+                          <td>Sales</td>
+                          <td>Actual</td>
+                          <td>Expected</td>
+                          <td colspan="2">Remarks</td>
+                        </tr>
+                        <tr>
+                          <td>Cash</td>
+                          <td>{{denomentry.TotalAmount + denomentry.OpeningBalance}}</td>
+                          <td>{{denomentry.SalesCash + denomentry.OpeningBalance}}</td>
+                          <td>{{denomentry.TotalAmount - denomentry.SalesCash}}</td>
+                          <td [innerHTML]="denomentry.TotalAmount - denomentry.SalesCash | remark"></td>
+                        </tr>
+                        <tr>
+                          <td>Card</td>
+                          <td>{{denomentry.Card}}</td>
+                          <td>{{denomentry.SalesCard}}</td>
+                          <td>{{denomentry.Card - denomentry.SalesCard}}</td>
+                          <td [innerHTML]="denomentry.Card - denomentry.SalesCard | remark"></td>
+                        </tr>
+                        <tr>
+                          <td>PhonePe</td>
+                          <td>{{denomentry.PhonePe}}</td>
+                          <td>{{denomentry.SalesPhonePe}}</td>
+                          <td>{{denomentry.PhonePe - denomentry.SalesPhonePe}}</td>
+                          <td [innerHTML]="denomentry.PhonePe - denomentry.SalesPhonePe | remark"></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2"></td>
+                          <td>Total Diff</td>
+                          <td colspan="2">{{denomentry.TotalAmount - denomentry.SalesCash + denomentry.Card - denomentry.SalesCard + denomentry.PhonePe - denomentry.SalesPhonePe}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
               <!-- <i class="text-warning">Contact your admin for more information</i> -->
-              <strong>Opening Balance: </strong> {{denomentry.OpeningBalance}} <br>
+              <!-- <strong>Opening Balance: </strong> {{denomentry.OpeningBalance}} <br>
               <strong>Sales Cash: </strong> {{denomentry.SalesCash}}
               <button *ngIf="denomentry.SalesCash&&!denomentry.showSalesTrnx"
                 (click)="denomentry.showSalesTrnx = !denomentry.showSalesTrnx" class="btn btn-link text-success"><i
@@ -286,7 +357,7 @@
               </span>
               <p *ngIf="denomentry.PCT_FACTOR != 0 && denomentry.PCT != 0" class="font-italic"
                 [ngClass]="{'text-success': denomentry.PCT > 0, 'text-danger': denomentry.PCT < 0}">
-                *{{denomentry.PCT_remark}}</p>
+                *{{denomentry.PCT_remark}}</p> -->
             </div>
           </div>
         </div>
@@ -550,7 +621,8 @@
           <tbody>
             <tr *ngFor="let rpt of denomcheckreports; let i = index">
               <td>{{rpt.Name}}</td>
-              <td [ngClass]="{'excess': rpt.shift1s > margin, 'shortage': rpt.shift1s < margin*-1, 'tallied': rpt.shift1s >= margin*-1 && rpt.shift1s <= margin && rpt.shift1s != null}"
+              <td
+                [ngClass]="{'excess': rpt.shift1s > margin, 'shortage': rpt.shift1s < margin*-1, 'tallied': rpt.shift1s >= margin*-1 && rpt.shift1s <= margin && rpt.shift1s != null}"
                 (mouseenter)="rpt['1s'+i] = true" (mouseleave)="rpt['1s'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift1s == null ? 'No Rec' : rpt.shift1s}}
                 <span *ngIf="rpt['1s'+i]" class="hover-info shadow">
@@ -566,7 +638,8 @@
                   <span>08:00 am to 11:59 am</span>
                 </span>
               </td> -->
-              <td [ngClass]="{'excess': rpt.shift2s > margin, 'shortage': rpt.shift2s < margin*-1, 'tallied': rpt.shift2s >= margin*-1 && rpt.shift2s <= margin && rpt.shift2s != null}"
+              <td
+                [ngClass]="{'excess': rpt.shift2s > margin, 'shortage': rpt.shift2s < margin*-1, 'tallied': rpt.shift2s >= margin*-1 && rpt.shift2s <= margin && rpt.shift2s != null}"
                 (mouseenter)="rpt['2s'+i] = true" (mouseleave)="rpt['2s'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift2s == null ? 'No Rec' : rpt.shift2s}}
                 <span *ngIf="rpt['2s'+i]" class="hover-info shadow">
@@ -582,7 +655,8 @@
                   <span>12:00 pm to 02:29 pm</span>
                 </span>
               </td> -->
-              <td [ngClass]="{'excess': rpt.shift3s > margin, 'shortage': rpt.shift3s < margin*-1, 'tallied': rpt.shift3s >= margin*-1 && rpt.shift3s <= margin && rpt.shift3s != null}"
+              <td
+                [ngClass]="{'excess': rpt.shift3s > margin, 'shortage': rpt.shift3s < margin*-1, 'tallied': rpt.shift3s >= margin*-1 && rpt.shift3s <= margin && rpt.shift3s != null}"
                 (mouseenter)="rpt['3s'+i] = true" (mouseleave)="rpt['3s'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift3s == null ? 'No Rec' : rpt.shift3s}}
                 <span *ngIf="rpt['3s'+i]" class="hover-info shadow">
@@ -598,7 +672,8 @@
                   <span>02:30 pm to 04:29 pm</span>
                 </span>
               </td> -->
-              <td [ngClass]="{'excess': rpt.shift4s > margin, 'shortage': rpt.shift4s < margin*-1, 'tallied': rpt.shift4s >= margin*-1 && rpt.shift4s <= margin && rpt.shift4s != null}"
+              <td
+                [ngClass]="{'excess': rpt.shift4s > margin, 'shortage': rpt.shift4s < margin*-1, 'tallied': rpt.shift4s >= margin*-1 && rpt.shift4s <= margin && rpt.shift4s != null}"
                 (mouseenter)="rpt['4s'+i] = true" (mouseleave)="rpt['4s'+i] = false" *ngIf="!hideHeader1">
                 {{rpt.shift4s == null ? 'No Rec' : rpt.shift4s}}
                 <span *ngIf="rpt['4s'+i]" class="hover-info shadow">
@@ -614,7 +689,8 @@
                   <span>04:30 pm to 06:29 pm</span>
                 </span>
               </td> -->
-              <td [ngClass]="{'excess': rpt.shift5s > margin, 'shortage': rpt.shift5s < margin*-1, 'tallied': rpt.shift5s >= margin*-1 && rpt.shift5s <= margin && rpt.shift5s != null}"
+              <td
+                [ngClass]="{'excess': rpt.shift5s > margin, 'shortage': rpt.shift5s < margin*-1, 'tallied': rpt.shift5s >= margin*-1 && rpt.shift5s <= margin && rpt.shift5s != null}"
                 (mouseenter)="rpt['5s'+i] = true" (mouseleave)="rpt['5s'+i] = false" *ngIf="!hideHeader2">
                 {{rpt.shift5s == null ? 'No Rec' : rpt.shift5s}}
                 <span *ngIf="rpt['5s'+i]" class="hover-info shadow">
@@ -630,7 +706,8 @@
                   <span>06:30 pm to 08:30 pm</span>
                 </span>
               </td> -->
-              <td [ngClass]="{'excess': rpt.shift6s > margin, 'shortage': rpt.shift6s < margin*-1, 'tallied': rpt.shift6s >= margin*-1 && rpt.shift6s <= margin && rpt.shift6s != null}"
+              <td
+                [ngClass]="{'excess': rpt.shift6s > margin, 'shortage': rpt.shift6s < margin*-1, 'tallied': rpt.shift6s >= margin*-1 && rpt.shift6s <= margin && rpt.shift6s != null}"
                 (mouseenter)="rpt['6s'+i] = true" (mouseleave)="rpt['6s'+i] = false" *ngIf="!hideHeader2">
                 {{rpt.shift6s == null ? 'No Rec' : rpt.shift6s}}
                 <span *ngIf="rpt['6s'+i]" class="hover-info shadow">

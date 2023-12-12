@@ -44,6 +44,7 @@ import { FeatherIconComponent } from './customelements/feather-icon/feather-icon
 import { LayoutComponent } from './layout/layout.component';
 import { TopBarComponent } from './layout/top-bar/top-bar.component';
 import { SideMenuComponent } from './layout/side-menu/side-menu.component';
+import { DenomPipe } from './pipes/denom.pipe';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { SideMenuComponent } from './layout/side-menu/side-menu.component';
     LayoutComponent,
     TopBarComponent,
     SideMenuComponent,
+    DenomPipe,
   ],
   imports: [
     BrowserModule,
