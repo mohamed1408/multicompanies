@@ -130,3 +130,41 @@ tr.tbody-tr:hover {
     color: #818078;
     background-color: #fcfcfa;
 }
+
+.bz-fab {
+    all: unset;
+    cursor: pointer;
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    /* border: 1px solid black; */
+}
+
+.bz-fab:active {
+    box-shadow: none;
+}
+
+.bz-menu {
+    position: fixed;
+    bottom: 90px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    height: fit-content;
+    max-height: 70vh;
+    background: white;
+    right: 30px;
+    overflow: auto;
+    padding: 10px;
+    z-index: 1000;
+    /* transition: all 0.5s ease-in-out; */
+}
+
+.spinner-border {
+    margin: auto;
+}

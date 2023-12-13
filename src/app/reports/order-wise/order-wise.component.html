@@ -138,8 +138,10 @@
                     <div class="col-xl-12" *ngIf="report.length > 0" style="overflow: auto; max-height: 75vh;">
                         <div class="col-xl-12 d-flex mb-2">
                             <div class="col-xl" *ngFor="let ot of ordertypes">
-                                <span class="biza" *ngIf="ordertypes['selected'] == ot.id">{{ot.title}} ({{ot.count}})</span>
-                                <a *ngIf="ordertypes['selected'] != ot.id" href="javascript:void(0);" [class.disabled]="ot.count == 0" class="biza"
+                                <span class="biza" *ngIf="ordertypes['selected'] == ot.id">{{ot.title}}
+                                    ({{ot.count}})</span>
+                                <a *ngIf="ordertypes['selected'] != ot.id" href="javascript:void(0);"
+                                    [class.disabled]="ot.count == 0" class="biza"
                                     (click)="ordertypes['selected'] = ot.id">{{ot.title}} ({{ot.count}})</a>
                             </div>
                         </div>
@@ -174,7 +176,8 @@
                                     <td class="text-right">{{r.ba | number : '.2'}}</td>
                                     <td class="text-right">
                                         {{r.pa | number : '.2'}}
-                                        <span class="txn-details font-12 font-italic text-blue">{{r.transaxnlist}}</span>
+                                        <span
+                                            class="txn-details font-12 font-italic text-blue">{{r.transaxnlist}}</span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -192,4 +195,33 @@
             </section>
         </div>
     </div>
+    <div class="bz-menu custom-scroll-bar" [hidden]="!showmenu">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        <button class="btn" (click)="toClipBoard()">
+                            <feather-icon [name]="'copy'"></feather-icon>
+                        </button>
+                    </th>
+                    <th>OrderCount</th>
+                    <!-- <th>PickUp</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let store of storeOrderCount">
+                    <td><a href="javascript:void(0)" class="biza" (click)="getstorereport(store)">{{store.Name}}</a>
+                    </td>
+                    <td><span class="badge"
+                            [class.badge-blue]="store.delivery > 0">{{store.delivery+store.takeaway+store.pickup}}</span>
+                    </td>
+                    <!-- <td><span class="badge" [class.badge-blue]="store.pickup > 0">{{store.pickup}}</span></td> -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="bz-fab" (click)="showmenu = !showmenu">
+        <div *ngIf="storeOrderCount['isloading']" class="spinner-border"></div>
+        <i *ngIf="!storeOrderCount['isloading']" style="margin: auto;" class="fa fa-cog"></i>
+    </button>
 </div>

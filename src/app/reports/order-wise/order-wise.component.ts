@@ -27,8 +27,11 @@ export class OrderWiseComponent implements OnInit {
   fromdate: string = ""
   searchTerm: string = ""
 
+  showmenu: boolean = false
+
   report: any[] = []
   stores: any[] = []
+  storeOrderCount: any = []
   ordertypes: { id: number, title: string }[] | any = []
   sortSetting: any = {
     key: "oddt", ss: 0, sort: () => {
@@ -85,6 +88,21 @@ export class OrderWiseComponent implements OnInit {
   getStores() {
     this.auth.GetStores(this.companyid).subscribe((data: any) => {
       this.storeid = 0
+      this.storeOrderCount = data.map((x: any) => {
+        x.delivery = 0
+        x.takeaway = 0
+        x.pickup = 0
+        x.oc = (oti: number) => {
+          if (oti == 2) {
+            x.takeaway++
+          } else if (oti == 3) {
+            x.delivery++
+          } else if (oti == 4) {
+            x.pickup++
+          }
+        }
+        return x
+      })
       this.stores = [{ Id: 0, Name: 'All' }, ...data];
       this.auth.isloading.next(false);
     });
@@ -179,6 +197,7 @@ export class OrderWiseComponent implements OnInit {
           this.totalpa += r.pa
           this.ordertypes.filter((x: any) => x.id == r.oti)[0].count++
           this.ordertypes[0].count++
+          this.storeOrderCount.filter((x: any) => x.Id == r.si)[0].oc(r.oti)
         }
       })
       console.log(this.report)
@@ -219,6 +238,19 @@ export class OrderWiseComponent implements OnInit {
   }
   clearselection() {
     this.report.forEach(x => x.selected = false)
+  }
+  getstorereport(store: any){
+    this.searchTerm = store
+    this.storeid = store.Id
+    this.getorderreport()
+  }
+  toClipBoard() {
+    // Clipboard
+    let cbt: string = "STORE \t TAK \t DEL \t PICK \n"
+    this.storeOrderCount.forEach((r: any) => {
+      cbt += `${r.Name} \t ${r.takeaway} \t ${r.delivery} \t ${r.pickup} \n`
+    });
+    navigator.clipboard.writeText(cbt)
   }
   hidecontent: boolean = true;
   keycode: string = 'sorrymaintenanceare';

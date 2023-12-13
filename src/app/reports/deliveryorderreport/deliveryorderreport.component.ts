@@ -264,7 +264,7 @@ export class DeliveryorderreportComponent implements OnInit {
     this.smodel = store
     this.deliveryOrderReport()
   }
-oti: number = 0
+  oti: number = 0
   toClipBoard() {
     // Clipboard
     let cbt: string = "STORE \t TAK \t DEL \t PICK \n"

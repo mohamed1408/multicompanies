@@ -212,9 +212,9 @@
                         <tr>
                           <td>Cash</td>
                           <td>{{denomentry.TotalAmount}}</td>
-                          <td>{{denomentry.SalesCash}}</td>
+                          <td>{{denomentry.SalesCash + denomentry.OpeningBalance}}</td>
                           <td>{{denomentry.TotalAmount - denomentry.SalesCash - denomentry.OpeningBalance}}</td>
-                          <td [innerHTML]="denomentry.TotalAmount - denomentry.SalesCash | remark"></td>
+                          <td [innerHTML]="denomentry.TotalAmount - denomentry.SalesCash - denomentry.OpeningBalance | remark"></td>
                         </tr>
                         <tr>
                           <td>Card</td>
