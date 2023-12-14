@@ -23,33 +23,34 @@ import { Kb2chefComponent } from './reports/kb2chef/kb2chef.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { OrderWiseComponent } from './reports/order-wise/order-wise.component';
 import { OrderManagerComponent } from './order-manager/order-manager.component';
+import { AuthGuardService } from './auth-guard.service';
 
 const routes: Routes = [
-  { path: '', component: SigninComponent },
-  { path: 'lock', component: LockscreenComponent },
-  { path: 'products', component: ProductsComponent },
-  { path: 'maintenance', component: StorewiseComponent },
-  { path: 'm1', component: EnquiryordersComponent },
-  { path: 'r1', component: OrderWiseComponent }, // old component: [OrderwisereportComponent]
-  { path: 'r2', component: ProductwisereportComponent },
-  { path: 'r3', component: CategorywisereportComponent },
-  { path: 'r4', component: StorewisereportComponent },
-  { path: 'r5', component: TimewisereportComponent },
+  { path: '', component: SigninComponent, canActivate: [AuthGuardService], data: {role: ['all',]} },
+  { path: 'lock', component: LockscreenComponent, canActivate: [AuthGuardService], data: {role: ['all']} },
+  { path: 'products', component: ProductsComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'maintenance', component: StorewiseComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'm1', component: EnquiryordersComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'r1', component: OrderWiseComponent, canActivate: [AuthGuardService], data: {role: ['admin']} }, // old component: [OrderwisereportComponent]
+  { path: 'r2', component: ProductwisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'r3', component: CategorywisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'r4', component: StorewisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'r5', component: TimewisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
   {
     path: 'r6',
     component: MonthwiseproductreportComponent,
   },
-  { path: 'r7', component: SpgwisereportComponent },
-  { path: 'r8', component: DeliveryorderreportComponent },
-  { path: 'm3', component: SusordersComponent },
-  { path: 'r9', component: CancelOrdReportComponent },
-  { path: 'r10', component: ProductsalesreportComponent },
-  { path: 'r11', component: CustomerdatarptComponent },
-  { path: 'r12', component: VersionlistComponent },
-  { path: 'm2', component: DenominationComponent },
-  { path: 'kb2chef', component: Kb2chefComponent },
-  { path: 'u1', component: TransactionListComponent },
-  { path: 'u2', component: OrderManagerComponent },
+  { path: 'r7', component: SpgwisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'r8', component: DeliveryorderreportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'm3', component: SusordersComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'r9', component: CancelOrdReportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'r10', component: ProductsalesreportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'r11', component: CustomerdatarptComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'r12', component: VersionlistComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'm2', component: DenominationComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'kb2chef', component: Kb2chefComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'u1', component: TransactionListComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
+  { path: 'u2', component: OrderManagerComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
 ];
 
 @NgModule({

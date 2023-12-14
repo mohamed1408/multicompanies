@@ -33,8 +33,10 @@ export class HeaderComponent implements OnInit {
     public modalService: NgbModal,
     private router: Router
   ) {
-    this.menus = getMenuData;
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    // console.log(this.user, getMenuData)
+    // getMenuData = getMenuData.filter(x => x.roles.includes(this.user.role))
+    this.menus = getMenuData;
 
     this.auth.user.subscribe((user) => {
       this.user = user;
@@ -70,7 +72,9 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.menus = getMenuData.filter(x => x.roles.includes(this.user.role))
+  }
 
   menuActiveConfig(route: string, menu: navlink[]) {
     let exists = false;
@@ -429,7 +433,7 @@ let getMenuData: Array<navlink> = [
     svg: '../../assets/svg/file-text.svg',
     icon_res: 'svg',
     hidden: false,
-    roles: ['admin', 'cashier'],
+    roles: ['admin'],
     notification_count: 4,
     isCollapsed: true,
     children: [
@@ -440,7 +444,7 @@ let getMenuData: Array<navlink> = [
         svg: '../../assets/svg/phone-incoming.svg',
         icon_res: 'svg',
         hidden: false,
-        roles: ['admin', 'cashier'],
+        roles: ['admin'],
         notification_count: 4,
         isCollapsed: true,
         children: [],

@@ -41,6 +41,10 @@ export class LockscreenComponent implements OnInit {
         localStorage.setItem('utoken', data['token']);
         localStorage.setItem('user', JSON.stringify(token_parsed));
         this.auth.user.next(token_parsed);
+        let next = "/maintenance"
+        if(token_parsed.role == "cashier") {
+          next = "/u1"
+        }
         this.auth.accLocked.next(false);
         this.auth
           .getusercompanies(token_parsed.userid)
@@ -58,7 +62,7 @@ export class LockscreenComponent implements OnInit {
               ...data['userCompanies'],
             ]);
             this.auth.companyid.next(this.companyid);
-            this.router.navigate(['/maintenance']);
+            this.router.navigate([next]);
           });
       } else {
         this.errorMsg = 'INALID PIN!';
