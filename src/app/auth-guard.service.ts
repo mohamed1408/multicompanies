@@ -16,7 +16,7 @@ export class AuthGuardService implements CanActivate {
     this.user = JSON.parse(localStorage.getItem("user") || '{"role": ""}')
     if (!this.jwtHelper.getTokenExpirationDate(this.token)) {
       console.log("Expired!")
-      this.router.navigate(['login']);
+      this.router.navigate(['']);
       return false;
     } else if (!next.data.role.includes(this.user.role.toLowerCase())&&!next.data.role.includes("all")) {
       console.log(next.url,this.user.role,"No Role")
