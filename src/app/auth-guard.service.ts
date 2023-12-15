@@ -13,7 +13,7 @@ export class AuthGuardService implements CanActivate {
     this.token = localStorage.getItem("utoken") || ""
   }
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    this.user = JSON.parse(localStorage.getItem("user") || "{'role': ''}")
+    this.user = JSON.parse(localStorage.getItem("user") || '{"role": ""}')
     if (!this.jwtHelper.getTokenExpirationDate(this.token)) {
       console.log("Expired!")
       this.router.navigate(['lock']);
