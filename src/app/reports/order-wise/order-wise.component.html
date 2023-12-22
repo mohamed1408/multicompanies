@@ -76,6 +76,29 @@
                         </tr>
                     </tbody>
                 </table>
+                <hr class="hr-text" data-content="A C T I O N S">
+                <div id="reasoncontainer" class="mb-2 pb-30 position-relative" [class.open]="cancelling">
+                    <label *ngIf="cancelling">Cancel Reason <span class="text-danger">*</span></label>
+                    <textarea [(ngModel)]="cancelreason" cols="30" rows="3"></textarea>
+                    <span *ngIf="cancelling" id="coem" hidden class="text-danger font-italic"
+                        style="position: absolute; bottom: 0;">* Cancel Reason is mandatory</span>
+                </div>
+                <div class="d-flex flex-row-reverse">
+                    <button *ngIf="selectedOrder.osi != -1" class="btn btn-outline-red btn-rounded mr-2"
+                        (click)="cancell()">
+                        <i class="fa fa-ban"></i>
+                        Cancel
+                    </button>
+                    <button *ngIf="cancelling" class="btn btn-outline-secondary btn-rounded mr-2"
+                        (click)="cancelling = false">
+                        <i class="fa fa-exclamation-circle"></i>
+                        Abort
+                    </button>
+                    <!-- <button class="btn btn-outline-success btn-rounded">
+                        <i class="fa fa-check"></i>
+                        Complete
+                    </button> -->
+                </div>
             </section>
             <section *ngIf="gds.sterm != ''" style="zoom: 75%; top: 0;" class="hk-sec-wrapper sticky-top">
                 <!-- <h5 class="biza">Data for search term “{{gds.sterm}}”</h5> -->
@@ -150,9 +173,9 @@
                                 <tr style="background-color: #2b2b2b; position: relative;">
                                     <th><i class="fa fa-ban" style="cursor: pointer; color: white;"
                                             (click)="clearselection()"></i></th>
-                                    <th class="sptitle">Invoice</th>
+                                    <th class="sptitle">Invoice No</th>
                                     <th class="sptitle pointer" (click)="sortSetting.sort()">
-                                        Date
+                                        Date 
                                         <i *ngIf="sortSetting.ss == 0" class="fa fa-sort"></i>
                                         <i *ngIf="sortSetting.ss == 1" class="fa fa-sort-down"></i>
                                         <i *ngIf="sortSetting.ss == -1" class="fa fa-sort-up"></i>
@@ -167,8 +190,13 @@
                                     class="tbody-tr" [class.selected]="r.selected" (click)="r.selected = !r.selected">
                                     <td><code>#{{i+1}}</code></td>
                                     <td>
-                                        <a class="biza" href="javascript:void(0);"
+                                        <ng-template #popContent>{{r.cr}}</ng-template>
+                                        <ng-template #popTitle><div class="px-10">Cancel Reason</div></ng-template>
+                                        <a class="biza" href="javascript:void(0);" *ngIf="r.osi != -1"
                                             (click)="selectOrder(r.OdrsId, $event)">{{r.ino}}</a>
+                                        <a class="biza text-danger" href="javascript:void(0);" *ngIf="r.osi == -1"
+                                            (click)="selectOrder(r.OdrsId, $event)" [ngbPopover]="popContent"
+                                            placement="end" [popoverTitle]="popTitle" triggers="mouseenter:mouseleave">{{r.ino}}</a>
                                         <span class="item-details font-12 font-italic text-blue">{{r.itemlist}}</span>
                                     </td>
                                     <td class="text-center">{{r.oddt.format('MMM DD, YYYY HH:mm A')}}</td>

@@ -26,8 +26,10 @@ export class OrderWiseComponent implements OnInit {
   todate: string = ""
   fromdate: string = ""
   searchTerm: string = ""
+  cancelreason: string = ""
 
   showmenu: boolean = false
+  cancelling: boolean = false
 
   report: any[] = []
   stores: any[] = []
@@ -251,6 +253,22 @@ export class OrderWiseComponent implements OnInit {
       cbt += `${r.Name} \t ${r.takeaway} \t ${r.delivery} \t ${r.pickup} \n`
     });
     navigator.clipboard.writeText(cbt)
+  }
+  cancell() {
+    if(!this.cancelling) {
+      this.cancelling = true
+      return
+    }
+    if(this.cancelreason == "") {
+      $("#coem")[0].hidden = false
+      return
+    }
+    this.auth.cancelorder(this.selectedOrder.OdrsId, this.cancelreason).subscribe((res: any) => {
+      if(res.status == 200) {
+        this.report.filter(x => x.OdrsId == this.selectedOrder.OdrsId)[0].osi = -1
+      }
+      this.cancelling = false
+    })
   }
   hidecontent: boolean = true;
   keycode: string = 'sorrymaintenanceare';

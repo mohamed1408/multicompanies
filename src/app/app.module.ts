@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
@@ -92,6 +92,7 @@ import { DenomPipe } from './pipes/denom.pipe';
     BrowserModule,
     AppRoutingModule,
     NgbModule,
+    NgbPopoverModule,
     FormsModule,
     HttpClientModule,
     Ng2SearchPipeModule,

@@ -826,6 +826,10 @@ export class AuthService {
   getpendingorders(storeid: number, companyid: number) {
     return this.http.get(this.baseurl + `StoreData/getstoredatav2?storeid=${storeid}&companyid=${companyid}&data=ORDERS_`)
   }
+
+  cancelorder(orderid: number, reason: string) {
+    return this.http.get(this.baseurl1 + "POSOrder/cancellorder?orderid=" + orderid + "&reason=" + reason)
+  }
 }
 
 // baseurl

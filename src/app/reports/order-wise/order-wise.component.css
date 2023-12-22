@@ -150,6 +150,23 @@ tr.tbody-tr:hover {
     box-shadow: none;
 }
 
+@keyframes popup {
+    0% {
+        font-size: 16px;
+    }
+    50% {
+        font-size: 20px;
+    }
+    100% {
+        font-size: 18px;
+    }
+}
+
+.bz-fab:hover i {
+    animation: popup 0.2s;
+    font-size: 18px;
+}
+
 .bz-menu {
     position: fixed;
     bottom: 90px;
@@ -167,4 +184,36 @@ tr.tbody-tr:hover {
 
 .spinner-border {
     margin: auto;
+}
+
+/* .btn-icon {
+    transition: transform 100ms cubic-bezier(.47,1.64,.41,.8)
+} */
+
+/* .btn-icon:hover {
+    transform: scale(1.5);
+} */
+
+#reasoncontainer {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 500ms;
+}
+
+#reasoncontainer > textarea {
+    overflow: hidden;
+    display: none;
+}
+
+#reasoncontainer.open {
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 500ms;
+}
+
+#reasoncontainer.open > textarea {
+    display: block;
+}
+
+.popover-body {
+    padding: 10px;
 }
