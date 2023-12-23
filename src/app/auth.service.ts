@@ -828,7 +828,7 @@ export class AuthService {
   }
 
   cancelorder(orderid: number, reason: string) {
-    return this.http.get(this.baseurl1 + "POSOrder/cancellorder?orderid=" + orderid + "&reason=" + reason)
+    return this.http.get(this.baseurl + "POSOrder/cancellorder?orderid=" + orderid + "&reason=" + reason)
   }
 }
 
