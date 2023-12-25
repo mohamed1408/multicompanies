@@ -77,7 +77,7 @@ export class DeliveryorderreportComponent implements OnInit {
     private calendar: NgbCalendar,
     public modalService: NgbModal,
     private sanitizer: DomSanitizer,
-    private cservice: ColorService
+    public cservice: ColorService
   ) {
     // this.loginfo = JSON.parse(localStorage.getItem('loginInfo'))
     // this.companyid = this.loginfo.CompanyId;
