@@ -10,7 +10,8 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
-import { statusColors } from 'src/environments/environment';
+import { ColorService } from 'src/app/services/color/color.service';
+// import { statusColors } from 'src/environments/environment';
 
 declare function setHeightWidth(): any;
 declare var $: any;
@@ -22,7 +23,7 @@ declare var feather: any;
   styleUrls: ['./deliveryorderreport.component.css'],
 })
 export class DeliveryorderreportComponent implements OnInit {
-  statusColors: any = statusColors
+  // statusColors: any = statusColors
   model!: NgbDateStruct;
   loginfo: any;
   companyid: number = 0;
@@ -75,7 +76,8 @@ export class DeliveryorderreportComponent implements OnInit {
     private auth: AuthService,
     private calendar: NgbCalendar,
     public modalService: NgbModal,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private cservice: ColorService
   ) {
     // this.loginfo = JSON.parse(localStorage.getItem('loginInfo'))
     // this.companyid = this.loginfo.CompanyId;
