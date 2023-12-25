@@ -66,7 +66,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <hr class="hr-text" data-content="T R A N S A X N S">
+                <hr *ngIf="selectedOrder.transaxns.length > 0" class="hr-text" data-content="T R A N S A X N S">
                 <table class="table table-bordered">
                     <tbody style="border-top: 1px solid #e0e3e4;">
                         <tr *ngFor="let txn of selectedOrder.transaxns">
@@ -76,7 +76,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <hr class="hr-text" data-content="A C T I O N S">
+                <hr *ngIf="selectedOrder.osi != -1" class="hr-text" data-content="A C T I O N S">
                 <div id="reasoncontainer" class="mb-2 pb-30 position-relative" [class.open]="cancelling">
                     <label *ngIf="cancelling">Cancel Reason <span class="text-danger">*</span></label>
                     <textarea [(ngModel)]="cancelreason" cols="30" rows="3"></textarea>

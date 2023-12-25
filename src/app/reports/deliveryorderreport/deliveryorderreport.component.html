@@ -59,270 +59,283 @@
     </div>
     <!-- /Title -->
 
-    <div class="container">
-      <section class="hk-sec-wrapper">
-        <!-- <h5 class="hk-sec-title">Form controls</h5> -->
-        <!-- <p class="mb-25">Textual form controls—like inputs, selects, and textareas—are styled with the
-                          <code>.form-control</code> class. Included are styles for general appearance, focus state,
-                          sizing, and more.
-                      </p> -->
-        <div class="col-xl-12 d-flex">
-          <div class="col-xl-3">
-            <ng-template class="w-100" #rt let-r="result" let-t="term">
-              <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
-            </ng-template>
-            <div style="height: 100%; position: relative">
-              <input id="typeahead-template" style="height: 100%" #instance="ngbTypeahead" type="text"
-                class="form-control" [(ngModel)]="smodel" placeholder="Search Ordered Store..." [ngbTypeahead]="search"
-                [resultTemplate]="rt" [inputFormatter]="formatter" (selectItem)="selectedItem($event.item)" />
-              <span *ngIf="smodel != ''" class="search-clear" aria-hidden="true"
-                (click)="smodel = ''; storeid = 0">×</span>
-            </div>
-          </div>
-          <div class="col-xl-3">
-            <input class="form-control" type="text" name="datetimes" />
-          </div>
-          <div class="col-xl-3">
-            <button class="btn btn-success" (click)="deliveryOrderReport()">
-              Submit
-            </button>
-          </div>
-          <div class="col-xl-3">
-            <input type="text" class="form-control" [(ngModel)]="invoiceno" placeholder="InVoice Number"
-              aria-label="Recipient's username" aria-describedby="basic-addon2" (keyup.enter)="deliveryOrderReport()" />
-          </div>
-        </div>
-      </section>
-      <section class="hk-sec-wrapper">
-        <!-- <div class="row"> -->
-        <!-- </div> -->
-        <!-- <p class="mb-25">Set heights using classes like <code>.form-control-lg, custom-select-lg</code> and
-                          <code>.form-control-sm, custom-select-sm</code>.
-                      </p> -->
-        <div class="row w-100">
-          <div class="col-sm">
-            <div class="table-wrap mb-30">
-              <div class="table-responsive">
-                <div class="btn-group btn-group-lg mb-15" role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-secondary" (click)="oti = 0">All</button>
-                  <button type="button" class="btn btn-secondary" (click)="oti = 2">Take Away</button>
-                  <button type="button" class="btn btn-secondary" (click)="oti = 3">Delivery</button>
-                  <button type="button" class="btn btn-secondary" (click)="oti = 4">PickUp</button>
-                  <button type="button" class="btn btn-secondary" (click)="oti = 5">Quick</button>
-                  <button type="button" class="btn btn-secondary" (click)="oti = 1">DineIn</button>
-              </div>
-                <table class="table table-sm mb-0">
-                  <thead>
-                    <tr>
-                      <th>Invoice</th>
-                      <th>Bill Amount</th>
-                      <th>Paid Amount</th>
-                      <th>Ordered Date</th>
-                      <th>Delivery Date</th>
-                      <th>Delivered Date</th>
-                      <th>Status</th>
-                      <th>Ordered Store</th>
-                      <th>Delivery Store</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let ordr of orders | orderfilter : oti">
-                      <td>
-                        <a class="biza" data-toggle="modal" data-target="#exampleModalLarge01" href="javascript:void(0)"
-                          (click)="selectOrder(ordr)">#{{ ordr.InvoiceNo }}</a>
-                      </td>
-                      <td>{{ ordr.BillAmount }}</td>
-                      <td>{{ ordr.PaidAmount }}</td>
-                      <td>
-                        <span class="text-muted"><i class="icon-clock font-13"></i>
-                          {{ordr.OrderedDateTime | date: "MMM d, h:mm a"}}</span>
-                      </td>
-                      <td>
-                        <span class="text-muted"><i class="icon-clock font-13"></i>
-                          {{ordr.DeliveryDateTime | date: "MMM d, h:mm a"}}</span>
-                      </td>
-                      <td>
-                        <span class="text-muted"><i class="icon-clock font-13"></i>
-                          {{
-                          ordr.DeliveredDateTime | date: "MMM d, h:mm a"
-                          }}</span>
-                      </td>
-                      <td>{{ ordr.StatusName }}</td>
-                      <td>{{ ordr.StoreName }}</td>
-                      <td>
-                        {{
-                        ordr.DeliveryStoreName
-                        ? ordr.DeliveryStoreName
-                        : "-"
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+    <div class="container d-flex">
+      <div class="col-xl-4">
+        <section class="hk-sec-wrapper sticky-top" style="top: 190px; max-height: 70vh; overflow: auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>InvoiceNo</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let txn of transaxns">
+                <th><span class="text-success">{{txn.ptype}}</span> <br> {{txn.InvoiceNo}}</th>
+                <th><span class="text-success">&#8377;{{txn.Amount}}</span> <br> {{txn.TransDateTime | date: "MMM d, h:mm a"}}</th>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+      <div class="col-xl-8">
+        <section class="hk-sec-wrapper">
+          <!-- <h5 class="hk-sec-title">Form controls</h5> -->
+          <!-- <p class="mb-25">Textual form controls—like inputs, selects, and textareas—are styled with the
+                            <code>.form-control</code> class. Included are styles for general appearance, focus state,
+                            sizing, and more.
+                        </p> -->
+          <div class="col-xl-12 d-flex">
+            <div class="col-xl">
+              <ng-template class="w-100" #rt let-r="result" let-t="term">
+                <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+              </ng-template>
+              <div style="height: 100%; position: relative">
+                <input id="typeahead-template" style="height: 100%" #instance="ngbTypeahead" type="text"
+                  class="form-control" [(ngModel)]="smodel" placeholder="Search Ordered Store..." [ngbTypeahead]="search"
+                  [resultTemplate]="rt" [inputFormatter]="formatter" (selectItem)="selectedItem($event.item)" />
+                <span *ngIf="smodel != ''" class="search-clear" aria-hidden="true"
+                  (click)="smodel = ''; storeid = 0">×</span>
               </div>
             </div>
+            <div class="col-xl">
+              <input class="form-control" type="text" name="datetimes" />
+            </div>
+            <div class="col-xl-2">
+              <button class="btn btn-success" (click)="deliveryOrderReport()">
+                Submit
+              </button>
+            </div>
+            <div class="col-xl">
+              <input type="text" class="form-control" [(ngModel)]="invoiceno" placeholder="InVoice Number"
+                aria-label="Recipient's username" aria-describedby="basic-addon2" (keyup.enter)="deliveryOrderReport()" />
+            </div>
           </div>
-        </div>
-        <div class="modal fade" id="exampleModalLarge01" tabindex="-1" role="dialog"
-          aria-labelledby="exampleModalLarge01" aria-hidden="true">
-          <div *ngIf="temporder" class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">{{ temporder.InvoiceNo }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="col-xl-12 row">
-                  <div class="col-xl-6">
-                    <div class="card-body">
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="baseFullname"><strong>Status</strong></label>
-                        <div class="col-md-8">
-                          <select class="form-control custom-select" [(ngModel)]="temporder.OrderStatusId"
-                            aria-placeholder="Select Company" style="margin-left: 40px">
-                            <option *ngFor="let status of statuses" value="{{ status.id }}">
-                              {{ status.status }}
-                            </option>
-                          </select>
-                        </div>
-                        <!-- <span *ngIf="submitted && variantgroup.name == ''" class="text-danger">*VariantGroup cannot be
-                                                empty</span> -->
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="baseFullname"><strong>Ordered Store</strong></label>
-                        <div class="col-md-3 pt-2" style="margin-left: 40px">
-                          {{ temporder.StoreName }}
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="baseFullname"><strong>Bill Amt</strong></label>
-                        <div class="col-md-3 pt-2" style="margin-left: 40px">
-                          &#8377;{{ temporder.BillAmount }}
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="formControlRange"><strong>Paid Amt</strong></label>
-                        <div class="col-md-3 pt-2" style="margin-left: 40px">
-                          &#8377;{{ temporder.PaidAmount }}
-                        </div>
-                      </div>
-                    </div>
+        </section>
+        <section class="hk-sec-wrapper">
+          <!-- <div class="row"> -->
+          <!-- </div> -->
+          <!-- <p class="mb-25">Set heights using classes like <code>.form-control-lg, custom-select-lg</code> and
+                            <code>.form-control-sm, custom-select-sm</code>.
+                        </p> -->
+          <div class="row w-100">
+            <div class="col-sm">
+              <div class="table-wrap mb-30">
+                <div class="table-responsive">
+                  <div class="btn-group btn-group-lg mb-15" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-secondary" (click)="oti = 0">All</button>
+                    <button type="button" class="btn btn-secondary" (click)="oti = 2">Take Away</button>
+                    <button type="button" class="btn btn-secondary" (click)="oti = 3">Delivery</button>
+                    <button type="button" class="btn btn-secondary" (click)="oti = 4">PickUp</button>
+                    <button type="button" class="btn btn-secondary" (click)="oti = 7">FB Online</button>
+                    <button type="button" class="btn btn-secondary" (click)="oti = 5">Quick</button>
+                    <button type="button" class="btn btn-secondary" (click)="oti = 1">DineIn</button>
                   </div>
-                  <div class="col-xl-6">
-                    <div class="form-group row">
-                      <label class="col-md-3 col-form-label" for="formControlRange"><strong>OrderedDate</strong></label>
-                      <div class="col-md-3 pt-2">
-                        <div style="margin-left: 50px">
-                          <input style="width: 15em; margin-left: 5px" [(ngModel)]="temporder.OrderedDate"
-                            class="form-control" type="date" />
+                  <table class="table table-sm mb-0">
+                    <thead>
+                      <tr>
+                        <th>Invoice</th>
+                        <th>Amount</th>
+                        <!-- <th>Paid Amount</th> -->
+                        <th>Ordered Date</th>
+                        <th>Delivered Date</th>
+                        <!-- <th>Status</th> -->
+                        <!-- <th>Ordered Store</th> -->
+                        <th>Store</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let ordr of orders | orderfilter : oti">
+                        <td class="position-relative" style="padding-top: 20px !important;">
+                          <span class="font-italic position-absolute font-13" style="top: 0;"
+                            [ngStyle]="{'color': statusColors(ordr.OrderStatusId)}">
+                            {{ordr.StatusName}}
+                          </span>
+                          <a class="biza" data-toggle="modal" data-target="#exampleModalLarge01" href="javascript:void(0)"
+                            (click)="selectOrder(ordr)">#{{ ordr.InvoiceNo }}</a>
+                        </td>
+                        <td>{{ ordr.PaidAmount }}/{{ ordr.BillAmount }}</td>
+                        <td>
+                          <span class="text-muted">OD: {{ordr.OrderedDateTime | date: "MMM d, h:mm a"}}</span><br>
+                          <span class="text-muted">DD: {{ordr.DeliveryDateTime | date: "MMM d, h:mm a"}}</span>
+                        </td>
+                        <td>
+                          <span class="text-muted">
+                            {{
+                            ordr.DeliveredDateTime | date: "MMM d, h:mm a"
+                            }}</span>
+                        </td>
+                        <!-- <td>{{ ordr.StatusName }}</td> -->
+                        <td style="width: 130px;">{{ ordr.StoreName }} to {{ordr.DeliveryStoreName? ordr.DeliveryStoreName: "-"}}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="exampleModalLarge01" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLarge01" aria-hidden="true">
+            <div *ngIf="temporder" class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">{{ temporder.InvoiceNo }}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="col-xl-12 row">
+                    <div class="col-xl-6">
+                      <div class="card-body">
+                        <div class="form-group row">
+                          <label class="col-md-3 col-form-label" for="baseFullname"><strong>Status</strong></label>
+                          <div class="col-md-8">
+                            <select class="form-control custom-select" [(ngModel)]="temporder.OrderStatusId"
+                              aria-placeholder="Select Company" style="margin-left: 40px">
+                              <option *ngFor="let status of statuses" value="{{ status.id }}">
+                                {{ status.status }}
+                              </option>
+                            </select>
+                          </div>
+                          <!-- <span *ngIf="submitted && variantgroup.name == ''" class="text-danger">*VariantGroup cannot be
+                                                  empty</span> -->
                         </div>
-                        <!-- <div hidden style="margin-left:80px;">
-                                <label for="username">Date</label>
-                                <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
-                                  [(ngModel)]="selected" [showCustomRangeLabel]="true"
-                                  [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
-                                  [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
-                                  class="form-control" />
-                              </div> -->
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label class="col-md-3 col-form-label" for="formControlRange"><strong>Delivery
-                          Date</strong></label>
-                      <div class="col-md-3 pt-2">
-                        <div style="margin-left: 50px">
-                          <!-- <input type="text" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
-                                  [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
-                                  [(ngModel)]="selected" [showCustomRangeLabel]="true"
-                                  [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
-                                  [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
-                                  class="form-control" /> -->
-                          <input style="width: 15em; margin-left: 5px" [(ngModel)]="temporder.DeliveryDateTime"
-                            class="form-control" type="date" />
+                        <div class="form-group row">
+                          <label class="col-md-3 col-form-label" for="baseFullname"><strong>Ordered Store</strong></label>
+                          <div class="col-md-3 pt-2" style="margin-left: 40px">
+                            {{ temporder.StoreName }}
+                          </div>
                         </div>
-                        <!-- <div hidden style="margin-left:80px;">
-                                <label for="username">Date</label>
-                                <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
-                                  [(ngModel)]="selected" [showCustomRangeLabel]="true"
-                                  [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
-                                  [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
-                                  class="form-control" />
-                              </div> -->
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label class="col-md-3 col-form-label" for="formControlRange"><strong>Delivered
-                          Date</strong></label>
-                      <div class="col-md-3 pt-2">
-                        <div style="margin-left: 50px">
-                          <!-- <input type="text" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
-                                  [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected"
-                                  [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
-                                  [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
-                                  placeholder="Select Date..." class="form-control" /> -->
-                          <input style="width: 15em; margin-left: 5px" [(ngModel)]="temporder.DeliveredDateTime"
-                            class="form-control" type="date" />
+                        <div class="form-group row">
+                          <label class="col-md-3 col-form-label" for="baseFullname"><strong>Bill Amt</strong></label>
+                          <div class="col-md-3 pt-2" style="margin-left: 40px">
+                            &#8377;{{ temporder.BillAmount }}
+                          </div>
                         </div>
-                        <!-- <div hidden style="margin-left:80px;">
-                                <label for="username">Date</label>
-                                <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
-                                  [(ngModel)]="selected" [showCustomRangeLabel]="true" [alwaysShowCalendars]="true"
-                                  [ranges]="ranges" [linkedCalendars]="true" [showClearButton]="true"
-                                  (change)="date($event)" placeholder="Select Date..." class="form-control" />
-                              </div> -->
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label class="col-md-3 col-form-label" for="baseFullname"><strong>Delivery Store</strong></label>
-                      <div class="col-md-9 pt-2">
-                        <div>
-                          <ng-template class="w-100" #rt let-r="result" let-t="term">
-                            <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
-                          </ng-template>
-                          <div style="
-                                  width: 100%;
-                                  height: 84%;
-                                  position: relative;
-                                  margin-left: 55px;
-                                ">
-                            <input id="typeahead-template" style="height: 100%" #instance="ngbTypeahead" type="text"
-                              class="form-control" [(ngModel)]="temporder.DeliveryStoreObj"
-                              placeholder="Search Delivery Store..." [ngbTypeahead]="search" [resultTemplate]="rt"
-                              [inputFormatter]="formatter" (selectItem)="selectedItem($event.item)" />
-                            <span *ngIf="temporder.DeliveryStoreId != ''" class="search-clear" aria-hidden="true"
-                              (click)="
-                                    temporder.DeliveryStoreId = ''; storeid = 0
-                                  ">×</span>
+                        <div class="form-group row">
+                          <label class="col-md-3 col-form-label" for="formControlRange"><strong>Paid Amt</strong></label>
+                          <div class="col-md-3 pt-2" style="margin-left: 40px">
+                            &#8377;{{ temporder.PaidAmount }}
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="form-group row">
-                      <label class="col-md-3 col-form-label" for="formControlRange"><strong>Note</strong></label>
-                      <div class="col-md-9 pt-2">
-                        <!-- <input class="form-control form-control-sm" [(ngModel)]="temporder.CancelReason" type="text"
-                                placeholder="Some Reason.."> -->
-                        <textarea class="form-control" style="margin-left: 55px" rows="1" placeholder="Some Reason..."
-                          [(ngModel)]="temporder.Note"></textarea>
+                    <div class="col-xl-6">
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="formControlRange"><strong>OrderedDate</strong></label>
+                        <div class="col-md-3 pt-2">
+                          <div style="margin-left: 50px">
+                            <input style="width: 15em; margin-left: 5px" [(ngModel)]="temporder.OrderedDate"
+                              class="form-control" type="date" />
+                          </div>
+                          <!-- <div hidden style="margin-left:80px;">
+                                  <label for="username">Date</label>
+                                  <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
+                                    [(ngModel)]="selected" [showCustomRangeLabel]="true"
+                                    [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
+                                    [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
+                                    class="form-control" />
+                                </div> -->
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="formControlRange"><strong>Delivery
+                            Date</strong></label>
+                        <div class="col-md-3 pt-2">
+                          <div style="margin-left: 50px">
+                            <!-- <input type="text" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
+                                    [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
+                                    [(ngModel)]="selected" [showCustomRangeLabel]="true"
+                                    [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
+                                    [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
+                                    class="form-control" /> -->
+                            <input style="width: 15em; margin-left: 5px" [(ngModel)]="temporder.DeliveryDateTime"
+                              class="form-control" type="date" />
+                          </div>
+                          <!-- <div hidden style="margin-left:80px;">
+                                  <label for="username">Date</label>
+                                  <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
+                                    [(ngModel)]="selected" [showCustomRangeLabel]="true"
+                                    [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
+                                    [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
+                                    class="form-control" />
+                                </div> -->
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="formControlRange"><strong>Delivered
+                            Date</strong></label>
+                        <div class="col-md-3 pt-2">
+                          <div style="margin-left: 50px">
+                            <!-- <input type="text" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
+                                    [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected"
+                                    [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
+                                    [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
+                                    placeholder="Select Date..." class="form-control" /> -->
+                            <input style="width: 15em; margin-left: 5px" [(ngModel)]="temporder.DeliveredDateTime"
+                              class="form-control" type="date" />
+                          </div>
+                          <!-- <div hidden style="margin-left:80px;">
+                                  <label for="username">Date</label>
+                                  <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
+                                    [(ngModel)]="selected" [showCustomRangeLabel]="true" [alwaysShowCalendars]="true"
+                                    [ranges]="ranges" [linkedCalendars]="true" [showClearButton]="true"
+                                    (change)="date($event)" placeholder="Select Date..." class="form-control" />
+                                </div> -->
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="baseFullname"><strong>Delivery Store</strong></label>
+                        <div class="col-md-9 pt-2">
+                          <div>
+                            <ng-template class="w-100" #rt let-r="result" let-t="term">
+                              <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+                            </ng-template>
+                            <div style="
+                                    width: 100%;
+                                    height: 84%;
+                                    position: relative;
+                                    margin-left: 55px;
+                                  ">
+                              <input id="typeahead-template" style="height: 100%" #instance="ngbTypeahead" type="text"
+                                class="form-control" [(ngModel)]="temporder.DeliveryStoreObj"
+                                placeholder="Search Delivery Store..." [ngbTypeahead]="search" [resultTemplate]="rt"
+                                [inputFormatter]="formatter" (selectItem)="selectedItem($event.item)" />
+                              <span *ngIf="temporder.DeliveryStoreId != ''" class="search-clear" aria-hidden="true"
+                                (click)="
+                                      temporder.DeliveryStoreId = ''; storeid = 0
+                                    ">×</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="formControlRange"><strong>Note</strong></label>
+                        <div class="col-md-9 pt-2">
+                          <!-- <input class="form-control form-control-sm" [(ngModel)]="temporder.CancelReason" type="text"
+                                  placeholder="Some Reason.."> -->
+                          <textarea class="form-control" style="margin-left: 55px" rows="1" placeholder="Some Reason..."
+                            [(ngModel)]="temporder.Note"></textarea>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                  Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Save changes
-                </button>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                  </button>
+                  <button type="button" class="btn btn-primary">
+                    Save changes
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   </div>
   <div class="bz-menu custom-scroll-bar" [hidden]="!showmenu">
@@ -341,7 +354,8 @@
       <tbody>
         <tr *ngFor="let store of storeOrderCount">
           <td><a href="javascript:void(0)" class="biza" (click)="getstorereport(store)">{{store.Name}}</a></td>
-          <td><span class="badge" [class.badge-blue]="store.delivery > 0">{{store.delivery+store.takeaway+store.pickup}}</span></td>
+          <td><span class="badge"
+              [class.badge-blue]="(store.delivery+store.takeaway+store.pickup+store.fbonline) > 0">{{store.delivery+store.takeaway+store.pickup}}</span></td>
           <!-- <td><span class="badge" [class.badge-blue]="store.pickup > 0">{{store.pickup}}</span></td> -->
         </tr>
       </tbody>

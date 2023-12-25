@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
+import { statusColors } from 'src/environments/environment';
 
 declare function setHeightWidth(): any;
 declare var $: any;
@@ -21,6 +22,7 @@ declare var feather: any;
   styleUrls: ['./deliveryorderreport.component.css'],
 })
 export class DeliveryorderreportComponent implements OnInit {
+  statusColors: any = statusColors
   model!: NgbDateStruct;
   loginfo: any;
   companyid: number = 0;
@@ -37,6 +39,7 @@ export class DeliveryorderreportComponent implements OnInit {
   displaydate = moment().format('Do MMM YYYY');
   daterange: any;
   orders: any = [];
+  transaxns: any[] = []
   invoiceno: string = '';
   temporder: any;
   ranges: any = {
@@ -170,6 +173,10 @@ export class DeliveryorderreportComponent implements OnInit {
         this.orders = data['report'];
         // this.storeOrderCount = data['ordercountreport'];
         console.log(this.orders);
+        this.transaxns = data["transactions"]
+        this.transaxns.forEach(txn => {
+          txn.InvoiceNo = this.orders.filter((x: any) => x.OdrsId == txn.OrderId)[0].InvoiceNo
+        })
         // this.orders = this.temporder.filter((x: any) => x.OrderId);
       });
   }
@@ -267,9 +274,9 @@ export class DeliveryorderreportComponent implements OnInit {
   oti: number = 0
   toClipBoard() {
     // Clipboard
-    let cbt: string = "STORE \t TAK \t DEL \t PICK \n"
+    let cbt: string = "STORE \t TAK \t DEL \t PICK \t FBONL \t\t cash \t card \t phonepe \n"
     this.storeOrderCount.forEach((r: any) => {
-      cbt += `${r.Name} \t ${r.takeaway} \t ${r.delivery} \t ${r.pickup} \n`
+      cbt += `${r.Name} \t ${r.takeaway} \t ${r.delivery} \t ${r.pickup} \t ${r.fbonline} \t\t ${r.cash} \t ${r.card} \t ${r.phonepe} \n`
     });
     navigator.clipboard.writeText(cbt)
   }
