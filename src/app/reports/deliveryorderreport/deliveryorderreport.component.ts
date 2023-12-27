@@ -178,6 +178,7 @@ export class DeliveryorderreportComponent implements OnInit {
         this.transaxns = data["transactions"]
         this.transaxns.forEach(txn => {
           txn.InvoiceNo = this.orders.filter((x: any) => x.OdrsId == txn.OrderId)[0].InvoiceNo
+          txn.OrderTypeId = this.orders.filter((x: any) => x.OdrsId == txn.OrderId)[0].OrderTypeId
         })
         // this.orders = this.temporder.filter((x: any) => x.OrderId);
       });
@@ -279,6 +280,18 @@ export class DeliveryorderreportComponent implements OnInit {
     let cbt: string = "STORE \t TAK \t DEL \t PICK \t FBONL \t\t cash \t card \t phonepe \n"
     this.storeOrderCount.forEach((r: any) => {
       cbt += `${r.Name} \t ${r.takeaway} \t ${r.delivery} \t ${r.pickup} \t ${r.fbonline} \t\t ${r.cash} \t ${r.card} \t ${r.phonepe} \n`
+    });
+    navigator.clipboard.writeText(cbt)
+  }
+  txnToClipBoard() {
+    let cbt: string = "INVOICE \t AMOUNT \t\t DATE \n"
+    this.orders.forEach((o: any) => {
+      let txn = this.transaxns.filter((x: any) => x.OrderId == o.OdrsId)
+      if (txn.length > 0) {
+        txn.sort((a: any,b: any) => b.OrderId - a.OrderId).forEach((x: any, i: number) => {
+          cbt += `${(i == 0) ? o.InvoiceNo : ''} \t ${x.Amount + " \t " + x.ptype} \t ${moment(x.TransDateTime).format("MMM D, hh:mm a")} \n`
+        })
+      }
     });
     navigator.clipboard.writeText(cbt)
   }

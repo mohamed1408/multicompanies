@@ -66,13 +66,24 @@
             <thead>
               <tr>
                 <th>InvoiceNo</th>
-                <th>Amount</th>
+                <th colspan="1">Amount</th>
+                <th>
+                  <button class="btn" (click)="txnToClipBoard()">
+                    <feather-icon [name]="'copy'"></feather-icon>
+                  </button>      
+                </th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let txn of transaxns">
-                <th><span class="text-success">{{txn.ptype}}</span> <br> {{txn.InvoiceNo}}</th>
-                <th><span class="text-success">&#8377;{{txn.Amount}}</span> <br> {{txn.TransDateTime | date: "MMM d, h:mm a"}}</th>
+              <tr *ngFor="let txn of transaxns | orderfilter : oti">
+                <th>{{txn.InvoiceNo}}</th>
+                <th>
+                  <br>
+                  <span class="text-success text-right float-right">&#8377;{{txn.Amount}}</span>
+                </th>
+                <th>
+                  <span class="float-left">{{txn.TransDateTime | date: "MMM d, h:mm a"}}</span><br>
+                  <span class="text-success float-left">{{txn.ptype}}</span></th>
               </tr>
             </tbody>
           </table>
@@ -123,13 +134,13 @@
               <div class="table-wrap mb-30">
                 <div class="table-responsive">
                   <div class="btn-group btn-group-lg mb-15" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-secondary" (click)="oti = 0">All</button>
-                    <button type="button" class="btn btn-secondary" (click)="oti = 2">Take Away</button>
-                    <button type="button" class="btn btn-secondary" (click)="oti = 3">Delivery</button>
-                    <button type="button" class="btn btn-secondary" (click)="oti = 4">PickUp</button>
-                    <button type="button" class="btn btn-secondary" (click)="oti = 7">FB Online</button>
-                    <button type="button" class="btn btn-secondary" (click)="oti = 5">Quick</button>
-                    <button type="button" class="btn btn-secondary" (click)="oti = 1">DineIn</button>
+                    <button type="button" [class.btn-outline-grey]="oti != 0" class="btn btn-secondary" (click)="oti = 0">All</button>
+                    <button type="button" [class.btn-outline-grey]="oti != 2" class="btn btn-secondary" (click)="oti = 2">Take Away</button>
+                    <button type="button" [class.btn-outline-grey]="oti != 3" class="btn btn-secondary" (click)="oti = 3">Delivery</button>
+                    <button type="button" [class.btn-outline-grey]="oti != 4" class="btn btn-secondary" (click)="oti = 4">PickUp</button>
+                    <button type="button" [class.btn-outline-grey]="oti != 7" class="btn btn-secondary" (click)="oti = 7">FB Online</button>
+                    <button type="button" [class.btn-outline-grey]="oti != 5" class="btn btn-secondary" (click)="oti = 5">Quick</button>
+                    <button type="button" [class.btn-outline-grey]="oti != 1" class="btn btn-secondary" (click)="oti = 1">DineIn</button>
                   </div>
                   <table class="table table-sm mb-0">
                     <thead>
@@ -145,7 +156,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let ordr of orders | orderfilter : oti">
+                      <tr *ngFor="let ordr of orders | orderfilter : oti | filter : invoiceno">
                         <td class="position-relative" style="padding-top: 20px !important;">
                           <span class="font-italic position-absolute font-13" style="top: 0;"
                             [ngStyle]="{'color': cservice.statusColors(ordr.OrderStatusId)}">
