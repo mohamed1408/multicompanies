@@ -5,6 +5,7 @@ import { SafeHtml } from '@angular/platform-browser';
 // import { version } from 'package.json'
 
 export class OrderModule {
+  OdrsId: number = 0
   Name: string = "";
   OrderType: string = "";
   selected: any;

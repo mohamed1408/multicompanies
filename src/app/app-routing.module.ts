@@ -24,6 +24,7 @@ import { TransactionListComponent } from './transaction-list/transaction-list.co
 import { OrderWiseComponent } from './reports/order-wise/order-wise.component';
 import { OrderManagerComponent } from './order-manager/order-manager.component';
 import { AuthGuardService } from './auth-guard.service';
+import { TransaxnVerifyComponent } from './transaxn-verify/transaxn-verify.component';
 
 const routes: Routes = [
   { path: '', component: SigninComponent, canActivate: [AuthGuardService], data: {role: ['all',]} },
@@ -51,6 +52,7 @@ const routes: Routes = [
   { path: 'kb2chef', component: Kb2chefComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
   { path: 'u1', component: TransactionListComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
   { path: 'u2', component: OrderManagerComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
+  { path: 'u3', component: TransaxnVerifyComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
 ];
 
 @NgModule({

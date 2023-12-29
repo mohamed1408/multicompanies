@@ -45,6 +45,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { TopBarComponent } from './layout/top-bar/top-bar.component';
 import { SideMenuComponent } from './layout/side-menu/side-menu.component';
 import { DenomPipe } from './pipes/denom.pipe';
+import { TransaxnVerifyComponent } from './transaxn-verify/transaxn-verify.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { DenomPipe } from './pipes/denom.pipe';
     TopBarComponent,
     SideMenuComponent,
     DenomPipe,
+    TransaxnVerifyComponent,
   ],
   imports: [
     BrowserModule,

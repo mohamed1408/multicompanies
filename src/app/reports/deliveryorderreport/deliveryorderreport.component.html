@@ -70,7 +70,7 @@
                 <th>
                   <button class="btn" (click)="txnToClipBoard()">
                     <feather-icon [name]="'copy'"></feather-icon>
-                  </button>      
+                  </button>
                 </th>
               </tr>
             </thead>
@@ -83,7 +83,8 @@
                 </th>
                 <th>
                   <span class="float-left">{{txn.TransDateTime | date: "MMM d, h:mm a"}}</span><br>
-                  <span class="text-success float-left">{{txn.ptype}}</span></th>
+                  <span class="text-success float-left">{{txn.ptype}}</span>
+                </th>
               </tr>
             </tbody>
           </table>
@@ -103,8 +104,9 @@
               </ng-template>
               <div style="height: 100%; position: relative">
                 <input id="typeahead-template" style="height: 100%" #instance="ngbTypeahead" type="text"
-                  class="form-control" [(ngModel)]="smodel" placeholder="Search Ordered Store..." [ngbTypeahead]="search"
-                  [resultTemplate]="rt" [inputFormatter]="formatter" (selectItem)="selectedItem($event.item)" />
+                  class="form-control" [(ngModel)]="smodel" placeholder="Search Ordered Store..."
+                  [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
+                  (selectItem)="selectedItem($event.item)" />
                 <span *ngIf="smodel != ''" class="search-clear" aria-hidden="true"
                   (click)="smodel = ''; storeid = 0">×</span>
               </div>
@@ -119,7 +121,8 @@
             </div>
             <div class="col-xl">
               <input type="text" class="form-control" [(ngModel)]="invoiceno" placeholder="InVoice Number"
-                aria-label="Recipient's username" aria-describedby="basic-addon2" (keyup.enter)="deliveryOrderReport()" />
+                aria-label="Recipient's username" aria-describedby="basic-addon2"
+                (keyup.enter)="deliveryOrderReport()" />
             </div>
           </div>
         </section>
@@ -129,19 +132,31 @@
           <!-- <p class="mb-25">Set heights using classes like <code>.form-control-lg, custom-select-lg</code> and
                             <code>.form-control-sm, custom-select-sm</code>.
                         </p> -->
+          <div class="d-flex">
+            <div class="btn-group btn-group-lg mb-15 col-xl-9" role="group" aria-label="Basic example">
+              <button type="button" [class.btn-outline-grey]="oti != 0" class="btn btn-secondary"
+                (click)="oti = 0">All</button>
+              <button type="button" [class.btn-outline-grey]="oti != 2" class="btn btn-secondary" (click)="oti = 2">Take
+                Away</button>
+              <button type="button" [class.btn-outline-grey]="oti != 3" class="btn btn-secondary"
+                (click)="oti = 3">Delivery</button>
+              <button type="button" [class.btn-outline-grey]="oti != 4" class="btn btn-secondary"
+                (click)="oti = 4">PickUp</button>
+              <button type="button" [class.btn-outline-grey]="oti != 7" class="btn btn-secondary" (click)="oti = 7">FB
+                Online</button>
+              <button type="button" [class.btn-outline-grey]="oti != 5" class="btn btn-secondary"
+                (click)="oti = 5">Quick</button>
+              <button type="button" [class.btn-outline-grey]="oti != 1" class="btn btn-secondary"
+                (click)="oti = 1">DineIn</button>
+            </div>
+            <div class="col-xl-3">
+              <button class="btn btn-success btn-lg" (click)="openselectedorders()">Complete Pending Orders</button>
+            </div>
+          </div>
           <div class="row w-100">
             <div class="col-sm">
               <div class="table-wrap mb-30">
                 <div class="table-responsive">
-                  <div class="btn-group btn-group-lg mb-15" role="group" aria-label="Basic example">
-                    <button type="button" [class.btn-outline-grey]="oti != 0" class="btn btn-secondary" (click)="oti = 0">All</button>
-                    <button type="button" [class.btn-outline-grey]="oti != 2" class="btn btn-secondary" (click)="oti = 2">Take Away</button>
-                    <button type="button" [class.btn-outline-grey]="oti != 3" class="btn btn-secondary" (click)="oti = 3">Delivery</button>
-                    <button type="button" [class.btn-outline-grey]="oti != 4" class="btn btn-secondary" (click)="oti = 4">PickUp</button>
-                    <button type="button" [class.btn-outline-grey]="oti != 7" class="btn btn-secondary" (click)="oti = 7">FB Online</button>
-                    <button type="button" [class.btn-outline-grey]="oti != 5" class="btn btn-secondary" (click)="oti = 5">Quick</button>
-                    <button type="button" [class.btn-outline-grey]="oti != 1" class="btn btn-secondary" (click)="oti = 1">DineIn</button>
-                  </div>
                   <table class="table table-sm mb-0">
                     <thead>
                       <tr>
@@ -162,13 +177,14 @@
                             [ngStyle]="{'color': cservice.statusColors(ordr.OrderStatusId)}">
                             {{ordr.StatusName}}
                           </span>
-                          <a class="biza" data-toggle="modal" data-target="#exampleModalLarge01" href="javascript:void(0)"
-                            (click)="selectOrder(ordr)">#{{ ordr.InvoiceNo }}</a>
+                          <a class="biza" data-toggle="modal" data-target="#exampleModalLarge01"
+                            href="javascript:void(0)" (click)="selectOrder(ordr)">#{{ ordr.InvoiceNo }}</a>
                         </td>
                         <td>{{ ordr.PaidAmount }}/{{ ordr.BillAmount }}</td>
                         <td>
                           <span class="text-muted">OD: {{ordr.OrderedDateTime | date: "MMM d, h:mm a"}}</span><br>
-                          <span class="text-muted">DD: {{ordr.DeliveryDateTime | date: "MMM d, h:mm a"}}</span>
+                          <span [class.text-danger]="ordr.missed">DD: {{ordr.DeliveryDateTime | date: "MMM d, h:mm
+                            a"}}</span>
                         </td>
                         <td>
                           <span class="text-muted">
@@ -177,7 +193,8 @@
                             }}</span>
                         </td>
                         <!-- <td>{{ ordr.StatusName }}</td> -->
-                        <td style="width: 130px;">{{ ordr.StoreName }} to {{ordr.DeliveryStoreName? ordr.DeliveryStoreName: "-"}}
+                        <td style="width: 130px;">{{ ordr.StoreName }} to {{ordr.DeliveryStoreName?
+                          ordr.DeliveryStoreName: "-"}}
                         </td>
                       </tr>
                     </tbody>
@@ -214,7 +231,8 @@
                                                   empty</span> -->
                         </div>
                         <div class="form-group row">
-                          <label class="col-md-3 col-form-label" for="baseFullname"><strong>Ordered Store</strong></label>
+                          <label class="col-md-3 col-form-label" for="baseFullname"><strong>Ordered
+                              Store</strong></label>
                           <div class="col-md-3 pt-2" style="margin-left: 40px">
                             {{ temporder.StoreName }}
                           </div>
@@ -226,7 +244,8 @@
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label class="col-md-3 col-form-label" for="formControlRange"><strong>Paid Amt</strong></label>
+                          <label class="col-md-3 col-form-label" for="formControlRange"><strong>Paid
+                              Amt</strong></label>
                           <div class="col-md-3 pt-2" style="margin-left: 40px">
                             &#8377;{{ temporder.PaidAmount }}
                           </div>
@@ -235,7 +254,8 @@
                     </div>
                     <div class="col-xl-6">
                       <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="formControlRange"><strong>OrderedDate</strong></label>
+                        <label class="col-md-3 col-form-label"
+                          for="formControlRange"><strong>OrderedDate</strong></label>
                         <div class="col-md-3 pt-2">
                           <div style="margin-left: 50px">
                             <input style="width: 15em; margin-left: 5px" [(ngModel)]="temporder.OrderedDate"
@@ -298,7 +318,8 @@
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="baseFullname"><strong>Delivery Store</strong></label>
+                        <label class="col-md-3 col-form-label" for="baseFullname"><strong>Delivery
+                            Store</strong></label>
                         <div class="col-md-9 pt-2">
                           <div>
                             <ng-template class="w-100" #rt let-r="result" let-t="term">
@@ -366,7 +387,8 @@
         <tr *ngFor="let store of storeOrderCount">
           <td><a href="javascript:void(0)" class="biza" (click)="getstorereport(store)">{{store.Name}}</a></td>
           <td><span class="badge"
-              [class.badge-blue]="(store.delivery+store.takeaway+store.pickup+store.fbonline) > 0">{{store.delivery+store.takeaway+store.pickup}}</span></td>
+              [class.badge-blue]="(store.delivery+store.takeaway+store.pickup+store.fbonline) > 0">{{store.delivery+store.takeaway+store.pickup}}</span>
+          </td>
           <!-- <td><span class="badge" [class.badge-blue]="store.pickup > 0">{{store.pickup}}</span></td> -->
         </tr>
       </tbody>
@@ -377,3 +399,67 @@
     <i *ngIf="!storeOrderCount['isloading']" style="margin: auto;" class="fa fa-cog"></i>
   </button>
 </div>
+
+<ng-template #selected_order_list let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Complete {{ selected_orders.length }} Orders</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.close('Save click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="width: 100%">
+    <div class="d-flex flex-row-reverse">
+      <button class="btn btn-sm btn-success" (click)="selectMissedOrders()">Missed Orders</button>
+      <button class="btn btn-sm btn-success" (click)="selectPendingOrders()">Pending Orders</button>
+    </div>
+    <table class="table table-sm mb-0" style="width: 100%">
+      <thead>
+        <tr>
+          <!-- <td>Store</td> -->
+          <!-- <td>Id</td> -->
+          <td>Invoice No</td>
+          <td>Transaction Time</td>
+          <td>Payment</td>
+          <td>Payment Type</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="position: relative" *ngFor="
+              let sOrder of selected_orders
+                | paginate: { itemsPerPage: 10, currentPage: p }
+            ">
+          <!-- <td>{{sOrder.store}}</td> -->
+          <!-- <td>{{sOrder.orderid}}</td> -->
+          <td (mouseover)="sOrder.showpopover = true" (mouseout)="sOrder.showpopover = false">
+            {{ sOrder.invoiceno }}
+            <div *ngIf="sOrder.showpopover" class="bizpopover shadow">
+              <span class="text-success">Type: </span>{{ sOrder.ordertype }}
+              <br />
+              <span class="text-success">Status: </span>{{ sOrder.orderstatus }}
+            </div>
+          </td>
+          <td>
+            <input type="date" [(ngModel)]="sOrder.transdate" (change)="sOrder.setDateTime()" />
+          </td>
+          <td class="text-right">
+            {{ sOrder.paidamount }} / {{ sOrder.billamount }}
+          </td>
+          <td>
+            <!-- {{sOrder.paymenttypeid}} -->
+            <select [(ngModel)]="sOrder.paymenttypeid">
+              <option *ngFor="let type of paymentTypes | ptypefilter : sOrder.storeid" value="{{ type.Id }}">
+                {{ type.Name }}
+              </option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="completeOrders()">
+      Complete
+    </button>
+  </div>
+</ng-template>

@@ -6,6 +6,7 @@ import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 declare function setHeightWidth(): any;
 
@@ -17,6 +18,7 @@ declare function setHeightWidth(): any;
 })
 export class TransactionListComponent implements OnInit {
   @ViewChild('selection', { static: false }) private selection: ElementRef | any;
+  @ViewChild('compare_modal', { static: true }) private compare_modal!: ElementRef;
 
   searchTerm: string = ""
   stores: any[] = []
@@ -27,7 +29,7 @@ export class TransactionListComponent implements OnInit {
   ptypes: any[] = []
   pos_report: { summary: any[], transactions: any[], showtransaxns: any[] } = { summary: [], transactions: [], showtransaxns: [] }
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     setHeightWidth();
@@ -128,6 +130,31 @@ export class TransactionListComponent implements OnInit {
       // console.log(data)
       this.getTransactionList();
     })
+  }
+  transaxnlsttxt: string = ""
+  compare() {
+    this.transaxnlsttxt = ""
+    this.modalService.open(this.compare_modal, {
+      centered: true,
+      size: 'lg',
+      backdropClass: 'z-index-1',
+    })
+  }
+  scan() {
+    console.log(this.transaxnlsttxt)
+    let splitData = this.transaxnlsttxt.split("\n").map(x => x.split("\t").filter(x => x != ""))
+    console.log(splitData)
+    let headers = splitData[0]
+    let arr: any[] = []
+    splitData.slice(1).forEach(line => {
+      let obj: any = {}
+      headers.forEach((hdr,i) => {
+        obj[hdr] = line[i]
+      })
+      obj["Net Amount"] = +obj["Net Amount"]
+      arr.push(obj)
+    })
+    console.log(arr)
   }
   hidecontent: boolean = true;
   keycode: string = 'sorrymaintenanceare';

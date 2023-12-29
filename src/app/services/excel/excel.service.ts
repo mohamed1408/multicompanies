@@ -7,7 +7,7 @@ const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.
 const EXCEL_EXTENSION = '.xlsx';
 
 @Injectable({
-  providedIn: 'root' 
+  providedIn: 'root'
 })
 export class ExcelService {
 
@@ -18,24 +18,24 @@ export class ExcelService {
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
     worksheet.s = { // styling for all cells
-        font: {
-            name: "arial"
+      font: {
+        name: "arial"
+      },
+      alignment: {
+        vertical: "center",
+        horizontal: "center",
+        wrapText: '1', // any truthy value here
+      },
+      border: {
+        right: {
+          style: "thin",
+          color: "000000"
         },
-        alignment: {
-            vertical: "center",
-            horizontal: "center",
-            wrapText: '1', // any truthy value here
+        left: {
+          style: "thin",
+          color: "000000"
         },
-        border: {
-            right: {
-                style: "thin",
-                color: "000000"
-            },
-            left: {
-                style: "thin",
-                color: "000000"
-            },
-        }
+      }
     }
     // worksheet["A1"].s = { fill: { fgColor: { type: 'pattern', pattern: 'solid',rgb: "FFC000" } } }
     // worksheet["A2"].s = { fill: { fgColor: { type: 'pattern', pattern: 'solid',rgb: "70AD47" } } }
@@ -51,5 +51,32 @@ export class ExcelService {
       type: EXCEL_TYPE
     });
     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
+
+  toJSON(file: File) {
+    let fileReader: FileReader = new FileReader()
+    fileReader.onload = (e) => {
+      console.log(e)
+      if (e.target) {
+        var data = e.target["result"];
+        var workbook = XLSX.read(data, {
+          type: 'binary', cellDates: true, dateNF: 'mm/dd/yyyy;@'
+        });
+        console.log(workbook)
+        workbook.SheetNames.forEach((sheetName) => {
+          // Here is your object
+          var XL_row_object: Array<any[]> = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+          var json_object = XL_row_object.slice(1).map(x => {
+            let obj: any = {}
+            XL_row_object[0].forEach((hdr, i) => {
+              obj[hdr] = x[i]
+            });
+            return obj
+          });
+          console.log(json_object);
+        })
+      }
+    }
+    fileReader.readAsBinaryString(file)
   }
 }

@@ -77,3 +77,13 @@ th {
 .hk-sec-wrapper:hover .bz-menu {
     opacity: 0.3 !important;
 }
+
+.bizpopover {
+    position: absolute;
+    background-color: white;
+    top: 40px;
+    left: 20px;
+    padding: 10px;
+    border-radius: 3px;
+    z-index: 1000;
+}

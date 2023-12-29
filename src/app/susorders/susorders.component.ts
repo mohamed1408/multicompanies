@@ -1680,8 +1680,7 @@ export class SusordersComponent implements OnInit {
   }
 
   // PENDING ORDERS
-  @ViewChild('selected_order_list', { static: true })
-  selected_order_list: ElementRef | any;
+  @ViewChild('selected_order_list', { static: true }) selected_order_list: ElementRef | any;
   @ViewChild('orderdetails', { static: true }) orderdetails: ElementRef | any;
 
   // CompanyId: number = 3;
@@ -1805,7 +1804,7 @@ export class SusordersComponent implements OnInit {
     this.ng2FilterPipe
       .transform(this.orders, this.term)
       .forEach((order: OrderModule) => {
-        if (order.Id == id || id == 0) {
+        if (order.OdrsId == id || id == 0) {
           console.log(order, this.paymentTypes);
           order.selected = select;
           if (select) {
@@ -1823,9 +1822,9 @@ export class SusordersComponent implements OnInit {
       });
   }
 
-  removeOrder(order: { Id: number }) {
+  removeOrder(order: { OdrsId: number }) {
     this.selectedOrders = this.selectedOrders.filter(
-      (x) => x.orderid != order.Id
+      (x) => x.orderid != order.OdrsId
     );
     console.log(this.selectedOrders.length);
   }
@@ -1924,7 +1923,7 @@ class CompleteOrderPayload {
    */
   constructor(order: OrderModule, pts: any) {
     this.invoiceno = order.InvoiceNo;
-    this.orderid = order.Id;
+    this.orderid = order.OdrsId;
     this.storeid = order.StoreId;
     this.transdatetime = order.DeliveryDateTime || '';
     this.transdate = moment(order.DeliveryDateTime).format('YYYY-MM-DD');

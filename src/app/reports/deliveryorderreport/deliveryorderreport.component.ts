@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {
   NgbDateStruct,
@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
+import { OrderModule } from 'src/app/enquiryorders/order.module';
 import { ColorService } from 'src/app/services/color/color.service';
 // import { statusColors } from 'src/environments/environment';
 
@@ -23,6 +24,7 @@ declare var feather: any;
   styleUrls: ['./deliveryorderreport.component.css'],
 })
 export class DeliveryorderreportComponent implements OnInit {
+  @ViewChild('selected_order_list', { static: true }) selected_order_list: ElementRef | any;
   // statusColors: any = statusColors
   model!: NgbDateStruct;
   loginfo: any;
@@ -33,6 +35,8 @@ export class DeliveryorderreportComponent implements OnInit {
   smodel = '';
   dmodel = '';
   feather: any = feather
+  p: number = 1
+  paymentTypes: any[] = []
   // date: { year: number; month: number }
   showcalender = false;
   stores: any = [];
@@ -173,6 +177,11 @@ export class DeliveryorderreportComponent implements OnInit {
       .subscribe((data: any) => {
         console.log(data);
         this.orders = data['report'];
+        let now = new Date()
+        this.orders.forEach((ord: any) => {
+          ord.pending = (ord.BillAmount != ord.PaidAmount || ord.OrderStatusId < 5)
+          ord.missed = ord.pending && (new Date(ord.DeliveryDateTime).getTime() < now.getTime())
+        });
         // this.storeOrderCount = data['ordercountreport'];
         console.log(this.orders);
         this.transaxns = data["transactions"]
@@ -288,12 +297,52 @@ export class DeliveryorderreportComponent implements OnInit {
     this.orders.forEach((o: any) => {
       let txn = this.transaxns.filter((x: any) => x.OrderId == o.OdrsId)
       if (txn.length > 0) {
-        txn.sort((a: any,b: any) => b.OrderId - a.OrderId).forEach((x: any, i: number) => {
+        txn.sort((a: any, b: any) => b.OrderId - a.OrderId).forEach((x: any, i: number) => {
           cbt += `${(i == 0) ? o.InvoiceNo : ''} \t ${x.Amount + " \t " + x.ptype} \t ${moment(x.TransDateTime).format("MMM D, hh:mm a")} \n`
         })
       }
     });
     navigator.clipboard.writeText(cbt)
+  }
+  //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //                                                                              COMPLETE PENDING ORDERS
+  //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  selected_orders: any[] = []
+  getpaymenttypes(cb: any) {
+    this.auth.getpaymenttypes(this.companyid, this.storeid).subscribe((data: any) => {
+      this.paymentTypes = data.filter((x: { IsActive: any }) => x.IsActive);
+      cb()
+    });
+  }
+  selectMissedOrders() {
+    this.selected_orders = this.orders.filter((x: any) => x.missed == true).map((x: any) => new CompleteOrderPayload(
+      x,
+      this.paymentTypes.filter((x: any) => x.StoreId == x.StoreId)
+    ),)
+    console.log("pending orders", this.selected_orders.length)
+  }
+  selectPendingOrders() {
+    this.selected_orders = this.orders.filter((x: any) => x.pending == true).map((x: any) => new CompleteOrderPayload(
+      x,
+      this.paymentTypes.filter((x: any) => x.StoreId == x.StoreId)
+    ),)
+    console.log("missing orders", this.selected_orders.length)
+  }
+  openselectedorders() {
+    this.getpaymenttypes(() => {
+      this.selected_orders = this.orders.filter((x: any) => x.pending).map((x: any) => new CompleteOrderPayload(
+        x,
+        this.paymentTypes.filter((x: any) => x.StoreId == x.StoreId)
+      ),)
+    })
+    this.modalService.open(this.selected_order_list, {
+      centered: true,
+      size: 'lg',
+      backdropClass: 'z-index-1',
+    })
+  }
+  completeOrders() {
+
   }
   hidecontent: boolean = true;
   keycode: string = 'sorrymaintenanceare';
@@ -316,3 +365,60 @@ export class DeliveryorderreportComponent implements OnInit {
 {id:4,status:'dispatch'},
 {id:5,status:'completed'}]
 */
+class CompleteOrderPayload {
+  invoiceno: string;
+  orderid: number;
+  storeid: number;
+  transdatetime: string;
+  transdate: string;
+  paidamount: number;
+  billamount: number;
+  orderstatusid: number;
+  orderstatus: string;
+  store: string;
+  paymenttypeid: number;
+  ordertype: string;
+  showpopover: boolean;
+  /**
+   *
+   */
+  constructor(order: OrderModule, pts: any) {
+    this.invoiceno = order.InvoiceNo;
+    this.orderid = order.Id;
+    this.storeid = order.StoreId;
+    this.transdatetime = order.DeliveryDateTime || '';
+    this.transdate = moment(order.DeliveryDateTime).format('YYYY-MM-DD');
+    this.paidamount = order.PaidAmount;
+    this.billamount = order.BillAmount;
+    this.store = order.Name;
+    this.orderstatusid = order.OrderStatusId;
+    this.paymenttypeid = pts[0].Id;
+    this.ordertype = order.OrderType;
+    this.showpopover = false;
+
+    const status: any = {
+      '-1': 'Cancelled',
+      '0': 'Pending',
+      '1': 'Accepted',
+      '2': 'Preparing',
+      '3': 'Prepared',
+      '4': 'Out fo Delivery',
+      '5': 'Completed',
+    };
+    const orderType = {
+      '1': 'Dinr In',
+      '2': 'Take Away',
+      '3': 'Delivery',
+      '4': 'Pick Up',
+      '5': 'Counter',
+    };
+    let typeid: string = this.orderstatusid.toString();
+    this.orderstatus = status[typeid];
+  }
+  //YYYY-MM-DDTHH:mm:ss.SSS
+  setDateTime() {
+    console.log(this.transdate);
+    this.transdatetime = this.transdate + moment().format('THH:mm:ss.SSS');
+    console.log(this.transdatetime, this.transdate);
+  }
+}

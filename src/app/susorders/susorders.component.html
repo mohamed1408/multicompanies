@@ -186,10 +186,10 @@
                           ">
                         <td class="font-12">
                           <input type="checkbox" [checked]="order.selected"
-                            [disabled]="selectedStoreId == 0 && companyid != 0" (change)="select($event, order.Id)" />
+                            [disabled]="selectedStoreId == 0 && companyid != 0" (change)="select($event, order.OdrsId)" />
                         </td>
                         <td class="font-12">
-                          <button class="btn btn-link" (click)="selectorder(order.OrderJson)">
+                          <button class="btn btn-link">
                             {{ order.InvoiceNo }}
                           </button>
                           <!-- <a href="javascript:void(0);"

@@ -1,0 +1,16 @@
+<div class="hk-pg-wrapper">
+    <!-- <div class="hk-pg-header">
+        <h4 class="hk-pg-title">&nbsp; Transactions</h4>
+    </div> -->
+    <div class="title">
+        Transaxn Verify
+    </div>
+    <div class="container">
+        <section class="hk-sec-wrapper">
+            <div id="fileDrop" class="d-flex" (drop)="drop($event)" (dragover)="allowDrop($event)" (click)="upload_file.click()">
+                <input hidden #upload_file id="upload_file" type="file" name="" (input)="selectfile(upload_file.files)">
+                <span class="font-50 p-5 m-auto">drop files here</span>
+            </div>
+        </section>
+    </div>
+</div>
