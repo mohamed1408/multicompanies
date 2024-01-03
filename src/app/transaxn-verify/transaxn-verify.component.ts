@@ -126,14 +126,15 @@ export class TransaxnVerifyComponent implements OnInit {
         }
       })
     })
-    console.log(this.mapped)
-    this.mapped.forEach(m => {
-      console.log(m[2], m[0].TransactionId, m[1].ino, m[3])
-    })
+    // console.log(this.mapped)
+    // this.mapped.forEach(m => {
+    //   console.log(m[2], m[0].TransactionId, m[1].ino, m[3])
+    // })
     this.unmapped.portal = this.phonepe.filtered.filter(x => !this.mapped.some(y => y[0].TransactionId === x.TransactionId))
     this.unmapped.db = this.posphonepe.filtered.filter(x => !this.mapped.some(y => y[1].TransactionId === x.TransactionId))
-    console.log(this.mapped)
-    console.log(this.unmapped)
+    this.rTabId = 1
+    // console.log(this.mapped)
+    // console.log(this.unmapped)
     // this.phonepe.data.forEach(r => {
     //   let best_mach = relations.filter(x => x[0].TransactionId == r.TransactionId).sort((a,b) => a[2] - b[2])[0]
     //   console.log(r)
