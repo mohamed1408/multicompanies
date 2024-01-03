@@ -53,29 +53,31 @@ export class ExcelService {
     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
-  toJSON(file: File) {
+  toJSON(file: File, cb: any) {
     let fileReader: FileReader = new FileReader()
     fileReader.onload = (e) => {
       console.log(e)
+      var json_object: any[] = []
       if (e.target) {
         var data = e.target["result"];
         var workbook = XLSX.read(data, {
           type: 'binary', cellDates: true, dateNF: 'mm/dd/yyyy;@'
         });
-        console.log(workbook)
+        // console.log(workbook)
         workbook.SheetNames.forEach((sheetName) => {
           // Here is your object
           var XL_row_object: Array<any[]> = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
-          var json_object = XL_row_object.slice(1).map(x => {
+          json_object = XL_row_object.slice(1).map(x => {
             let obj: any = {}
             XL_row_object[0].forEach((hdr, i) => {
               obj[hdr] = x[i]
             });
             return obj
           });
-          console.log(json_object);
+          // console.log(json_object);
         })
       }
+      cb(json_object)
     }
     fileReader.readAsBinaryString(file)
   }

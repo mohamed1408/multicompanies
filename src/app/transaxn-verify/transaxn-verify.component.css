@@ -10,10 +10,11 @@
     max-width: 90vw !important;
 }
 
-#fileDrop {
+.fileDrop {
     border: grey dashed 5px;
     border-radius: 10px;
     cursor: pointer;
+    margin: 10px;
 }
 
 .info-card {

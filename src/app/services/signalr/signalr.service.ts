@@ -37,6 +37,10 @@ export class SignalrService {
       // console.log('OrderUpdate', orderid, storeid)
     })
 
+    this.hubconnection.on('DeliveryOrderUpdate', (orderid, storeid) => {
+      // console.log('OrderUpdate', orderid, storeid)
+    })
+
     this.hubconnection.on('NewOrder', (platfor, orderid) => {
       // console.log('NewOrder', platfor, orderid)
     })
