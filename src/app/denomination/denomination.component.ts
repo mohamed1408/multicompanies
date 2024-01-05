@@ -82,7 +82,8 @@ export class DenominationComponent implements OnInit {
     { shift: '02:00 pm to 03:59 pm', shiftid: 3 },
     { shift: '04:00 pm to 05:59 pm', shiftid: 4 },
     { shift: '06:00 pm to 07:59 pm', shiftid: 5 },
-    { shift: '08:00 pm to closing ', shiftid: 6 },
+    { shift: '08:00 pm to 10:00 pm', shiftid: 6 },
+    { shift: '10:00 pm to closing ', shiftid: 7 },
   ];
 
   constructor(

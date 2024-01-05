@@ -616,6 +616,7 @@
               <th colspan="1" *ngIf="!hideHeader1">{{shifts[4].shift}}</th>
               <th colspan="1" *ngIf="!hideHeader2">{{shifts[5].shift}}</th>
               <th colspan="1" *ngIf="!hideHeader2">{{shifts[6].shift}}</th>
+              <th colspan="1" *ngIf="!hideHeader2">{{shifts[7].shift}}</th>
             </tr>
           </thead>
           <tbody>
@@ -644,7 +645,7 @@
                 {{rpt.shift2s == null ? 'No Rec' : rpt.shift2s}}
                 <span *ngIf="rpt['2s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
-                  <span>12:00 pm to 02:29 pm</span>
+                  <span>12:00 pm to 02:00 pm</span>
                 </span>
               </td>
               <!-- <td [ngClass]="{'excess': rpt.shift2e > 0, 'shortage': rpt.shift2e < 0, 'tallied': rpt.shift2e == 0}"
@@ -661,7 +662,7 @@
                 {{rpt.shift3s == null ? 'No Rec' : rpt.shift3s}}
                 <span *ngIf="rpt['3s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
-                  <span>02:30 pm to 04:29 pm</span>
+                  <span>02:00 pm to 04:00 pm</span>
                 </span>
               </td>
               <!-- <td [ngClass]="{'excess': rpt.shift3e > 0, 'shortage': rpt.shift3e < 0, 'tallied': rpt.shift3e == 0}"
@@ -678,7 +679,7 @@
                 {{rpt.shift4s == null ? 'No Rec' : rpt.shift4s}}
                 <span *ngIf="rpt['4s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
-                  <span>04:30 pm to 06:29 pm</span>
+                  <span>04:00 pm to 06:00 pm</span>
                 </span>
               </td>
               <!-- <td [ngClass]="{'excess': rpt.shift4e > 0, 'shortage': rpt.shift4e < 0, 'tallied': rpt.shift4e == 0}"
@@ -695,7 +696,7 @@
                 {{rpt.shift5s == null ? 'No Rec' : rpt.shift5s}}
                 <span *ngIf="rpt['5s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
-                  <span>06:30 pm to 08:30 pm</span>
+                  <span>06:00 pm to 08:00 pm</span>
                 </span>
               </td>
               <!-- <td [ngClass]="{'excess': rpt.shift5e > 0, 'shortage': rpt.shift5e < 0, 'tallied': rpt.shift5e == 0}"
@@ -712,7 +713,24 @@
                 {{rpt.shift6s == null ? 'No Rec' : rpt.shift6s}}
                 <span *ngIf="rpt['6s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
+                  <span>08:00 pm to 10:00 pm</span>
+                </span>
+              </td>
+              <!-- <td [ngClass]="{'excess': rpt.shift6e > 0, 'shortage': rpt.shift6e < 0, 'tallied': rpt.shift6e == 0}"
+                (mouseenter)="rpt['6e'+i] = true" (mouseleave)="rpt['6e'+i] = false" *ngIf="!hideHeader2">
+                {{rpt.shift6e == null ? 'No Rec' : rpt.shift6e}}
+                <span *ngIf="rpt['6e'+i]" class="hover-info shadow">
+                  <span>{{rpt.Name}}</span><br>
                   <span>08:30 pm to closing</span>
+                </span>
+              </td> -->
+              <td
+                [ngClass]="{'excess': rpt.shift7s > margin, 'shortage': rpt.shift7s < margin*-1, 'tallied': rpt.shift7s >= margin*-1 && rpt.shift7s <= margin && rpt.shift7s != null}"
+                (mouseenter)="rpt['7s'+i] = true" (mouseleave)="rpt['7s'+i] = false" *ngIf="!hideHeader2">
+                {{rpt.shift7s == null ? 'No Rec' : rpt.shift7s}}
+                <span *ngIf="rpt['7s'+i]" class="hover-info shadow">
+                  <span>{{rpt.Name}}</span><br>
+                  <span>10:00 pm to closing</span>
                 </span>
               </td>
               <!-- <td [ngClass]="{'excess': rpt.shift6e > 0, 'shortage': rpt.shift6e < 0, 'tallied': rpt.shift6e == 0}"
