@@ -1927,6 +1927,7 @@ export class SusordersComponent implements OnInit {
     this.auth.ordertransaction([this.transaction]).subscribe(data => {
       this.Getpendingorder();
       this.auth.isloading.next(false)
+      this.modalService.dismissAll()
     })
   }
   itest(a: any) {
