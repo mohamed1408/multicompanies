@@ -151,68 +151,74 @@
                                 selectedOrders.length != orders.length
                               " (change)="select($event, 0)" />
                         </th>
-                        <th>
-                          <strong><a class="font-12">InvoiceNo</a></strong>
-                        </th>
-                        <th>
-                          <strong><a class="font-12">StoreName</a></strong>
-                        </th>
-                        <th>
-                          <strong><a class="font-12">Orderstatus</a></strong>
-                        </th>
-                        <th>
-                          <strong><a class="font-12">Bill Amount</a></strong>
-                        </th>
-                        <th>
-                          <strong><a class="font-12">Paid Amount</a></strong>
-                        </th>
-                        <th>
-                          <strong><a class="font-12">DeliveryDateTime</a></strong>
-                        </th>
-                        <th>
-                          <strong><a class="font-12">DeliveredDateTime</a></strong>
-                        </th>
-                        <th>
-                          <strong><a class="font-12">App Version</a></strong>
-                        </th>
+                        <th><strong><a class="font-12">InvoiceNo</a></strong></th>
+                        <th><strong><a class="font-12">StoreName</a></strong></th>
+                        <th><strong><a class="font-12">Orderstatus</a></strong></th>
+                        <th><strong><a class="font-12">Bill Amount</a></strong></th>
+                        <th colspan="2"><strong><a class="font-12">Paid Amount</a></strong></th>
+                        <th><strong><a class="font-12">DeliveryDateTime</a></strong></th>
+                        <th><strong><a class="font-12">DeliveredDateTime</a></strong></th>
+                        <th><strong><a class="font-12">App Version</a></strong></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="
-                            let order of orders
-                              | filter: term
-                              | order: showFutureOrders
-                              | orderfilter: statusfilter
-                          ">
-                        <td class="font-12">
-                          <input type="checkbox" [checked]="order.selected"
-                            [disabled]="selectedStoreId == 0 && companyid != 0" (change)="select($event, order.OdrsId)" />
-                        </td>
-                        <td class="font-12">
-                          <button class="btn btn-link">
-                            {{ order.InvoiceNo }}
-                          </button>
-                          <!-- <a href="javascript:void(0);"
-                              (click)="getOrderItems(order.Id, contentdetail1);">{{order.InvoiceNo}}</a> -->
-                          <br />
-                          <span class="px-20 font-italic">{{
-                            order.OrderType
-                            }}</span>
-                        </td>
-                        <td class="font-12">{{ order.Name }}</td>
-                        <td class="font-12">{{ order.StatusName }}</td>
-                        <td class="font-12">{{ order.BillAmount }}</td>
-                        <td class="font-12">{{ order.PaidAmount }}</td>
-                        <td class="font-12" style="position: relative">
-                          {{ order.DeliveryDateTime | date: "MMM d, y, h:mm a" }}
-                          <span class="superscript text-blue" *ngIf="order.futureOrder">f</span>
-                        </td>
-                        <td class="font-12">
-                          {{ order.DeliveredDateTime | date: "MMM d, y, h:mm a" }}
-                        </td>
-                        <td class="font-12">{{ order.appversion }}</td>
-                      </tr>
-                      <br />
+                      <ng-container
+                        *ngFor="let order of orders | filter: term | order: showFutureOrders | orderfilter: statusfilter">
+                        <tr>
+                          <td class="font-12">
+                            <input type="checkbox" [checked]="order.selected"
+                              [disabled]="selectedStoreId == 0 && companyid != 0"
+                              (change)="select($event, order.OdrsId)" />
+                          </td>
+                          <td class="font-12">
+                            <button class="btn btn-link">
+                              {{ order.InvoiceNo }}
+                            </button>
+                            <br />
+                            <span class="px-20 font-italic">{{order.OrderType}}</span>
+                          </td>
+                          <td class="font-12">{{ order.Name }}</td>
+                          <td class="font-12">{{ order.StatusName }}</td>
+                          <td class="font-12">{{ order.BillAmount }}</td>
+                          <td class="font-12">{{ order.PaidAmount }}</td>
+                          <td class="font-12">
+                            <button *ngIf="order.BillAmount != order.PaidAmount" class="btn btn-success btn-sm bz-btn"
+                              (click)="pay(order);order.isCollapsed = !order.isCollapsed">PAY</button>
+                            <button disabled *ngIf="order.BillAmount == order.PaidAmount"
+                              class="btn btn-secondary btn-sm bz-btn">PAID</button>
+                          </td>
+                          <td class="font-12" style="position: relative">
+                            {{ order.DeliveryDateTime | date: "MMM d, y, h:mm a" }}
+                            <span class="superscript text-blue" *ngIf="order.futureOrder">f</span>
+                          </td>
+                          <td class="font-12">
+                            {{ order.DeliveredDateTime | date: "MMM d, y, h:mm a" }}
+                          </td>
+                          <td class="font-12">{{ order.appversion }}</td>
+                        </tr>
+                        <!-- <div toggler="#headingOne" [ngbCollapse]="!order.isCollapsed">
+                          <div class="d-flex">
+                            <div class="col-xl-6">
+
+                            </div>
+                            <div class="col-xl-6">
+                              <div class="form-group">
+                                <div class="input-group">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon3">{{order.BillAmount -
+                                      order.PaidAmount}}</span>
+                                  </div>
+                                  <input type="text" class="form-control" placeholder="Recipient's username"
+                                    aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">@example.com</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div> -->
+                      </ng-container>
                     </tbody>
                   </table>
                 </div>
@@ -248,8 +254,8 @@
                 <span class="input-group-text bg-white border-0" id="basic-addon1"><span class="feather-icon"><i
                       data-feather="search"></i></span></span>
               </div>
-              <input type="text" class="form-control border-0" [(ngModel)]="term" placeholder="Search by invoice..." aria-label="Username"
-                aria-describedby="basic-addon1">
+              <input type="text" class="form-control border-0" [(ngModel)]="term" placeholder="Search by invoice..."
+                aria-label="Username" aria-describedby="basic-addon1">
             </div>
           </div>
         </div>
@@ -257,7 +263,8 @@
       <div>
         <ul class="nav nav-tabs" role="tablist">
           <li class="nav-item">
-            <a class="nav-link active" (click)="term = ''" data-toggle="tab" href="#cancelleditems">By Cancelled Items</a>
+            <a class="nav-link active" (click)="term = ''" data-toggle="tab" href="#cancelleditems">By Cancelled
+              Items</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" (click)="term = ''" data-toggle="tab" href="#discountedorders">By Discount Orders</a>
@@ -394,6 +401,14 @@
                   {{selectedItems.Discount}}
                 </th>
               </tr>
+              <tr>
+                <th colspan="2" class="text-right">
+                  Bill Amount
+                </th>
+                <th>
+                  {{selectedOrder.BillAmount}}
+                </th>
+              </tr>
               <tr *ngIf="selectedItems.customerdetails">
                 <th><strong>Customer</strong></th>
                 <th colspan="2">
@@ -404,6 +419,127 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+      <hr class="hr-text" data-content="I T E M - C A N C E L - R E A S O N">
+      <div class="position-relative">
+        <textarea class="form-control" [(ngModel)]="selectedOrder.ItemCanelledReason" name="" id="" cols="30"
+          rows="10"></textarea>
+        <div class="position-absolute" style="bottom: 10px; right: 10px;">
+          <button class="btn btn-success btn-sm" [disabled]="selectedOrder.loading" (click)="savereason()">
+            <i *ngIf="selectedOrder.loading" class="fa fa-spinner spin-360"></i> SAVE
+          </button>
+        </div>
+      </div>
+      <!-- </div> -->
+    </div>
+    <div class="col-xl-6">
+      <div *ngFor="let kot of selectedKots">
+        <div class="table-wrap">
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <thead>
+                <tr>
+                  <th colspan="2">
+                    <strong>#{{kot.KOTNo}}</strong>
+                    <span class="font-italic text-light-30 float-right">@ {{kot.CreatedDate | date:'EEE, MMM d, y, h:mm
+                      a'}}</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of kot.Items; let i = index;">
+                  <th>
+                    {{item.showname}}
+                  </th>
+                  <th class="text-right"><strong>{{item.Quantity}}</strong></th>
+                </tr>
+                <tr>
+                  <th class="text-right">Total So Far</th>
+                  <th class="text-right">{{kot.totalsofar}}</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary">Save changes</button>
+    </div> -->
+</ng-template>
+<ng-template #dckotInfo let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">{{selectedKots[0].orderrefid}}</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body row">
+    <div class="col-xl-6">
+      <!-- <div *ngFor="let kot of selectedItems"> -->
+      <div class="table-wrap">
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <!-- <thead>
+                  <tr>
+                    <th colspan="2">
+                      <strong>#{{kot.KOTNo}}</strong>
+                      <span class="font-italic text-light-30 float-right">@ {{kot.CreatedDate | date:'EEE, MMM d, y, h:mm
+                        a'}}</span>
+                    </th>
+                  </tr>
+                </thead> -->
+            <tbody>
+              <tr>
+                <th>Ordered @</th>
+                <th colspan="2">{{selectedItems.OrderedDateTime | date:'EEE, MMM d, y, h:mm a'}}</th>
+              </tr>
+              <tr *ngFor="let item of selectedItems; let i = index;">
+                <th>
+                  {{item.showname}}
+                </th>
+                <th class="text-right"><strong>{{item.Quantity}}</strong></th>
+                <th>{{item.TotalAmount}}</th>
+              </tr>
+              <tr>
+                <th colspan="2" class="text-right">
+                  Discount
+                </th>
+                <th>
+                  {{selectedItems.Discount}}
+                </th>
+              </tr>
+              <tr>
+                <th colspan="2" class="text-right">
+                  Bill Amount
+                </th>
+                <th>
+                  {{selectedOrder.BillAmount}}
+                </th>
+              </tr>
+              <tr *ngIf="selectedItems.customerdetails">
+                <th><strong>Customer</strong></th>
+                <th colspan="2">
+                  <strong>{{selectedItems.customerdetails.Name}}</strong><br>
+                  {{selectedItems.customerdetails.PhoneNo}}<br>
+                  {{selectedItems.customerdetails.Address}}
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <hr class="hr-text" data-content="D I S C O U N T - R E A S O N">
+      <div class="position-relative">
+        <textarea class="form-control" [(ngModel)]="selectedOrder.DiscountReason" name="" id="" cols="30"
+          rows="10"></textarea>
+        <div class="position-absolute" style="bottom: 10px; right: 10px;">
+          <button class="btn btn-success btn-sm" [disabled]="selectedOrder.loading" (click)="savereason()">
+            <i *ngIf="selectedOrder.loading" class="fa fa-spinner spin-360"></i> SAVE
+          </button>
         </div>
       </div>
       <!-- </div> -->
@@ -564,13 +700,69 @@
     </button>
   </div>
   <div class="modal-body">
-    <button class="btn btn-success float-right" *ngIf="selectedstores == 0" (click)="deselctAllStores(true)">Select All</button>
-    <button class="btn btn-danger float-right" *ngIf="selectedstores > 0" (click)="deselctAllStores(false)">DeSelect All</button>
+    <button class="btn btn-success float-right" *ngIf="selectedstores == 0" (click)="deselctAllStores(true)">Select
+      All</button>
+    <button class="btn btn-danger float-right" *ngIf="selectedstores > 0" (click)="deselctAllStores(false)">DeSelect
+      All</button>
   </div>
   <div class="modal-body row col-xl-12">
     <div *ngFor="let store of POStortesArray" (click)="togglePOStoreSelect(store.Id)" [class.selected]="store.selected"
       class="col-xl-3 store-card">
       {{store.Name}}
     </div>
+  </div>
+</ng-template>
+
+<ng-template #paymodal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">#{{transaction.InvoiceNo}}&nbsp;({{transaction.OrderId}})</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.close('Save click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row mx-0">
+      <div class="col-xl-6">
+        <table class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th>Bill</th>
+              <th>Paid</th>
+              <th>Remaining</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{transaction.BillAmount}}</td>
+              <td>{{transaction.PaidAmount}}</td>
+              <td>{{transaction.Remaining}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-xl-6">
+        <div class="d-flex">
+          <label class="col-sm">Date</label>
+          <label class="col-sm">Amount</label>
+        </div>
+        <div class="d-flex">
+          <input id="datetime" class="form-control" type="text" name="birthday" />
+          <input type="number" onfocus="this.select()" #amount [value]="transaction.Amount" (input)="transaction.setamt(+amount.value)" class="form-control">
+        </div>
+      </div>
+      <div class="row flex-row-reverse col-xl-12">
+        <div class="mx-1" *ngFor="let ptype of paymentTypes">
+          <button class="btn btn-success btn-sm bz-btn" [class.btn-outline-success]="transaction.StorePaymentTypeId != ptype.Id" (click)="transaction.setptype(ptype.Id)">{{ptype.Name}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary">
+      CANCEL
+    </button>
+    <button [disabled]="transaction.invalid" type="button" class="btn btn-success" (click)="makepayment()">
+      PAY
+    </button>
   </div>
 </ng-template>

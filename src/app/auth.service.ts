@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DenomEntry } from './denomination/denomination.module';
+import { Transaction } from './model/model';
 
 @Injectable({
   providedIn: 'root',
@@ -829,6 +830,14 @@ export class AuthService {
 
   cancelorder(orderid: number, reason: string) {
     return this.http.get(this.baseurl + "POSOrder/cancellorder?orderid=" + orderid + "&reason=" + reason)
+  }
+
+  savereason(orderid: number, ItemCanelledReason: string, DiscountReason: string) {
+    return this.http.get(this.baseurl + "Report/savereason?orderid=" + orderid + "&ItemCanelledReason=" + ItemCanelledReason + "&DiscountReason=" + DiscountReason)
+  }
+
+  ordertransaction(transactionlist: Array<Transaction>) {
+    return this.http.post(this.baseurl + `Receipt/ordertransaction2`, transactionlist)
   }
 }
 

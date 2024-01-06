@@ -27,3 +27,14 @@ export var daterangepicker = function (id, callback) {
 
     return cb
 }
+
+export var singleDateTime = function (id, callback) {
+    $('#' + id).daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: 1901,
+        "cancelClass": "btn-secondary"
+    }, function (start, end, label) {
+        callback(start)
+    });
+}
