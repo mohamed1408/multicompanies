@@ -38,7 +38,7 @@
                 <div *ngIf="rTabId == 0" class="d-flex">
                     <div class="col-xl-6">
                         <select class="form-control mb-2" [(ngModel)]="phonepestores.selected"
-                            (change)="phonepe.filter('Store',phonepestores.selected)">
+                            (change)="phonepe.filter('Store',phonepestores.selected, 'All')">
                             <option *ngFor="let store of phonepestores" [value]="store">{{store}}</option>
                         </select>
                         <input type="text" [(ngModel)]="portalTerm" class="form-control mb-2">
@@ -64,7 +64,7 @@
                     </div>
                     <div class="col-xl-5">
                         <select class="form-control mb-2" [(ngModel)]="posphonepestores.selected"
-                            (change)="posphonepe.filter('StoreId',posphonepestores.selected)">
+                            (change)="posphonepe.filter('StoreId',posphonepestores.selected, 0)">
                             <option *ngFor="let store of posphonepestores" [value]="store.StoreId">{{store.Store}}
                             </option>
                         </select>
@@ -89,25 +89,29 @@
                 </div>
                 <div *ngIf="rTabId == 1" class="row mx-0">
                     <div class="col-xl-12">
-                        <table class="table table-bordered table-sm">
+                        <table class="table table-bordered table-hover table-sm">
                             <thead>
                                 <tr>
+                                    <th>Store</th>
                                     <th>TransaxnId</th>
                                     <th>Amount</th>
                                     <th>Date</th>
                                     <th>TransaxnId</th>
                                     <th>Amount</th>
                                     <th>Date</th>
+                                    <th>Store</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let transaxn of mapped">
+                                    <td>{{transaxn[0].Store}}</td>
                                     <td>{{transaxn[0].TransactionId}}</td>
                                     <td>{{transaxn[0].Amount}}</td>
                                     <td>{{transaxn[0].TransactionStamp | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
                                     <td>{{transaxn[1].TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
                                     <td>{{transaxn[1].Amount}}</td>
                                     <td>{{transaxn[1].ino}}</td>
+                                    <td>{{transaxn[1].PhonePeName}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -118,6 +122,7 @@
                         <table class="table table-bordered table-sm">
                             <thead>
                                 <tr>
+                                    <th>Store</th>
                                     <th>TransaxnId</th>
                                     <th>Amount</th>
                                     <th>Date</th>
@@ -125,6 +130,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let transaxn of unmapped.portal | filter: portalTerm">
+                                    <td>{{transaxn.Store}}</td>
                                     <td>{{transaxn.TransactionId}}</td>
                                     <td>{{transaxn.Amount}}</td>
                                     <td>{{transaxn.TransactionStamp | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
@@ -138,6 +144,7 @@
                         <table class="table table-bordered table-sm">
                             <thead>
                                 <tr>
+                                    <th>Store</th>
                                     <th>TransaxnId</th>
                                     <th>Amount</th>
                                     <th>Date</th>
@@ -145,6 +152,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let transaxn of unmapped.db | filter: dbTerm">
+                                    <td>{{transaxn.PhonePeName}}</td>
                                     <td>{{transaxn.ino}}</td>
                                     <td>{{transaxn.Amount}}</td>
                                     <td>{{transaxn.TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>

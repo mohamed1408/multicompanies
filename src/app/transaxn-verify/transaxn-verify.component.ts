@@ -62,10 +62,11 @@ export class TransaxnVerifyComponent implements OnInit {
       this.tablist[1] = "Card : " + this.pos_report.summary.filter(x => x.MachineId == "card").map(x => x.Amount).reduce((a, c) => a + c, 0)
       this.posphonepe = new bzarray(this.pos_report.transactions.filter(x => x.MachineId == "phonepe"))
       this.posphonepestores = this.pos_report.summary.map(x => {
-        return { Store: x.Store, StoreId: x.StoreId }
+        return { Store: x.PhonePeName, StoreId: x.StoreId }
       }).filter((x, i) => i == this.pos_report.summary.findIndex(y => y.StoreId == x.StoreId))
-      this.posphonepestores["selected"] = this.posphonepestores[0].StoreId
-      this.posphonepe.filter("StoreId", this.posphonepestores["selected"])
+      this.posphonepestores.unshift({ Store: "All", StoreId: 0 })
+      this.posphonepestores["selected"] = 0
+      this.posphonepe.filter("StoreId", this.posphonepestores["selected"], 0)
     })
   }
 
@@ -76,9 +77,10 @@ export class TransaxnVerifyComponent implements OnInit {
         this.phonepe = new bzarray(arr)
         console.log(this.phonepe)
         this.phonepestores = this.phonepe.data.map((x: any) => x.Store).filter((x: any, i: number) => i == this.phonepe.data.findIndex(y => y.Store == x))
+        this.phonepestores.unshift("All")
         console.log(this.phonepestores)
         this.phonepestores["selected"] = this.phonepestores[0]
-        this.phonepe.filter("Store", this.phonepestores["selected"])
+        this.phonepe.filter("Store", this.phonepestores["selected"], "All")
       })
     }
   }
@@ -100,13 +102,16 @@ export class TransaxnVerifyComponent implements OnInit {
     this.unmapped = { portal: [], db: [] }
     this.phonepe.sort((a, b) => a["TransactionStamp"] - b["TransactionStamp"])
     this.posphonepe.sort((a, b) => new Date(a["TransDateTime"]).getTime() - new Date(b["TransDateTime"]).getTime())
+    console.log(this.posphonepe, this.phonepe)
     let relations: any[] = []
     let amounts: number[] = [...this.phonepe.filtered.map(x => x.Amount), ...this.posphonepe.filtered.map(x => x.Amount)]
     amounts = amounts.filter((x, i) => i == amounts.findIndex(y => y == x))
 
     this.phonepe.filtered.forEach((x, i) => {
       this.posphonepe.filtered.forEach((y, j) => {
-        if (x.Amount == y.Amount) {
+        if(x.Amount == y.Amount) console.log(x.Store, y.PhonePeName, x.Store == y.PhonePeName)
+        if (x.Amount == y.Amount && x.Store.toLowerCase() == y.PhonePeName.toLowerCase()) {
+          console.log(x.Store, y.PhonePeName)
           relations.push([x, y, x.Amount, +Math.abs(new Date(x.TransactionStamp).getTime() / 1000 - new Date(y.TransDateTime).getTime() / 1000).toFixed(0)])
         }
       })
@@ -158,8 +163,8 @@ class bzarray {
   constructor(data: any[]) {
     this.data = data
   }
-  filter(field: string, value: any) {
-    this.filtered = this.data.filter(x => x[field] == value)
+  filter(field: string, value: any, allvalue: any) {
+    this.filtered = this.data.filter(x => x[field] == value || value == allvalue)
   }
   sort(compareFn: (a: any, b: any) => number) {
     this.filtered = this.filtered.sort(compareFn)
