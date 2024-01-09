@@ -88,14 +88,19 @@
                                 <th class="sptitle">Amount</th>
                                 <th class="sptitle">Payment Type</th>
                                 <th class="sptitle">Transaction Time</th>
+                                <th class="sptitle">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let transaxn of pos_report.showtransaxns; let i = index;">
-                                <td><a class="biza" href="javascript:void(0);" (click)="editTransaction(i, $event)">{{transaxn.ino}}</a></td>
+                                <td><a class="biza" href="javascript:void(0);">{{transaxn.ino}}</a></td>
                                 <td class="text-right">{{transaxn.Amount | number: ".2"}}</td>
                                 <td>{{transaxn.PaymentType}}</td>
                                 <td class="text-right">{{transaxn.TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
+                                <td>
+                                    <button class="btn btn-link float-right" (click)="editTransaction(i, $event)">edit</button>
+                                    <!-- <button class="btn btn-link float-right">revoke</button> -->
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -111,9 +116,14 @@
                                 <td class="text-right">{{rpt.Amount}}</td>
                                 <td class="text-left"><span class="info-badge">{{rpt.BillCount}}</span></td>
                             </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong>{{pos_report.total.amount}}</strong></td>
+                                <td><strong>{{pos_report.total.bills}}</strong></td>
+                            </tr>
                         </tbody>
                     </table>
-                    <button class="btn btn-success" (click)="compare()">Compare</button>
+                    <!-- <button class="btn btn-success" (click)="compare()">Compare</button> -->
                 </div>
             </div>
         </section>
@@ -145,17 +155,51 @@
                 class="fa fa-pencil"></i></button></div>
 </div> -->
 
-<ng-template #compare_modal let-modal>
+<ng-template #transactioneditmdl let-modal>
     <div class="modal-header">
-        <h5 class="modal-title">Compare</h5>
+        <h5 class="modal-title">{{selectedtransaxn.ino}}</h5>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body">
-        <textarea name="" id="" cols="30" rows="10" class="form-control" [(ngModel)]="transaxnlsttxt"></textarea>
+        <div class="row mx-0">
+            <div class="form-group col-sm">
+                <select class="form-control" [(ngModel)]="selectedtransaxn.StorePaymentTypeId">
+                    <option *ngFor="let ptype of ptypes; let i = index;" [value]="ptype.Id">{{ptype.Name}}</option>
+                </select>
+            </div>
+            <div class="form-group col-sm">
+                <input type="number" [(ngModel)]="selectedtransaxn.Amount" class="form-control">
+            </div>
+            <div class="form-group col-sm">
+                <input type="date" class="form-control mb-2" [(ngModel)]="date">
+            </div>
+            <div class="form-group col-sm">
+                <button class="btn btn-warning" (click)="splitpayment.addtrnsxn()">split</button>
+            </div>
+        </div>
+        <!-- <hr class="hr-text"> -->
+        <div *ngFor="let transaxn of splitpayment.transactions; let i = index;" class="row mx-0">
+            <div class="form-group col-sm">
+                <select class="form-control" [(ngModel)]="transaxn.StorePaymentTypeId">
+                    <option *ngFor="let ptype of ptypes" [value]="ptype.Id">{{ptype.Name}}</option>
+                </select>
+            </div>
+            <div class="form-group col-sm">
+                <input type="number" [(ngModel)]="transaxn.Amount" class="form-control">
+            </div>
+            <div class="form-group col-sm">
+                <input type="date" class="form-control mb-2" [(ngModel)]="transaxn.TransDate">
+            </div>
+            <div class="form-group col-sm">
+                <button class="btn btn-danger" (click)="splitpayment.delete(i)">Delete</button>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success btn-sm" (click)="scan()"></button>
+        <p *ngIf="!splitpayment.isvalid" class="font-italic text-danger float-left">{{splitpayment.remarks}}</p>
+        <button class="btn btn-secondary btn-sm" (click)="modal.dismiss('Cross click');splitpayment.transactions = []">Cancel</button>
+        <button class="btn btn-success btn-sm" (click)="updatetransaction()">Save</button>
     </div>
 </ng-template>
