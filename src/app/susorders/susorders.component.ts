@@ -1811,8 +1811,9 @@ export class SusordersComponent implements OnInit {
     // console.log(this.ng2FilterPipe.transform(this.orders, this.term))
     this.ng2FilterPipe
       .transform(this.orders, this.term)
+      .filter((x: any) => (x.futureOrder == this.showFutureOrders || !x.futureOrder))
       .forEach((order: OrderModule) => {
-        if (order.OdrsId == id || id == 0) {
+        if ((order.OdrsId == id || id == 0)) {
           console.log(order, this.paymentTypes);
           order.selected = select;
           if (select) {
@@ -1846,6 +1847,8 @@ export class SusordersComponent implements OnInit {
   }
 
   completeOrders() {
+    console.log(this.selectedOrders)
+    return
     this.auth.completeOrders(this.selectedOrders).subscribe((data: any) => {
       console.log(data);
       this.Getpendingorder();

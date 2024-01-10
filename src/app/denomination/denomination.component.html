@@ -610,137 +610,215 @@
           <thead>
             <tr>
               <th>Store</th>
-              <th colspan="1" *ngIf="!hideHeader1">{{shifts[1].shift}}</th>
-              <th colspan="1" *ngIf="!hideHeader1">{{shifts[2].shift}}</th>
-              <th colspan="1" *ngIf="!hideHeader1">{{shifts[3].shift}}</th>
-              <th colspan="1" *ngIf="!hideHeader1">{{shifts[4].shift}}</th>
-              <th colspan="1" *ngIf="!hideHeader2">{{shifts[5].shift}}</th>
-              <th colspan="1" *ngIf="!hideHeader2">{{shifts[6].shift}}</th>
-              <th colspan="1" *ngIf="!hideHeader2">{{shifts[7].shift}}</th>
+              <th colspan="3" *ngIf="!hideHeader1" class="shift1">{{shifts[1].shift}}</th>
+              <!-- <td class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
+              <th colspan="3" *ngIf="!hideHeader1" class="shift2">{{shifts[2].shift}}</th>
+              <!-- <td class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
+              <th colspan="3" *ngIf="!hideHeader1" class="shift3">{{shifts[3].shift}}</th>
+              <!-- <td class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
+              <th colspan="3" *ngIf="!hideHeader1" class="shift4">{{shifts[4].shift}}</th>
+              <!-- <td class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
+              <th colspan="3" *ngIf="!hideHeader2" class="shift5">{{shifts[5].shift}}</th>
+              <!-- <td class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
+              <th colspan="3" *ngIf="!hideHeader2" class="shift6">{{shifts[6].shift}}</th>
+              <!-- <td class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
+              <th colspan="3" *ngIf="!hideHeader2" class="shift7">{{shifts[7].shift}}</th>
             </tr>
           </thead>
           <tbody>
+            <colgroup>
+              <col />
+              <col span="3" class="dark" />
+              <col span="3" class="white" />
+              <col span="3" class="dark" />
+              <col span="3" class="white" />
+              <col span="3" class="dark" />
+              <col span="3" class="white" />
+              <col span="3" class="dark" />
+            </colgroup>
             <tr *ngFor="let rpt of denomcheckreports; let i = index">
               <td>{{rpt.Name}}</td>
               <td
                 [ngClass]="{'excess': rpt.shift1s > margin, 'shortage': rpt.shift1s < margin*-1, 'tallied': rpt.shift1s >= margin*-1 && rpt.shift1s <= margin && rpt.shift1s != null}"
-                (mouseenter)="rpt['1s'+i] = true" (mouseleave)="rpt['1s'+i] = false" *ngIf="!hideHeader1">
+                (mouseenter)="rpt['1s'+i] = true" (mouseleave)="rpt['1s'+i] = false" *ngIf="!hideHeader1" class="shift1 cash">
                 {{rpt.shift1s == null ? 'No Rec' : rpt.shift1s}}
                 <span *ngIf="rpt['1s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>08:00 am to 11:59 am</span>
                 </span>
               </td>
-              <!-- <td [ngClass]="{'excess': rpt.shift1e > 0, 'shortage': rpt.shift1e < 0, 'tallied': rpt.shift1e == 0}"
-                (mouseenter)="rpt['1e'+i] = true" (mouseleave)="rpt['1e'+i] = false" *ngIf="!hideHeader1">
-                {{rpt.shift1e == null ? 'No Rec' : rpt.shift1e}}
-                <span *ngIf="rpt['1e'+i]" class="hover-info shadow">
+              <td [ngClass]="{'excess': rpt.shift1p > 0, 'shortage': rpt.shift1p < 0, 'tallied': rpt.shift1p == 0}"
+                (mouseenter)="rpt['1p'+i] = true" (mouseleave)="rpt['1p'+i] = false" *ngIf="!hideHeader1" class="shift1 phonepe">
+                {{rpt.shift1p == null ? 'No Rec' : rpt.shift1p}}
+                <span *ngIf="rpt['1p'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>08:00 am to 11:59 am</span>
                 </span>
-              </td> -->
+              </td>
+              <td [ngClass]="{'excess': rpt.shift1c > 0, 'shortage': rpt.shift1c < 0, 'tallied': rpt.shift1c == 0}" class="gap-right"
+                (mouseenter)="rpt['1c'+i] = true" (mouseleave)="rpt['1c'+i] = false" *ngIf="!hideHeader1" class="shift1 cardpt">
+                {{rpt.shift1c == null ? 'No Rec' : rpt.shift1c}}
+                <span *ngIf="rpt['1c'+i]" class="hover-info shadow">
+                  <span>{{rpt.Name}}</span><br>
+                  <span>08:00 am to 11:59 am</span>
+                </span>
+              </td>
+              <!-- <td *ngIf="i == 0" class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
               <td
                 [ngClass]="{'excess': rpt.shift2s > margin, 'shortage': rpt.shift2s < margin*-1, 'tallied': rpt.shift2s >= margin*-1 && rpt.shift2s <= margin && rpt.shift2s != null}"
-                (mouseenter)="rpt['2s'+i] = true" (mouseleave)="rpt['2s'+i] = false" *ngIf="!hideHeader1">
+                (mouseenter)="rpt['2s'+i] = true" (mouseleave)="rpt['2s'+i] = false" *ngIf="!hideHeader1" class="shift2 cash">
                 {{rpt.shift2s == null ? 'No Rec' : rpt.shift2s}}
                 <span *ngIf="rpt['2s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>12:00 pm to 02:00 pm</span>
                 </span>
               </td>
-              <!-- <td [ngClass]="{'excess': rpt.shift2e > 0, 'shortage': rpt.shift2e < 0, 'tallied': rpt.shift2e == 0}"
-                (mouseenter)="rpt['2e'+i] = true" (mouseleave)="rpt['2e'+i] = false" *ngIf="!hideHeader1">
-                {{rpt.shift2e == null ? 'No Rec' : rpt.shift2e}}
-                <span *ngIf="rpt['2e'+i]" class="hover-info shadow">
+              <td [ngClass]="{'excess': rpt.shift2p > 0, 'shortage': rpt.shift2p < 0, 'tallied': rpt.shift2p == 0}"
+                (mouseenter)="rpt['2p'+i] = true" (mouseleave)="rpt['2p'+i] = false" *ngIf="!hideHeader1" class="shift2 phonepe">
+                {{rpt.shift2p == null ? 'No Rec' : rpt.shift2p}}
+                <span *ngIf="rpt['2p'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>12:00 pm to 02:29 pm</span>
                 </span>
-              </td> -->
+              </td>
+              <td [ngClass]="{'excess': rpt.shift2c > 0, 'shortage': rpt.shift2c < 0, 'tallied': rpt.shift2c == 0}" class="gap-right"
+                (mouseenter)="rpt['2c'+i] = true" (mouseleave)="rpt['2c'+i] = false" *ngIf="!hideHeader1" class="shift2 cardpt">
+                {{rpt.shift2c == null ? 'No Rec' : rpt.shift2c}}
+                <span *ngIf="rpt['2c'+i]" class="hover-info shadow">
+                  <span>{{rpt.Name}}</span><br>
+                  <span>12:00 pm to 02:29 pm</span>
+                </span>
+              </td>
+              <!-- <td *ngIf="i == 0" class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
               <td
                 [ngClass]="{'excess': rpt.shift3s > margin, 'shortage': rpt.shift3s < margin*-1, 'tallied': rpt.shift3s >= margin*-1 && rpt.shift3s <= margin && rpt.shift3s != null}"
-                (mouseenter)="rpt['3s'+i] = true" (mouseleave)="rpt['3s'+i] = false" *ngIf="!hideHeader1">
+                (mouseenter)="rpt['3s'+i] = true" (mouseleave)="rpt['3s'+i] = false" *ngIf="!hideHeader1" class="shift3 cash">
                 {{rpt.shift3s == null ? 'No Rec' : rpt.shift3s}}
                 <span *ngIf="rpt['3s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>02:00 pm to 04:00 pm</span>
                 </span>
               </td>
-              <!-- <td [ngClass]="{'excess': rpt.shift3e > 0, 'shortage': rpt.shift3e < 0, 'tallied': rpt.shift3e == 0}"
-                (mouseenter)="rpt['3e'+i] = true" (mouseleave)="rpt['3e'+i] = false" *ngIf="!hideHeader1">
-                {{rpt.shift3e == null ? 'No Rec' : rpt.shift3e}}
-                <span *ngIf="rpt['3e'+i]" class="hover-info shadow">
+              <td [ngClass]="{'excess': rpt.shift3p > 0, 'shortage': rpt.shift3p < 0, 'tallied': rpt.shift3p == 0}"
+                (mouseenter)="rpt['3p'+i] = true" (mouseleave)="rpt['3p'+i] = false" *ngIf="!hideHeader1" class="shift3 phonepe">
+                {{rpt.shift3p == null ? 'No Rec' : rpt.shift3p}}
+                <span *ngIf="rpt['3p'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>02:30 pm to 04:29 pm</span>
                 </span>
-              </td> -->
+              </td>
+              <td [ngClass]="{'excess': rpt.shift3c > 0, 'shortage': rpt.shift3c < 0, 'tallied': rpt.shift3c == 0}" class="gap-right"
+                (mouseenter)="rpt['3c'+i] = true" (mouseleave)="rpt['3c'+i] = false" *ngIf="!hideHeader1" class="shift3 cardpt">
+                {{rpt.shift3c == null ? 'No Rec' : rpt.shift3c}}
+                <span *ngIf="rpt['3c'+i]" class="hover-info shadow">
+                  <span>{{rpt.Name}}</span><br>
+                  <span>02:30 pm to 04:29 pm</span>
+                </span>
+              </td>
+              <!-- <td *ngIf="i == 0" class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
               <td
                 [ngClass]="{'excess': rpt.shift4s > margin, 'shortage': rpt.shift4s < margin*-1, 'tallied': rpt.shift4s >= margin*-1 && rpt.shift4s <= margin && rpt.shift4s != null}"
-                (mouseenter)="rpt['4s'+i] = true" (mouseleave)="rpt['4s'+i] = false" *ngIf="!hideHeader1">
+                (mouseenter)="rpt['4s'+i] = true" (mouseleave)="rpt['4s'+i] = false" *ngIf="!hideHeader1" class="shift4 cash">
                 {{rpt.shift4s == null ? 'No Rec' : rpt.shift4s}}
                 <span *ngIf="rpt['4s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>04:00 pm to 06:00 pm</span>
                 </span>
               </td>
-              <!-- <td [ngClass]="{'excess': rpt.shift4e > 0, 'shortage': rpt.shift4e < 0, 'tallied': rpt.shift4e == 0}"
-                (mouseenter)="rpt['4e'+i] = true" (mouseleave)="rpt['4e'+i] = false" *ngIf="!hideHeader1">
-                {{rpt.shift4e == null ? 'No Rec' : rpt.shift4e}}
-                <span *ngIf="rpt['4e'+i]" class="hover-info shadow">
+              <td [ngClass]="{'excess': rpt.shift4p > 0, 'shortage': rpt.shift4p < 0, 'tallied': rpt.shift4p == 0}"
+                (mouseenter)="rpt['4p'+i] = true" (mouseleave)="rpt['4p'+i] = false" *ngIf="!hideHeader1" class="shift4 phonepe">
+                {{rpt.shift4p == null ? 'No Rec' : rpt.shift4p}}
+                <span *ngIf="rpt['4p'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>04:30 pm to 06:29 pm</span>
                 </span>
-              </td> -->
+              </td>
+              <td [ngClass]="{'excess': rpt.shift4c > 0, 'shortage': rpt.shift4c < 0, 'tallied': rpt.shift4c == 0}" class="gap-right"
+                (mouseenter)="rpt['4c'+i] = true" (mouseleave)="rpt['4c'+i] = false" *ngIf="!hideHeader1" class="shift4 cardpt">
+                {{rpt.shift4c == null ? 'No Rec' : rpt.shift4c}}
+                <span *ngIf="rpt['4c'+i]" class="hover-info shadow">
+                  <span>{{rpt.Name}}</span><br>
+                  <span>04:30 pm to 06:29 pm</span>
+                </span>
+              </td>
+              <!-- <td *ngIf="i == 0" class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
               <td
                 [ngClass]="{'excess': rpt.shift5s > margin, 'shortage': rpt.shift5s < margin*-1, 'tallied': rpt.shift5s >= margin*-1 && rpt.shift5s <= margin && rpt.shift5s != null}"
-                (mouseenter)="rpt['5s'+i] = true" (mouseleave)="rpt['5s'+i] = false" *ngIf="!hideHeader2">
+                (mouseenter)="rpt['5s'+i] = true" (mouseleave)="rpt['5s'+i] = false" *ngIf="!hideHeader2" class="shift5 cash">
                 {{rpt.shift5s == null ? 'No Rec' : rpt.shift5s}}
                 <span *ngIf="rpt['5s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>06:00 pm to 08:00 pm</span>
                 </span>
               </td>
-              <!-- <td [ngClass]="{'excess': rpt.shift5e > 0, 'shortage': rpt.shift5e < 0, 'tallied': rpt.shift5e == 0}"
-                (mouseenter)="rpt['5e'+i] = true" (mouseleave)="rpt['5e'+i] = false" *ngIf="!hideHeader2">
-                {{rpt.shift5e == null ? 'No Rec' : rpt.shift5e}}
-                <span *ngIf="rpt['5e'+i]" class="hover-info shadow">
+              <td [ngClass]="{'excess': rpt.shift5p > 0, 'shortage': rpt.shift5p < 0, 'tallied': rpt.shift5p == 0}"
+                (mouseenter)="rpt['5p'+i] = true" (mouseleave)="rpt['5p'+i] = false" *ngIf="!hideHeader2" class="shift5 phonepe">
+                {{rpt.shift5p == null ? 'No Rec' : rpt.shift5p}}
+                <span *ngIf="rpt['5p'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>06:30 pm to 08:30 pm</span>
                 </span>
-              </td> -->
+              </td>
+              <td [ngClass]="{'excess': rpt.shift5c > 0, 'shortage': rpt.shift5c < 0, 'tallied': rpt.shift5c == 0}" class="gap-right"
+                (mouseenter)="rpt['5c'+i] = true" (mouseleave)="rpt['5c'+i] = false" *ngIf="!hideHeader2" class="shift5 cardpt">
+                {{rpt.shift5c == null ? 'No Rec' : rpt.shift5c}}
+                <span *ngIf="rpt['5c'+i]" class="hover-info shadow">
+                  <span>{{rpt.Name}}</span><br>
+                  <span>06:30 pm to 08:30 pm</span>
+                </span>
+              </td>
+              <!-- <td *ngIf="i == 0" class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
               <td
                 [ngClass]="{'excess': rpt.shift6s > margin, 'shortage': rpt.shift6s < margin*-1, 'tallied': rpt.shift6s >= margin*-1 && rpt.shift6s <= margin && rpt.shift6s != null}"
-                (mouseenter)="rpt['6s'+i] = true" (mouseleave)="rpt['6s'+i] = false" *ngIf="!hideHeader2">
+                (mouseenter)="rpt['6s'+i] = true" (mouseleave)="rpt['6s'+i] = false" *ngIf="!hideHeader2" class="shift6 cash">
                 {{rpt.shift6s == null ? 'No Rec' : rpt.shift6s}}
                 <span *ngIf="rpt['6s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>08:00 pm to 10:00 pm</span>
                 </span>
               </td>
-              <!-- <td [ngClass]="{'excess': rpt.shift6e > 0, 'shortage': rpt.shift6e < 0, 'tallied': rpt.shift6e == 0}"
-                (mouseenter)="rpt['6e'+i] = true" (mouseleave)="rpt['6e'+i] = false" *ngIf="!hideHeader2">
-                {{rpt.shift6e == null ? 'No Rec' : rpt.shift6e}}
-                <span *ngIf="rpt['6e'+i]" class="hover-info shadow">
+              <td [ngClass]="{'excess': rpt.shift6p > 0, 'shortage': rpt.shift6p < 0, 'tallied': rpt.shift6p == 0}"
+                (mouseenter)="rpt['6p'+i] = true" (mouseleave)="rpt['6p'+i] = false" *ngIf="!hideHeader2" class="shift6 phonepe">
+                {{rpt.shift6p == null ? 'No Rec' : rpt.shift6p}}
+                <span *ngIf="rpt['6p'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>08:30 pm to closing</span>
                 </span>
-              </td> -->
+              </td>
+              <td [ngClass]="{'excess': rpt.shift6c > 0, 'shortage': rpt.shift6c < 0, 'tallied': rpt.shift6c == 0}" class="gap-right"
+                (mouseenter)="rpt['6c'+i] = true" (mouseleave)="rpt['6c'+i] = false" *ngIf="!hideHeader2" class="shift6 cardpt">
+                {{rpt.shift6c == null ? 'No Rec' : rpt.shift6c}}
+                <span *ngIf="rpt['6c'+i]" class="hover-info shadow">
+                  <span>{{rpt.Name}}</span><br>
+                  <span>08:30 pm to closing</span>
+                </span>
+              </td>
+              <!-- <td *ngIf="i == 0" class="td-border" [attr.rowspan]="denomcheckreports.length"></td> -->
               <td
                 [ngClass]="{'excess': rpt.shift7s > margin, 'shortage': rpt.shift7s < margin*-1, 'tallied': rpt.shift7s >= margin*-1 && rpt.shift7s <= margin && rpt.shift7s != null}"
-                (mouseenter)="rpt['7s'+i] = true" (mouseleave)="rpt['7s'+i] = false" *ngIf="!hideHeader2">
+                (mouseenter)="rpt['7s'+i] = true" (mouseleave)="rpt['7s'+i] = false" *ngIf="!hideHeader2" class="shift7 cash">
                 {{rpt.shift7s == null ? 'No Rec' : rpt.shift7s}}
                 <span *ngIf="rpt['7s'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>10:00 pm to closing</span>
                 </span>
               </td>
-              <!-- <td [ngClass]="{'excess': rpt.shift6e > 0, 'shortage': rpt.shift6e < 0, 'tallied': rpt.shift6e == 0}"
-                (mouseenter)="rpt['6e'+i] = true" (mouseleave)="rpt['6e'+i] = false" *ngIf="!hideHeader2">
-                {{rpt.shift6e == null ? 'No Rec' : rpt.shift6e}}
-                <span *ngIf="rpt['6e'+i]" class="hover-info shadow">
+              <td [ngClass]="{'excess': rpt.shift7p > 0, 'shortage': rpt.shift7p < 0, 'tallied': rpt.shift7p == 0}"
+                (mouseenter)="rpt['7p'+i] = true" (mouseleave)="rpt['7p'+i] = false" *ngIf="!hideHeader2" class="shift7 phonepe">
+                {{rpt.shift7p == null ? 'No Rec' : rpt.shift7p}}
+                <span *ngIf="rpt['7p'+i]" class="hover-info shadow">
                   <span>{{rpt.Name}}</span><br>
                   <span>08:30 pm to closing</span>
                 </span>
-              </td> -->
+              </td>
+              <td [ngClass]="{'excess': rpt.shift7c > 0, 'shortage': rpt.shift7c < 0, 'tallied': rpt.shift7c == 0}"
+                (mouseenter)="rpt['7c'+i] = true" (mouseleave)="rpt['7c'+i] = false" *ngIf="!hideHeader2" class="shift7 cardpt">
+                {{rpt.shift7c == null ? 'No Rec' : rpt.shift7c}}
+                <span *ngIf="rpt['7c'+i]" class="hover-info shadow">
+                  <span>{{rpt.Name}}</span><br>
+                  <span>08:30 pm to closing</span>
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>

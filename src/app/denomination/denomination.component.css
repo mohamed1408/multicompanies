@@ -108,3 +108,21 @@ td {
 table.flat td {
   padding: 5px !important;
 }
+
+/* .gap-right {
+  padding: 0 15px;
+}
+
+tr th:not(:first-child):not(:last-child) {
+  border-right: 2px solid black;
+}
+
+td.cardpt {
+  border-right: 2px solid black;
+} */
+
+/* .dark */
+td.td-border {
+  width: 10px;
+  padding: 0;
+}
