@@ -1848,7 +1848,7 @@ export class SusordersComponent implements OnInit {
 
   completeOrders() {
     console.log(this.selectedOrders)
-    return
+    // return
     this.auth.completeOrders(this.selectedOrders).subscribe((data: any) => {
       console.log(data);
       this.Getpendingorder();
