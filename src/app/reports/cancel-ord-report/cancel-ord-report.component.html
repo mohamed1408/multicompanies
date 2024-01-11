@@ -1,71 +1,60 @@
 <div *ngIf="hidecontent" class="hk-wrapper">
 
-  <!-- Main Content -->
-  <div class="hk-pg-wrapper hk-auth-wrapper">
-    <header class="d-flex justify-content-end align-items-center">
-      <div class="btn-group btn-group-sm">
-        <a href="#" class="btn btn-outline-secondary">Help</a>
-        <a href="#" class="btn btn-outline-secondary">About Us</a>
-      </div>
-    </header>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xl-12 pa-0">
-          <div class="auth-form-wrap pt-xl-0 pt-70">
-            <div class="auth-form w-xl-25 w-lg-30 w-sm-50 w-100">
-
-              <form>
-                <div
-                  class="d-62 bg-white rounded-circle mb-10 d-flex align-items-center justify-content-center mx-auto">
-                  <i class="zmdi zmdi-settings font-28"></i>
-                </div>
-                <h1 class="display-4 mb-10 text-center"> <span unselectable="on" class="no-select"
-                    (click)="unlockpagr('sorry')">Sorry</span>
-                  we <span unselectable="on" class="no-select" (click)="unlockpagr('are')">are</span>
-                  down for <span (click)="unlockpagr('maintenance')">maintenance</span></h1>
-                <p class="mb-30 text-center">We apologize for the inconvenience, we are doing our best
-                  to get things back in order for you. Please feel free to <a href="#"><u>contact
-                      us</u></a> for any queries.</p>
-              </form>
+    <div class="hk-pg-wrapper hk-auth-wrapper">
+        <header class="d-flex justify-content-end align-items-center">
+            <div class="btn-group btn-group-sm">
+                <a href="#" class="btn btn-outline-secondary">Help</a>
+                <a href="#" class="btn btn-outline-secondary">About Us</a>
             </div>
-          </div>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12 pa-0">
+                    <div class="auth-form-wrap pt-xl-0 pt-70">
+                        <div class="auth-form w-xl-25 w-lg-30 w-sm-50 w-100">
+                            <form>
+                                <div
+                                    class="d-62 bg-white rounded-circle mb-10 d-flex align-items-center justify-content-center mx-auto">
+                                    <i class="zmdi zmdi-settings font-28"></i>
+                                </div>
+                                <h1 class="display-4 mb-10 text-center"> <span unselectable="on" class="no-select"
+                                        (click)="unlockpagr('sorry')">Sorry</span>
+                                    we <span unselectable="on" class="no-select" (click)="unlockpagr('are')">are</span>
+                                    down for <span (click)="unlockpagr('maintenance')">maintenance</span></h1>
+                                <p class="mb-30 text-center">We apologize for the inconvenience, we are doing our best
+                                    to get things back in order for you. Please feel free to <a href="#"><u>contact
+                                            us</u></a> for any queries.</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <!-- /Main Content -->
-
 </div>
 
 
-<div *ngIf="!hidecontent" class="hk-pg-wrapper">
+<div *ngIf="!hidecontent" class="hk-pg-wrapper" style="height: 100%;">
+    <div class="title">
+        Cancel Order Report
+    </div>
+
     <div class="container">
-        <!-- <nav class="hk-breadcrumb" aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-light bg-transparent">
-            <li class="breadcrumb-item active" aria-current="page"><i class="icon-note"></i> Manage</li>
-        </ol>
-    </nav> -->
-        <div class="hk-pg-header">
-            <h4 class="hk-pg-title">OrderWiseSales</h4>
-        </div>
+        <!-- <div class="hk-pg-header" style="padding-top: 5px;">
+            <h5 class="hk-pg-title">Cancel Order Report</h5>
+        </div> -->
         <div class="col-sm-14">
             <div class="col-xl-12 pl-0 pr-0">
-                <section class="hk-sec-wrapper">
+                <section class="hk-sec-wrapper" style="height: 25%;">
                     <div class="form-group row">
                         <div style="margin-left:30px ">
                             <label for="username">Location</label>
-                            <ng-autocomplete [data]="stores" style="width:10em;
-              border-color: #c5d4d6;" [formControl]="myControl" [searchKeyword]="key" (selected)='selectEvent($event)'
-                                placeHolder="Choose Location" (inputCleared)="focusAutocomplete()"
-                                [itemTemplate]="itemTemplate1" [notFoundTemplate]="notFoundTemplate1" [(ngModel)]="all">
-                            </ng-autocomplete>
-                            <ng-template #itemTemplate1 let-item>
-                                <a [innerHTML]="item.Name"></a>
+                            <ng-template #rt let-r="result" let-t="term">
+                                <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
                             </ng-template>
-
-                            <ng-template #notFoundTemplate1 let-notFound>
-                                <div [innerHTML]="notFound"></div>
-                            </ng-template>
+                            <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
+                                [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
+                                placeholder="Search Stores..." (selectItem)="selecteds($event.item)" />
                         </div>
                         <div style="margin-left:50px;">
                             <label for="username">Date</label>
@@ -95,196 +84,80 @@
                                 <option value="4">Food Panda</option>
                             </select>
                         </div>
-
                         <div style="margin-top:35px;">
                             <button class="btn btn-success btn-sm mx-100 w-30 pull-right"
                                 (click)="Submit()">Submit</button>
                         </div>
-                        <!-- <div style="margin-left:85px;margin-top:35px; ">
-              <button type="button" class="btn btn-primary" (click)="Export()">Export</button>
-            </div> -->
                     </div>
-
-                    <div class="row">
-                        <div class="col-sm">
-                            <!-- <form> -->
-                            <div class="table-wrap">
-                                <div class="table-responsive">
-                                    <input type="text" class="form-control" placeholder="Search Report.."
-                                        [(ngModel)]="term" (input)="calculate()">
-                                    <br>
-                                    <div class="float-right">
-                                        <strong>TotalSales: </strong>{{TotalSales | number: ".2"}} <br>
-                                        <strong>TotalPayments: </strong>{{TotalPayments | number: ".2"}} <br>
-                                    </div>
-                                    <table class="table mb-0 table-sm">
-                                        <thead>
-                                            <tr style="background-color:rgb(217, 226, 250);">
-                                                <th (click)="sortsettings('InvoiceNo')"><strong><a
-                                                            class="font-12">Id</a></strong><i
-                                                        *ngIf="sortfield == 'InvoiceNo' && x == -1"
-                                                        class="icon-arrow-up  pull-right"></i>
-                                                    <i *ngIf="sortfield == 'InvoiceNo' && x == 1"
-                                                        class="icon-arrow-down  pull-right"></i>
-                                                </th>
-                                                <th (click)="sortsettings('OrderedDate')"> <strong><a
-                                                            class="font-12">Date</a></strong><i
-                                                        *ngIf="sortfield == 'OrderedDate' && x == -1"
-                                                        class="icon-arrow-up  pull-right"></i>
-                                                    <i *ngIf="sortfield == 'OrderedDate' && x == 1"
-                                                        class="icon-arrow-down  pull-right"></i>
-                                                </th>
-                                                <th (click)="sortsettings('Name')"> <strong><a
-                                                            class="font-12">Store</a></strong><i
-                                                        *ngIf="sortfield == 'Name' && x == -1"
-                                                        class="icon-arrow-up  pull-right"></i>
-                                                    <i *ngIf="sortfield == 'Name' && x == 1"
-                                                        class="icon-arrow-down  pull-right"></i>
-                                                </th>
-                                                <th (click)="sortsettings('TotalTax')"><strong><a
-                                                            class="font-12">Tax</a></strong><i
-                                                        *ngIf="sortfield == 'TotalTax' && x == -1"
-                                                        class="icon-arrow-up  pull-right"></i>
-                                                    <i *ngIf="sortfield == 'TotalTax' && x == 1"
-                                                        class="icon-arrow-down  pull-right"></i>
-                                                </th>
-                                                <th (click)="sortsettings('DiscAmount')"><strong><a
-                                                            class="font-12">Discount</a></strong><i
-                                                        *ngIf="sortfield == 'DiscAmount' && x == -1"
-                                                        class="icon-arrow-up  pull-right"></i>
-                                                    <i *ngIf="sortfield == 'DiscAmount' && x == 1"
-                                                        class="icon-arrow-down  pull-right"></i>
-                                                </th>
-                                                <th (click)="sortsettings('BillAmount')"><strong><a class="font-12">Bill
-                                                            Amount</a></strong><i
-                                                        *ngIf="sortfield == 'BillAmount' && x == -1"
-                                                        class="icon-arrow-up  pull-right"></i>
-                                                    <i *ngIf="sortfield == 'BillAmount' && x == 1"
-                                                        class="icon-arrow-down  pull-right"></i>
-                                                </th>
-                                                <th (click)="sortsettings('PaidAmount')"><strong><a class="font-12">Paid
-                                                            Amount</a></strong><i
-                                                        *ngIf="sortfield == 'PaidAmount' && x == -1"
-                                                        class="icon-arrow-up  pull-right"></i>
-                                                    <i *ngIf="sortfield == 'PaidAmount' && x == 1"
-                                                        class="icon-arrow-down  pull-right"></i>
-                                                </th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="select" *ngFor="let item of sortData | filter:term; index as i;"
-                                                (click)="itemdetails(item.ItemJson,item.ChargeJson, item.SourceId);">
-                                                <td class="font-12">{{item.InvoiceNo}}</td>
-                                                <td class="font-12">{{item.OrderedDate}}</td>
-                                                <td class="font-12">{{item.Store}}</td>
-                                                <td class="font-12">&#8377;{{item.TotalTax | number: ".2"}}</td>
-                                                <td class="font-12">&#8377;{{item.DiscAmount | number: ".2"}}</td>
-                                                <td class="font-12">&#8377;{{item.BillAmount | number: ".2"}}</td>
-                                                <td class="font-12">&#8377;{{item.PaidAmount | number: ".2"}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td><strong>TotalSales</strong></td>
-                                                <td class="font-14"><strong>&#8377;{{TotalSales | number:".2"}}</strong>
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td><strong>TotalPayments</strong></td>
-                                                <td class="font-14"><strong>&#8377;{{TotalPayments |
-                                                        number:".2"}}</strong></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
-                                </div>
-                            </div>
-                            <!-- </form> -->
-                        </div>
-                    </div>
+                </section>
+                <section class="hk-sec-wrapper">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;"><strong>Invoice</strong></th>
+                                <th style="width: 10%;"><strong>Bill Amount</strong></th>
+                                <th style="width: 10%;"><strong>Paid Amount</strong></th>
+                                <th style="width: 15%;"><strong>OrdredDate</strong></th>
+                                <th style="width: 15%;"><strong>OrderType</strong></th>
+                                <th style="width: 15%;"><strong>Store</strong></th>
+                                <th style="width: 15%;"><strong>Reason</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let rpt of  CancelRptIndex; let i = index">
+                                <td style="width: 20%;">
+                                    <p>
+                                        {{rpt.ino}}
+                                    </p>
+                                </td>
+                                <td style="width: 10%;">
+                                    <p>
+                                        {{rpt.ba}}
+                                    </p>
+                                </td>
+                                <td style="width: 10%;">
+                                    <p>
+                                        {{rpt.pa}}
+                                    </p>
+                                </td>
+                                <td style="width: 15%;">
+                                    <p>
+                                        {{rpt.od | date: 'dd/MM/yyyy'}}
+                                    </p>
+                                </td>
+                                <td style="width: 15%;">
+                                    <p *ngIf="rpt.oti == 1">
+                                        DineIn
+                                    </p>
+                                    <p *ngIf="rpt.oti == 2">
+                                        TakeAway
+                                    </p>
+                                    <p *ngIf="rpt.oti == 3">
+                                        Delivery
+                                    </p>
+                                    <p *ngIf="rpt.oti == 4">
+                                        PickUp
+                                    </p>
+                                    <p *ngIf="rpt.oti == 5">
+                                        QuickOrder
+                                    </p>
+                                </td>
+                                <td style="width: 15%;">
+                                    <p>{{rpt.Name}}</p>
+                                </td>
+                                <td style="width: 15%;">
+                                    <p #popoverTrigger="ngbPopover"
+                                        ngbPopover="&nbsp;&nbsp;&nbsp;&nbsp;{{ rpt.cr }}&nbsp;&nbsp;&nbsp;&nbsp;"
+                                        (mouseenter)="popoverTrigger.open()" (mouseleave)="popoverTrigger.close()"
+                                        placement="right" class="custom-popover">
+                                        <span class="truncate-text" style="cursor: pointer;">{{ rpt.cr }}</span>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </section>
             </div>
         </div>
     </div>
 </div>
-
-<ng-template #itemsModal let-modal>
-    <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <table *ngIf="receipt.length" class="table table-sm mb-0" style="width:100%">
-            <thead>
-                <tr>
-                    <td>Item</td>
-                    <td>Quantity</td>
-                    <td>Tax</td>
-                    <td>Price</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of receipt">
-                    <td>{{item.showname || item.Product}}</td>
-                    <td>{{item.Quantity}}</td>
-                    <td>{{item.Tax1+item.Tax2}}</td>
-                    <td>&#8377;{{item.TotalAmount | number:".2"}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Subtotal</td>
-                    <td>&#8377;{{subtotal | number:".2"}}</td>
-                </tr>
-                <tr *ngIf="discount > 0">
-                    <td></td>
-                    <td></td>
-                    <td>Discount</td>
-                    <td>-&#8377;{{discount | number: ".2"}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>CGST</td>
-                    <td>&#8377;{{cgst | number:".2"}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>SGST</td>
-                    <td>&#8377;{{sgst | number:".2"}}</td>
-                </tr>
-                <tr *ngFor="let item of ordcharges">
-                    <td></td>
-                    <td></td>
-                    <td>{{item.Description}}</td>
-                    <td>&#8377;{{item.ChargeAmount | number:".2"}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Total</td>
-                    <td>&#8377;{{total | number:".2"}}</td>
-                </tr>
-            </tbody>
-        </table>
-        <div *ngIf="!receipt.length" style="background: #fffbe5"
-            class="row px-30 py-30 border border-warning rounded-5 mx-10 bg-primary-10">
-            <span style="margin: auto;color: #6b5d00;font-style: italic;">Item details not available</span>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    </div>
-</ng-template>

@@ -1,0 +1,15 @@
+
+.truncate-text {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.title {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 10px;
+    padding: 30px;
+    font-size: xx-large;
+}

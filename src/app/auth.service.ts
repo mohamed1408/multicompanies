@@ -839,6 +839,18 @@ export class AuthService {
   ordertransaction(transactionlist: Array<Transaction>) {
     return this.http.post(this.baseurl + `Receipt/ordertransaction2`, transactionlist)
   }
+  CancelledRpt(
+    FrmDate: string,
+    ToDate: string,
+    StoreId: number,
+    CompId: number,
+    SourceId: number
+  ) {
+    return this.http.get(
+      this.baseurl +
+        `POSOrder/CancelledRpt?FrmDate=${FrmDate}&ToDate=${ToDate}&StoreId=${StoreId}&CompId=${CompId}&SourceId=${SourceId}`
+    );
+  }
 }
 
 // baseurl
