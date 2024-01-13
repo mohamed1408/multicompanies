@@ -1,46 +1,49 @@
-.checkbox-select {
-    position: relative;
+.title {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 10px;
+    padding: 30px;
+    font-size: xx-large;
 }
 
-.options {
+.container {
+    max-width: 90vw !important;
+}
+
+.tooltip {
     position: absolute;
-    left: 0;
-    max-height: 250px;
-    overflow: auto;
-}
+    display: block;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
 
-.option {
-    background: white;
-    cursor: pointer;
-}
-
-.option label {
-    margin: 0;
-    cursor: pointer;
-}
-
-.option:hover {
-    background: #348ff1;
-}
-
-.option:hover label {
-    color: white;
-}
-
-.slider {
-    position: relative;
-    width: 50vw;
-    height: 10px;
-    background: #f4f6f7;
-}
-
-.thumb {
-    position: absolute;
-    background: #233c46;
+  
+ /* CheckBox */
+ input.largerCheckbox {
     width: 20px;
     height: 20px;
-    border-radius: 50px;
-    top: -5px;
-    left: 0;
-    cursor: pointer;
 }
+ 
+
+.table-container {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .table-container thead th { 
+    position: sticky; 
+    top: 0; 
+  } 
+
+  input.smallerCheckbox{
+    width: 15px;
+    height: 15px;
+  }
+  
+
+   
+   
+   
+   
+   

@@ -1,67 +1,163 @@
 <div class="hk-pg-wrapper">
-  <nav class="hk-breadcrumb" aria-label="breadcrumb">
-    <ol class="breadcrumb breadcrumb-light bg-transparent">
-      <li class="breadcrumb-item active" aria-current="page">Products</li>
-    </ol>
-  </nav>
-  <div class="col-xl-12">
-    <section class="hk-sec-wrapper">
-      <h6>Section Header</h6>
+  <div class="title">
+    PriceBook
+  </div>
 
-      <!-- cbselectels -->
-      <div class="row col-xl-12 cbselectels">
-        <div class=" checkbox-select px-0 cbselectels">
-          <input
-            type="text"
-            class="w-100 cbselectels"
-            readonly
-            (focus)="toggleDropDown()"
-            [(ngModel)]="selected_companies"
-          />
-          <div
-            *ngIf="showdropdown | async"
-            class="options w-100 shadow shadow-xl cbselectels"
-          >
-            <div
-              class="option px-15 cbselectels"
-              (click)="all = !all; toggleAll();"
-            >
-              <label for="one" class="cbselectels">
-                <input
-                  type="checkbox"
-                  readonly
-                  [(ngModel)]="all"
-                  class="cbselectels"
-                />
-                Select All
-              </label>
-            </div>
-            <div
-              *ngFor="let company of companies"
-              class="option px-15 cbselectels"
-              (click)="company.isselected = !company.isselected; change()"
-            >
-              <label for="one" class="cbselectels">
-                <input
-                  type="checkbox"
-                  readonly
-                  [(ngModel)]="company.isselected"
-                  class="cbselectels"
-                />
-                &nbsp;{{ company.AccountName }}</label
-              >
-            </div>
+  <div class="container">
+    <section class="hk-sec-wrapper">
+      <div class="row">
+        <div class="col-3">
+          <ng-template #rt let-r="result" let-t="term">
+            <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+          </ng-template>
+          <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
+            [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" placeholder="Search Stores..."
+            (selectItem)="selecteds($event.item)" />
+        </div>
+        <div class="col-3">
+          <select class="form-control custom-select" [(ngModel)]="CategoryId" (change)="filterProducts()">
+            <option value="0" selected disabled>Select Category</option>
+            <option value="All">All</option>
+            <option value="{{ item.Id }}" *ngFor="let item of categ">
+              {{ item.Description }}
+            </option>
+          </select>
+        </div>
+        <div class="col-3">
+          <select class="form-control custom-select" [(ngModel)]="TaxGroupId" (change)="filterProducts()">
+            <option value="0" selected disabled>Select TaxGroup</option>
+            <option value="0">All</option>
+            <option value="{{ item.Id }}" *ngFor="let item of taxgroupvalues">
+              {{ item.Description }}
+            </option>
+          </select>
+        </div>
+        <div class="col" style="text-align: right;">
+          <button class="btn btn-success" (click)="getproducts()">Submit</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="container">
+    <section class="hk-sec-wrapper">
+      <div class="row">
+        <div class="col-3">
+          <div class="input-group d-inline-flex" style="padding-bottom: 10px;">
+            <input class="form-control" type="search" placeholder="Search Product" aria-label="Search"
+              [(ngModel)]="filterText" />
           </div>
         </div>
-      </div>
-      <!-- cbselectels -->
-      <!-- custom slider -->
-      <div class="py-10">
-        <div class="slider">
-          <!-- <div class="thumb" draggable="true" (dragstart)="" (drag)="" (dragend)=""></div> -->
+        <div class="col" style="text-align: right;">
+          <button class="btn btn-info btn-sm" (click)="openDetailpopup(contentdetail)">
+            Import
+          </button>
+          &nbsp;&nbsp;
+          <button class="btn btn-warning btn-sm" (click)="ExportTOExcel()">
+            Export
+          </button>
         </div>
       </div>
-      <!-- custom slider -->
+
+      <div class="table-container">
+        <table class="table table-bordered" #TABLE>
+          <thead style="position: sticky; top: 0; ">
+            <tr style="background-color: #2b2b2b;">
+              <th style="text-align: center; border: none; color: white; width: 5%;">
+                <strong><input class="smallerCheckbox" type="checkbox" style="cursor: pointer;"
+                    (change)="selectAllRows($event)"></strong>
+              </th>
+              <th style="text-align: left; border: none; color: white; width: 20%;"><strong>Name</strong></th>
+              <th style="text-align: center; border: none; color: white; width: 15%;"><strong>Price</strong></th>
+              <!-- <th style="width: 15%; text-align: center; border: none; color: white;"><strong>TakeAway Price</strong>
+              </th>
+              <th style="width: 15%; text-align: center; border: none; color: white;"><strong>Delivery Price</strong>
+              </th> -->
+              <th style="text-align: center; border: none; color: white; width: 15%;"><strong>UP Price</strong>
+              </th>
+              <th style="text-align: center; border: none; color: white; width: 15%;"><strong>Sort Order</strong></th>
+              <th style="text-align: center; border: none; color: white; width: 15%;"><strong>Recommended</strong></th>
+              <th style="text-align: center; border: none; color: white; width: 15%;"><strong>Action</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let prd of filtervalues; let i = index"
+              [hidden]="filterText && !prd.Name.toLowerCase().includes(filterText.toLowerCase())">
+              <td style="text-align: center; width: 5%;">
+                <input class="smallerCheckbox" type="checkbox" style="cursor: pointer;" [(ngModel)]="prd.isSelected">
+              </td>
+              <td style="width: 20%;">
+                <strong>{{prd.Name}}</strong>
+              </td>
+              <td style="text-align: center; width: 15%;">
+                <input class="form-control" type="number" [(ngModel)]="prd.Price" [disabled]="selectedRowIndex !== i">
+              </td>
+              <!-- <td style="text-align: center;">
+                <input class="form-control" type="number" [(ngModel)]="prd.TakeawayPrice"
+                  [disabled]="selectedRowIndex !== i">
+              </td>
+              <td style="text-align: center;">
+                <input class="form-control" type="number" [(ngModel)]="prd.DeliveryPrice"
+                  [disabled]="selectedRowIndex !== i">
+              </td> -->
+              <td style="text-align: center; width: 15%;">
+                <input class="form-control" type="number" [(ngModel)]="prd.UPPrice" [disabled]="selectedRowIndex !== i">
+              </td>
+              <td style="text-align: center; width: 15%;">
+                <input class="form-control" type="number" [(ngModel)]="prd.SortOrder"
+                  [disabled]="selectedRowIndex !== i">
+              </td>
+              <td style="text-align: center; width: 15%;">
+                <input class="largerCheckbox" type="checkbox" [(ngModel)]="prd.Recommended"
+                  [disabled]="selectedRowIndex !== i">
+              </td>
+              <td style="text-align: center; width: 15%;" *ngIf="selectedRowIndex !== i; else editButtons">
+                <strong style="cursor: pointer;" (click)="startEditMode(i)"><i class="fa fa-pencil-square-o"
+                    aria-hidden="true"></i></strong>
+              </td>
+              <ng-template #editButtons>
+                <td style="text-align: center;">
+                  <button class="btn btn-success btn-sm" (click)="saveChanges(i)" [disabled]="!editMode">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                  </button>
+                  &nbsp;&nbsp;
+                  <button class="btn btn-danger btn-sm" (click)="cancelEdit()" [disabled]="!editMode">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </ng-template>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </div>
 </div>
+
+<ng-template #contentdetail let-modal style="z-index: 9999;">
+  <div class="modal-header" style="z-index: 9999;">
+    <p>Update &nbsp;Products</p>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div>
+    <div class="row" style="padding: 0.75rem 1.25rem;">
+      <div class="col">
+        <input type="file" (change)="onFileChange($event)" />
+      </div>
+    </div>
+    <div class="row" style="padding: 0.75rem 1.25rem;">
+      <div class="col">
+        <button class="btn btn-success btn-sm" (click)="importFromExcel(); modal.dismiss('Cross click')">
+          Save
+        </button>
+      </div>
+      <div class="col" style="text-align: right;">
+        <button class="btn btn-danger btn-sm" (click)="cancelimport(); modal.dismiss('Cross click')">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
