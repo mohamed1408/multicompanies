@@ -848,8 +848,28 @@ export class AuthService {
   ) {
     return this.http.get(
       this.baseurl +
-        `POSOrder/CancelledRpt?FrmDate=${FrmDate}&ToDate=${ToDate}&StoreId=${StoreId}&CompId=${CompId}&SourceId=${SourceId}`
+      `POSOrder/CancelledRpt?FrmDate=${FrmDate}&ToDate=${ToDate}&StoreId=${StoreId}&CompId=${CompId}&SourceId=${SourceId}`
     );
+  }
+  GetStoreProducts(CompId: number, StoreId: number) {
+    return this.http.get(
+      this.baseurl +
+      'StoreData/GetPrice?CompId=' +
+      CompId +
+      '&StoreId=' +
+      StoreId
+    );
+  }
+
+  Updatepricebook(formdata: any) {
+    let body = this.toFormData(formdata);
+    // console.log(formdata);
+    // console.log(body);
+    return this.http.post(this.baseurl + 'StoreData/Update', body);
+  }
+
+  GetTaxes(companyId: number) {
+    return this.http.get(this.baseurl + 'TaxGroup/Get?CompanyId=' + companyId);
   }
 }
 

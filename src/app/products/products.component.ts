@@ -236,7 +236,7 @@ export class ProductsComponent implements OnInit {
   TABLE!: ElementRef;
 
   ExportTOExcel() {
-    if (!this.filtervalues.some((x) => x.isSelected == true)) {
+    if (!this.filtervalues.some((x: any) => x.isSelected == true)) {
       alert('select atleast one product');
       return;
     }
