@@ -45,6 +45,8 @@ export class DenominationComponent implements OnInit {
   loginfo;
   storeid: number = 0;
   smodel = '';
+  phonepe: boolean = true
+  card: boolean = true
   entrytypeid: number | null = null;
   date!: { year: number; month: number };
   entrytypes = [
