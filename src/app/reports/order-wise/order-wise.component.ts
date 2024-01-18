@@ -4,7 +4,7 @@ import { Ng2SearchPipe } from 'ng2-search-filter';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import * as moment from 'moment';
-import { daterangepicker } from '../../../assets/dist/js/datePickerHelper';
+import { dtrangepicker } from '../../../assets/dist/js/datePickerHelper';
 declare function setHeightWidth(): any;
 
 @Component({
@@ -133,7 +133,7 @@ export class OrderWiseComponent implements OnInit {
       )
     );
   setDateRange() {
-    daterangepicker('myrangepicker', (start: any, end: any) => {
+    dtrangepicker('myrangepicker', (start: any, end: any) => {
       this.fromdate = start.startOf('day').format('YYYY-MM-DD HH:mm:ss');
       this.todate = end.endOf('day').format('YYYY-MM-DD HH:mm:ss');
       (document.getElementById("typeahead-template") as HTMLElement).focus()

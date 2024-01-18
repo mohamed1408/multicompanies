@@ -6,15 +6,16 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import * as moment from 'moment';
+import { Ng2SearchPipe } from 'ng2-search-filter';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { Ng2SearchPipe } from 'ng2-search-filter';
 
-import { AuthService } from '../auth.service';
-import { daterangepicker, singleDateTime } from '../../assets/dist/js/datePickerHelper';
-import { OrderModule } from '../enquiryorders/order.module';
 import { Transaction } from '../model/model';
+import { AuthService } from '../auth.service';
+import { OrderModule } from '../enquiryorders/order.module';
+import { dtrangepicker, singleDateTime } from '../../assets/dist/js/datePickerHelper';
 
 declare function setHeightWidth(): any;
 
@@ -1678,7 +1679,7 @@ export class SusordersComponent implements OnInit {
   }
 
   setDateRange() {
-    daterangepicker('myrangepicker', (start: any, end: any) => {
+    dtrangepicker('myrangepicker', (start: any, end: any) => {
       this.fromdate = start.startOf('day').format('YYYY-MM-DD HH:mm:ss');
       this.todate = end.endOf('day').format('YYYY-MM-DD HH:mm:ss');
       console.log(this.fromdate, this.todate);

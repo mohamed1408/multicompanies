@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
+import { dtrangepicker } from '../../assets/dist/js/datePickerHelper';
 import { ExcelService } from '../services/excel/excel.service';
 import { AuthService } from '../auth.service';
 import * as moment from 'moment';
@@ -47,7 +47,7 @@ export class TransaxnVerifyComponent implements OnInit {
   }
 
   setDateRange() {
-    daterangepicker('myrangepicker', (start: any, end: any) => {
+    dtrangepicker('myrangepicker', (start: any, end: any) => {
       this.fromdate = start.startOf('day').format('YYYY-MM-DD HH:mm:ss');
       this.todate = end.endOf('day').format('YYYY-MM-DD HH:mm:ss');
       // (document.getElementById("typeahead-template") as HTMLElement).focus()

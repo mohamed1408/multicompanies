@@ -1,4 +1,4 @@
-export var daterangepicker = function (id, callback) {
+export var dtrangepicker = function (id, callback) {
     function cb(start, end) {
         // console.log(start, end)
         $('#' + id + ' span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
+import { dtrangepicker } from '../../assets/dist/js/datePickerHelper';
 import * as moment from 'moment';
 import { Ng2SearchPipe } from 'ng2-search-filter';
 import { ExcelService } from '../services/excel/excel.service';
@@ -61,7 +61,7 @@ export class StorewiseComponent implements OnInit {
     // this.stores = [...Array(50)].map((x) => 0);
     // this.getusercompany();
     this.navbartoggle();
-    daterangepicker('myrangepicker', (start: any, end: any) => {
+    dtrangepicker('myrangepicker', (start: any, end: any) => {
       console.log(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
       this.startdate = start.format('YYYY-MM-DD');
       this.enddate = end.format('YYYY-MM-DD');

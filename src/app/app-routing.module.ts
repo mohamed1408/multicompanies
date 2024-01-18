@@ -25,6 +25,7 @@ import { OrderWiseComponent } from './reports/order-wise/order-wise.component';
 import { OrderManagerComponent } from './order-manager/order-manager.component';
 import { AuthGuardService } from './auth-guard.service';
 import { TransaxnVerifyComponent } from './transaxn-verify/transaxn-verify.component';
+import { Susorders2Component } from './susorders2/susorders2.component';
 
 const routes: Routes = [
   { path: '', component: SigninComponent, canActivate: [AuthGuardService], data: {role: ['all',]} },
@@ -44,6 +45,7 @@ const routes: Routes = [
   { path: 'r7', component: SpgwisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
   { path: 'r8', component: DeliveryorderreportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
   { path: 'm3', component: SusordersComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  { path: 'm4', component: Susorders2Component, canActivate: [AuthGuardService], data: {role: ['admin']} },
   { path: 'r9', component: CancelOrdReportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
   { path: 'r10', component: ProductsalesreportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
   { path: 'r11', component: CustomerdatarptComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },

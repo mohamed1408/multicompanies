@@ -1,6 +1,6 @@
 var from = moment();//.subtract(29, 'days');
 var to = moment();
-var companyid = JSON.parse(localStorage.getItem("loginInfo")).CompanyId;
+var companyid = localStorage.getItem("loginInfo") ? JSON.parse(localStorage.getItem("loginInfo")).CompanyId : 0;
 var storeid = 0;
 
 function sortTable() {

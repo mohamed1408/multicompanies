@@ -438,8 +438,21 @@ let getMenuData: Array<navlink> = [
     isCollapsed: true,
     children: [
       {
-        title: 'Sus Orders | Pending Orders',
+        title: 'Pending Orders',
         url: '/m3',
+        icon: 'fa fa-pie-chart',
+        svg: '../../assets/svg/phone-incoming.svg',
+        icon_res: 'svg',
+        hidden: false,
+        roles: ['admin'],
+        notification_count: 4,
+        isCollapsed: true,
+        children: [],
+        active: false,
+      },
+      {
+        title: 'Sus Orders',
+        url: '/m4',
         icon: 'fa fa-pie-chart',
         svg: '../../assets/svg/phone-incoming.svg',
         icon_res: 'svg',

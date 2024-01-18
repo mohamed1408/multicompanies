@@ -4,7 +4,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 import * as moment from 'moment';
 
-import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
+import { dtrangepicker } from '../../assets/dist/js/datePickerHelper';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -43,7 +43,7 @@ export class ProductsalesreportComponent implements OnInit {
       this.getCategory();
     });
 
-    daterangepicker('myrangepicker', (start: any, end: any) => {
+    dtrangepicker('myrangepicker', (start: any, end: any) => {
       console.log(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
       this.startdate = start.format('YYYY-MM-DD');
       this.enddate = end.format('YYYY-MM-DD');

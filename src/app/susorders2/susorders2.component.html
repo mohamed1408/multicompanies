@@ -1,0 +1,197 @@
+<div class="hk-pg-wrapper">
+    <div class="title">
+        Sus Orders
+    </div>
+    <div class="container">
+        <section class="hk-sec-wrapper">
+            <div class="row">
+                <div class="col-xl-3">
+                    <ng-template #rt let-r="result" let-t="term">
+                        <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+                    </ng-template>
+                    <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
+                        [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
+                        placeholder="Search Stores..." (selectItem)="selected($event.item)" />
+                </div>
+                <div class="col-xl-5">
+                    <div id="myrangepicker" class="form-control text-truncate">
+                        <i class="fa fa-calendar text-light-40"></i>&nbsp; <span></span>
+                        <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
+                    </div>
+                </div>
+                <div class="col-xl-1">
+                    <button class="btn btn-success btn-rounded" (click)="getSusOrders()">Fetch</button>
+                </div>
+                <div class="col-xl-3">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-white border-0" id="basic-addon1"><span
+                                        class="feather-icon"><i data-feather="search"></i></span></span>
+                            </div>
+                            <input type="text" class="form-control border-0" [(ngModel)]="term"
+                                placeholder="Search by invoice..." aria-label="Username"
+                                aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="hk-sec-wrapper">
+            <bz-tab-header class="col-xl" [tablist]="tablist" (onChange)="tabid = $event[0]"></bz-tab-header>
+            <div class="d-flex" *ngIf="tabid == 0">
+                <div class="col-xl-4">
+                    <div *ngIf="selecteditem.kots.length > 0" class="border border-info">
+                        <table class="table">
+                            <tr>
+                                <td class="font-italic">#{{selecteditem.ino}}</td>
+                                <td colspan="2" class="font-italic text-right">BA: {{selecteditem.ba}} | PA:
+                                    {{selecteditem.pa}}</td>
+                            </tr>
+                            <ng-container *ngFor="let kot of selecteditem.kots">
+                                <tr>
+                                    <td>
+                                        <strong>{{kot.KOTId}}#{{kot.KOTNo}}</strong>
+                                    </td>
+                                    <td colspan="2" class="font-italic text-light-30 text-right">@{{kot.CreatedDate}}
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let item of kot.items">
+                                    <td colspan="2">{{item.product}}</td>
+                                    <td class="text-right">{{item.qy}}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Total So Far</td>
+                                    <td class="text-right">{{kot.totalsofar}}</td>
+                                </tr>
+                            </ng-container>
+                            <tr>
+                                <td colspan="3">
+                                    <span class="position-relative">
+                                        <textarea class="form-control" [(ngModel)]="selecteditem.icr" cols="30"
+                                            rows="2"></textarea>
+                                        <span class="position-absolute" style="bottom: 8px; right: 8px;">
+                                            <button class="btn btn-success btn-sm" [disabled]="selecteditem.loading"
+                                                (click)="savereason(selecteditem)">
+                                                <i *ngIf="selecteditem.loading" class="fa fa-spinner spin-360"></i>
+                                                SAVE
+                                            </button>
+                                        </span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-xl-8">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>InvoiceNo</th>
+                                <th>Item</th>
+                                <th>Total Qty</th>
+                                <th>Comment</th>
+                                <th>AppVersion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let i of cancelleditems">
+                                <td class="text-left">
+                                    <a href="javascript:void(0);" style="margin: unset;" class="biza mb-1"
+                                        (click)="selectitem(i)">{{i.ino}}</a>
+                                    <strong class="text-light-30">{{i.store}}</strong>
+                                </td>
+                                <td>
+                                    {{i.product}} <br>
+                                    <strong class="text-light-30">{{i.pricemap}}</strong>
+                                    <span *ngIf="i.trend > 0" class="px-3"><img
+                                            src="./assets/dist/svgs/arrow-trend-up.svg" width="16" height="18"></span>
+                                    <span *ngIf="i.trend < 0" class="px-3"><img
+                                            src="./assets/dist/svgs/arrow-trend-down.svg" width="16" height="18"></span>
+                                </td>
+                                <td>{{i.totalqty}}</td>
+                                <td>{{i.qtymap}}</td>
+                                <td>{{i.appversion}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div *ngIf="tabid == 1">
+                <!-- <div class="col-xl-4">
+                    <div *ngIf="selecteditem.kots.length > 0" class="border border-info">
+                        <table class="table">
+                            <tr>
+                                <td class="font-italic">#{{selecteditem.ino}}</td>
+                                <td colspan="2" class="font-italic text-right">BA: {{selecteditem.ba}} | PA:
+                                    {{selecteditem.pa}}</td>
+                            </tr>
+                            <ng-container *ngFor="let kot of selecteditem.kots">
+                                <tr>
+                                    <td>
+                                        <strong>{{kot.KOTId}}#{{kot.KOTNo}}</strong>
+                                    </td>
+                                    <td colspan="2" class="font-italic text-light-30 text-right">@{{kot.CreatedDate}}
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let item of kot.items">
+                                    <td colspan="2">{{item.product}}</td>
+                                    <td class="text-right">{{item.qy}}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Total So Far</td>
+                                    <td class="text-right">{{kot.totalsofar}}</td>
+                                </tr>
+                            </ng-container>
+                        </table>
+                    </div>
+                </div> -->
+                <div class="col-xl-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>InvoiceNo</th>
+                                <th>Bill Amount</th>
+                                <th>Discount</th>
+                                <th>Discount %</th>
+                                <th>AppVersion</th>
+                                <th>Disc Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let i of discountedorders">
+                                <td class="text-left">
+                                    <a href="javascript:void(0);" style="margin: unset;" class="biza mb-1">{{i.ino}}</a>
+                                    <strong class="text-light-30">{{i.store}}</strong>
+                                </td>
+                                <td>
+                                    {{i.ba}}
+                                    <!-- <strong class="text-light-30">{{i.pricemap}}</strong>
+                                    <span *ngIf="i.trend > 0" class="px-3"><img
+                                            src="./assets/dist/svgs/arrow-trend-up.svg" width="16" height="18"></span>
+                                    <span *ngIf="i.trend < 0" class="px-3"><img
+                                            src="./assets/dist/svgs/arrow-trend-down.svg" width="16" height="18"></span> -->
+                                </td>
+                                <td>{{i.Discount | number: ".2"}}</td>
+                                <td>{{i.DiscountPercentage | number: ".2"}}</td>
+                                <td>{{i.appversion}}</td>
+                                <td>
+                                    <span *ngIf="!i.loading">{{i.dr}} <button class="btn btn-link float-right"
+                                            (click)="i.loading = true"><i class="fa fa-pencil"></i></button></span>
+                                    <span *ngIf="i.loading" class="position-relative">
+                                        <textarea class="form-control" [(ngModel)]="i.dr" cols="10" rows="2"></textarea>
+                                        <span class="position-absolute" style="bottom: 8px; right: 8px;">
+                                            <button class="btn btn-success btn-sm" (click)="savereason(i)">SAVE</button>
+                                        </span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

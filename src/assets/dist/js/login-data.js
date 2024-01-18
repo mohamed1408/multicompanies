@@ -1,6 +1,6 @@
 /*Login Init*/
 
-"use strict";
+// "use strict";
 
 export var OwlCarousel = function (id) {
 	$('#' + id).owlCarousel({

@@ -15,7 +15,7 @@ import {
   OrderModule,
 } from './order.module';
 import { SignalrService } from '../services/signalr/signalr.service';
-import { daterangepicker } from '../../assets/dist/js/datePickerHelper';
+import { dtrangepicker } from '../../assets/dist/js/datePickerHelper';
 
 declare function setHeightWidth(): any;
 declare const feather: any, $: any;
@@ -124,7 +124,7 @@ export class EnquiryordersComponent implements OnInit {
         json.location = this.stores.filter((y: any) => y.Id == json.StoreId)[0]?.Name || '-'
         return json
       })
-      daterangepicker('myrangepicker', (start: any, end: any) => {
+      dtrangepicker('myrangepicker', (start: any, end: any) => {
         // console.log(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
         // this.startdate = start.format('YYYY-MM-DD');
         // this.enddate = end.format('YYYY-MM-DD');
