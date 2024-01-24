@@ -109,8 +109,8 @@ export class TransaxnVerifyComponent implements OnInit {
 
     this.phonepe.filtered.forEach((x, i) => {
       this.posphonepe.filtered.forEach((y, j) => {
-        if(x.Amount == y.Amount) console.log(x.Store, y.PhonePeName, x.Store == y.PhonePeName)
-        if (x.Amount == y.Amount && x.Store.toLowerCase() == y.PhonePeName.toLowerCase()) {
+        if (x.Amount == y.Amount) console.log("|" + x.Store + "|", "|" + y.PhonePeName + "|", x.Store == y.PhonePeName)
+        if (x.Amount == y.Amount && x.Store.toLowerCase().trim() == y.PhonePeName.toLowerCase().trim()) {
           console.log(x.Store, y.PhonePeName)
           relations.push([x, y, x.Amount, +Math.abs(new Date(x.TransactionStamp).getTime() / 1000 - new Date(y.TransDateTime).getTime() / 1000).toFixed(0)])
         }
