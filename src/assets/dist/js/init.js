@@ -15,7 +15,7 @@
 var initialize = function() {
   mintos();
   emailApp();
-  chatApp();
+  // chatApp();
   calendarApp();
   fmApp();
 };
@@ -23,7 +23,7 @@ var initialize = function() {
 $(document).ready(function() {
   mintos();
   emailApp();
-  chatApp();
+  // chatApp();
   calendarApp();
   fmApp();
   /*Disabled*/
@@ -306,7 +306,7 @@ var mintos = function() {
 var setHeightWidth = function() {
   mintos();
   emailApp();
-  chatApp();
+  // chatApp();
   calendarApp();
   fmApp();
 
@@ -533,7 +533,7 @@ var chatApp = function() {
       ).insertAfter(".chatapp-right  ul li.media:last-child");
       $(this).val("");
     } else if (e.which == 13) {
-      alert("Please type asomthing!");
+      // alert("Please type asomthing!");
     }
     return;
   });

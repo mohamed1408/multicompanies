@@ -26,6 +26,7 @@ import { OrderManagerComponent } from './order-manager/order-manager.component';
 import { AuthGuardService } from './auth-guard.service';
 import { TransaxnVerifyComponent } from './transaxn-verify/transaxn-verify.component';
 import { Susorders2Component } from './susorders2/susorders2.component';
+import { ChatComponent } from './chat/chat.component';
 
 const routes: Routes = [
   { path: '', component: SigninComponent, canActivate: [AuthGuardService], data: {role: ['all',]} },
@@ -55,6 +56,7 @@ const routes: Routes = [
   { path: 'u1', component: TransactionListComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
   { path: 'u2', component: OrderManagerComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
   { path: 'u3', component: TransaxnVerifyComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
+  { path: 'chat', component: ChatComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
 ];
 
 @NgModule({

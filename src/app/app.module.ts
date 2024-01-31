@@ -47,6 +47,7 @@ import { SideMenuComponent } from './layout/side-menu/side-menu.component';
 import { DenomPipe } from './pipes/denom.pipe';
 import { TransaxnVerifyComponent } from './transaxn-verify/transaxn-verify.component';
 import { Susorders2Component } from './susorders2/susorders2.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { Susorders2Component } from './susorders2/susorders2.component';
     DenomPipe,
     TransaxnVerifyComponent,
     Susorders2Component,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,

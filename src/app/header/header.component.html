@@ -1,73 +1,39 @@
 <nav class="navbar navbar-expand-xl navbar-dark fixed-top hk-navbar">
-  <a
-    id="navbar_toggle_btn"
-    (click)="navbartoggle()"
-    class="navbar-toggle-btn nav-link-hover"
-    href="javascript:void(0);"
-    ><span class="feather-icon"><i data-feather="menu"></i></span
-  ></a>
+  <a id="navbar_toggle_btn" (click)="navbartoggle()" class="navbar-toggle-btn nav-link-hover"
+    href="javascript:void(0);"><span class="feather-icon"><i data-feather="menu"></i></span></a>
   <a class="navbar-brand" href="javascript:void(0);">
-    <img
-      class="brand-img d-inline-block"
-      src="assets/dist/img/logo-dark.png"
-      alt="brand"
-    />
+    <img class="brand-img d-inline-block" src="assets/dist/img/logo-dark.png" alt="brand" />
   </a>
   <ul class="navbar-nav hk-navbar-content">
+    <li class="mr-1">
+      <!-- <a class="navbar-toggle-btn nav-link-hover" href="javascript:void(0);"><span class="feather-icon"><i
+            data-feather="message-square"></i></span></a> -->
+      <a class="nav-link nav-link-hover" [routerLink]="['/chat']"><span
+          class="feather-icon"><i data-feather="message-square"></i></span></a>
+    </li>
     <li class="w-100">
-      <select
-        *ngIf="!multicompanies"
-        class="form-control custom-select"
-        [(ngModel)]="companyid"
-        (change)="setCompanyId()"
-        aria-placeholder="Select Company"
-      >
+      <select *ngIf="!multicompanies" class="form-control custom-select" [(ngModel)]="companyid"
+        (change)="setCompanyId()" aria-placeholder="Select Company">
         <option *ngFor="let comp of companies" value="{{ comp.CompanyId }}">
           {{ comp.AccountName }}
         </option>
       </select>
 
       <div *ngIf="multicompanies" class="checkbox-select px-0 cbselectels">
-        <input
-          type="text"
-          class="w-100 cbselectels"
-          placeholder="Select atleast one"
-          readonly
-          (focus)="toggleDropDown()"
-          [(ngModel)]="selected_companies"
-        />
-        <div
-          *ngIf="showdropdown | async"
-          class="options w-100 shadow shadow-xl cbselectels"
-        >
-          <div
-            class="option px-15 cbselectels"
-            (click)="all = !all; toggleAll()"
-          >
+        <input type="text" class="w-100 cbselectels" placeholder="Select atleast one" readonly
+          (focus)="toggleDropDown()" [(ngModel)]="selected_companies" />
+        <div *ngIf="showdropdown | async" class="options w-100 shadow shadow-xl cbselectels">
+          <div class="option px-15 cbselectels" (click)="all = !all; toggleAll()">
             <label for="one" class="cbselectels">
-              <input
-                type="checkbox"
-                readonly
-                [(ngModel)]="all"
-                class="cbselectels"
-              />
+              <input type="checkbox" readonly [(ngModel)]="all" class="cbselectels" />
               Select All
             </label>
           </div>
-          <div
-            *ngFor="let company of companies"
-            class="option px-15 cbselectels"
-            (click)="company.isselected = !company.isselected; change()"
-          >
+          <div *ngFor="let company of companies" class="option px-15 cbselectels"
+            (click)="company.isselected = !company.isselected; change()">
             <label for="one" class="cbselectels">
-              <input
-                type="checkbox"
-                readonly
-                [(ngModel)]="company.isselected"
-                class="cbselectels"
-              />
-              &nbsp;{{ company.AccountName }}</label
-            >
+              <input type="checkbox" readonly [(ngModel)]="company.isselected" class="cbselectels" />
+              &nbsp;{{ company.AccountName }}</label>
           </div>
         </div>
       </div>
@@ -84,55 +50,32 @@
   </ul>
 </nav>
 <nav class="hk-nav hk-nav-light bg-white" style="z-index: 1">
-  <a
-    href="javascript:void(0);"
-    id="hk_nav_close"
-    (click)="navbartoggle()"
-    class="hk-nav-close"
-    ><span class="feather-icon"><i data-feather="x"></i></span
-  ></a>
+  <a href="javascript:void(0);" id="hk_nav_close" (click)="navbartoggle()" class="hk-nav-close"><span
+      class="feather-icon"><i data-feather="x"></i></span></a>
   <div class="nicescroll-bar">
     <div class="navbar-nav-wrap">
-      <ul
-        *ngFor="let menu of menus; let i = index"
-        class="navbar-nav flex-column"
-      >
+      <ul *ngFor="let menu of menus; let i = index" class="navbar-nav flex-column">
         <li class="nav-item" *ngIf="menu.children.length == 0 && !menu.hidden">
           <a class="nav-link" [routerLink]="[menu.url]">
             <img src="{{ menu.svg }}" alt="" srcset="" />
-            <span
-              class="nav-link-text font-15 px-2"
-              [ngClass]="menu.active ? 'text-dark font-weight-bolder' : ''"
-              >{{ menu.title }}</span
-            >
+            <span class="nav-link-text font-15 px-2" [ngClass]="menu.active ? 'text-dark font-weight-bolder' : ''">{{
+              menu.title }}</span>
           </a>
         </li>
         <li class="nav-item" *ngIf="menu.children.length > 0">
-          <a
-            class="nav-link pointer"
-            href="javascript:void(0);"
-            (click)="toggleCollapse(i)"
-            data-toggle="collapse"
-            data-target="#dummyid"
-          >
+          <a class="nav-link pointer" href="javascript:void(0);" (click)="toggleCollapse(i)" data-toggle="collapse"
+            data-target="#dummyid">
             <img src="{{ menu.svg }}" alt="" srcset="" />
             <span class="nav-link-text font-13 px-2">{{ menu.title }}</span>
           </a>
-          <ul
-            class="nav flex-column collapse collapse-level-1"
-            [(ngbCollapse)]="menu.isCollapsed"
-          >
+          <ul class="nav flex-column collapse collapse-level-1" [(ngbCollapse)]="menu.isCollapsed">
             <li class="nav-item">
               <ul class="navbar-nav flex-column">
                 <li class="nav-item" *ngFor="let cmenu of menu.children">
                   <a class="nav-link" [routerLink]="[cmenu.url]">
-                    <span
-                      class="nav-link-text"
-                      [ngClass]="
+                    <span class="nav-link-text" [ngClass]="
                         cmenu.active ? 'text-dark font-weight-bolder' : ''
-                      "
-                      >{{ cmenu.title }}</span
-                    >
+                      ">{{ cmenu.title }}</span>
                   </a>
                 </li>
               </ul>
@@ -145,81 +88,53 @@
     <div class="navbar-nav-wrap settings">
       <ul class="navbar-nav flex-column">
         <li class="nav-item">
-          <a
-            href="javascript:void(0);"
-            class="nav-link"
-            (click)="prompt_logoff()"
-          >
+          <a href="javascript:void(0);" class="nav-link" (click)="prompt_logoff()">
             <i class="glyphicon glyphicon-log-out text-danger"></i>
-            <span class="nav-link-text font-13"
-              >{{ user.user }} | {{ user.role }}</span
-            >
+            <span class="nav-link-text font-13">{{ user.user }} | {{ user.role }}</span>
           </a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
-<div
-  class="popover fade bs-popover-top"
-  role="tooltip"
-  #lockpopover
-  id="lockpopover"
-  style="
+<div class="popover fade bs-popover-top" role="tooltip" #lockpopover id="lockpopover" style="
     will-change: transform;
     position: absolute;
     transform: translate3d(53px, 222px, 0px);
     top: 0px;
     left: 0px;
     z-index: -1000;
-  "
-  x-placement="top"
->
+  " x-placement="top">
   <h3 class="popover-header">Do you wanna lock?</h3>
   <div class="popover-body py-30">
-    <button
-      class="btn btn-danger btn-sm"
-      (click)="lock()"
-      style="
+    <button class="btn btn-danger btn-sm" (click)="lock()" style="
         margin: auto;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translateX(-50%);
-      "
-    >
+      ">
       Lock
     </button>
   </div>
 </div>
-<div
-  class="popover fade bs-popover-top"
-  role="tooltip"
-  #logpopover
-  id="logpopover"
-  style="
+<div class="popover fade bs-popover-top" role="tooltip" #logpopover id="logpopover" style="
     will-change: transform;
     position: absolute;
     transform: translate3d(53px, 222px, 0px);
     top: 0px;
     left: 0px;
     z-index: -1000;
-  "
-  x-placement="top"
->
+  " x-placement="top">
   <h3 class="popover-header">Do you wanan log out?</h3>
   <div class="popover-body py-30">
-    <button
-      class="btn btn-danger btn-sm"
-      (click)="logout()"
-      style="
+    <button class="btn btn-danger btn-sm" (click)="logout()" style="
         margin: auto;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translateX(-50%);
-      "
-    >
+      ">
       Log Out
     </button>
   </div>
@@ -228,12 +143,7 @@
 <ng-template #logoff_prompt let-modal>
   <div class="modal-header">
     <h5 class="modal-title">Logging Off</h5>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>

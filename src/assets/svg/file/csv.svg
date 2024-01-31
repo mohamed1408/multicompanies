@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 24 24" fill="#00733bcc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+    <style>
+        .title {
+            font: 6px monospace;
+            font-weight: 700;
+        }
+    </style>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+    <polyline fill="#4d9d76" points="14 2 14 8 20 8"></polyline>
+    <text x="7.2" y="16" class="title" fill="white">CSV</text>
+</svg>

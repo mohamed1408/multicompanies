@@ -1,3 +1,5 @@
+import { SafeUrl } from "@angular/platform-browser"
+
 export class Transaction {
     Id: number
     Amount: number
@@ -61,5 +63,47 @@ export class Transaction {
             this.StorePaymentTypeId = id
         }
         this.validate()
+    }
+}
+
+export class Message {
+    MessageId: number;
+    MsgTransType: number;
+    MessageType: number;
+    RecieverStatus: number;
+    Content: string;
+    ImgId: number | null;
+    StoreId: number;
+    UserId: number | null;
+    MessageDate: string;
+    MessageDateTime: string;
+    ImgUrl: string | null
+    imgurl: SafeUrl | undefined
+    constructor(private message: any = null) {
+        if (message != null) {
+            this.MessageId = message.MessageId;
+            this.MsgTransType = message.MsgTransType;
+            this.MessageType = message.MessageType;
+            this.RecieverStatus = message.RecieverStatus;
+            this.Content = message.Content;
+            this.ImgId = message.ImgId;
+            this.StoreId = message.StoreId;
+            this.UserId = message.UserId;
+            this.MessageDate = message.MessageDate;
+            this.MessageDateTime = message.MessageDateTime;
+            this.ImgUrl = message.ImgUrl
+        } else {
+            this.MessageId = 0;
+            this.MsgTransType = 1;
+            this.MessageType = 1;
+            this.RecieverStatus = 0;
+            this.Content = "";
+            this.ImgId = null;
+            this.StoreId = 0;
+            this.UserId = null;
+            this.MessageDate = '';
+            this.MessageDateTime = '';
+            this.ImgUrl = null
+        }
     }
 }

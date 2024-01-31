@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DenomEntry } from './denomination/denomination.module';
-import { Transaction } from './model/model';
+import { Message, Transaction } from './model/model';
 
 @Injectable({
   providedIn: 'root',
@@ -870,6 +870,24 @@ export class AuthService {
 
   GetTaxes(companyId: number) {
     return this.http.get(this.baseurl + 'TaxGroup/Get?CompanyId=' + companyId);
+  }
+  getchatindex(companyid: number) {
+    return this.http.get(this.baseurl1 + 'Message/GetChatIndex?companyid=' + companyid);
+  }
+  getmessages(storeid: number) {
+    return this.http.get(this.baseurl1 + 'Message/GetMessages?storeid=' + storeid);
+  }
+  savemessage(message: Message) {
+    return this.http.post(this.baseurl1 + 'Message/SaveMessage', message)
+  }
+  savefilemessage(message: any, file: File) {
+    let form = new FormData()
+    form.append('file', file)
+    form.append('message', JSON.stringify(message))
+    // for (let key in message) {
+    //   form.append(key, message[key])
+    // }
+    return this.http.post(this.baseurl1 + 'Message/SaveFileMessage', form)
   }
 }
 

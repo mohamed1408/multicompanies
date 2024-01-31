@@ -19,7 +19,7 @@
         height : '250px',
 
         // width in pixels of the scrollbar and rail
-        size : '7px',
+        size : '1px',
 
         // scrollbar color, accepts any hex/color value
         color: '#000',
@@ -46,7 +46,7 @@
         railVisible :false,
 
         // sets rail color
-        railColor : '#333',
+        railColor : '#2b2b2b',
 
         // sets rail opacity
         railOpacity : .2,

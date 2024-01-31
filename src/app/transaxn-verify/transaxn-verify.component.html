@@ -24,14 +24,15 @@
                 <input hidden #upload_file id="upload_file" type="file" name="" (input)="selectfile(upload_file.files)">
                 <span class="font-50 p-5 m-auto">drop [phonepe] sheet here</span>
             </div>
-            <div *ngIf="tabid == 1" class="fileDrop d-flex" (drop)="drop($event)" (dragover)="allowDrop($event)"
-                (click)="upload_file.click()">
-                <input hidden #upload_file id="upload_file" type="file" name="" (input)="selectfile(upload_file.files)">
+            <div *ngIf="tabid == 1 && card.data.length == 0" class="fileDrop d-flex" (drop)="dropcd($event)" (dragover)="allowDropcd($event)"
+                (click)="upload_filecd.click()">
+                <input hidden #upload_filecd id="upload_filecd" type="file" name="" (input)="selectfilecd(upload_filecd.files)">
                 <span class="font-50 p-5 m-auto">drop [card] sheet here</span>
             </div>
             <div *ngIf="tabid == 0 && phonepe.data.length > 0">
                 <!-- <bz-tab-header class="col-xl" [tablist]="rTabs" (onChange)="rTabId = $event[0]"></bz-tab-header> -->
                 <div class="d-flex flex-row-reverse mb-2 px-3">
+                    <button class="btn btn-link text-danger" (click)="clear('PHONEPE')">&times; Clear</button>
                     <button class="btn btn-secondary" [disabled]="i == rTabId" *ngFor="let tab of rTabs; let i = index;"
                         (click)="rTabId = i">{{tab}}</button>
                 </div>
@@ -148,6 +149,140 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let transaxn of mapped">
+                                    <td>{{transaxn[0].Store}}</td>
+                                    <td>{{transaxn[0].TransactionId}}</td>
+                                    <td>{{transaxn[0].Amount}}</td>
+                                    <td>{{transaxn[0].TransactionStamp | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
+                                    <td>{{transaxn[1].TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
+                                    <td>{{transaxn[1].Amount}}</td>
+                                    <td>{{transaxn[1].ino}}</td>
+                                    <td>{{transaxn[1].PhonePeName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="tabid == 1 && card.data.length > 0">
+                <!-- <bz-tab-header class="col-xl" [tablist]="rTabs" (onChange)="rTabId = $event[0]"></bz-tab-header> -->
+                <div class="d-flex flex-row-reverse mb-2 px-3">
+                    <button class="btn btn-link text-danger" (click)="clear('CARD')">&times; Clear</button>
+                    <button class="btn btn-secondary" [disabled]="i == rTabId" *ngFor="let tab of rTabs; let i = index;"
+                        (click)="rTabId = i">{{tab}}</button>
+                </div>
+                <div *ngIf="rTabId == 0" class="d-flex">
+                    <div class="col-xl-6">
+                        <select class="form-control mb-2" [(ngModel)]="cardstores.selected"
+                            (change)="card.filter('Store',cardstores.selected, 'All')">
+                            <option *ngFor="let store of cardstores" [value]="store">{{store}}</option>
+                        </select>
+                        <input type="text" [(ngModel)]="portalTerm" class="form-control mb-2">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>TransaxnId</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let transaxn of card.filtered | filter: portalTerm">
+                                    <td>{{transaxn.TransactionId}}</td>
+                                    <td>{{transaxn.Amount}}</td>
+                                    <td>{{transaxn.TransactionStamp | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xl-1">
+                        <button class="btn btn-success" (click)="scancd()">Scan</button>
+                    </div>
+                    <div class="col-xl-5">
+                        <select class="form-control mb-2" [(ngModel)]="poscardstores.selected"
+                            (change)="poscard.filter('StoreId',poscardstores.selected, 0)">
+                            <option *ngFor="let store of poscardstores" [value]="store.StoreId">{{store.Store}}
+                            </option>
+                        </select>
+                        <input type="text" [(ngModel)]="dbTerm" class="form-control mb-2">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>TransaxnId</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let transaxn of poscard.filtered | filter: dbTerm">
+                                    <td>{{transaxn.ino}}</td>
+                                    <td>{{transaxn.Amount}}</td>
+                                    <td>{{transaxn.TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div *ngIf="rTabId == 1" class="row mx-0">
+                    <div class="col-xl-6">
+                        <h6>Portal</h6>
+                        <input type="text" [(ngModel)]="portalTerm" class="form-control mb-2">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Store</th>
+                                    <th>TransaxnId</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let transaxn of unmappedcd.portal | filter: portalTerm">
+                                    <td>{{transaxn.Store}}</td>
+                                    <td>{{transaxn.TransactionId}}</td>
+                                    <td>{{transaxn.Amount}}</td>
+                                    <td>{{transaxn.TransactionStamp | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xl-6">
+                        <h6>DB</h6>
+                        <input type="text" [(ngModel)]="dbTerm" class="form-control mb-2">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Store</th>
+                                    <th>TransaxnId</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let transaxn of unmappedcd.db | filter: dbTerm">
+                                    <td>{{transaxn.PhonePeName}}</td>
+                                    <td>{{transaxn.ino}}</td>
+                                    <td>{{transaxn.Amount}}</td>
+                                    <td>{{transaxn.TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xl-12">
+                        <table class="table table-bordered table-hover table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Store</th>
+                                    <th>TransaxnId</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>TransaxnId</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Store</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let transaxn of mappedcd">
                                     <td>{{transaxn[0].Store}}</td>
                                     <td>{{transaxn[0].TransactionId}}</td>
                                     <td>{{transaxn[0].Amount}}</td>

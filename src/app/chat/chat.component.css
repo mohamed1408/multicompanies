@@ -1,0 +1,30 @@
+.read-receipts {
+    margin-left: 10px;
+}
+
+.file-drop-overlay {
+    top: 129px;
+    bottom: 61px;
+    position: fixed;
+    width: 100%;
+    background: wheat;
+    opacity: 1;
+    z-index: 1000000;
+    /* transform: translateY(100vh); */
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* .chat-img {
+    max-width: 50%;
+    max-height: 50%;
+} */
+
+/* audio.chat-audio::-webkit-media-controls-current-time-display,
+audio.chat-audio::-webkit-media-controls-time-remaining-display,
+audio.chat-audio::-webkit-media-controls-mute-button,
+audio.chat-audio::-webkit-media-controls-volume-slider-container,
+audio.chat-audio::-webkit-media-controls-volume-slider {
+    display: none;
+} */
+
+/* audio::-webkit-m */

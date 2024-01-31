@@ -13,10 +13,17 @@ declare function setHeightWidth(): any;
 })
 export class TransaxnVerifyComponent implements OnInit {
   mode: string = ""
+
   phonepe: bzarray = new bzarray([])
   phonepestores: any = []
   posphonepe: bzarray = new bzarray([])
   posphonepestores: any = []
+
+  card: bzarray = new bzarray([])
+  cardstores: any = []
+  poscard: bzarray = new bzarray([])
+  poscardstores: any = []
+
   searchTerm: string = ""
   stores: any[] = []
   storeid: number = 0
@@ -67,6 +74,14 @@ export class TransaxnVerifyComponent implements OnInit {
       this.posphonepestores.unshift({ Store: "All", StoreId: 0 })
       this.posphonepestores["selected"] = 0
       this.posphonepe.filter("StoreId", this.posphonepestores["selected"], 0)
+
+      this.poscard = new bzarray(this.pos_report.transactions.filter(x => x.MachineId == "card"))
+      this.poscardstores = this.pos_report.summary.map(x => {
+        return { Store: x.PhonePeName, StoreId: x.StoreId }
+      }).filter((x, i) => i == this.pos_report.summary.findIndex(y => y.StoreId == x.StoreId))
+      this.poscardstores.unshift({ Store: "All", StoreId: 0 })
+      this.poscardstores["selected"] = 0
+      this.poscard.filter("StoreId", this.poscardstores["selected"], 0)
     })
   }
 
@@ -126,7 +141,8 @@ export class TransaxnVerifyComponent implements OnInit {
     amounts.forEach(a => {
       let a_rels = relations.filter(r => r[2] == a).sort((a, b) => a[3] - b[3])
       a_rels.forEach(ar => {
-        if (!this.mapped.some(x => x[1].TransactionId === ar[1].TransactionId)) {
+        if (!this.mapped.some(x => x[1].TransactionId === ar[1].TransactionId) && !this.mapped.some(x => x[0].TransactionId === ar[0].TransactionId)) {
+          console.log(ar[0].TransactionId, ar[1].TransactionId)
           this.mapped.push(ar)
         }
       })
@@ -154,6 +170,102 @@ export class TransaxnVerifyComponent implements OnInit {
     //     console.log(i, timediff)
     //   })
     // })
+  }
+  selectfilecd(files: FileList | null) {
+    if (files && files.length > 0) {
+      console.log(files)
+      this.xlsx.toJSON(files[0], (_arr: any[]) => {
+        console.log(Object.keys(_arr[0]))
+        let arr = _arr.map(x => {
+          return { Transaction_ID: x["Transaction_ID"].replaceAll("'", ""), TransactionId: x["Order_ID"].replaceAll("'", ""), Store: "", TransactionDate: x["Transaction_Date"].replaceAll("'", ""), TransactionStamp: new Date(x["Transaction_Date"].replaceAll("'", "")).getTime(), Amount: x["Amount"] }
+        })
+        this.card = new bzarray(arr)
+        console.log(this.card)
+        this.cardstores = this.card.data.map((x: any) => x.Store).filter((x: any, i: number) => i == this.card.data.findIndex(y => y.Store == x))
+        this.cardstores.unshift("All")
+        console.log(this.cardstores)
+        this.cardstores["selected"] = this.cardstores[0]
+        this.card.filter("Store", this.cardstores["selected"], "All")
+      })
+    }
+  }
+  dropcd(e: DragEvent) {
+    e.preventDefault()
+    if (e.dataTransfer && e.dataTransfer?.files.length > 0) {
+      this.selectfilecd(e.dataTransfer.files)
+    }
+  }
+
+  allowDropcd(e: DragEvent) {
+    e.preventDefault()
+  }
+  mappedcd: any[] = []
+  unmappedcd: { portal: any[], db: any[] } = { portal: [], db: [] }
+  scancd() {
+    this.mappedcd = []
+    this.unmappedcd = { portal: [], db: [] }
+    this.card.sort((a, b) => a["TransactionStamp"] - b["TransactionStamp"])
+    this.poscard.sort((a, b) => new Date(a["TransDateTime"]).getTime() - new Date(b["TransDateTime"]).getTime())
+    console.log(this.poscard, this.card)
+    let relations: any[] = []
+    let amounts: number[] = [...this.card.filtered.map(x => x.Amount), ...this.poscard.filtered.map(x => x.Amount)]
+    amounts = amounts.filter((x, i) => i == amounts.findIndex(y => y == x))
+
+    this.card.filtered.forEach((x, i) => {
+      this.poscard.filtered.forEach((y, j) => {
+        if (x.Amount == y.Amount) console.log("|" + x.Store + "|", "|" + y.CardName + "|", x.Store == y.CardName)
+        if (x.Amount == y.Amount && x.Store.toLowerCase().trim() == y.CardName.toLowerCase().trim()) {
+          console.log(x.Store, y.CardName)
+          relations.push([x, y, x.Amount, +Math.abs(new Date(x.TransactionStamp).getTime() / 1000 - new Date(y.TransDateTime).getTime() / 1000).toFixed(0)])
+        }
+      })
+    })
+    console.log(relations)
+    // relations.forEach(r => {
+    //   console.log(r[2], r[0].TransactionId, r[1].ino, r[3])
+    //   //   console.log(r[0].TransactionId, r[1].ino)
+    //   //   console.log(r[0].Amount, r[0].Amount - r[1].Amount, Math.abs(new Date(r[0].TransactionStamp).getTime() / 1000 - new Date(r[1].TransDateTime).getTime() / 1000))
+    // })
+
+    amounts.forEach(a => {
+      let a_rels = relations.filter(r => r[2] == a).sort((a, b) => a[3] - b[3])
+      a_rels.forEach(ar => {
+        if (!this.mappedcd.some(x => x[1].TransactionId === ar[1].TransactionId) && !this.mappedcd.some(x => x[0].TransactionId === ar[0].TransactionId)) {
+          console.log(ar[0].TransactionId, ar[1].TransactionId)
+          this.mappedcd.push(ar)
+        }
+      })
+    })
+    // console.log(this.mappedcd)
+    // this.mappedcd.forEach(m => {
+    //   console.log(m[2], m[0].TransactionId, m[1].ino, m[3])
+    // })
+    this.unmappedcd.portal = this.card.filtered.filter(x => !this.mappedcd.some(y => y[0].TransactionId === x.TransactionId))
+    this.unmappedcd.db = this.poscard.filtered.filter(x => !this.mappedcd.some(y => y[1].TransactionId === x.TransactionId))
+    this.rTabId = 1
+    // console.log(this.mappedcd)
+    // console.log(this.unmappedcd)
+    // this.card.data.forEach(r => {
+    //   let best_mach = relations.filter(x => x[0].TransactionId == r.TransactionId).sort((a,b) => a[2] - b[2])[0]
+    //   console.log(r)
+    //   console.log(best_mach)
+    // })
+    // this.card.filtered.forEach(x => {
+    //   let postransaxns = this.poscard.filtered.filter(y => y.Amount == x.Amount)
+    //   console.log(x.TransactionId, x.Amount, x.TransactionDate)
+    //   console.log(postransaxns)
+    //   postransaxns.forEach((post, i) => {
+    //     let timediff = new Date(x.TransactionStamp).getTime() - new Date(post.TransDateTime).getTime()
+    //     console.log(i, timediff)
+    //   })
+    // })
+  }
+  clear(mode: string) {
+    if (mode == "PHONEPE") {
+      this.phonepe = new bzarray([])
+    } else if (mode == "CARD") {
+      this.card = new bzarray([])
+    }
   }
 }
 
