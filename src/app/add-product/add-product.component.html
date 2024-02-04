@@ -1,0 +1,276 @@
+<div class="hk-pg-wrapper">
+    <div *ngIf="uptmainscreen != true">
+        <div class="title" *ngIf="mainscreen == false">
+            Add &nbsp;Product
+        </div>
+    </div>
+
+    <div class="title" *ngIf="mainscreen == true">
+        Product &nbsp;Index
+    </div>
+
+    <div class="title" *ngIf="uptmainscreen == true">
+        Update &nbsp;Product
+    </div>
+    <div style="display: flex; flex-wrap: wrap; text-align: center; justify-content: center; text-align: left;"
+        *ngIf="mainscreen == false">
+        <div>
+            <div class="card"
+                style="width: fit-content; padding: 1.5rem; border-radius: 0.25rem;  box-shadow: 0 0px 18px rgba(0, 0, 0, 0.1); border: 1px solid #e2e2e2; background: #fff; margin: 10px; flex-grow: 1;">
+                <label for="fileInput" style="font-weight: bolder;">Product Image</label>
+                <br>
+                <div style="text-align: center;">
+                    <img *ngIf="savedimageedit == null" id="productImage" src="../../assets/svg/imagepicker.svg"
+                        alt="ImageSelectSVG" width="100px" (click)="onProductImageClick()" style="cursor: pointer;">
+
+                    <img *ngIf="savedimageedit.length > 0" id="productImage" [src]="savedimageedit" alt="ImageSelectSVG"
+                        width="100px" (click)="onProductImageClick()" style="cursor: pointer;">
+                </div>
+                <br>
+                <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)">
+            </div>
+
+        </div>
+        <div>
+            <section class="hk-sec-wrapper" style="margin: 10px; flex-grow: 1;">
+                <div class="row">
+                    <div class="col" style="text-align: right;">
+                        <button class="btn btn-danger" style="width: 100px;" (click)="backprod()">
+                            back
+                        </button>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <label for="cars" style="font-weight: bolder;">Product Name <span style="color: red;">*</span>
+                        </label>
+                        <input type="text" class="form-control" placeholder="Enter Product Name" [(ngModel)]="PrdName"
+                            required [ngClass]="{'error-input': formSubmitted && !PrdName}" />
+                        <span *ngIf="formSubmitted && !PrdName" style="color: red;">Product Name is required.</span>
+                    </div>
+                    <div class="col">
+                        <label for="cars" style="font-weight: bolder;">Product Description</label>
+                        <input type="text" class="form-control" placeholder="Enter Description" [(ngModel)]="PrdDesc" />
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <label for="cars" style="font-weight: bolder;">Product Code
+                        </label>
+                        <input type="text" class="form-control" placeholder="Enter Product Code"
+                            [(ngModel)]="PrdCode" />
+                    </div>
+                    <div class="col">
+                        <label for="cars" style="font-weight: bolder;">Product Type <span
+                                style="color: red;">*</span></label>
+                        <select class="form-control custom-select" [(ngModel)]="Prdtype" required
+                            [ngClass]="{'error-input': formSubmitted && !Prdtype}">
+                            <option value="0" selected disabled>Select Product Type</option>
+                            <option value="1">None</option>
+                            <option value="2">Egg</option>
+                            <option value="3">Veg</option>
+                            <option value="4">Non-Veg</option>
+                        </select>
+                        <span *ngIf="formSubmitted && !Prdtype" style="color: red;">Product Type is required.</span>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <label for="cars" style="font-weight: bolder;">Category <span style="color: red;">*</span>
+                        </label>
+                        <select class="form-control custom-select" [(ngModel)]="CategoryId" required
+                            [ngClass]="{'error-input': formSubmitted && !CategoryId}">
+                            <option value="0" selected disabled>Select Category</option>
+                            <option value="{{ item.Id }}" *ngFor="let item of categ">
+                                {{ item.Description }}
+                            </option>
+                        </select>
+                        <span *ngIf="formSubmitted && !CategoryId" style="color: red;">CategoryId is required.</span>
+                    </div>
+                    <div class="col">
+                        <label for="cars" style="font-weight: bolder;">Tax Group <span
+                                style="color: red;">*</span></label>
+                        <select class="form-control custom-select" [(ngModel)]="TaxGroupId" required
+                            [ngClass]="{'error-input': formSubmitted && !TaxGroupId}">
+                            <option value="0" selected disabled>Select TaxGroup</option>
+                            <option value="{{ item.Id }}" *ngFor="let item of taxgroupvalues">
+                                {{ item.Description }}
+                            </option>
+                        </select>
+                        <span *ngIf="formSubmitted && !TaxGroupId" style="color: red;">TaxGroup is required.</span>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <label for="cars" style="font-weight: bolder;">Price <span style="color: red;">*</span>
+                        </label>
+                        <input type="number" class="form-control" placeholder="Enter Price" [(ngModel)]="PrdPrice"
+                            required [ngClass]="{'error-input': formSubmitted && !PrdPrice}" />
+                        <span *ngIf="formSubmitted && !PrdPrice" style="color: red;">Price is required.</span>
+                    </div>
+                    <div class="col">
+                        <label for="cars" style="font-weight: bolder;">UP Price <span style="color: red;">*</span>
+                        </label>
+                        <input type="number" class="form-control" placeholder="Enter UPPrice" [(ngModel)]="PrdUpPrice"
+                            required [ngClass]="{'error-input': formSubmitted && !PrdUpPrice}" />
+                        <span *ngIf="formSubmitted && !PrdUpPrice" style="color: red;">UPPrice is required.</span>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <!-- <div class="col">
+                        <label for="cars" style="font-weight: bolder;">UP Price <span
+                                style="color: red;">*</span></label>
+                        <input type="number" class="form-control" placeholder="Enter UP Price" [(ngModel)]="PrdUpPrice"
+                            required [ngClass]="{'error-input': formSubmitted && !PrdUpPrice}" />
+                        <span *ngIf="formSubmitted && !PrdUpPrice" style="color: red;">UP Price is required.</span>
+                    </div> -->
+                    <div class="col">
+                        <label for="cars" style="font-weight: bolder;">Sort Order</label>
+                        <input type="number" class="form-control" placeholder="Enter Sort Order"
+                            [(ngModel)]="PrdSortOrd" />
+                    </div>
+                    <div class="col" style="align-self: end; text-align: left;">
+                        <input type="checkbox" [(ngModel)]="PrdActive">
+                        <label for="cars" style="font-weight: bolder; padding-left: 10px;">Is Active
+                        </label>
+                        <br>
+                        <input type="checkbox" [(ngModel)]="PrdRecomd">
+                        <label for="cars" style="font-weight: bolder; padding-left: 10px;">
+                            Is
+                            Recommended</label>
+                        <br>
+                        <input type="checkbox" [(ngModel)]="PrdOnline">
+                        <label for="cars" style="font-weight: bolder; padding-left: 10px;">
+                            Is
+                            Online</label>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <!-- <div class="col">
+
+                        <input type="checkbox" [(ngModel)]="PrdActive">
+                        <label for="cars" style="font-weight: bolder; padding-left: 10px;">Is Active
+                        </label>
+                    </div>
+                    <div class="col">
+
+                        <input type="checkbox" [(ngModel)]="PrdRecomd">
+                        <label for="cars" style="font-weight: bolder; padding-left: 10px;">
+                            Is
+                            Recommended</label>
+                    </div> -->
+                    <div class="col" style="align-self: end; text-align: right;">
+
+                        <button class="btn btn-success" style="width: 100px;" (click)="Submit()"
+                            *ngIf="uptmainscreen == false">Save</button>
+                        &nbsp;&nbsp;
+                        <button class="btn btn-danger" style="width: 100px;" (click)="Clear()"
+                            *ngIf="uptmainscreen == false">Clear</button>
+
+                        <button class="btn btn-warning" style="width: 100px;" (click)="updateprd()"
+                            *ngIf="uptmainscreen == true">Update</button>
+                        &nbsp;&nbsp;
+                        <button class="btn btn-danger" style="width: 100px;" (click)="backprod()"
+                            *ngIf="uptmainscreen == true">Cancel</button>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="container" *ngIf="mainscreen == true">
+        <section class="hk-sec-wrapper">
+            <div class="row">
+                <div class="col" style="text-align: right; padding-bottom: 10px;">
+                    <!-- <button class="btn btn-primary" style="width: 100px;" (click)="getproducts()">Submit</button>
+                    &nbsp;&nbsp; -->
+                    <button class="btn btn-success" style="width: 100px;" (click)="addprod()">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Add
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input class="form-control" type="search" placeholder="Search Product" aria-label="Search"
+                        [(ngModel)]="filterText" />
+                </div>
+                <div class="col">
+                    <select class="form-control custom-select" [(ngModel)]="CategoryId" (change)="filterProducts()">
+                        <option value="0" selected disabled>Select Category</option>
+                        <option value="All">All</option>
+                        <option value="{{ item.Id }}" *ngFor="let item of categ">
+                            {{ item.Description }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="form-control custom-select" [(ngModel)]="TaxGroupId" (change)="filterProducts()">
+                        <option value="0" selected disabled>Select TaxGroup</option>
+                        <option value="0">All</option>
+                        <option value="{{ item.Id }}" *ngFor="let item of taxgroupvalues">
+                            {{ item.Description }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="container" *ngIf="mainscreen == true">
+        <section class="hk-sec-wrapper">
+
+            <div class="table-container">
+                <table class="table table-bordered" #TABLE>
+                    <thead style="position: sticky; top: 0; ">
+                        <tr style="background-color: #2b2b2b;">
+                            <th style="text-align: center; border: none; color: white; width: 5%;">
+                                <strong>#</strong>
+                            </th>
+                            <th style="text-align: center; border: none; color: white; width: 25%;">
+                                <strong>Name</strong>
+                            </th>
+                            <th style="text-align: center; border: none; color: white; width: 20%;">
+                                <strong>Price</strong>
+                            </th>
+                            <th style="text-align: center; border: none; color: white; width: 15%;"><strong>Sort
+                                    Order</strong></th>
+                            <th style="text-align: center; border: none; color: white; width: 15%;">
+                                <strong>Recommended</strong>
+                            </th>
+                            <th style="text-align: center; border: none; color: white; width: 15%;">
+                                <strong>Action</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let prd of filtervalues | filter: filterText | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                            <td style="text-align: center;">{{i + 1}}</td>
+                            <td style="text-align: center;">{{prd.Name}}</td>
+                            <td style="text-align: center;">
+                                &#8377; {{prd.Price}}
+                            </td>
+                            <td style="text-align: center;">{{prd.SortOrder}}</td>
+                            <td style="text-align: center;">
+                                <input class="largerCheckbox" type="checkbox" [(ngModel)]="prd.Recommended">
+                            </td>
+                            <td style="text-align: center;">
+                                <button type="button" class="btn btn-warning" (click)="updatescr(prd)">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </div>
+        </section>
+    </div>
+</div>

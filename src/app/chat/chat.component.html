@@ -258,7 +258,7 @@
                         </header>
                         <div class="chat-body">
                             <div class="nicescroll-bar" (drop)="drop($event)" (dragover)="allowDrop($event)" (dragleave)="dragleave()">
-                                <div *ngIf="showfiledropoverlay" class="file-drop-overlay" style="pointer-events: none;">
+                                <div [hidden]="!showfiledropoverlay" class="file-drop-overlay" style="pointer-events: none;">
                                     <p style="position: absolute;
                                               top: 50%;
                                               left: 50%;
@@ -325,6 +325,11 @@
                                                             max-width: 300px;
                                                             align-self: center;
                                                             ">{{chat.Content}}</span>
+                                                            <a href="javascript:void(0);" (click)="forceDownload(chat.ImgUrl, chat.Content)">
+                                                                <span class="btn btn-icon-wrap" style="width: fit-content;align-self: center;">
+                                                                    <span [innerHTML]="download_icon"></span>
+                                                                </span>
+                                                            </a>
                                                         </div>
                                                         <span class="chat-time">
                                                             {{chat.MessageDateTime | date: 'hh:mm a'}}

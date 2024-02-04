@@ -868,17 +868,17 @@ export class AuthService {
     return this.http.post(this.baseurl + 'StoreData/Update', body);
   }
 
-  GetTaxes(companyId: number) {
-    return this.http.get(this.baseurl + 'TaxGroup/Get?CompanyId=' + companyId);
-  }
+  // GetTaxes(companyId: number) {
+  //   return this.http.get(this.baseurl + 'TaxGroup/Get?CompanyId=' + companyId);
+  // }
   getchatindex(companyid: number) {
-    return this.http.get(this.baseurl1 + 'Message/GetChatIndex?companyid=' + companyid);
+    return this.http.get(this.baseurl + 'Message/GetChatIndex?companyid=' + companyid);
   }
   getmessages(storeid: number) {
-    return this.http.get(this.baseurl1 + 'Message/GetMessages?storeid=' + storeid);
+    return this.http.get(this.baseurl + 'Message/GetMessages?storeid=' + storeid);
   }
   savemessage(message: Message) {
-    return this.http.post(this.baseurl1 + 'Message/SaveMessage', message)
+    return this.http.post(this.baseurl + 'Message/SaveMessage', message)
   }
   savefilemessage(message: any, file: File) {
     let form = new FormData()
@@ -887,8 +887,32 @@ export class AuthService {
     // for (let key in message) {
     //   form.append(key, message[key])
     // }
-    return this.http.post(this.baseurl1 + 'Message/SaveFileMessage', form)
+    return this.http.post(this.baseurl + 'Message/SaveFileMessage', form)
   }
+    // rohith
+    addProduct(product: any, image: File | null) {
+      let formData = new FormData();
+      if (image) formData.append('image', image);
+      formData.append('product', JSON.stringify(product));
+      return this.http.post(this.baseurl + 'Product/AddProduct', formData);
+    }
+    updateProduct(product: any, image: File | null) {
+      let formData = new FormData();
+      if (image) formData.append('image', image);
+      formData.append('product', JSON.stringify(product));
+      return this.http.post(this.baseurl + 'Product/Update', formData);
+    }
+  
+    GetProducts(companyid: number) {
+      return this.http.get(
+        this.baseurl + 'Product/CompanyProducts?companyid=' + companyid
+      );
+    }
+  
+    GetTaxes(companyId: number) {
+      return this.http.get(this.baseurl + 'TaxGroup/Get?CompanyId=' + companyId);
+    }
+  
 }
 
 // baseurl

@@ -25,12 +25,13 @@ export class ChatComponent implements OnInit {
   check: SafeHtml
   dbl_check: SafeHtml
   read_dbl_check: SafeHtml
+  download_icon: SafeHtml
   constructor(private auth: AuthService, private sanitizer: DomSanitizer) {
     this.comapnyid = 0
     this.check = sanitizer.bypassSecurityTrustHtml(svgs[0]);
     this.dbl_check = sanitizer.bypassSecurityTrustHtml(svgs[1]);
     this.read_dbl_check = sanitizer.bypassSecurityTrustHtml(svgs[2]);
-    sanitizer.bypassSecurityTrustHtml("")
+    this.download_icon = sanitizer.bypassSecurityTrustHtml(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`)
   }
 
   ngOnInit(): void {
@@ -88,7 +89,7 @@ export class ChatComponent implements OnInit {
     }
   }
   showfiledropoverlay: boolean = false
-  filetype: any = {"image": 2, "audio": 3, "video": 4}
+  filetype: any = { "image": 2, "audio": 3, "video": 4 }
   drop(e: DragEvent) {
     e.preventDefault()
     this.dragleave()
@@ -96,7 +97,7 @@ export class ChatComponent implements OnInit {
       // console.log(e.dataTransfer.files)
       console.log(e.dataTransfer.files[0].name, e.dataTransfer.files[0].type)
       // this.selectfile(e.dataTransfer.files)
-      const {name, type} = e.dataTransfer.files[0]
+      const { name, type } = e.dataTransfer.files[0]
       let message = new Message()
       message.Content = name
       message.ImgId = null
@@ -119,7 +120,9 @@ export class ChatComponent implements OnInit {
   }
 
   allowDrop(e: DragEvent) {
+    console.log("<allow drop>")
     e.preventDefault()
+    e.stopPropagation()
     const { top, left, width, height } = document.getElementsByClassName("chat-body")[0].getBoundingClientRect()
     this.showfiledropoverlay = true
     $(".file-drop-overlay")[0].style.top = top + "px"
@@ -130,9 +133,27 @@ export class ChatComponent implements OnInit {
   }
 
   dragleave() {
+    console.log("<drag leave>")
     $(".file-drop-overlay")[0].style.opacity = '0'
     setTimeout(() => {
       this.showfiledropoverlay = false
     }, 200);
+  }
+
+  forceDownload(url: string | null, fileName: string) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url || "", true);
+    xhr.responseType = "blob";
+    xhr.onload = function () {
+      var urlCreator = window.URL || window.webkitURL;
+      var imageUrl = urlCreator.createObjectURL(this.response);
+      var tag = document.createElement('a');
+      tag.href = imageUrl;
+      tag.download = fileName;
+      document.body.appendChild(tag);
+      tag.click();
+      document.body.removeChild(tag);
+    }
+    xhr.send();
   }
 }

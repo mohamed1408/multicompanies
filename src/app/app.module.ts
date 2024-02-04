@@ -48,6 +48,7 @@ import { DenomPipe } from './pipes/denom.pipe';
 import { TransaxnVerifyComponent } from './transaxn-verify/transaxn-verify.component';
 import { Susorders2Component } from './susorders2/susorders2.component';
 import { ChatComponent } from './chat/chat.component';
+import { AddProductComponent } from './add-product/add-product.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { ChatComponent } from './chat/chat.component';
     TransaxnVerifyComponent,
     Susorders2Component,
     ChatComponent,
+    AddProductComponent,
   ],
   imports: [
     BrowserModule,
