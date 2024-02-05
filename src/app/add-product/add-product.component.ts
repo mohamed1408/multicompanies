@@ -57,6 +57,8 @@ export class AddProductComponent implements OnInit {
         this.TGValues();
       }
     });
+
+    // localStorage.setItem('SavedCompaniesId', this.CompanyId.toString());
   }
 
   categ: any;
@@ -169,6 +171,8 @@ export class AddProductComponent implements OnInit {
     };
     this.Auth.addProduct(obj, this.image).subscribe((data) => {
       console.log(data);
+      this.backprod();
+      alert('Product Added Successfully');
     });
     // productArray.push(obj);
     // console.log(productArray);
@@ -414,6 +418,7 @@ export class AddProductComponent implements OnInit {
     this.Auth.updateProduct(obj, this.image).subscribe((data) => {
       console.log(data);
       this.backprod();
+      alert('Product Updated Successfully');
     });
 
     // productArray.push(obj);
