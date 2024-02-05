@@ -23,7 +23,7 @@
                     <img *ngIf="savedimageedit == null" id="productImage" src="../../assets/svg/imagepicker.svg"
                         alt="ImageSelectSVG" width="100px" (click)="onProductImageClick()" style="cursor: pointer;">
 
-                    <img *ngIf="savedimageedit.length > 0" id="productImage" [src]="savedimageedit" alt="ImageSelectSVG"
+                    <img *ngIf="savedimageedit != null" id="productImage" [src]="savedimageedit" alt="ImageSelectSVG"
                         width="100px" (click)="onProductImageClick()" style="cursor: pointer;">
                 </div>
                 <br>

@@ -206,7 +206,7 @@ let getMenuData: Array<navlink> = [
   },
   {
     title: 'Products',
-    url: '/products',
+    url: '',
     icon: 'fa fa-pie-chart',
     svg: '../../assets/svg/tag.svg',
     icon_res: 'svg',
