@@ -1,4 +1,14 @@
 <!-- HK Wrapper -->
+
+<ngb-alert *ngIf="successAlert" type="success" [dismissible]="false">
+    {{ successMessage }}
+</ngb-alert>
+
+<ngb-alert *ngIf="dangerAlert" type="danger" [dismissible]="false">
+    {{ dangerMessage }}
+</ngb-alert>
+
+
 <div class="hk-wrapper">
 
     <!-- Main Content -->
@@ -51,25 +61,27 @@
                             <h1 class="display-4 mb-10">Welcome Back :)</h1>
                             <p class="mb-30">Sign in to your account and enjoy unlimited perks.</p>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Email" type="email" (keyup.enter)="login()" [(ngModel)]="EmailId">
+                                <input class="form-control" placeholder="Email" type="email" (keyup.enter)="login()"
+                                    [(ngModel)]="EmailId">
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input class="form-control" placeholder="Password" type="{{showpassword}}"
+                                    <input class="form-control" placeholder="Password" [type]="showpassword"
                                         [(ngModel)]="Password" (keyup.enter)="login()">
-                                    <div class="input-group-append">
+                                    <!-- <div class="input-group-append">
                                         <span class="input-group-text" (click)="togglepasswordvisibility()">
                                             <span class="feather-icon">
                                                 <i data-feather="eye-off"></i>
                                             </span>
                                         </span>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
+
                             <div class="custom-control custom-checkbox mb-25">
-                                <input class="custom-control-input" id="same-address" type="checkbox" checked>
-                                <label class="custom-control-label font-14" for="same-address">Keep me logged
-                                    in</label>
+                                <input class="custom-control-input" id="same-address" type="checkbox"
+                                    (click)="togglepasswordvisibility()">
+                                <label class="custom-control-label font-14" for="same-address">Show Password</label>
                             </div>
                             <button class="btn btn-primary btn-block" type="button" (click)="login()">Login</button>
                             <p class="font-14 text-center mt-15">Having trouble logging in?</p>

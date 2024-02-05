@@ -15,7 +15,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
-  styleUrls: ['./add-product.component.css']
+  styleUrls: ['./add-product.component.css'],
 })
 export class AddProductComponent implements OnInit {
   CategoryId: any = 0;
@@ -44,7 +44,7 @@ export class AddProductComponent implements OnInit {
   filterText: string = '';
   p: any;
 
-  constructor(private Auth: AuthService, private renderer2: Renderer2) { }
+  constructor(private Auth: AuthService, private renderer2: Renderer2) {}
 
   ngOnInit(): void {
     this.Auth.companyid.subscribe((companyid) => {
@@ -191,7 +191,7 @@ export class AddProductComponent implements OnInit {
       (this.PrdActive = true),
       (this.PrdRecomd = false);
     this.PrdOnline = false;
-    this.savedimageedit = "";
+    this.savedimageedit = '';
   }
 
   getproducts() {
@@ -251,11 +251,11 @@ export class AddProductComponent implements OnInit {
         term.length < 1
           ? []
           : this.stores
-            .filter(
-              (v: any) =>
-                v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
-            )
-            .slice(0, 10)
+              .filter(
+                (v: any) =>
+                  v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10)
       )
     );
 
@@ -269,6 +269,7 @@ export class AddProductComponent implements OnInit {
 
   addprod() {
     this.mainscreen = false;
+    this.savedimageedit = null;
   }
 
   backprod() {
@@ -303,7 +304,7 @@ export class AddProductComponent implements OnInit {
   }
 
   uptmainscreen = false;
-  savedimageedit: any = "";
+  savedimageedit: any = '';
   updatescr(data: any) {
     this.savedupdprd = data;
     this.savedimageedit = this.savedupdprd.ImgUrl;
