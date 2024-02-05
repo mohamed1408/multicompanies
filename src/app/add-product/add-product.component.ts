@@ -169,10 +169,12 @@ export class AddProductComponent implements OnInit {
       IsQtyPredefined: false,
       groupid: 0,
     };
-    this.Auth.addProduct(obj, this.image).subscribe((data) => {
+    this.Auth.addProduct(obj, this.image).subscribe((data: any) => {
       console.log(data);
-      this.backprod();
-      alert('Product Added Successfully');
+      if (data['status'] == 200) {
+        this.backprod();
+        alert('Product Added Successfully');
+      }
     });
     // productArray.push(obj);
     // console.log(productArray);
@@ -415,10 +417,12 @@ export class AddProductComponent implements OnInit {
       IsQtyPredefined: this.savedupdprd.IsQtyPredefined,
       groupid: this.savedupdprd.groupid,
     };
-    this.Auth.updateProduct(obj, this.image).subscribe((data) => {
-      console.log(data);
-      this.backprod();
-      alert('Product Updated Successfully');
+    this.Auth.updateProduct(obj, this.image).subscribe((data: any) => {
+      console.log();
+      if (data['status'] == 200) {
+        this.backprod();
+        alert('Product Updated Successfully');
+      }
     });
 
     // productArray.push(obj);
