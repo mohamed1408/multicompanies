@@ -114,11 +114,11 @@ export class ProductsComponent implements OnInit {
         term.length < 1
           ? []
           : this.stores
-            .filter(
-              (v: any) =>
-                v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
-            )
-            .slice(0, 10)
+              .filter(
+                (v: any) =>
+                  v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10)
       )
     );
 
@@ -416,5 +416,31 @@ export class ProductsComponent implements OnInit {
 
   slectTG() {
     this.filterProducts(); //'TaxGroupId', this.TaxGroupId);
+  }
+
+  showAlert1: boolean = false;
+
+  showAlertWithTimeout1() {
+    this.showAlert1 = true;
+    setTimeout(() => {
+      this.hideAlert1();
+    }, 3000);
+  }
+
+  hideAlert1() {
+    this.showAlert1 = false;
+  }
+
+  showAlert2: boolean = false;
+
+  showAlertWithTimeout2() {
+    this.showAlert2 = true;
+    setTimeout(() => {
+      this.hideAlert2();
+    }, 3000);
+  }
+
+  hideAlert2() {
+    this.showAlert2 = false;
   }
 }

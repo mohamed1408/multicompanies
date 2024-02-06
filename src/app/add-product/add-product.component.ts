@@ -173,7 +173,9 @@ export class AddProductComponent implements OnInit {
       console.log(data);
       if (data['status'] == 200) {
         this.backprod();
-        alert('Product Added Successfully');
+        this.showAlertWithTimeout2();
+      } else {
+        this.showAlertWithTimeout1();
       }
     });
     // productArray.push(obj);
@@ -421,7 +423,9 @@ export class AddProductComponent implements OnInit {
       console.log();
       if (data['status'] == 200) {
         this.backprod();
-        alert('Product Updated Successfully');
+        this.showAlertWithTimeout2();
+      } else {
+        this.showAlertWithTimeout1();
       }
     });
 
@@ -473,5 +477,31 @@ export class AddProductComponent implements OnInit {
     } else {
       this.filtervalues = this.ProductsValues;
     }
+  }
+
+  showAlert1: boolean = false;
+
+  showAlertWithTimeout1() {
+    this.showAlert1 = true;
+    setTimeout(() => {
+      this.hideAlert1();
+    }, 3000);
+  }
+
+  hideAlert1() {
+    this.showAlert1 = false;
+  }
+
+  showAlert2: boolean = false;
+
+  showAlertWithTimeout2() {
+    this.showAlert2 = true;
+    setTimeout(() => {
+      this.hideAlert2();
+    }, 3000);
+  }
+
+  hideAlert2() {
+    this.showAlert2 = false;
   }
 }

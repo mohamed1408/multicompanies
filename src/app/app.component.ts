@@ -58,6 +58,8 @@ export class AppComponent {
   isLoading$: Observable<boolean>;
   companyid: number;
 
+  savedcompany: any;
+  savedcompanyFinal: any;
   constructor(
     private auth: AuthService,
     public router: Router,
@@ -69,11 +71,21 @@ export class AppComponent {
     this.isLoggedIn$ = this.auth.isLoggedIn;
     this.isLocked$ = this.auth.accLocked;
     this.isLoading$ = this.auth.isloading;
+
+    //HYPER CHANGING SAVE TOP COMPANY IN LOCAL STOARGE
+    this.savedcompany = localStorage.getItem('SavedCompaniesId');
+    this.savedcompanyFinal = parseInt(this.savedcompany);
+
     this.companyid = +JSON.parse(localStorage.getItem('company') || '{}')
       .CompanyId;
+
     this.auth.companyid.subscribe((cid) => {
       console.log(cid);
     });
+
+    if (Number.isNaN(this.savedcompanyFinal) == false) {
+      this.companyid = this.savedcompanyFinal;
+    }
     const ctoken = localStorage.getItem('ctoken') || '';
     const utoken = localStorage.getItem('utoken') || '';
     if (ctoken != '') {
@@ -101,7 +113,7 @@ export class AppComponent {
         this.auth.companyid.next(this.companyid);
       });
     } else {
-      this.auth.accLocked.next(true)
+      this.auth.accLocked.next(true);
     }
     this.isLoggedIn$.subscribe((data) => {
       console.log(data);

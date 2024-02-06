@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.menus = getMenuData.filter(x => x.roles.includes(this.user.role))
+    this.menus = getMenuData.filter((x) => x.roles.includes(this.user.role));
   }
 
   menuActiveConfig(route: string, menu: navlink[]) {
@@ -105,6 +105,7 @@ export class HeaderComponent implements OnInit {
 
   setCompanyId() {
     this.auth.companyid.next(this.companyid);
+    localStorage.setItem('SavedCompaniesId', this.companyid.toString());
   }
 
   navbartoggle() {

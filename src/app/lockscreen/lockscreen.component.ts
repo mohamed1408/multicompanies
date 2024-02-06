@@ -37,13 +37,14 @@ export class LockscreenComponent implements OnInit {
     this.auth.unlock(this.pin, this.companyid).subscribe((data: any) => {
       this.auth.isloading.next(false);
       if (data['status'] == 200) {
+        localStorage.removeItem('SavedCompaniesId');
         const token_parsed = this.jwtHelper.decodeToken(data['token']);
         localStorage.setItem('utoken', data['token']);
         localStorage.setItem('user', JSON.stringify(token_parsed));
         this.auth.user.next(token_parsed);
-        let next = "/maintenance"
-        if(token_parsed.role == "cashier") {
-          next = "/u1"
+        let next = '/maintenance';
+        if (token_parsed.role == 'cashier') {
+          next = '/u1';
         }
         this.auth.accLocked.next(false);
         this.auth

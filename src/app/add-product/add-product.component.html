@@ -1,3 +1,13 @@
+<div *ngIf="showAlert1 == true" class="alert1" style="display: fixed; z-index: 9999999;" (click)="hideAlert1()">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    <strong>Oops!</strong> Somwthing Went Wrong.
+</div>
+
+<div *ngIf="showAlert2 == true" class="alert2" style="display: fixed; z-index: 9999999;" (click)="hideAlert2()">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    <strong>Success!</strong> Saved Successfully.
+</div>
+
 <div class="hk-pg-wrapper">
     <div *ngIf="uptmainscreen != true">
         <div class="title" *ngIf="mainscreen == false">
