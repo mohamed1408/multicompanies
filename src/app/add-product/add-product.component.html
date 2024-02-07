@@ -94,8 +94,8 @@
                         <select class="form-control custom-select" [(ngModel)]="CategoryId" required
                             [ngClass]="{'error-input': formSubmitted && !CategoryId}">
                             <option value="0" selected disabled>Select Category</option>
-                            <option value="{{ item.Id }}" *ngFor="let item of categ">
-                                {{ item.Description }}
+                            <option value="{{ item.id }}" *ngFor="let item of categ">
+                                {{ item.description }}
                             </option>
                         </select>
                         <span *ngIf="formSubmitted && !CategoryId" style="color: red;">CategoryId is required.</span>
@@ -215,8 +215,8 @@
                     <select class="form-control custom-select" [(ngModel)]="CategoryId" (change)="filterProducts()">
                         <option value="0" selected disabled>Select Category</option>
                         <option value="All">All</option>
-                        <option value="{{ item.Id }}" *ngFor="let item of categ">
-                            {{ item.Description }}
+                        <option value="{{ item.id }}" *ngFor="let item of categ">
+                            {{ item.description }}
                         </option>
                     </select>
                 </div>

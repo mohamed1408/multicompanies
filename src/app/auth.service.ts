@@ -13,6 +13,7 @@ export class AuthService {
   baseurl1 = 'https://localhost:44383/api/';
   ecomurl = 'https://biz1ecom.azurewebsites.net/api/';
   posurl = 'http://localhost:2357/';
+  base_url2 = 'https://retailpos.azurewebsites.net/api/';
 
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
@@ -319,9 +320,7 @@ export class AuthService {
   }
 
   getcat(CompanyId: number) {
-    return this.http.get(
-      this.baseurl + 'Category/Index?CompanyId=' + CompanyId
-    );
+    return this.http.get(this.base_url2 + 'Login/Index?CompanyId=' + CompanyId);
   }
 
   GetSalesRpt6(

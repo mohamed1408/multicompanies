@@ -63,8 +63,8 @@ export class AddProductComponent implements OnInit {
 
   categ: any;
   getCategory() {
-    this.Auth.getcat(this.CompanyId).subscribe((data) => {
-      this.categ = data;
+    this.Auth.getcat(this.CompanyId).subscribe((data: any) => {
+      this.categ = data['totalSales'];
       console.log(this.categ);
     });
   }
