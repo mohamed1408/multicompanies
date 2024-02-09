@@ -217,3 +217,7 @@ tr.tbody-tr:hover {
 .popover-body {
     padding: 10px;
 }
+
+.hk-pg-wrapper{
+    z-index: 999;
+}
