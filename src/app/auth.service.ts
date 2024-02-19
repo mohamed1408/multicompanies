@@ -256,6 +256,26 @@ export class AuthService {
         '&cancelorder=0'
     );
   }
+
+  orderwiseV2_temp(
+    fromdate: string,
+    todate: string,
+    storeid: number,
+    companyid: number
+  ) {
+    return this.http.get(
+      this.baseurl +
+        'OrderWise/DeliveruRpt_V?fromdate=' +
+        fromdate +
+        '&todate=' +
+        todate +
+        '&storeid=' +
+        storeid +
+        '&companyid=' +
+        companyid
+    );
+  }
+
   GetproductRpt(
     Id: number,
     frmdate: string,
