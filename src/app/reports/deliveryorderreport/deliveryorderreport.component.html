@@ -206,6 +206,7 @@
               <table class="table table-sm mb-0">
                 <thead>
                   <tr>
+                    <th>#</th>
                     <th>Invoice No</th>
                     <th>Amount</th>
                     <th>Ordered Date</th>
@@ -216,6 +217,7 @@
                 <tbody>
                   <tr *ngFor="let r of report | filter : term | orderfilter : oti ; let i = index;" class="tbody-tr"
                     [class.selected]="r.selected" (click)="r.selected = !r.selected">
+                    <td>{{i+1}}</td>
                     <td class="position-relative" style="padding-top: 20px !important;">
                       <span class="font-italic position-absolute font-13" style="top: 0;"
                         [ngStyle]="{'color': cservice.statusColors(r.osi)}">
