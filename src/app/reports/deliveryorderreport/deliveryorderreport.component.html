@@ -1,4 +1,5 @@
-<div *ngIf="hidecontent" class="hk-wrapper">
+<!-- <p>transaction-list works!</p> -->
+<div [hidden]="!hidecontent" class="hk-wrapper">
 
   <!-- Main Content -->
   <div class="hk-pg-wrapper hk-auth-wrapper">
@@ -34,340 +35,218 @@
     </div>
   </div>
   <!-- /Main Content -->
-
 </div>
-
-<div *ngIf="!hidecontent" class="hk-pg-wrapper">
-  <!-- Breadcrumb -->
-  <nav class="hk-breadcrumb" aria-label="breadcrumb">
-    <ol class="breadcrumb breadcrumb-light bg-transparent">
-      <li class="breadcrumb-item"><a href="javascript:void(0)">Reports</a></li>
-      <li class="breadcrumb-item active" aria-current="page">
-        Delivery Order Report
-      </li>
-    </ol>
-  </nav>
-  <!-- /Breadcrumb -->
-
-  <div class="container">
-    <!-- Title -->
-    <div class="hk-pg-header">
-      <h4 class="hk-pg-title">
-        <span class="pg-title-icon"><span class="feather-icon"><i data-feather="toggle-right"></i></span></span>Delivery
-        Order Report
-      </h4>
+<div [hidden]="hidecontent" class="hk-pg-wrapper">
+  <div class="title">Delivery Order Report</div>
+  <div class="container d-flex">
+    <div class="col-xl-3">
+      <section class="hk-sec-wrapper sticky-top" style="top: 160px; max-height: 70vh; overflow: auto;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>InvoiceNo</th>
+              <th colspan="1">Amount</th>
+              <th>
+                <button class="btn" (click)="txnToClipBoard()">
+                  <feather-icon [name]="'copy'"></feather-icon>
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let txn of transaxns | orderfilter : oti">
+              <th>{{txn.InvoiceNo}}</th>
+              <th>
+                <br>
+                <span class="text-success text-right float-right">&#8377;{{txn.Amount}}</span>
+              </th>
+              <th>
+                <span class="float-left">{{txn.TransDateTime | date: "MMM d, h:mm a"}}</span><br>
+                <span class="text-success float-left">{{txn.ptype}}</span>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <br>
+      <section style="zoom: 75%; top: 220px;" *ngIf="selectedOrder" class="hk-sec-wrapper sticky-top">
+        <!-- <h5 class="biza">{{selectedOrder.ino}}</h5> -->
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th colspan="3">
+                <h5 class="biza">{{selectedOrder.ino}}</h5>
+              </th>
+            </tr>
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Amt</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let it of selectedOrder.items">
+              <td>
+                <span>{{it.pd}}</span><br>
+                <span class="font-italic text-light-50">GST {{it.t}}%</span>
+              </td>
+              <td>{{it.qy}}</td>
+              <td>{{it.ta}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr *ngIf="selectedOrder.transaxns.length > 0" class="hr-text" data-content="T R A N S A X N S">
+        <table class="table table-bordered">
+          <tbody style="border-top: 1px solid #e0e3e4;">
+            <tr *ngFor="let txn of selectedOrder.transaxns">
+              <td>{{txn.TransDateTime.format('MMM DD, YYYY HH:mm A')}}</td>
+              <td>{{txn.Amount | number : ".2"}}</td>
+              <td>{{txn.spt}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr *ngIf="selectedOrder.osi != -1" class="hr-text" data-content="A C T I O N S">
+        <div id="reasoncontainer" class="mb-2 pb-30 position-relative" [class.open]="cancelling">
+          <label *ngIf="cancelling">Cancel Reason <span class="text-danger">*</span></label>
+          <textarea [(ngModel)]="cancelreason" cols="30" rows="3"></textarea>
+          <span *ngIf="cancelling" id="coem" hidden class="text-danger font-italic"
+            style="position: absolute; bottom: 0;">* Cancel Reason is mandatory</span>
+        </div>
+        <div class="d-flex flex-row-reverse">
+          <button *ngIf="selectedOrder.osi != -1" class="btn btn-outline-red btn-rounded mr-2" (click)="cancell()">
+            <i class="fa fa-ban"></i>
+            Cancel
+          </button>
+          <button *ngIf="cancelling" class="btn btn-outline-secondary btn-rounded mr-2" (click)="cancelling = false">
+            <i class="fa fa-exclamation-circle"></i>
+            Abort
+          </button>
+          <!-- <button class="btn btn-outline-success btn-rounded">
+                      <i class="fa fa-check"></i>
+                      Complete
+                  </button> -->
+        </div>
+      </section>
+      <section *ngIf="gds.sterm != ''" style="zoom: 75%; top: 0;" class="hk-sec-wrapper sticky-top">
+        <!-- <h5 class="biza">Data for search term “{{gds.sterm}}”</h5> -->
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th colspan="3">
+                <h5 class="biza">Data for search term “{{gds.sterm}}”</h5>
+              </th>
+            </tr>
+            <tr>
+              <th>STORE</th>
+              <th>ORDERCOUNT</th>
+              <th>QTY</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of gds.data">
+              <td>{{d.Store}}</td>
+              <td>{{d.ordercount}}</td>
+              <td>{{d.qty}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
     </div>
-    <!-- /Title -->
-
-    <div class="container d-flex">
-      <div class="col-xl-4">
-        <section class="hk-sec-wrapper sticky-top" style="top: 190px; max-height: 70vh; overflow: auto;">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>InvoiceNo</th>
-                <th colspan="1">Amount</th>
-                <th>
-                  <button class="btn" (click)="txnToClipBoard()">
-                    <feather-icon [name]="'copy'"></feather-icon>
-                  </button>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let txn of transaxns | orderfilter : oti">
-                <th>{{txn.InvoiceNo}}</th>
-                <th>
-                  <br>
-                  <span class="text-success text-right float-right">&#8377;{{txn.Amount}}</span>
-                </th>
-                <th>
-                  <span class="float-left">{{txn.TransDateTime | date: "MMM d, h:mm a"}}</span><br>
-                  <span class="text-success float-left">{{txn.ptype}}</span>
-                </th>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-      </div>
-      <div class="col-xl-8">
-        <section class="hk-sec-wrapper">
-          <!-- <h5 class="hk-sec-title">Form controls</h5> -->
-          <!-- <p class="mb-25">Textual form controls—like inputs, selects, and textareas—are styled with the
-                            <code>.form-control</code> class. Included are styles for general appearance, focus state,
-                            sizing, and more.
-                        </p> -->
-          <div class="col-xl-12 d-flex">
-            <div class="col-xl">
-              <ng-template class="w-100" #rt let-r="result" let-t="term">
-                <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
-              </ng-template>
-              <div style="height: 100%; position: relative">
-                <input id="typeahead-template" style="height: 100%" #instance="ngbTypeahead" type="text"
-                  class="form-control" [(ngModel)]="smodel" placeholder="Search Ordered Store..."
-                  [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
-                  (selectItem)="selectedItem($event.item)" />
-                <span *ngIf="smodel != ''" class="search-clear" aria-hidden="true"
-                  (click)="smodel = ''; storeid = 0">×</span>
-              </div>
-            </div>
-            <div class="col-xl">
-              <input class="form-control" type="text" name="datetimes" />
-            </div>
-            <div class="col-xl-2">
-              <button class="btn btn-success" (click)="deliveryOrderReport()">
-                Submit
-              </button>
-            </div>
-            <div class="col-xl">
-              <input type="text" class="form-control" [(ngModel)]="invoiceno" placeholder="InVoice Number"
-                aria-label="Recipient's username" aria-describedby="basic-addon2"
-                (keyup.enter)="deliveryOrderReport()" />
-            </div>
+    <div class="col-xl-9">
+      <section class="hk-sec-wrapper">
+        <div class="row">
+          <div class="col-xl-3">
+            <ng-template #rt let-r="result" let-t="term">
+              <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+            </ng-template>
+            <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
+              [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" placeholder="Search Stores..."
+              (selectItem)="selected($event.item)" />
           </div>
-        </section>
-        <section class="hk-sec-wrapper">
-          <!-- <div class="row"> -->
-          <!-- </div> -->
-          <!-- <p class="mb-25">Set heights using classes like <code>.form-control-lg, custom-select-lg</code> and
-                            <code>.form-control-sm, custom-select-sm</code>.
-                        </p> -->
-          <div class="d-flex">
-            <div class="btn-group btn-group-lg mb-15 col-xl-9" role="group" aria-label="Basic example">
-              <button type="button" [class.btn-outline-grey]="oti != 0" class="btn btn-secondary"
-                (click)="oti = 0">All</button>
-              <button type="button" [class.btn-outline-grey]="oti != 2" class="btn btn-secondary" (click)="oti = 2">Take
-                Away</button>
-              <button type="button" [class.btn-outline-grey]="oti != 3" class="btn btn-secondary"
-                (click)="oti = 3">Delivery</button>
-              <button type="button" [class.btn-outline-grey]="oti != 4" class="btn btn-secondary"
-                (click)="oti = 4">PickUp</button>
-              <button type="button" [class.btn-outline-grey]="oti != 7" class="btn btn-secondary" (click)="oti = 7">FB
-                Online</button>
-              <button type="button" [class.btn-outline-grey]="oti != 5" class="btn btn-secondary"
-                (click)="oti = 5">Quick</button>
-              <button type="button" [class.btn-outline-grey]="oti != 1" class="btn btn-secondary"
-                (click)="oti = 1">DineIn</button>
-            </div>
-            <div class="col-xl-3">
-              <button class="btn btn-success btn-lg" (click)="openselectedorders()">Complete Pending Orders</button>
-            </div>
+          <div class="col-xl-5">
+            <input class="form-control" type="text" name="datetimes" />
           </div>
-          <div class="row w-100">
-            <div class="col-sm">
-              <div class="table-wrap mb-30">
-                <div class="table-responsive">
-                  <table class="table table-sm mb-0">
-                    <thead>
-                      <tr>
-                        <th>Invoice</th>
-                        <th>Amount</th>
-                        <!-- <th>Paid Amount</th> -->
-                        <th>Ordered Date</th>
-                        <th>Delivered Date</th>
-                        <!-- <th>Status</th> -->
-                        <!-- <th>Ordered Store</th> -->
-                        <th>Store</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let ordr of orders | orderfilter : oti | filter : invoiceno">
-                        <td class="position-relative" style="padding-top: 20px !important;">
-                          <span class="font-italic position-absolute font-13" style="top: 0;"
-                            [ngStyle]="{'color': cservice.statusColors(ordr.OrderStatusId)}">
-                            {{ordr.StatusName}}
-                          </span>
-                          <a class="biza" data-toggle="modal" data-target="#exampleModalLarge01"
-                            href="javascript:void(0)" (click)="selectOrder(ordr)">#{{ ordr.InvoiceNo }}</a>
-                        </td>
-                        <td>{{ ordr.PaidAmount }}/{{ ordr.BillAmount }}</td>
-                        <td>
-                          <span class="text-muted">OD: {{ordr.OrderedDateTime | date: "MMM d, h:mm a"}}</span><br>
-                          <span [class.text-danger]="ordr.missed">DD: {{ordr.DeliveryDateTime | date: "MMM d, h:mm
-                            a"}}</span>
-                        </td>
-                        <td>
-                          <span class="text-muted">
-                            {{
-                            ordr.DeliveredDateTime | date: "MMM d, h:mm a"
-                            }}</span>
-                        </td>
-                        <!-- <td>{{ ordr.StatusName }}</td> -->
-                        <td style="width: 130px;">{{ ordr.StoreName }} to {{ordr.DeliveryStoreName?
-                          ordr.DeliveryStoreName: "-"}}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+          <div class="col-xl-1">
+            <button class="btn btn-success" (click)="getorderreport()">Submit</button>
+          </div>
+          <div class="col-xl-3">
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text bg-white border-0" id="basic-addon1"><span class="feather-icon"><i
+                        data-feather="search"></i></span></span>
                 </div>
+                <input [(ngModel)]="term" type="text" class="form-control border-0" (input)="filter()"
+                  placeholder="Search by invoice..." aria-label="Username" (keydown.enter)="groupdatabystore()"
+                  aria-describedby="basic-addon1">
               </div>
             </div>
           </div>
-          <div class="modal fade" id="exampleModalLarge01" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalLarge01" aria-hidden="true">
-            <div *ngIf="temporder" class="modal-dialog modal-lg" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">{{ temporder.InvoiceNo }}</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <div class="col-xl-12 row">
-                    <div class="col-xl-6">
-                      <div class="card-body">
-                        <div class="form-group row">
-                          <label class="col-md-3 col-form-label" for="baseFullname"><strong>Status</strong></label>
-                          <div class="col-md-8">
-                            <select class="form-control custom-select" [(ngModel)]="temporder.OrderStatusId"
-                              aria-placeholder="Select Company" style="margin-left: 40px">
-                              <option *ngFor="let status of statuses" value="{{ status.id }}">
-                                {{ status.status }}
-                              </option>
-                            </select>
-                          </div>
-                          <!-- <span *ngIf="submitted && variantgroup.name == ''" class="text-danger">*VariantGroup cannot be
-                                                  empty</span> -->
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-md-3 col-form-label" for="baseFullname"><strong>Ordered
-                              Store</strong></label>
-                          <div class="col-md-3 pt-2" style="margin-left: 40px">
-                            {{ temporder.StoreName }}
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-md-3 col-form-label" for="baseFullname"><strong>Bill Amt</strong></label>
-                          <div class="col-md-3 pt-2" style="margin-left: 40px">
-                            &#8377;{{ temporder.BillAmount }}
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-md-3 col-form-label" for="formControlRange"><strong>Paid
-                              Amt</strong></label>
-                          <div class="col-md-3 pt-2" style="margin-left: 40px">
-                            &#8377;{{ temporder.PaidAmount }}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xl-6">
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label"
-                          for="formControlRange"><strong>OrderedDate</strong></label>
-                        <div class="col-md-3 pt-2">
-                          <div style="margin-left: 50px">
-                            <input style="width: 15em; margin-left: 5px" [(ngModel)]="temporder.OrderedDate"
-                              class="form-control" type="date" />
-                          </div>
-                          <!-- <div hidden style="margin-left:80px;">
-                                  <label for="username">Date</label>
-                                  <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
-                                    [(ngModel)]="selected" [showCustomRangeLabel]="true"
-                                    [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
-                                    [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
-                                    class="form-control" />
-                                </div> -->
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="formControlRange"><strong>Delivery
-                            Date</strong></label>
-                        <div class="col-md-3 pt-2">
-                          <div style="margin-left: 50px">
-                            <!-- <input type="text" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
-                                    [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
-                                    [(ngModel)]="selected" [showCustomRangeLabel]="true"
-                                    [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
-                                    [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
-                                    class="form-control" /> -->
-                            <input style="width: 15em; margin-left: 5px" [(ngModel)]="temporder.DeliveryDateTime"
-                              class="form-control" type="date" />
-                          </div>
-                          <!-- <div hidden style="margin-left:80px;">
-                                  <label for="username">Date</label>
-                                  <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
-                                    [(ngModel)]="selected" [showCustomRangeLabel]="true"
-                                    [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
-                                    [showClearButton]="true" (change)="date($event)" placeholder="Select Date..."
-                                    class="form-control" />
-                                </div> -->
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="formControlRange"><strong>Delivered
-                            Date</strong></label>
-                        <div class="col-md-3 pt-2">
-                          <div style="margin-left: 50px">
-                            <!-- <input type="text" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
-                                    [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected"
-                                    [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
-                                    [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
-                                    placeholder="Select Date..." class="form-control" /> -->
-                            <input style="width: 15em; margin-left: 5px" [(ngModel)]="temporder.DeliveredDateTime"
-                              class="form-control" type="date" />
-                          </div>
-                          <!-- <div hidden style="margin-left:80px;">
-                                  <label for="username">Date</label>
-                                  <input type="text" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}"
-                                    [(ngModel)]="selected" [showCustomRangeLabel]="true" [alwaysShowCalendars]="true"
-                                    [ranges]="ranges" [linkedCalendars]="true" [showClearButton]="true"
-                                    (change)="date($event)" placeholder="Select Date..." class="form-control" />
-                                </div> -->
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="baseFullname"><strong>Delivery
-                            Store</strong></label>
-                        <div class="col-md-9 pt-2">
-                          <div>
-                            <ng-template class="w-100" #rt let-r="result" let-t="term">
-                              <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
-                            </ng-template>
-                            <div style="
-                                    width: 100%;
-                                    height: 84%;
-                                    position: relative;
-                                    margin-left: 55px;
-                                  ">
-                              <input id="typeahead-template" style="height: 100%" #instance="ngbTypeahead" type="text"
-                                class="form-control" [(ngModel)]="temporder.DeliveryStoreObj"
-                                placeholder="Search Delivery Store..." [ngbTypeahead]="search" [resultTemplate]="rt"
-                                [inputFormatter]="formatter" (selectItem)="selectedItem($event.item)" />
-                              <span *ngIf="temporder.DeliveryStoreId != ''" class="search-clear" aria-hidden="true"
-                                (click)="
-                                      temporder.DeliveryStoreId = ''; storeid = 0
-                                    ">×</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="formControlRange"><strong>Note</strong></label>
-                        <div class="col-md-9 pt-2">
-                          <!-- <input class="form-control form-control-sm" [(ngModel)]="temporder.CancelReason" type="text"
-                                  placeholder="Some Reason.."> -->
-                          <textarea class="form-control" style="margin-left: 55px" rows="1" placeholder="Some Reason..."
-                            [(ngModel)]="temporder.Note"></textarea>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    Close
-                  </button>
-                  <button type="button" class="btn btn-primary">
-                    Save changes
-                  </button>
-                </div>
+          <div class="col-xl-12" *ngIf="report.length > 0" style="overflow: auto; max-height: 75vh;">
+            <div class="d-flex">
+              <div class="btn-group btn-group-lg mb-15 col-xl-9" role="group" aria-label="Basic example">
+                <button type="button" [class.btn-outline-grey]="oti != 0" class="btn btn-secondary"
+                  (click)="oti = 0">All</button>
+                <button type="button" [class.btn-outline-grey]="oti != 2" class="btn btn-secondary"
+                  (click)="oti = 2">Take
+                  Away</button>
+                <button type="button" [class.btn-outline-grey]="oti != 3" class="btn btn-secondary"
+                  (click)="oti = 3">Delivery</button>
+                <button type="button" [class.btn-outline-grey]="oti != 4" class="btn btn-secondary"
+                  (click)="oti = 4">PickUp</button>
+                <button type="button" [class.btn-outline-grey]="oti != 7" class="btn btn-secondary" (click)="oti = 7">FB
+                  Online</button>
+                <button type="button" [class.btn-outline-grey]="oti != 5" class="btn btn-secondary"
+                  (click)="oti = 5">Quick</button>
+                <button type="button" [class.btn-outline-grey]="oti != 1" class="btn btn-secondary"
+                  (click)="oti = 1">DineIn</button>
               </div>
             </div>
+            <div class="table-responsive">
+              <table class="table table-sm mb-0">
+                <thead>
+                  <tr>
+                    <th>Invoice No</th>
+                    <th>Amount</th>
+                    <th>Ordered Date</th>
+                    <th>Delivered Date</th>
+                    <th>Store</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let r of report | filter : term | orderfilter : oti ; let i = index;" class="tbody-tr"
+                    [class.selected]="r.selected" (click)="r.selected = !r.selected">
+                    <td class="position-relative" style="padding-top: 20px !important;">
+                      <span class="font-italic position-absolute font-13" style="top: 0;"
+                        [ngStyle]="{'color': cservice.statusColors(r.osi)}">
+                        {{r.StatusName}}
+                      </span>
+                      <a class="biza" data-toggle="modal" data-target="#exampleModalLarge01" href="javascript:void(0)"
+                        (click)="openModal(); selectOrder(r)">#{{ r.ino }}</a>
+                      <span class="item-details font-12 font-italic text-blue">{{r.itemlist}}</span>
+                    </td>
+                    <td>{{ r.pa }}/{{ r.ba }}</td>
+                    <td>
+                      <span class="text-muted">OD: {{r.oddt | date: "MMM d, h:mm a"}}</span><br>
+                      <span [class.text-danger]="r.missed">DD: {{r.dddt | date: "MMM d, h:mm
+                        a"}}</span>
+                    </td>
+                    <td>
+                      <span class="text-muted">
+                        {{
+                        r.dddt | date: "MMM d, h:mm a"
+                        }}</span>
+                    </td>
+                    <td style="width: 130px;">{{ r.Store }} to {{r.DeliveryStoreName?
+                      r.DeliveryStoreName: "-"}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   </div>
   <div class="bz-menu custom-scroll-bar" [hidden]="!showmenu">
@@ -385,81 +264,73 @@
       </thead>
       <tbody>
         <tr *ngFor="let store of storeOrderCount">
-          <td><a href="javascript:void(0)" class="biza" (click)="getstorereport(store)">{{store.Name}}</a></td>
+          <td><a href="javascript:void(0)" class="biza" (click)="getstorereport(store)">{{store.Name}}</a>
+          </td>
           <td><span class="badge"
-              [class.badge-blue]="(store.delivery+store.takeaway+store.pickup+store.fbonline) > 0">{{store.delivery+store.takeaway+store.pickup}}</span>
+              [class.badge-blue]="store.delivery > 0">{{store.delivery+store.takeaway+store.pickup}}</span>
           </td>
           <!-- <td><span class="badge" [class.badge-blue]="store.pickup > 0">{{store.pickup}}</span></td> -->
         </tr>
       </tbody>
     </table>
   </div>
-  <button class="bz-fab" (click)="!showmenu && DeliveryOrderCount(); showmenu&&showmenu = !showmenu">
+  <button class="bz-fab" (click)="showmenu = !showmenu">
     <div *ngIf="storeOrderCount['isloading']" class="spinner-border"></div>
     <i *ngIf="!storeOrderCount['isloading']" style="margin: auto;" class="fa fa-cog"></i>
   </button>
 </div>
 
-<ng-template #selected_order_list let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title">Complete {{ selected_orders.length }} Orders</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.close('Save click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body" style="width: 100%">
-    <div class="d-flex flex-row-reverse">
-      <button class="btn btn-sm btn-success" (click)="selectMissedOrders()">Missed Orders</button>
-      <button class="btn btn-sm btn-success" (click)="selectPendingOrders()">Pending Orders</button>
+
+<!-- app.component.html -->
+<div class="modal" tabindex="-1" role="dialog" id="myModal">
+  <div class="container d-flex align-items-center justify-content-center vh-100" *ngIf="temporder">
+    <div class="card" style="width: 70%;">
+      <div class="card-header" style="border-bottom: 1px solid #aaa; font-weight:bolder">
+        {{ temporder.InvoiceNo }}
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="card-body">
+        <table style="width: 100%;">
+          <tr>
+            <td style="width: 50%;"><strong>Status :</strong></td>
+            <td style="width: 50%;">{{ temporder.StatusName }}</td>
+          </tr>
+          <tr>
+            <td style="width: 50%;"><strong>Ordered Date :</strong></td>
+            <td style="width: 50%;">{{ temporder.OrderedDate }}</td>
+          </tr>
+          <tr>
+            <td style="width: 50%;"><strong>Ordered Store :</strong></td>
+            <td style="width: 50%;">{{ temporder.StoreName }}</td>
+          </tr>
+          <tr>
+            <td style="width: 50%;"><strong>Delivery Date :</strong></td>
+            <td style="width: 50%;">{{ temporder.DeliveryDateTime }}</td>
+          </tr>
+          <tr>
+            <td style="width: 50%;"><strong>Bill Amt :</strong></td>
+            <td style="width: 50%;">{{ temporder.BillAmount }}</td>
+          </tr>
+          <tr>
+            <td style="width: 50%;"><strong>Delivered Date :</strong></td>
+            <td style="width: 50%;">{{ temporder.DeliveredDateTime }}</td>
+          </tr>
+          <tr>
+            <td style="width: 50%;"><strong>Paid Amt :</strong></td>
+            <td style="width: 50%;">{{ temporder.PaidAmount }}</td>
+          </tr>
+          <tr>
+            <td style="width: 50%;"><strong>Delivery Store :</strong></td>
+            <td style="width: 50%;">{{ temporder.DeliveryStoreName }}</td>
+          </tr>
+          <tr>
+            <td style="width: 50%;"><strong>Note :</strong></td>
+            <td style="width: 50%;" *ngIf="temporder.Note != 'undefined\n'">{{ temporder.Note }}</td>
+          </tr>
+        </table>
+      </div>
     </div>
-    <table class="table table-sm mb-0" style="width: 100%">
-      <thead>
-        <tr>
-          <!-- <td>Store</td> -->
-          <!-- <td>Id</td> -->
-          <td>Invoice No</td>
-          <td>Transaction Time</td>
-          <td>Payment</td>
-          <td>Payment Type</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="position: relative" *ngFor="
-              let sOrder of selected_orders
-                | paginate: { itemsPerPage: 10, currentPage: p }
-            ">
-          <!-- <td>{{sOrder.store}}</td> -->
-          <!-- <td>{{sOrder.orderid}}</td> -->
-          <td (mouseover)="sOrder.showpopover = true" (mouseout)="sOrder.showpopover = false">
-            {{ sOrder.invoiceno }}
-            <div *ngIf="sOrder.showpopover" class="bizpopover shadow">
-              <span class="text-success">Type: </span>{{ sOrder.ordertype }}
-              <br />
-              <span class="text-success">Status: </span>{{ sOrder.orderstatus }}
-            </div>
-          </td>
-          <td>
-            <input type="date" [(ngModel)]="sOrder.transdate" (change)="sOrder.setDateTime()" />
-          </td>
-          <td class="text-right">
-            {{ sOrder.paidamount }} / {{ sOrder.billamount }}
-          </td>
-          <td>
-            <!-- {{sOrder.paymenttypeid}} -->
-            <select [(ngModel)]="sOrder.paymenttypeid">
-              <option *ngFor="let type of paymentTypes | ptypefilter : sOrder.storeid" value="{{ type.Id }}">
-                {{ type.Name }}
-              </option>
-            </select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="completeOrders()">
-      Complete
-    </button>
-  </div>
-</ng-template>
+</div>
