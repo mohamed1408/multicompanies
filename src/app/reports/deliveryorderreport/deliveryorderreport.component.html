@@ -228,7 +228,7 @@
                     <td>{{ r.pa }}/{{ r.ba }}</td>
                     <td>
                       <span class="text-muted">OD: {{r.oddt | date: "MMM d, h:mm a"}}</span><br>
-                      <span [class.text-danger]="r.missed">DD: {{r.dddt | date: "MMM d, h:mm
+                      <span [class.text-danger]="r.missed">DD: {{r.didt | date: "MMM d, h:mm
                         a"}}</span>
                     </td>
                     <td>
@@ -284,7 +284,7 @@
 <!-- app.component.html -->
 <div class="modal" tabindex="-1" role="dialog" id="myModal">
   <div class="container d-flex align-items-center justify-content-center vh-100" *ngIf="temporder">
-    <div class="card" style="width: 70%;">
+    <div class="card" style="width: 60%;">
       <div class="card-header" style="border-bottom: 1px solid #aaa; font-weight:bolder">
         {{ temporder.InvoiceNo }}
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
@@ -307,7 +307,8 @@
           </tr>
           <tr>
             <td style="width: 50%;"><strong>Delivery Date :</strong></td>
-            <td style="width: 50%;">{{ temporder.DeliveryDateTime }}</td>
+            <td style="width: 50%;" *ngIf="temporder.DeliveryDateTime != 'Invalid date'">{{ temporder.DeliveryDateTime
+              }}</td>
           </tr>
           <tr>
             <td style="width: 50%;"><strong>Bill Amt :</strong></td>
@@ -315,7 +316,8 @@
           </tr>
           <tr>
             <td style="width: 50%;"><strong>Delivered Date :</strong></td>
-            <td style="width: 50%;">{{ temporder.DeliveredDateTime }}</td>
+            <td style="width: 50%;" *ngIf="temporder.DeliveredDateTime != 'Invalid date'">{{ temporder.DeliveredDateTime
+              }}</td>
           </tr>
           <tr>
             <td style="width: 50%;"><strong>Paid Amt :</strong></td>

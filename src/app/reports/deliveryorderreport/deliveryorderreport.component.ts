@@ -318,8 +318,8 @@ export class DeliveryorderreportComponent implements OnInit {
     this.temporder.BillAmount = order.ba;
     this.temporder.PaidAmount = order.pa;
     this.temporder.OrderedDate = moment(order.od).format('YYYY-MM-DD');
-    this.temporder.DeliveryDateTime = moment(order.oddt).format('YYYY-MM-DD');
-    this.temporder.DeliveredDateTime = moment(order.oddt).format('YYYY-MM-DD');
+    this.temporder.DeliveryDateTime = moment(order.didt).format('YYYY-MM-DD');
+    this.temporder.DeliveredDateTime = moment(order.dddt).format('YYYY-MM-DD');
     this.temporder.DeliveryStoreName = order.DeliveryStoreName;
   }
   clearselection() {
