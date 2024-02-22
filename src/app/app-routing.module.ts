@@ -28,37 +28,169 @@ import { TransaxnVerifyComponent } from './transaxn-verify/transaxn-verify.compo
 import { Susorders2Component } from './susorders2/susorders2.component';
 import { ChatComponent } from './chat/chat.component';
 import { AddProductComponent } from './add-product/add-product.component';
+import { SptRptComponent } from './reports/spt-rpt/spt-rpt.component';
 
 const routes: Routes = [
-  { path: '', component: SigninComponent, canActivate: [AuthGuardService], data: {role: ['all',]} },
-  { path: 'lock', component: LockscreenComponent, canActivate: [AuthGuardService], data: {role: ['all']} },
-  { path: 'products', component: ProductsComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'maintenance', component: StorewiseComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'm1', component: EnquiryordersComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'r1', component: OrderWiseComponent, canActivate: [AuthGuardService], data: {role: ['admin']} }, // old component: [OrderwisereportComponent]
-  { path: 'r2', component: ProductwisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'r3', component: CategorywisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'r4', component: StorewisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'r5', component: TimewisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  {
+    path: '',
+    component: SigninComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['all'] },
+  },
+  {
+    path: 'lock',
+    component: LockscreenComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['all'] },
+  },
+  {
+    path: 'products',
+    component: ProductsComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'maintenance',
+    component: StorewiseComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'm1',
+    component: EnquiryordersComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'r1',
+    component: OrderWiseComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  }, // old component: [OrderwisereportComponent]
+  {
+    path: 'r2',
+    component: ProductwisereportComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'r3',
+    component: CategorywisereportComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'r4',
+    component: StorewisereportComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'r5',
+    component: TimewisereportComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
   {
     path: 'r6',
     component: MonthwiseproductreportComponent,
   },
-  { path: 'r7', component: SpgwisereportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'r8', component: DeliveryorderreportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'm3', component: SusordersComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'm4', component: Susorders2Component, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'r9', component: CancelOrdReportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'r10', component: ProductsalesreportComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'r11', component: CustomerdatarptComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'r12', component: VersionlistComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'm2', component: DenominationComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'kb2chef', component: Kb2chefComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'u1', component: TransactionListComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
-  { path: 'u2', component: OrderManagerComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
-  { path: 'u3', component: TransaxnVerifyComponent, canActivate: [AuthGuardService], data: {role: ['admin', 'cashier']} },
-  { path: 'chat', component: ChatComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
-  { path: 'addproducts', component: AddProductComponent, canActivate: [AuthGuardService], data: {role: ['admin']} },
+  {
+    path: 'r7',
+    component: SpgwisereportComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'r8',
+    component: DeliveryorderreportComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'm3',
+    component: SusordersComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'm4',
+    component: Susorders2Component,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'r9',
+    component: CancelOrdReportComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'r10',
+    component: ProductsalesreportComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'r11',
+    component: CustomerdatarptComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'r12',
+    component: VersionlistComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'm2',
+    component: DenominationComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'kb2chef',
+    component: Kb2chefComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'u1',
+    component: TransactionListComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin', 'cashier'] },
+  },
+  {
+    path: 'u2',
+    component: OrderManagerComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin', 'cashier'] },
+  },
+  {
+    path: 'u3',
+    component: TransaxnVerifyComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin', 'cashier'] },
+  },
+  {
+    path: 'chat',
+    component: ChatComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'addproducts',
+    component: AddProductComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
+  {
+    path: 'SptRpt',
+    component: SptRptComponent,
+    canActivate: [AuthGuardService],
+    data: { role: ['admin'] },
+  },
 ];
 
 @NgModule({

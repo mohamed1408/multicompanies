@@ -995,6 +995,23 @@ export class AuthService {
   GetTaxes(companyId: number) {
     return this.http.get(this.baseurl + 'TaxGroup/Get?CompanyId=' + companyId);
   }
+
+  SPT_RPT(
+    storeId: number,
+    companyId: number,
+    from: string,
+    to: string,
+    spt: number
+  ) {
+    return this.http.get(
+      this.baseurl +
+        `Report/SPT_Reports?storeId=${storeId}&companyId=${companyId}&from=${from}&to=${to}&spt=${spt}`
+    );
+  }
+
+  GetCusDeltbyId(CusId: number) {
+    return this.http.get(this.baseurl + 'Report/GetCusDeltbyId?CusId=' + CusId);
+  }
 }
 
 // baseurl

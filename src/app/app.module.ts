@@ -49,6 +49,7 @@ import { TransaxnVerifyComponent } from './transaxn-verify/transaxn-verify.compo
 import { Susorders2Component } from './susorders2/susorders2.component';
 import { ChatComponent } from './chat/chat.component';
 import { AddProductComponent } from './add-product/add-product.component';
+import { SptRptComponent } from './reports/spt-rpt/spt-rpt.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import { AddProductComponent } from './add-product/add-product.component';
     Susorders2Component,
     ChatComponent,
     AddProductComponent,
+    SptRptComponent,
   ],
   imports: [
     BrowserModule,

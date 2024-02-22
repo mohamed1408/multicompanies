@@ -1,0 +1,231 @@
+<div [hidden]="!hidecontent" class="hk-wrapper">
+    <div class="hk-pg-wrapper hk-auth-wrapper">
+        <header class="d-flex justify-content-end align-items-center">
+            <div class="btn-group btn-group-sm">
+                <a href="#" class="btn btn-outline-secondary">Help</a>
+                <a href="#" class="btn btn-outline-secondary">About Us</a>
+            </div>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12 pa-0">
+                    <div class="auth-form-wrap pt-xl-0 pt-70">
+                        <div class="auth-form w-xl-25 w-lg-30 w-sm-50 w-100">
+
+                            <form>
+                                <div
+                                    class="d-62 bg-white rounded-circle mb-10 d-flex align-items-center justify-content-center mx-auto">
+                                    <i class="zmdi zmdi-settings font-28"></i>
+                                </div>
+                                <h1 class="display-4 mb-10 text-center"> <span unselectable="on" class="no-select"
+                                        (click)="unlockpagr('sorry')">Sorry</span>
+                                    we <span unselectable="on" class="no-select" (click)="unlockpagr('are')">are</span>
+                                    down for <span (click)="unlockpagr('maintenance')">maintenance</span></h1>
+                                <p class="mb-30 text-center">We apologize for the inconvenience, we are doing our best
+                                    to get things back in order for you. Please feel free to <a href="#"><u>contact
+                                            us</u></a> for any queries.</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div [hidden]="hidecontent" class="hk-pg-wrapper">
+    <div class="title">StorePayment &nbsp;Type</div>
+
+    <div class="container">
+        <section class="hk-sec-wrapper">
+            <div class="row">
+                <div class="col-3">
+                    <ng-template #rt let-r="result" let-t="term">
+                        <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+                    </ng-template>
+                    <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
+                        [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
+                        placeholder="Search Stores..." (selectItem)="selecteds($event.item)" />
+                </div>
+                <div class="col-3">
+                    <select class="form-control custom-select" [disabled]="storeId <= 0" [(ngModel)]="Selectspt">
+                        <option value="0" selected>All</option>
+                        <option value="{{ item.Id }}" *ngFor="let item of PaymentType">
+                            {{ item.Name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <div id="myrangepicker" class="form-control text-truncate">
+                        <i class="fa fa-calendar text-light-40"></i>&nbsp; <span></span>
+                        <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
+                    </div>
+                </div>
+                <div class="col" style="text-align: right;">
+                    <button class="btn btn-success" (click)="Report()">Submit</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="container">
+        <section class="hk-sec-wrapper">
+            <table class="table table-bordered" style="border-collapse: collapse;">
+                <thead class="z-index-1">
+                    <tr style="background-color: #2b2b2b; position: relative; ">
+                        <th style="color: white; font-weight: bolder; border: 1px solid #2b2b2b;">#</th>
+                        <th style="color: white; font-weight: bolder; border: 1px solid #2b2b2b;">Invoice No</th>
+                        <th style="color: white; font-weight: bolder; border: 1px solid #2b2b2b;">Amount</th>
+                        <th style="color: white; font-weight: bolder; border: 1px solid #2b2b2b;">Date</th>
+                        <th style="color: white; font-weight: bolder; border: 1px solid #2b2b2b;">Store</th>
+                        <th style="color: white; font-weight: bolder; border: 1px solid #2b2b2b;">
+                            <span (click)="toggleFilterDropdown()" style="cursor: pointer;">Payment Type &nbsp;<i
+                                    class="fa fa-list" aria-hidden="true"></i></span>
+                            <div *ngIf="showFilterDropdown" class="filter-dropdown">
+                                <div *ngFor="let paymentType of uniquePaymentTypes">
+                                    <label>
+                                        <input type="radio" [checked]="selectedPaymentType === paymentType"
+                                            (change)="togglePaymentType(paymentType)" />
+                                        {{ paymentType }}
+                                    </label>
+                                </div>
+                                <button type="button" class="btn btn-danger btn-sm" (click)="revert()"
+                                    style="width: 100%;">Revert</button>
+                            </div>
+
+                        </th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rpt of filterlists; let i = index;">
+                        <td>{{i+1}}</td>
+                        <td>
+                            <p style="font-weight: bolder; cursor: pointer;" (click)="openModal(rpt)">
+                                <u>{{rpt.Invoice}}</u>
+                            </p>
+                        </td>
+                        <td>&#8377; {{rpt.Amount}}</td>
+                        <td>{{rpt.TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}</td>
+                        <td>{{rpt.StoreName}}</td>
+                        <td>{{rpt.PaymentType}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+
+
+<div class="modal" tabindex="-1" role="dialog" id="myModal">
+    <div class="container d-flex align-items-center justify-content-center vh-100">
+        <div class="card" style="width: 60%;" *ngIf="OrderDetails">
+            <div class="card-header" style="border-bottom: 1px solid #aaa; font-weight:bolder">
+                Order Details : #{{OrderDetails.Invoice}}
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td><strong>Store</strong></td>
+                        <td>
+                            <p>
+                                {{OrderDetails.StoreName}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Amount</strong></td>
+                        <td>
+                            <p>
+                                &#8377; {{OrderDetails.Amount}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>OrderType</strong></td>
+                        <td>
+                            <p *ngIf="OrderDetails.OrderTypeId == 1">
+                                DineIn
+                            </p>
+                            <p *ngIf="OrderDetails.OrderTypeId == 2">
+                                TakeAway
+                            </p>
+                            <p *ngIf="OrderDetails.OrderTypeId == 3">
+                                Delivery
+                            </p>
+                            <p *ngIf="OrderDetails.OrderTypeId == 4">
+                                PickUp
+                            </p>
+                            <p *ngIf="OrderDetails.OrderTypeId == 5">
+                                QuickOrder
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>OrderStatus</strong></td>
+                        <td>
+                            <span *ngIf="OrderDetails.OrderStatusId == 1" style="color: orange;">
+                                <strong>Accepted</strong> </span>
+                            <span *ngIf="OrderDetails.OrderStatusId == 3"
+                                style="color: rgb(99, 96, 91);"><strong>Preparing</strong></span>
+                            <span *ngIf="OrderDetails.OrderStatusId == 4"
+                                style="color: rgb(85, 138, 189);"><strong>Prepared</strong></span>
+                            <span *ngIf="OrderDetails.OrderStatusId == 5"
+                                style="color: green;"><strong>Completed</strong></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>OrdredDate</strong></td>
+                        <td>
+                            <p>
+                                {{OrderDetails.OrdredDate | date: 'EEE,dd-MMM-y, hh:mm a'}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>TransDateTime</strong></td>
+                        <td>
+                            <p>
+                                {{OrderDetails.TransDateTime | date: 'EEE,dd-MMM-y, hh:mm a'}}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <hr>
+                <p style="font-weight: bolder; font-size: larger;" *ngIf="CustomerDetails.PhoneNo != null"><u>Customer
+                        Details :</u></p>
+                <div class="row" *ngIf="CustomerDetails.PhoneNo != null">
+                    <div class="col d-flex justify-content-center align-items-center">
+                        <div class=" card12">
+                            <div class="profile-pic"><img src="../../../assets/images/happycus.png" alt=""></div>
+                            <div class="bottom">
+                                <div class="content">
+                                    <span class="name">{{CustomerDetails.Name}}</span>
+                                    <span class="about-me">
+                                        Contact No : {{CustomerDetails.PhoneNo}}
+                                    </span>
+                                    <span class="about-me">
+                                        <span *ngIf="CustomerDetails.Address != null">Address :
+                                            {{CustomerDetails.Address}}</span><span
+                                            *ngIf="CustomerDetails.City != null">,
+                                            {{CustomerDetails.City}}</span><span
+                                            *ngIf="CustomerDetails.PostalCode != null">,
+                                            {{CustomerDetails.PostalCode}}</span>
+                                    </span>
+                                </div>
+                                <div class="bottom-bottom">
+                                    Hover Me ! Suprise Inside Me...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
