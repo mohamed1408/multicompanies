@@ -39,11 +39,8 @@
 
 
 <div *ngIf="!hidecontent" class="hk-pg-wrapper">
-  <br>
+  <div class="title">Customer Data</div>
   <div class="container">
-    <div class="hk-pg-header">
-      <h4 class="hk-pg-title">Customer Data List</h4>
-    </div>
     <div class="col-sm-14">
       <div class="col-xl-12 pl-0 pr-0">
         <section class="hk-sec-wrapper">
@@ -53,14 +50,16 @@
               <input type="text" class="form-group" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
                 [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected" [showCustomRangeLabel]="true"
                 [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true" [showClearButton]="true"
-                (change)="date($event)" placeholder="Select Date..." class="form-control" />
+                (change)="date($event)" placeholder="Select Date..." class="form-control"
+                [isInvalidDate]="isInvalidDate" />
             </div>
             <div hidden style="margin-left:120px;margin-top: 3px">
               <label for="username">Date</label>
               <input type="text" class="form-group" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
                 [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected" [showCustomRangeLabel]="true"
                 [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true" [showClearButton]="true"
-                (change)="date($event)" placeholder="Select Date..." class="form-control" />
+                (change)="date($event)" placeholder="Select Date..." class="form-control"
+                [isInvalidDate]="isInvalidDate" />
             </div>
 
             <div class="form-group" style="width: 10em;margin-left:40px;">
@@ -81,11 +80,14 @@
             </div>
 
             <div style="margin-top:35px;">
-              <button class="btn btn-success btn-sm mx-100 w-30 pull-right" (click)="Submit()">Submit</button>
-            </div>
-
-            <div style="margin-top:35px;">
-              <button class="btn btn-success btn-sm mx-100 w-30 pull-right" (click)="exportToExcel()">Export</button>
+              <div class="row">
+                <div class="col" style="padding-left: 100px;">
+                  <button class="btn btn-success btn-sm" (click)="Submit()">Submit</button>
+                </div>
+                <div class="col">
+                  <button class="btn btn-warning btn-sm" (click)="exportToExcel()">Export</button>
+                </div>
+              </div>
             </div>
           </div>
 

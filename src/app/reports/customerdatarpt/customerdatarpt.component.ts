@@ -37,7 +37,8 @@ export class CustomerdatarptComponent implements OnInit {
   ];
 
   isInvalidDate = (m: moment.Moment) => {
-    return this.invalidDates.some((d) => d.isSame(m, 'day'));
+    // return this.invalidDates.some((d) => d.isSame(m, 'day'));
+    return m.isBefore(moment('2024-02-22'));
   };
 
   limited_user: boolean = true;
@@ -108,7 +109,7 @@ export class CustomerdatarptComponent implements OnInit {
     ).subscribe((data: any) => {
       this.Auth.isloading.next(false);
       console.log(data);
-      this.cuslist = data.Order;
+      this.cuslist = data;
       console.log(this.cuslist);
       this.cuslist.forEach((cl: any) => {
         cl.OrderType = this.ordertypes[cl.OrderTypeId.toString()];
@@ -149,13 +150,16 @@ export class CustomerdatarptComponent implements OnInit {
       this.BillAmount
     ).subscribe((data: any) => {
       console.log(data);
-      this.importtocus = data.Order;
+      this.importtocus = data;
       console.log(this.importtocus);
 
       // this.exceldata = [{ "StoreName": this.importtocus.Store, "CustomerName": this.importtocus.CusName, "PhoneNumber": this.importtocus.CusPhone, "OrderedDate": this.importtocus.OrderedDate, "DeliveryDate": this.importtocus.DeliveryDate }]
       // // this.exceldata = obj
       // this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel')
 
+      this.importtocus.forEach((cl: any) => {
+        cl.OrderType = this.ordertypes[cl.OrderTypeId.toString()];
+      });
       this.importtocus.forEach((element: any) => {
         this.exceldata.push({
           StoreName: element.Store,
@@ -163,7 +167,7 @@ export class CustomerdatarptComponent implements OnInit {
           PhoneNumber: element.CusPhone,
           OrderedDate: element.OrderedDate,
           DeliveryDate: element.DeliveryDate,
-          OrderType: element.OrderType
+          OrderType: element.OrderType,
         });
       });
       this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel');
