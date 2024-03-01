@@ -210,7 +210,6 @@ export class AddProductComponent implements OnInit {
       this.filtervalues = this.ProductsValues;
       this.Auth.isloading.next(false);
     });
-
     // this.filtervalues = [
     //   {
     //     Name: 'Kadai Chicken**',
@@ -247,6 +246,16 @@ export class AddProductComponent implements OnInit {
     console.log(this.filtervalues);
 
     this.Auth.isloading.next(false);
+  }
+
+  filterprods() {
+    this.filtervalues = this.ProductsValues.filter((data: any) => {
+      if (!this.filterText) {
+        return true;
+      } else {
+        return data.Name.toLowerCase().includes(this.filterText.toLowerCase());
+      }
+    });
   }
 
   formatter = (result: any) => result.Name;

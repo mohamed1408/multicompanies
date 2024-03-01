@@ -209,7 +209,7 @@
             <div class="row">
                 <div class="col">
                     <input class="form-control" type="search" placeholder="Search Product" aria-label="Search"
-                        [(ngModel)]="filterText" />
+                        [(ngModel)]="filterText" (ngModelChange)="filterprods()" />
                 </div>
                 <div class="col">
                     <select class="form-control custom-select" [(ngModel)]="CategoryId" (change)="filterProducts()">
@@ -261,7 +261,7 @@
                     </thead>
                     <tbody>
                         <tr
-                            *ngFor="let prd of filtervalues | filter: filterText | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                            *ngFor="let prd of filtervalues | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
                             <td style="text-align: center;">{{i + 1}}</td>
                             <td style="text-align: center;">{{prd.Name}}</td>
                             <td style="text-align: center;">
