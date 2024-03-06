@@ -29,7 +29,7 @@ import { Susorders2Component } from './susorders2/susorders2.component';
 import { ChatComponent } from './chat/chat.component';
 import { AddProductComponent } from './add-product/add-product.component';
 import { SptRptComponent } from './reports/spt-rpt/spt-rpt.component';
-import { UseraccComponent } from './useracc/useracc.component';
+// import { UseraccComponent } from './useracc/useracc.component';
 import { CategorywiseRptNewComponent } from './reports/categorywise-rpt-new/categorywise-rpt-new.component';
 
 const routes: Routes = [
@@ -151,12 +151,12 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     data: { role: ['admin'] },
   },
-  {
-    path: 'useracc',
-    component: UseraccComponent,
-    canActivate: [AuthGuardService],
-    data: { role: ['admin'] },
-  },
+  // {
+  //   path: 'useracc',
+  //   component: UseraccComponent,
+  //   canActivate: [AuthGuardService],
+  //   data: { role: ['admin'] },
+  // },
   {
     path: 'kb2chef',
     component: Kb2chefComponent,
