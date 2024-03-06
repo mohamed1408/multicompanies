@@ -1012,6 +1012,41 @@ export class AuthService {
   GetCusDeltbyId(CusId: number) {
     return this.http.get(this.baseurl + 'Report/GetCusDeltbyId?CusId=' + CusId);
   }
+
+  SaveUserAccount(payload: any) {
+    return this.http.post(this.baseurl1 + 'User/addUserAccounts', payload);
+  }
+
+  GetUserValues(ComId: number) {
+    return this.http.get(this.baseurl1 + 'User/GetUserAccounts?ComId=' + ComId);
+  }
+
+  UpdateUserAccount(payload: any) {
+    return this.http.post(this.baseurl1 + 'User/UpdateUserAccounts', payload);
+  }
+
+  GetUserStores(UserId: number) {
+    return this.http.get(this.baseurl1 + 'User/GetUserStores?UserId=' + UserId);
+  }
+
+  Get2CatOnly(companyId: number) {
+    return this.http.get(
+      this.baseurl + 'Report/Get2CatOnly?companyId=' + companyId
+    );
+  }
+
+  GetCatwiseAllStr(
+    cateId: number,
+    companyId: number,
+    fromDate: string,
+    toDate: string,
+    hidebool: number
+  ) {
+    return this.http.get(
+      this.baseurl +
+        `Report/GetCatwiseAllStr?cateId=${cateId}&companyId=${companyId}&fromDate=${fromDate}&toDate=${toDate}&hidebool=${hidebool}`
+    );
+  }
 }
 
 // baseurl

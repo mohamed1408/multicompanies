@@ -1,0 +1,155 @@
+<!-- <p>transaction-list works!</p> -->
+<div [hidden]="!hidecontent" class="hk-wrapper">
+    <div class="hk-pg-wrapper hk-auth-wrapper">
+        <header class="d-flex justify-content-end align-items-center">
+            <div class="btn-group btn-group-sm">
+                <a href="#" class="btn btn-outline-secondary">Help</a>
+                <a href="#" class="btn btn-outline-secondary">About Us</a>
+            </div>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12 pa-0">
+                    <div class="auth-form-wrap pt-xl-0 pt-70">
+                        <div class="auth-form w-xl-25 w-lg-30 w-sm-50 w-100">
+
+                            <form>
+                                <div
+                                    class="d-62 bg-white rounded-circle mb-10 d-flex align-items-center justify-content-center mx-auto">
+                                    <i class="zmdi zmdi-settings font-28"></i>
+                                </div>
+                                <h1 class="display-4 mb-10 text-center"> <span unselectable="on" class="no-select"
+                                        (click)="unlockpagr('sorry')">Sorry</span>
+                                    we <span unselectable="on" class="no-select" (click)="unlockpagr('are')">are</span>
+                                    down for <span (click)="unlockpagr('maintenance')">maintenance</span></h1>
+                                <p class="mb-30 text-center">We apologize for the inconvenience, we are doing our best
+                                    to get things back in order for you. Please feel free to <a href="#"><u>contact
+                                            us</u></a> for any queries.</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div [hidden]="hidecontent" class="hk-pg-wrapper">
+    <div class="title">Category Wise</div>
+    <div class="container">
+        <section class="hk-sec-wrapper">
+            <div>
+                <div class="form-group row">
+                    <div style="margin-left:50px;">
+                        <label for="username">Date : </label>
+                        <input type="text" class="form-group" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
+                            [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected"
+                            [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
+                            [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
+                            placeholder="Select Date..." class="form-control" [isInvalidDate]="isInvalidDate" />
+                    </div>
+                    <div hidden style="margin-left:120px;margin-top: 3px">
+                        <label for="username">Date</label>
+                        <input type="text" class="form-group" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
+                            [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected"
+                            [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
+                            [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
+                            placeholder="Select Date..." class="form-control" [isInvalidDate]="isInvalidDate" />
+                    </div>
+                    <div class="form-group" style="width: 15em;margin-left:40px;">
+                        <label for="username">Category Type : </label>
+                        <select class="form-control custom-select" name="OrderType" [(ngModel)]="CatId">
+                            <option value="0" disabled selected>Select Atleast One</option>
+                            <option value="{{item.Id}}" *ngFor="let item of GetCatValues">{{item.Description}}</option>
+                            <option value="-74489">Other</option>
+                        </select>
+                    </div>
+                    <div style="margin-top:35px;">
+                        <div class="row">
+                            <div class="col" style="padding-left: 100px;">
+                                <button class="btn btn-success btn-sm" (click)="GetCatwiseAllRpt()">Submit</button>
+                            </div>
+                            <!-- <div class="col">
+                            <button class="btn btn-warning btn-sm" (click)="exportToExcel()">Export</button>
+                          </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="row">
+        <div class="col-9">
+            <div class="container">
+                <section class="hk-sec-wrapper">
+                    <table class="table mb-0 table-sm">
+                        <thead>
+                            <tr style="background-color:rgb(217, 226, 250);">
+                                <th>
+                                    #
+                                </th>
+                                <th>
+                                    Store Name
+                                </th>
+                                <th>
+                                    Category
+                                </th>
+                                <th>
+                                    Amount
+                                </th>
+                                <th>
+                                    Discount
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let catr of GetCatwiseAllRptValues; let i = index">
+                                <td>{{i+1}}</td>
+                                <td *ngIf="hidebool == 0">{{catr.StoreName}}</td>
+                                <td *ngIf="hidebool == 1">
+                                    <u style="font-weight: bolder; color: green;cursor: pointer;"
+                                        (click)="othercats(catr.StoreName)">{{catr.StoreName}}</u>
+                                </td>
+                                <td *ngIf="hidebool == 1">Other</td>
+                                <td *ngIf="hidebool == 0">Fresh Dream Cake</td>
+                                <td>{{catr.Amt | number: ".0"}}</td>
+                                <td>{{catr.DisAmt | number: ".0"}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="container">
+                <section class="hk-sec-wrapper">
+                    <strong>[Total Amt]</strong>
+                    <span class="float-right"> {{ totalamount | number: ".0" }}</span> <br />
+                    <strong>[Total Disc Amt]</strong>
+                    <span class="float-right">{{ totaldiscamount | number: ".0" }}</span> <br />
+                </section>
+            </div>
+            <div class="container" *ngIf="hidebool == 1">
+                <section class="hk-sec-wrapper" style="padding: 5px;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th><strong>[Cat Name]</strong></th>
+                                <th><strong>[Total Amt]</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of filterothercats">
+                                <td>{{item.CateId}}</td>
+                                <td>{{item.Amt}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </div>
+
+
+</div>
