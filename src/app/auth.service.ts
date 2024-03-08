@@ -719,7 +719,7 @@ export class AuthService {
     ProdName: string
   ) {
     return this.http.get(
-      this.baseurl1 +
+      this.baseurl +
         `Customer/GetCustomerList?companyid=${CompanyId}&frmdate=${frmdate}&todate=${todate}&ordertype=${OrderTypeId}&billamt=${BillAmt}&ProdName=${ProdName}`
     );
   }
