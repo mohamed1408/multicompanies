@@ -354,7 +354,7 @@ export class TimewisereportComponent implements OnInit {
 
   getCategory() {
     this.Auth.getcat(this.CompanyId).subscribe((data: any) => {
-      this.categ = data;
+      this.categ = data['totalSales'];
       console.log(this.categ);
     });
   }
@@ -448,11 +448,11 @@ export class TimewisereportComponent implements OnInit {
       .open(contentdetail, {
         ariaLabelledBy: 'modal-basic-title',
         centered: true,
-        backdropClass: 'z-index-1'
+        backdropClass: 'z-index-1',
       })
       .result.then(
-        (result) => { },
-        (reason) => { }
+        (result) => {},
+        (reason) => {}
       );
   }
   reportProducts: any = [];
@@ -478,6 +478,27 @@ export class TimewisereportComponent implements OnInit {
     }
     var frmdate = moment(this.startdate).format('YYYY-MM-DD');
     var todate = moment(this.enddate).format('YYYY-MM-DD');
+
+    // this.Auth.getTimeWiseProducts(
+    //   reportdata.storeId,
+    //   frmdate,
+    //   todate,
+    //   reportdata.StartTime,
+    //   reportdata.EndTime,
+    //   this.sourceId,
+    //   this.productId,
+    //   this.saleProductId,
+    //   this.CompanyId,
+    //   this.categoryId
+    // ).subscribe((data: any) => {
+    //   console.log(data);
+    //   this.reportProducts = data['products'];
+    //   this.reportProducts.forEach((prod: any) => {
+    //     this.reportProductsTotal.quantity += prod.Quantity * prod.Factor;
+    //   });
+    //   this.modalS.open(this.productmodal, { backdropClass: 'z-index-1' });
+    //   this.Auth.isloading.next(false);
+    // });
 
     this.Auth.getTimeWiseProducts(
       reportdata.storeId,
@@ -544,7 +565,9 @@ export class TimewisereportComponent implements OnInit {
   fromInt: number | null = null;
   toInt: number | null = null;
   openTimeIntervalModal() {
-    const modalRef = this.modalS.open(this.timeintervalmodal, { backdropClass: 'z-index-1' });
+    const modalRef = this.modalS.open(this.timeintervalmodal, {
+      backdropClass: 'z-index-1',
+    });
     this.sliderControl = true;
     modalRef.result.then(
       (data) => {

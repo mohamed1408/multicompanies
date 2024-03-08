@@ -115,16 +115,16 @@
                 <strong class="py-20 px-5">min</strong>
               </div>
             </div>
-            <div class="form-group" style="width: 10em;margin-left:40px  ">
+            <!-- <div class="form-group" style="width: 10em;margin-left:40px  ">
               <label for="username">Category</label>
               <select class="form-control custom-select" [(ngModel)]="categoryId">
                 <option value="0" selected>All</option>
-                <option value="{{item.Id}}" *ngFor="let item of categ">{{item.Description}}</option>
+                <option value="{{item.id}}" *ngFor="let item of categ">{{item.description}}</option>
               </select>
               <div class="invalid-feedback">
                 <div>Select Category</div>
               </div>
-            </div>
+            </div> -->
             <div class="form-group" style="width: 10em;margin-left:40px;">
               <label for="username">Source</label>
               <select class="form-control custom-select" [(ngModel)]="sourceId" name="Source">
@@ -136,7 +136,7 @@
               </select>
             </div>
 
-            <div style="margin-left:40px ">
+            <!-- <div style="margin-left:40px ">
               <label for="username">Product</label>
               <ng-autocomplete (inputCleared)="focusedAutocomplete()" [data]="product1" style="width:10em;margin-left:30px;
                         border-color: #90a7a8;  " [searchKeyword]="key2" (selected)='selectedEvent($event)'
@@ -160,7 +160,7 @@
               <div class="invalid-feedback">
                 <div>Select Category</div>
               </div>
-            </div>
+            </div> -->
 
             <!-- <div class="form-group">
                       <div class="switch-toggle switch-3 switch-candy">
@@ -174,8 +174,9 @@
                     </div> -->
           </div>
           <div class="mb-10 pull-right">
+            <span style="font-weight: bolder; color: red; width: 100%;">* Select Max 5 Hours</span>&nbsp;&nbsp;
             <button class="btn btn-success btn-sm" (click)="Submit()">Submit</button>
-            <button class="btn btn-success btn-sm" (click)="openTimeIntervalModal()">timeInterval</button>
+            <!-- <button class="btn btn-success btn-sm" (click)="openTimeIntervalModal()">timeInterval</button> -->
           </div>
 
           <div class="row w-100">
@@ -255,14 +256,22 @@
                     <tbody>
                       <tr *ngFor="let item of salesrpt.Order | filter:term  ">
                         <td><strong>{{item.storeName}}</strong></td>
-                        <td [ngClass]="item.TotSales > 0 ? 'text-dark' : 'text-light'" class="text-right"><strong>{{item.TotSales | number:".2" }}</strong></td>
-                        <td [ngClass]="item.payments > 0 ? 'text-dark' : 'text-light'" class="text-right" *ngIf="showPaidAmount"><strong>
-                          {{item.payments |
+                        <td [ngClass]="item.TotSales > 0 ? 'text-dark' : 'text-light'" class="text-right">
+                          <strong>{{item.TotSales | number:".2" }}</strong>
+                        </td>
+                        <td [ngClass]="item.payments > 0 ? 'text-dark' : 'text-light'" class="text-right"
+                          *ngIf="showPaidAmount"><strong>
+                            {{item.payments |
                             number:".2" }}
-                        </strong></td>
-                        <td [ngClass]="item.quantity > 0 ? 'text-dark' : 'text-light'" class="text-right"><strong>{{item.quantity | number:".2" }}</strong></td>
-                        <td [ngClass]="item.quantity > 0 ? 'text-dark' : 'text-light'" class="text-right"><strong>{{(item.quantity/5).toFixed(2) | number:".2" }}</strong></td>
-                        <td [ngClass]="item.quantity > 0 ? 'text-dark' : 'text-light'" class="text-right"><strong>{{(item.quantity/90).toFixed(2) | number:".2" }}</strong>
+                          </strong></td>
+                        <td [ngClass]="item.quantity > 0 ? 'text-dark' : 'text-light'" class="text-right">
+                          <strong>{{item.quantity | number:".2" }}</strong>
+                        </td>
+                        <td [ngClass]="item.quantity > 0 ? 'text-dark' : 'text-light'" class="text-right">
+                          <strong>{{(item.quantity/5).toFixed(2) | number:".2" }}</strong>
+                        </td>
+                        <td [ngClass]="item.quantity > 0 ? 'text-dark' : 'text-light'" class="text-right">
+                          <strong>{{(item.quantity/90).toFixed(2) | number:".2" }}</strong>
                         </td>
                         <td><strong>{{item.StartTime}}</strong></td>
                         <td><strong>{{item.EndTime}}</strong></td>
@@ -398,9 +407,9 @@
         <tbody>
           <tr *ngFor="let product of reportProducts">
             <td>{{product.Name}}</td>
-            <td>{{product.Quantity}}</td>
-            <td>{{product.Factor}}</td>
-            <td>{{product.Quantity * product.Factor}}</td>
+            <td>{{product.Quantity.toFixed(2) | number:".2"}}</td>
+            <td>{{product.Factor.toFixed(2) | number:".2"}}</td>
+            <td>{{product.Quantity * product.Factor.toFixed(2) | number:".2"}}</td>
           </tr>
         </tbody>
       </table>
@@ -410,7 +419,7 @@
         <tbody>
           <tr>
             <td><strong>Total</strong></td>
-            <td>{{reportProductsTotal.quantity}}</td>
+            <td>{{reportProductsTotal.quantity.toFixed(2) | number:".2"}}</td>
             <td></td>
             <td><span style="font-style: italic;">(sales)</span></td>
           </tr>
