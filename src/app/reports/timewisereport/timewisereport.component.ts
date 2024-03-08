@@ -509,7 +509,8 @@ export class TimewisereportComponent implements OnInit {
       this.sourceId,
       this.productId,
       this.saleProductId,
-      this.CompanyId
+      this.CompanyId,
+      this.categoryId
     ).subscribe((data: any) => {
       console.log(data);
       this.reportProducts = data['products'];

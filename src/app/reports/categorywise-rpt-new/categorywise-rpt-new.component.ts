@@ -79,6 +79,7 @@ export class CategorywiseRptNewComponent implements OnInit {
   GetCatwiseAllRptValues: any;
   totalamount: any;
   totaldiscamount: any;
+  totalzsamount: any;
   hidebool: any;
   // GetCatwiseAllRpt() {
   //   if (this.CatId == -74489) {
@@ -111,6 +112,8 @@ export class CategorywiseRptNewComponent implements OnInit {
   // }
 
   othercatvalues: any;
+  szDatas: any;
+  FinalCatValues: any;
   GetCatwiseAllRpt() {
     this.Auth.isloading.next(true);
     if (this.CatId == -74489) {
@@ -131,11 +134,15 @@ export class CategorywiseRptNewComponent implements OnInit {
       if (data['status'] == 200) {
         this.Auth.isloading.next(false);
       }
+      this.szDatas = data['zspt'];
       this.othercatvalues = data['spt'];
       this.GetCatwiseAllRptValues = data?.['spt'] ?? [];
 
       // Create a map to store sums for each StoreName
-      const storeSums = new Map<string, { Amt: number; DisAmt: number }>();
+      const storeSums = new Map<
+        string,
+        { Amt: number; DisAmt: number; BillAmt: number }
+      >();
 
       // Iterate through the array and update sums
       for (const row of this.GetCatwiseAllRptValues) {
@@ -146,10 +153,12 @@ export class CategorywiseRptNewComponent implements OnInit {
             storeSums.set(storeName, {
               Amt: row?.Amt ?? 0,
               DisAmt: row?.DisAmt ?? 0,
+              BillAmt: row?.BillAmt ?? 0,
             });
           } else {
             storeSums.get(storeName)!.Amt += row?.Amt ?? 0;
             storeSums.get(storeName)!.DisAmt += row?.DisAmt ?? 0;
+            storeSums.get(storeName)!.BillAmt += row?.BillAmt ?? 0;
           }
         }
       }
@@ -160,21 +169,39 @@ export class CategorywiseRptNewComponent implements OnInit {
           StoreName: storeName,
           Amt: sums?.Amt ?? 0,
           DisAmt: sums?.DisAmt ?? 0,
+          BillAmt: sums?.BillAmt ?? 0,
         })
       );
 
       // Calculate totalPaidAmount and totalDiscAmount
       let totalPaidAmount = 0;
       let totalDiscAmount = 0;
+      let totalZzAmount = 0;
+      let totalSsAmount = 0;
 
-      for (const row of this.GetCatwiseAllRptValues) {
+      const mergedArray = [];
+      for (const obj1 of this.GetCatwiseAllRptValues) {
+        const obj2 = this.szDatas.find(
+          (item: any) => item.StoreName === obj1.StoreName
+        );
+        if (obj2) {
+          const mergedObject = { ...obj1, ...obj2 };
+          mergedArray.push(mergedObject);
+        }
+      }
+      console.log('Json Joined HyperTech:', mergedArray);
+      this.FinalCatValues = mergedArray;
+
+      for (const row of this.FinalCatValues) {
         totalPaidAmount += row?.Amt ?? 0;
         totalDiscAmount += row?.DisAmt ?? 0;
+        totalZzAmount += row?.Zomato ?? 0;
+        totalSsAmount += row?.Swiggy ?? 0;
       }
 
-      // Assign the calculated values to the class variables
       this.totalamount = totalPaidAmount;
       this.totaldiscamount = totalDiscAmount;
+      this.totalzsamount = totalZzAmount + totalSsAmount;
     });
 
     if (this.hidebool == 1) {

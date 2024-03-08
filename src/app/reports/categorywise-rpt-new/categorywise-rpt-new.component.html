@@ -93,27 +93,41 @@
                                     Store Name
                                 </th>
                                 <th>
-                                    Category
+                                    Amount
                                 </th>
                                 <th>
-                                    Amount
+                                    POS
+                                </th>
+                                <th>
+                                    Swiggy
+                                </th>
+                                <th>
+                                    Zomato
                                 </th>
                                 <th>
                                     Discount
                                 </th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            <tr *ngFor="let catr of GetCatwiseAllRptValues; let i = index">
+                            <tr *ngFor="let catr of FinalCatValues; let i = index">
                                 <td>{{i+1}}</td>
                                 <td *ngIf="hidebool == 0">{{catr.StoreName}}</td>
                                 <td *ngIf="hidebool == 1">
                                     <u style="font-weight: bolder; color: green;cursor: pointer;"
                                         (click)="othercats(catr.StoreName)">{{catr.StoreName}}</u>
                                 </td>
-                                <td *ngIf="hidebool == 1">Other</td>
-                                <td *ngIf="hidebool == 0">Fresh Dream Cake</td>
                                 <td>{{catr.Amt | number: ".0"}}</td>
+                                <td>
+                                    {{catr.Amt | number: ".0"}}
+                                </td>
+                                <td>
+                                    {{ catr.Swiggy | number: ".0" }}
+                                </td>
+                                <td>
+                                    {{ catr.Zomato | number: ".0" }}
+                                </td>
                                 <td>{{catr.DisAmt | number: ".0"}}</td>
                             </tr>
                         </tbody>
@@ -126,8 +140,11 @@
                 <section class="hk-sec-wrapper">
                     <strong>[Total Amt]</strong>
                     <span class="float-right"> {{ totalamount | number: ".0" }}</span> <br />
+                    <strong>[Total Net Amt]</strong>
+                    <span class="float-right">{{ totalzsamount | number: ".0" }}</span> <br />
                     <strong>[Total Disc Amt]</strong>
-                    <span class="float-right">{{ totaldiscamount | number: ".0" }}</span> <br />
+                    <span class="float-right">{{ totaldiscamount | number: ".0" }}</span>
+
                 </section>
             </div>
             <div class="container" *ngIf="hidebool == 1">

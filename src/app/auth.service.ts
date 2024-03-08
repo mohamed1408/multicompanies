@@ -521,7 +521,8 @@ export class AuthService {
     sourceId: number,
     productId: number,
     saleproductgroupid: number,
-    companyid: number
+    companyid: number,
+    categoryId: number
   ) {
     return this.http.get(
       this.baseurl +
@@ -542,7 +543,9 @@ export class AuthService {
         '&saleproductgroupid=' +
         saleproductgroupid +
         '&companyid=' +
-        companyid
+        companyid +
+        '&categoryId=' +
+        categoryId
     );
   }
 

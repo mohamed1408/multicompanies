@@ -197,7 +197,7 @@ export class CustomerdatarptComponent implements OnInit {
   }
 
   getprodsValues: any;
-  ProdName: any;
+  ProdName: any = '';
   getprods() {
     this.Auth.GetOldProds(this.CompanyId).subscribe((data: any) => {
       this.getprodsValues = data;
