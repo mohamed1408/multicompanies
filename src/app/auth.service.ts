@@ -1047,8 +1047,8 @@ export class AuthService {
     hidebool: number
   ) {
     return this.http.get(
-      this.baseurl1 +
-        `User/GetCatwiseAllStr?cateId=${cateId}&companyId=${companyId}&fromDate=${fromDate}&toDate=${toDate}&hidebool=${hidebool}`
+      this.baseurl +
+        `Report/GetCatwiseAllStr?cateId=${cateId}&companyId=${companyId}&fromDate=${fromDate}&toDate=${toDate}&hidebool=${hidebool}`
     );
   }
 
