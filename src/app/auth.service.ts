@@ -715,11 +715,12 @@ export class AuthService {
     todate: string,
     CompanyId: number,
     OrderTypeId: number,
-    BillAmt: number
+    BillAmt: number,
+    ProdName: string
   ) {
     return this.http.get(
-      this.baseurl +
-        `Customer/GetCustomerList?companyid=${CompanyId}&frmdate=${frmdate}&todate=${todate}&ordertype=${OrderTypeId}&billamt=${BillAmt}`
+      this.baseurl1 +
+        `Customer/GetCustomerList?companyid=${CompanyId}&frmdate=${frmdate}&todate=${todate}&ordertype=${OrderTypeId}&billamt=${BillAmt}&ProdName=${ProdName}`
     );
   }
   getAppVersion(CompanyId: number, OrderedDate: string) {
@@ -1043,8 +1044,14 @@ export class AuthService {
     hidebool: number
   ) {
     return this.http.get(
-      this.baseurl +
-        `Report/GetCatwiseAllStr?cateId=${cateId}&companyId=${companyId}&fromDate=${fromDate}&toDate=${toDate}&hidebool=${hidebool}`
+      this.baseurl1 +
+        `User/GetCatwiseAllStr?cateId=${cateId}&companyId=${companyId}&fromDate=${fromDate}&toDate=${toDate}&hidebool=${hidebool}`
+    );
+  }
+
+  GetOldProds(companyId: number) {
+    return this.http.get(
+      this.baseurl1 + 'Customer/GetOldProds?ComId=' + companyId
     );
   }
 }

@@ -91,6 +91,11 @@
             </div>
           </div>
 
+          <div class="row">
+            <div class="form-group" style="width: 15em;margin-left:55px;">
+              <input type="text" class="form-control" placeholder="Search ProductName" [(ngModel)]="ProdName" />
+            </div>
+          </div>
           <div>
             <table class="table mb-0 table-sm">
               <thead>
@@ -100,6 +105,9 @@
                   </th>
                   <th>
                     Order Type
+                  </th>
+                  <th>
+                    ProductName
                   </th>
                   <th>
                     Customer Name
@@ -119,6 +127,7 @@
                 <tr *ngFor="let item of cuslist">
                   <td class="font-12">{{item.Store}}</td>
                   <td class="font-12">{{item.OrderType}}</td>
+                  <td class="font-12">{{item.Prodname}}</td>
                   <td class="font-12">{{item.CusName}}</td>
                   <td class="font-12">{{item.CusPhone}}</td>
                   <td class="font-12">{{item.OrderedDate | date : 'dd-MM-YYYY'}}</td>

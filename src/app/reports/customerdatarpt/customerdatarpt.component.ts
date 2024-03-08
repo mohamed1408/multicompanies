@@ -56,6 +56,7 @@ export class CustomerdatarptComponent implements OnInit {
       // this.GetStore();
       // this.GetCustomerList();
       this.Submit();
+      // this.getprods();
     });
     setHeightWidth();
     var date = new Date();
@@ -105,10 +106,12 @@ export class CustomerdatarptComponent implements OnInit {
       todate,
       this.CompanyId,
       this.OrderTypeId,
-      this.BillAmount
+      this.BillAmount,
+      this.ProdName
     ).subscribe((data: any) => {
       this.Auth.isloading.next(false);
       console.log(data);
+      this.importtocus = data;
       this.cuslist = data;
       console.log(this.cuslist);
       this.cuslist.forEach((cl: any) => {
@@ -135,43 +138,69 @@ export class CustomerdatarptComponent implements OnInit {
   exceldata: any = [];
   importtocus: any;
   exportToExcel() {
-    // if (this.startdate.hasOwnProperty('month')) {
-    //   this.startdate.month = this.startdate.month - 1;
-    //   this.enddate.month = this.enddate.month - 1;
-    // }
-    var frmdate = moment(this.startdate).format('YYYY-MM-DD');
-    var todate = moment(this.enddate).format('YYYY-MM-DD');
-    console.log(this.OrderTypeId);
-    this.Auth.getCustListRpt(
-      frmdate,
-      todate,
-      this.CompanyId,
-      this.OrderTypeId,
-      this.BillAmount
-    ).subscribe((data: any) => {
-      console.log(data);
-      this.importtocus = data;
-      console.log(this.importtocus);
+    // // if (this.startdate.hasOwnProperty('month')) {
+    // //   this.startdate.month = this.startdate.month - 1;
+    // //   this.enddate.month = this.enddate.month - 1;
+    // // }
+    // var frmdate = moment(this.startdate).format('YYYY-MM-DD');
+    // var todate = moment(this.enddate).format('YYYY-MM-DD');
+    // console.log(this.OrderTypeId);
+    // this.Auth.getCustListRpt(
+    //   frmdate,
+    //   todate,
+    //   this.CompanyId,
+    //   this.OrderTypeId,
+    //   this.BillAmount
+    // ).subscribe((data: any) => {
+    //   console.log(data);
+    //   this.importtocus = data;
+    //   console.log(this.importtocus);
 
-      // this.exceldata = [{ "StoreName": this.importtocus.Store, "CustomerName": this.importtocus.CusName, "PhoneNumber": this.importtocus.CusPhone, "OrderedDate": this.importtocus.OrderedDate, "DeliveryDate": this.importtocus.DeliveryDate }]
-      // // this.exceldata = obj
-      // this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel')
+    //   // this.exceldata = [{ "StoreName": this.importtocus.Store, "CustomerName": this.importtocus.CusName, "PhoneNumber": this.importtocus.CusPhone, "OrderedDate": this.importtocus.OrderedDate, "DeliveryDate": this.importtocus.DeliveryDate }]
+    //   // // this.exceldata = obj
+    //   // this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel')
 
-      this.importtocus.forEach((cl: any) => {
-        cl.OrderType = this.ordertypes[cl.OrderTypeId.toString()];
+    //   this.importtocus.forEach((cl: any) => {
+    //     cl.OrderType = this.ordertypes[cl.OrderTypeId.toString()];
+    //   });
+    //   this.importtocus.forEach((element: any) => {
+    //     this.exceldata.push({
+    //       StoreName: element.Store,
+    //       ProductName: element.Prodname,
+    //       CustomerName: element.CusName,
+    //       PhoneNumber: element.CusPhone,
+    //       OrderedDate: element.OrderedDate,
+    //       DeliveryDate: element.DeliveryDate,
+    //       OrderType: element.OrderType,
+    //     });
+    //   });
+    //   this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel');
+    //   this.exceldata = [];
+    // });
+
+    this.importtocus.forEach((cl: any) => {
+      cl.OrderType = this.ordertypes[cl.OrderTypeId.toString()];
+    });
+    this.importtocus.forEach((element: any) => {
+      this.exceldata.push({
+        StoreName: element.Store,
+        ProductName: element.Prodname,
+        CustomerName: element.CusName,
+        PhoneNumber: element.CusPhone,
+        OrderedDate: element.OrderedDate,
+        DeliveryDate: element.DeliveryDate,
+        OrderType: element.OrderType,
       });
-      this.importtocus.forEach((element: any) => {
-        this.exceldata.push({
-          StoreName: element.Store,
-          CustomerName: element.CusName,
-          PhoneNumber: element.CusPhone,
-          OrderedDate: element.OrderedDate,
-          DeliveryDate: element.DeliveryDate,
-          OrderType: element.OrderType,
-        });
-      });
-      this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel');
-      this.exceldata = [];
+    });
+    this.excelservice.exportAsExcelFile(this.exceldata, 'newexcel');
+    this.exceldata = [];
+  }
+
+  getprodsValues: any;
+  ProdName: any;
+  getprods() {
+    this.Auth.GetOldProds(this.CompanyId).subscribe((data: any) => {
+      this.getprodsValues = data;
     });
   }
 
