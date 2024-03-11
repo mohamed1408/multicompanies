@@ -5,9 +5,9 @@ import { SafeHtml } from '@angular/platform-browser';
 // import { version } from 'package.json'
 
 export class OrderModule {
-  OdrsId: number = 0
-  Name: string = "";
-  OrderType: string = "";
+  OdrsId: number = 0;
+  Name: string = '';
+  OrderType: string = '';
   selected: any;
   additionalchargearray: Array<AdditionalCharge> = [];
   AggregatorOrderId!: number;
@@ -149,7 +149,7 @@ export class OrderModule {
 
   // ADD PRODDUCT
   additem(product: any, options: any) {
-    // console.log(product)
+    console.log(product);
     if (product.isorderitem) {
       this.mergeitem(product, options);
       this.setbillamount();
@@ -211,6 +211,8 @@ export class OrderModule {
   }
 
   productkeygenerator(product: any) {
+    console.trace(product);
+    console.log(product.ProductId.toString());
     var key = '';
     key = product.ProductId
       ? product.ProductId.toString()
@@ -229,7 +231,7 @@ export class OrderModule {
     return key;
   }
   getshowname(product: OrderItemModule) {
-    var name = product.Product;
+    var name = product.Name;
     if (product.OptionGroup) {
       product.OptionGroup.forEach((opg) => {
         if (opg.selected) {
@@ -591,8 +593,8 @@ export class OrderItemModule {
     this.KOTId = 0;
     this.Message = '';
     this.MinimumQty = product.MinimumQty;
-    this.Name = product.Product;
-    this.Product = product.Product;
+    this.Name = product.Name;
+    this.Product = product.Name;
     this.Note = '';
     this.OptionJson = '';
     this.OptionGroup = [];
@@ -773,6 +775,7 @@ export class CurrentItemModule {
   TaxAmount2!: number;
   TaxAmount3!: number;
   TaxAmount!: number;
+  TaxGroup: any;
   IsTaxInclusive: boolean;
   Product: string;
   showname!: string;
@@ -797,8 +800,8 @@ export class CurrentItemModule {
     this.KOTId = 0;
     this.Message = '';
     this.MinimumQty = product.MinimumQty;
-    this.Name = product.Product;
-    this.Product = product.Product;
+    this.Name = product.Name;
+    this.Product = product.Name;
     this.Note = null;
     this.OptionJson = '';
     this.OptionGroup = [];
@@ -809,9 +812,16 @@ export class CurrentItemModule {
     this.Price = product.Price;
     this.Quantity = product.Quantity ? product.Quantity : 1;
     this.StatusId = 0;
-    this.Tax1 = product.Tax1;
-    this.Tax2 = product.Tax2;
-    this.Tax3 = product.Tax3;
+    if (product.TaxGroup) {
+      this.TaxGroup = product.TaxGroup;
+      this.Tax1 = product.TaxGroup.Tax1;
+      this.Tax2 = product.TaxGroup.Tax2;
+      this.Tax3 = product.TaxGroup.Tax3;
+    } else {
+      this.Tax1 = product.Tax1;
+      this.Tax2 = product.Tax2;
+      this.Tax3 = product.Tax3;
+    }
     this.TaxGroupId = product.TaxGroupId;
     this.TaxItemDiscount = 0;
     this.TaxOrderDiscount = 0;

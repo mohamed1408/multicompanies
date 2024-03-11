@@ -246,7 +246,7 @@ let getMenuData: Array<navlink> = [
     active: false,
   },
   {
-    title: 'Enquiry Orders',
+    title: 'Web Orders',
     url: '/m1',
     icon: 'fa fa-pie-chart',
     svg: '../../assets/svg/phone-incoming.svg',

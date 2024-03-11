@@ -163,14 +163,14 @@ export class AuthService {
   }
 
   getAllstores() {
-    return this.http.get(this.ecomurl + 'Ecommerce/getallStores');
+    return this.http.get(this.baseurl + 'Stores/getallStores');
   }
 
-  getCustomerByPhone(phonenum: string) {
-    return this.http.get(
-      this.baseurl + 'Customer/GetCustomerByPhone?Phone=' + phonenum
-    );
-  }
+  // getCustomerByPhone(phonenum: string) {
+  //   return this.http.get(
+  //     this.baseurl + 'Customer/GetCustomerByPhone?Phone=' + phonenum
+  //   );
+  // }
 
   saveorder(payload: any) {
     return this.http.post(this.baseurl + 'POSOrder/saveorder_3', payload);
@@ -1055,6 +1055,61 @@ export class AuthService {
   GetOldProds(companyId: number) {
     return this.http.get(
       this.baseurl1 + 'Customer/GetOldProds?ComId=' + companyId
+    );
+  }
+
+  //WEB ORDERS
+  GetAllStores() {
+    return this.http.get(this.baseurl1 + 'WebOrders/GetStores');
+  }
+
+  StorePaymentTypes(CompId: number, StrId: number) {
+    return this.http.get(
+      this.baseurl1 + `WebOrders/GetPayTypes?CompId=${CompId}&StrId=${StrId}`
+    );
+  }
+
+  GetStoreProductsByStr(storeId: number, cateId: number) {
+    return this.http.get(
+      this.baseurl1 +
+        `WebOrders/GetProducts?storeId=${storeId}&cateId=${cateId}`
+    );
+  }
+
+  getCustomerByPhone(Phone: string, companyid: number, storeid: number) {
+    return this.http.get(
+      this.baseurl +
+        'Customer/GetCustomerByPhone?Phone=' +
+        Phone +
+        '&companyid=' +
+        companyid +
+        '&storeid=' +
+        storeid
+    );
+  }
+
+  GetCusDetails(cuiId: number) {
+    return this.http.get(
+      this.baseurl + 'Customer/GetCusDetails?cuiId=' + cuiId
+    );
+  }
+
+  GetWOOrdDeails(OrderId: number) {
+    return this.http.get(
+      this.baseurl + 'POSOrder/GetWO_OrderDetails?OrderId=' + OrderId
+    );
+  }
+
+  GetCusDetailsUP(
+    cusname: number,
+    cusadd: number,
+    cuscity: string,
+    cusphone: string,
+    cuiId: number
+  ) {
+    return this.http.get(
+      this.baseurl +
+        `Customer/GetCusDetailsUP?cusname=${cusname}&cusadd=${cusadd}&cuscity=${cuscity}&cusphone=${cusphone}&cuiId=${cuiId}`
     );
   }
 }

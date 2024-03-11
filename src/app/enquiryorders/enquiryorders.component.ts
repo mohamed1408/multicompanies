@@ -19,6 +19,7 @@ import { dtrangepicker } from '../../assets/dist/js/datePickerHelper';
 
 declare function setHeightWidth(): any;
 declare const feather: any, $: any;
+declare const $wrapper: any;
 @Component({
   selector: 'app-enquiryorders',
   templateUrl: './enquiryorders.component.html',
@@ -44,7 +45,7 @@ export class EnquiryordersComponent implements OnInit {
   products: any = [];
   order: OrderModule;
   temp_order: any;
-  orders: any = []
+  orders: any = [];
   customer: CustomerModule;
   sections = {
     customer: {
@@ -71,16 +72,16 @@ export class EnquiryordersComponent implements OnInit {
     /((\+*)((0[ -]*)*|((91 )*))((\d{12})+|(\d{10})+))|\d{5}([- ]*)\d{6}/;
 
   status = [
-    [-1, "Cancelled", "text-danger"],
-    [0, "Not Accepted", "text-secondary"],
-    [1, "Accepted", "text-primary"],
-    [3, "Preparing", "text-warning"],
-    [4, "Prepared", "text-purple"],
-    [5, "Completed", "text-success"],
-  ]
+    [-1, 'Cancelled', 'text-danger'],
+    [0, 'Not Accepted', 'text-secondary'],
+    [1, 'Accepted', 'text-primary'],
+    [3, 'Preparing', 'text-warning'],
+    [4, 'Prepared', 'text-purple'],
+    [5, 'Completed', 'text-success'],
+  ];
 
-  fromdate: string = ''
-  todate: string = ''
+  fromdate: string = '';
+  todate: string = '';
   showdatepicker: boolean = false;
 
   constructor(
@@ -101,44 +102,47 @@ export class EnquiryordersComponent implements OnInit {
     this.customer = new CustomerModule();
     console.log(this.plusIcon);
     this.phone_num_reg;
-    this.signalR.hubconnection.on('DeliveryOrderUpdate', (fromstoreid, tostoreid, invoiceno) => {
-      if (invoiceno.includes("ENQ")) {
-        console.log('DeliveryOrderUpdate', fromstoreid, tostoreid, invoiceno)
-        const orderid = +invoiceno.split(' | ')[1]
-        this.getSingleOrder(orderid)
+    this.signalR.hubconnection.on(
+      'DeliveryOrderUpdate',
+      (fromstoreid, tostoreid, invoiceno) => {
+        if (invoiceno.includes('WO')) {
+          console.log('DeliveryOrderUpdate', fromstoreid, tostoreid, invoiceno);
+          const orderid = +invoiceno.split(' | ')[1];
+          this.getSingleOrder(orderid);
+        }
       }
-    })
+    );
   }
 
   getENQOrders() {
-    console.log("fetching enquiry orders")
-    this.Auth.getENQOrders().subscribe((data: any) => {
-      console.log(data)
-      this.orders = data["orders"]
+    console.log('fetching enquiry orders');
+    this.Auth.getENQOrders(0).subscribe((data: any) => {
+      console.log(data);
+      this.orders = data;
       this.orders = this.orders.map((x: any) => {
-        let json = JSON.parse(x.OrderJson)
-        let status = this.status.filter(y => y[0] == json.OrderStatusId)[0]
-        console.log(status)
-        json.orderstatus = status[1]
-        json.status_class = status[2]
-        json.location = this.stores.filter((y: any) => y.Id == json.StoreId)[0]?.Name || '-'
-        return json
-      })
+        // let json = JSON.parse(x.OrderJson)
+        // let status = this.status.filter(y => y[0] == json.OrderStatusId)[0]
+        // console.log(status)
+        // json.orderstatus = status[1]
+        // json.status_class = status[2]
+        // json.location = this.stores.filter((y: any) => y.Id == json.StoreId)[0]?.Name || '-'
+        return x;
+      });
       dtrangepicker('myrangepicker', (start: any, end: any) => {
         // console.log(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
         // this.startdate = start.format('YYYY-MM-DD');
         // this.enddate = end.format('YYYY-MM-DD');
         // this.storeRpt();
         // console.log(document.getElementById("newdrp"))
-        this.fromdate = start.format('YYYY-MM-DD')
-        this.todate = end.format('YYYY-MM-DD')
+        this.fromdate = start.format('YYYY-MM-DD');
+        this.todate = end.format('YYYY-MM-DD');
       })(moment(), moment());
-    })
+    });
   }
   getAllStores() {
     this.Auth.getAllstores().subscribe((data: any) => {
       this.stores = data;
-      this.getENQOrders()
+      this.getENQOrders();
       // this.Stores.unshift()
     });
   }
@@ -149,6 +153,8 @@ export class EnquiryordersComponent implements OnInit {
     this.Auth.getCompanyProducts(this.store.CompanyId, this.store.Id).subscribe(
       (data: any) => {
         this.products = data;
+        console.log(this.products);
+
         // this.page_loading = false
         this.Auth.isloading.next(false);
       },
@@ -169,7 +175,7 @@ export class EnquiryordersComponent implements OnInit {
     console.log(this.feather);
   }
   formatter = (result: any) => result.Name;
-  pformatter = (result: any) => result.Product;
+  pformatter = (result: any) => result.Name;
   search: OperatorFunction<string, readonly string[]> = (
     text$: Observable<string>
   ) =>
@@ -180,11 +186,11 @@ export class EnquiryordersComponent implements OnInit {
         term.length < 1
           ? []
           : this.stores
-            .filter(
-              (v: any) =>
-                v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
-            )
-            .slice(0, 10)
+              .filter(
+                (v: any) =>
+                  v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10)
       )
     );
   prodsearch: OperatorFunction<string, readonly string[]> = (
@@ -197,11 +203,11 @@ export class EnquiryordersComponent implements OnInit {
         term.length < 1
           ? []
           : this.products
-            .filter(
-              (v: any) =>
-                v.Product.toLowerCase().indexOf(term.toLowerCase()) > -1
-            )
-            .slice(0, 10)
+              .filter(
+                (v: any) =>
+                  v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10)
       )
     );
   selected(e: any) {
@@ -214,10 +220,14 @@ export class EnquiryordersComponent implements OnInit {
     this.getcompanyproducts();
   }
   selectItem(e: any, quantityel: any) {
+    console.log(e, quantityel);
     this.selected_product = new CurrentItemModule(e);
     this.quantity = null;
     if (this.selected_product.OptionGroup.length > 0) {
-      this.modalService.open(this.options_details, { centered: true, backdropClass: 'z-index-1' });
+      this.modalService.open(this.options_details, {
+        centered: true,
+        backdropClass: 'z-index-1',
+      });
       return;
     }
     quantityel.focus();
@@ -237,21 +247,27 @@ export class EnquiryordersComponent implements OnInit {
     this.selected_product = new CurrentItemModule(
       JSON.parse(JSON.stringify(item))
     );
-    this.modalService.open(this.options_details, { centered: true, backdropClass: 'z-index-1' });
+    this.modalService.open(this.options_details, {
+      centered: true,
+      backdropClass: 'z-index-1',
+    });
   }
   openbdmodal() {
-    this.modalService.open(this.bulk_discount, { centered: true, backdropClass: 'z-index-1' });
+    this.modalService.open(this.bulk_discount, {
+      centered: true,
+      backdropClass: 'z-index-1',
+    });
   }
-  getcustomerbyphonenum() {
-    this.Auth.getCustomerByPhone(this.customer.PhoneNo).subscribe(
-      (data: any) => {
-        if (data.length > 0) {
-          this.customer.Name = data[0]['Name'];
-          this.customer.Address = data[0]['Address'];
-        }
-      }
-    );
-  }
+  // getcustomerbyphonenum() {
+  //   this.Auth.getCustomerByPhone(this.customer.PhoneNo).subscribe(
+  //     (data: any) => {
+  //       if (data.length > 0) {
+  //         this.customer.Name = data[0]['Name'];
+  //         this.customer.Address = data[0]['Address'];
+  //       }
+  //     }
+  //   );
+  // }
   generatekot() {
     var groupeditems = _.mapValues(
       _.groupBy(
@@ -267,7 +283,7 @@ export class EnquiryordersComponent implements OnInit {
     });
     if (this.order.OrderNo == 0) {
       this.order.OrderNo = -1;
-      this.order.InvoiceNo = 'ENQ | ';
+      this.order.InvoiceNo = 'WO | ';
       // this.updateorderno()
     } else {
       if (!this.order.changeditems.includes('kot'))
@@ -388,15 +404,17 @@ export class EnquiryordersComponent implements OnInit {
     };
     this.order = new OrderModule(3);
     this.customer = new CustomerModule();
-    this.store = null
-    this.products = []
-    this.searchTerm = ""
+    this.store = null;
+    this.products = [];
+    this.searchTerm = '';
     // this.order.StoreId = this.store.Id;
     // this.order.DeliveryStoreId = this.store.Id;
     // this.order.store = this.store;
     // this.order.CompanyId = this.store.CompanyId;
-    this.mode = "list"
-    this.getENQOrders()
+    this.mode = 'list';
+    this.selectedDate = '';
+    this.selectedTime = '';
+    this.getENQOrders();
   }
   setcurrentitemprice() {
     var singleqtyoptionprice = 0;
@@ -458,59 +476,77 @@ export class EnquiryordersComponent implements OnInit {
     this.setcurrentitemprice();
   }
   test() {
-    console.log("clickedOutside")
+    console.log('clickedOutside');
   }
   getenquiryordersbydate() {
-    this.Auth.getenqordersbydate(this.fromdate, this.todate).subscribe((data: any) => {
-      console.log(data)
-      this.orders = data
-      this.orders = this.orders.map((order: any) => {
-        // let json = JSON.parse(x.OrderJson)
-        let status = this.status.filter(x => x[0] == order.OrderStatusId)[0]
-        console.log(status)
-        order.orderstatus = status[1]
-        order.status_class = status[2]
-        order.CustomerDetails = { Name: order.Name, PhoneNo: order.PhoneNo }
-        order.location = this.stores.filter((x: any) => x.Id == order.StoreId)[0]?.Name || '-'
-        return order
-      })
-      this.showdatepicker = false
-    })
+    this.Auth.getenqordersbydate(this.fromdate, this.todate).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.orders = data;
+        this.orders = this.orders.map((order: any) => {
+          // let json = JSON.parse(x.OrderJson)
+          let status = this.status.filter(
+            (x) => x[0] == order.OrderStatusId
+          )[0];
+          console.log(status);
+          order.orderstatus = status[1];
+          order.status_class = status[2];
+          order.CustomerDetails = { Name: order.Name, PhoneNo: order.PhoneNo };
+          order.location =
+            this.stores.filter((x: any) => x.Id == order.StoreId)[0]?.Name ||
+            '-';
+          return order;
+        });
+        this.showdatepicker = false;
+      }
+    );
   }
   getSingleOrder(orderid: number) {
     this.Auth.getENQOrders(orderid).subscribe((data: any) => {
-      console.log(data)
-      let orders = this.orders
-      const index = orders.findIndex((x: any) => x.InvoiceNo == "ENQ | " + orderid)
-      let json = JSON.parse(data["orders"][0]["OrderJson"])
-      let status = this.status.filter(x => x[0] == json.OrderStatusId)[0]
-      console.log(status)
-      json.status = status[1]
-      json.status_class = status[2]
-      console.log("updating")
+      console.log(data);
+      let orders = this.orders;
+      const index = orders.findIndex(
+        (x: any) => x.InvoiceNo == 'WO | ' + orderid
+      );
+      let json = JSON.parse(data['orders'][0]['OrderJson']);
+      let status = this.status.filter((x) => x[0] == json.OrderStatusId)[0];
+      console.log(status);
+      json.status = status[1];
+      json.status_class = status[2];
+      console.log('updating');
       if (index > -1) {
-        orders[index] = json
+        orders[index] = json;
       } else {
-        orders.push(json)
+        orders.push(json);
       }
-      this.orders = orders
-      console.log("updated", this.orders[index])
-    })
+      this.orders = orders;
+      console.log('updated', this.orders[index]);
+    });
   }
   async viewOrder(order: any) {
-    if (!order.hasOwnProperty("Items")) {
-      let orderjson: any = await this.Auth.getorderjson(order.Id).toPromise()
-      console.log(orderjson)
-      orderjson = JSON.parse(orderjson.invoices[0].OrderJson)
-      this.orders[this.orders.findIndex((x: any) => x.Id == order.Id)] = { ...this.orders[this.orders.findIndex((x: any) => x.Id == order.Id)], ...orderjson }
-      order = { ...order, ...orderjson }
+    if (!order.hasOwnProperty('Items')) {
+      let orderjson: any = await this.Auth.getorderjson(
+        order.OdrsId
+      ).toPromise();
+      console.log(orderjson);
+      orderjson = JSON.parse(orderjson.invoices[0].OrderJson);
+      this.orders[this.orders.findIndex((x: any) => x.Id == order.Id)] = {
+        ...this.orders[this.orders.findIndex((x: any) => x.Id == order.Id)],
+        ...orderjson,
+      };
+      order = { ...order, ...orderjson };
       // return
     }
-    this.temp_order = order
-    this.modalService.open(this.order_details, { size: 'lg', backdropClass: 'z-index-1' })
+    this.temp_order = order;
+    console.log(this.temp_order);
+    // this.GetCusDetails();
+    this.modalService.open(this.order_details, {
+      size: 'lg',
+      backdropClass: 'z-index-1',
+    });
   }
   change() {
-    this.orders[0].status = "lkjadhlklksdh"
+    this.orders[0].status = 'lkjadhlklksdh';
   }
 
   hidecontent: boolean = true;
@@ -521,6 +557,130 @@ export class EnquiryordersComponent implements OnInit {
     if (this.keyarr.length == 3) {
       this.hidecontent = !(this.keyarr.join('') == this.keycode);
     }
+  }
+
+  openDrawer() {
+    $wrapper.toggleClass('hk-settings-toggle');
+  }
+
+  openModal() {
+    $('#myModal').modal('show');
+  }
+
+  closeModal() {
+    $('#myModal').modal('hide');
+  }
+  selectedDiscountType: string = 'cash';
+  cashDiscount: any;
+  percentageDiscount: any;
+
+  toggleDiscountInputs() {
+    this.cashDiscount = null;
+    this.percentageDiscount = null;
+  }
+
+  onOrderTypeChange() {
+    console.log('Order Type changed to:', this.order.OrderTypeId);
+  }
+
+  orderButtonText: string = 'Clear Order';
+  ShowCoics = false;
+  toggleOrderStatus() {
+    this.ShowCoics = true;
+    this.orderButtonText = 'Confirm?';
+  }
+
+  CancelClearOrder() {
+    this.ShowCoics = false;
+    this.orderButtonText = 'Clear Order';
+  }
+
+  ClearOrder() {
+    this.ShowCoics = false;
+    this.orderButtonText = 'Clear Order';
+    this.clearOrder();
+  }
+
+  selectedDate: any;
+  ChangeDate() {
+    const monthString =
+      this.selectedDate.month < 10
+        ? `0${this.selectedDate.month}`
+        : `${this.selectedDate.month}`;
+    const dayString =
+      this.selectedDate.day < 10
+        ? `0${this.selectedDate.day}`
+        : `${this.selectedDate.day}`;
+    const formattedDate = `${this.selectedDate.year}-${monthString}-${dayString}`;
+    console.log(formattedDate);
+    this.order.DeliveryDate = formattedDate;
+  }
+
+  time: any;
+
+  selectedTime: any;
+  ChangeTime() {
+    console.log(this.selectedTime);
+    this.order.DeliveryTime = this.selectedTime;
+  }
+
+  getcustomer(number: string) {
+    this.Auth.getCustomerByPhone(
+      number,
+      this.store.CompanyId,
+      this.store.Id
+    ).subscribe((data: any) => {
+      console.log(data);
+      this.customer.Name = data[0]['Name'];
+      this.customer.Address = data[0]['Address'];
+    });
+  }
+
+  GetCusDetailsValues: any;
+  GetCusDetails(data: any) {
+    this.Auth.GetCusDetails(data).subscribe((data: any) => {
+      this.GetCusDetailsValues = data['cus'][0];
+      console.log(data);
+    });
+  }
+
+  itemsnew: any;
+  GetWOOrdDeails(order: any) {
+    this.Auth.GetWOOrdDeails(order).subscribe((data: any) => {
+      this.temp_order = data['Deatails'][0];
+      this.itemsnew = JSON.parse(data['Deatails'][0].Items);
+      console.log(this.itemsnew);
+      const modifiedItems = [];
+      for (let i = 0; i < this.itemsnew.length; i++) {
+        const itemObject = JSON.parse(this.itemsnew[i].Items);
+        delete itemObject.Name;
+        modifiedItems.push(itemObject);
+      }
+
+      this.itemsnew = modifiedItems;
+      console.log(this.temp_order.CustomerId);
+
+      this.GetCusDetails(this.temp_order.CustomerId);
+      this.modalService.open(this.order_details, {
+        size: 'lg',
+        backdropClass: 'z-index-1',
+      });
+    });
+  }
+
+  searchText: string = '';
+  filteredOrders: any[] = [];
+
+  filterOrders() {
+    this.filteredOrders = this.orders.filter(
+      (order: any) =>
+        (order.CusName &&
+          order.CusName.toLowerCase().includes(
+            this.searchText.toLowerCase()
+          )) ||
+        (order.CusPhone &&
+          order.CusPhone.toLowerCase().includes(this.searchText.toLowerCase()))
+    );
   }
 }
 

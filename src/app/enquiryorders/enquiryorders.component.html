@@ -1,297 +1,375 @@
 <div *ngIf="hidecontent" class="hk-wrapper">
 
-  <!-- Main Content -->
-  <div class="hk-pg-wrapper hk-auth-wrapper">
-    <header class="d-flex justify-content-end align-items-center">
-      <div class="btn-group btn-group-sm">
-        <a href="#" class="btn btn-outline-secondary">Help</a>
-        <a href="#" class="btn btn-outline-secondary">About Us</a>
-      </div>
-    </header>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xl-12 pa-0">
-          <div class="auth-form-wrap pt-xl-0 pt-70">
-            <div class="auth-form w-xl-25 w-lg-30 w-sm-50 w-100">
-
-              <form>
-                <div
-                  class="d-62 bg-white rounded-circle mb-10 d-flex align-items-center justify-content-center mx-auto">
-                  <i class="zmdi zmdi-settings font-28"></i>
-                </div>
-                <h1 class="display-4 mb-10 text-center"> <span unselectable="on" class="no-select"
-                    (click)="unlockpagr('sorry')">Sorry</span>
-                  we <span unselectable="on" class="no-select" (click)="unlockpagr('are')">are</span>
-                  down for <span (click)="unlockpagr('maintenance')">maintenance</span></h1>
-                <p class="mb-30 text-center">We apologize for the inconvenience, we are doing our best
-                  to get things back in order for you. Please feel free to <a href="#"><u>contact
-                      us</u></a> for any queries.</p>
-              </form>
+    <!-- Main Content -->
+    <div class="hk-pg-wrapper hk-auth-wrapper">
+        <header class="d-flex justify-content-end align-items-center">
+            <div class="btn-group btn-group-sm">
+                <a href="#" class="btn btn-outline-secondary">Help</a>
+                <a href="#" class="btn btn-outline-secondary">About Us</a>
             </div>
-          </div>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12 pa-0">
+                    <div class="auth-form-wrap pt-xl-0 pt-70">
+                        <div class="auth-form w-xl-25 w-lg-30 w-sm-50 w-100">
+
+                            <form>
+                                <div
+                                    class="d-62 bg-white rounded-circle mb-10 d-flex align-items-center justify-content-center mx-auto">
+                                    <i class="zmdi zmdi-settings font-28"></i>
+                                </div>
+                                <h1 class="display-4 mb-10 text-center"> <span unselectable="on" class="no-select"
+                                        (click)="unlockpagr('sorry')">Sorry</span>
+                                    we <span unselectable="on" class="no-select" (click)="unlockpagr('are')">are</span>
+                                    down for <span (click)="unlockpagr('maintenance')">maintenance</span></h1>
+                                <p class="mb-30 text-center">We apologize for the inconvenience, we are doing our best
+                                    to get things back in order for you. Please feel free to <a href="#"><u>contact
+                                            us</u></a> for any queries.</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <!-- /Main Content -->
+    <!-- /Main Content -->
 
 </div>
 
 
 <div *ngIf="!hidecontent" class="hk-pg-wrapper">
-    <nav class="hk-breadcrumb" aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-light bg-transparent">
-            <li class="breadcrumb-item active" aria-current="page">Enquiry Orders</li>
-        </ol>
-    </nav>
     <div *ngIf="mode == 'list'" class="col-xl-12">
+        <div class="title">Web Orders</div>
         <section class="hk-sec-wrapper">
             <div class="row">
-                <!-- <div class="col-sm"> -->
-                <div></div>
-                <div>
-                    <button class="btn btn-outline-success" (click)="getENQOrders()">show pending orders</button>
+                <div class="col-3">
+                    <input class="form-control" type="search" placeholder="Search..." aria-label="Search"
+                        [(ngModel)]="searchText" (input)="filterOrders()" />
                 </div>
-                <div>
-                    <button [hidden]="showdatepicker" class="btn btn-outline-success"
-                        (click)="showdatepicker = true">get orders by date</button>
-                    <div id="myrangepicker" [hidden]="!showdatepicker" class="form-control text-truncate">
-                        <i class="fa fa-calendar text-light-40"></i>&nbsp; <span></span>
-                        <i class="fa fa-caret-down text-light-40 font-12 ml-10"></i>
-                    </div>
+                <div class="col" style="text-align: right;">
+                    <button class="btn btn-success" (click)="mode = 'edit'"><i class="fa fa-plus"
+                            aria-hidden="true"></i>&nbsp;&nbsp;New
+                        Order</button>
                 </div>
-                <div>
-                    <button [hidden]="!showdatepicker" class="btn btn-success"
-                        (click)="getenquiryordersbydate()">Submit</button>
-                </div>
-                <!-- </div> -->
             </div>
+            <br>
             <div class="row">
                 <div class="col-sm">
                     <div class="table-wrap mb-30">
                         <div class="table-responsive">
-                            <table class="table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Invoice</th>
-                                        <th>Customer</th>
-                                        <th>Amount</th>
-                                        <th>Ordered</th>
-                                        <th>Delivery</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let order of orders">
-                                        <td>
-                                            <button class="btn btn-link"
-                                                (click)="viewOrder(order)">#{{order.InvoiceNo}}</button>
-                                                <br>
-                                                <span class="px-15">{{order.location}}</span>
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-user mr-3"></i>{{order.CustomerDetails?.Name || '-'}} <br>
-                                            <i class="fa fa-phone mr-3"></i>{{order.CustomerDetails?.PhoneNo || '-'}}
-                                        </td>
-                                        <td>
-                                            {{order.PaidAmount}}/{{order.BillAmount}}
-                                        </td>
-                                        <td>
-                                            <span class="text-muted">
-                                                <i class="icon-clock font-13"></i> {{order.OrderedDateTime | date: "MMM
-                                                d, y, h:mm a"}}</span>
-                                        </td>
-                                        <td>
-                                            <span class="text-muted">
-                                                <i class="icon-clock font-13"></i> {{order.DeliveryDateTime | date: "MMM
-                                                d, y, h:mm a"}}</span>
-                                        </td>
-                                        <td class="{{order.status_class}}">{{order.orderstatus}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="row">
+                                <div class="col">
+                                    <table class="table table-flush">
+                                        <thead class="z-index-1"
+                                            style="position: sticky; top: 0; background-color: #2b2b2b;">
+                                            <tr>
+                                                <th style="color: white;">
+                                                    <strong>Invoice</strong>
+                                                </th>
+                                                <th style="color: white;">
+                                                    <strong>Customer</strong>
+                                                </th>
+                                                <th style="color: white;">
+                                                    <strong>Amount</strong>
+                                                </th>
+                                                <th style="color: white;">
+                                                    <strong>Ordered Date</strong>
+                                                </th>
+                                                <th style="color: white;">
+                                                    <strong>Delivery Date</strong>
+                                                </th>
+                                                <th style="color: white;">
+                                                    <strong>Status</strong>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let order of filteredOrders.length ? filteredOrders : orders">
+                                                <td>
+                                                    <button class=" btn btn-link"
+                                                        (click)="GetWOOrdDeails(order.OdrsId)">#{{order.InvoiceNo}}</button>
+                                                    <br>
+                                                    <span class="px-15">{{order.location}}</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fa fa-user" aria-hidden="true"
+                                                        style="color: rgb(134, 134, 207);"></i>&nbsp;&nbsp;{{order?.CusName
+                                                    || '-'}} <br>
+                                                    <i class="fa fa-phone" aria-hidden="true"
+                                                        style="color: rgb(21, 158, 21);"></i>&nbsp;&nbsp;{{order?.CusPhone
+                                                    || '-'}}
+                                                </td>
+                                                <td>
+                                                    {{order.PaidAmount}}/{{order.BillAmount}}
+                                                </td>
+                                                <td>
+                                                    <span class="text-muted">
+                                                        <i class="icon-clock font-13"></i> {{order.OrderedDateTime |
+                                                        date: "MMM
+                                                        d, y, h:mm a"}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-muted">
+                                                        <i class="icon-clock font-13"></i> {{order.DeliveryDateTime |
+                                                        date: "MMM
+                                                        d, y, h:mm a"}}</span>
+                                                </td>
+                                                <td *ngIf="order.OrderStatusId == 0"><span
+                                                        class="badge badge-dark">Pending</span></td>
+                                                <td *ngIf="order.OrderStatusId == 1"><span
+                                                        class="badge badge-warning">Accepted</span></td>
+                                                <td *ngIf="order.OrderStatusId == 4"><span class="badge badge-info">Out
+                                                        of Delivery</span></td>
+                                                <td *ngIf="order.OrderStatusId == 5"><span
+                                                        class="badge badge-success">Delivered</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <button style="position: fixed; bottom: 20px; right: 20px;"
-            class="btn btn-success btn-wth-icon btn-rounded icon-right btn-sm">
-            <span class="btn-text" (click)="mode = 'edit'">New Order</span>
-            <span class="icon-label">
-                <i class="fa fa-plus"></i>
-                <!-- <i *ngIf="loading" class="fa fa-circle-notch fa-spin"></i> -->
-            </span>
-        </button>
-
     </div>
     <div *ngIf="mode == 'edit'" class="col-xl-12">
-        <section class="hk-sec-wrapper px-15" style="transition: all 0.3s ease-in-out;"
-            [ngStyle]="{'height': sections.customer.collapse ? '100px' : '150px'}">
-            <div *ngIf="sections.customer.collapse" class="col-xl-12 row" style="position: relative;">
-                <button style="position: absolute; top: 0; right: 0; z-index: 1000000;" class="btn btn-link"
-                    (click)="sections.customer.collapse = false">✏️</button>
-                <div class="col-xl-3">📞&nbsp;{{customer.PhoneNo}}[{{customer.Id}}]</div>
-                <div class="col-xl-3">👨🏻&nbsp;{{customer.Name}}</div>
-                <div class="col-xl-3">📘&nbsp;{{customer.Address}}</div>
-                <div class="col-xl-3">🎂&nbsp;{{store?.Name}}<strong>[{{store?.C_Name}}]</strong> </div>
-            </div>
-            <div *ngIf="!sections.customer.collapse" class="col-xl-12 row" style="position: relative;">
-                <button style="position: absolute; top: 0; right: 0; z-index: 1000000;" class="btn btn-link"
-                    (click)="sections.customer.collapse = true">❌</button>
-                <div class="col-xl-3" style="position: relative;">
-                    <label>Phone</label>
-                    <input type="text" class="form-control" (keyup.enter)="getcustomerbyphonenum()"
-                        [class.is-invalid]="form_validation.phoneno" [(ngModel)]="customer.PhoneNo"
-                        (input)="validation()" />
-                    <span *ngIf="form_validation.phoneno" class="text-danger font-11">Phone Num. is Mandatory</span>
-                </div>
-                <div class="col-xl-3">
-                    <label>Name</label>
-                    <input type="text" class="form-control" [(ngModel)]="customer.Name" />
-                </div>
-                <div class="col-xl-3">
-                    <label>Address</label>
-                    <textarea type="text" class="form-control" [(ngModel)]="customer.Address"></textarea>
-                </div>
+        <div class="title">Add New Order</div>
+        <section class="hk-sec-wrapper">
+            <div *ngIf=" !sections.customer.collapse" class="col-xl-12 row" style="position: relative;">
                 <div class="form-group col-xl-3">
-                    <label>Stores <strong *ngIf="store">[{{store?.C_Name}}]</strong></label>
                     <ng-template #rt let-r="result" let-t="term">
                         <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
                     </ng-template>
                     <input id="typeahead-template" type="text" class="form-control col" [(ngModel)]="searchTerm"
                         [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
-                        (selectItem)="selected($event.item)" />
+                        (selectItem)="selected($event.item)" placeholder="Search Stores..." />
+                </div>
+                <div class="col-xl-3" style="position: relative;">
+                    <input type="text" class="form-control" (keyup.enter)="getcustomer(customer.PhoneNo);openDrawer()"
+                        [class.is-invalid]="form_validation.phoneno" [(ngModel)]="customer.PhoneNo"
+                        (input)="validation()" placeholder="Customer Mobile" />
+                    <span *ngIf="form_validation.phoneno" class="text-danger font-11">Phone Num. is Mandatory</span>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-secondary btn-sm" style="border-radius: 500px;"
+                        (click)="openDrawer()">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="col" style="text-align: right;">
+
+                    <button class="btn btn-danger" (click)="clearOrder()"><i class="fa fa-arrow-left"
+                            aria-hidden="true"></i>&nbsp;&nbsp;Back</button>
                 </div>
             </div>
         </section>
-        <section *ngIf="products.length > 0" class="hk-sec-wrapper px-15" style="position: relative;">
+        <section style="position: relative;">
             <div *ngIf="loading"
                 style="position: absolute;background: rgb(255 255 255 / 39%);height: 100%;width: 100%;top: 0;z-index: 100000;">
             </div>
-            <div class="col-xl-12 row">
-                <div class="col-xl-3">
-                    <div class="row px-15">
-                        <input name="OrderTypeId" style="align-self: center;" [(ngModel)]="order.OrderTypeId"
-                            [value]="3" type="radio">
-                        <button class="btn btn-sm" (click)="order.OrderTypeId = 3;">
-                            Delivery
-                        </button>
-                        <input name="OrderTypeId" style="align-self: center;" [(ngModel)]="order.OrderTypeId"
-                            [value]="4" type="radio">
-                        <button class="btn btn-sm" (click)="order.OrderTypeId = 4;">
-                            Pick Up
-                        </button>
-                    </div>
-                    <hr>
-                    <div>
-                        Delivery Date & Time
-                        <!-- <div class="form-group"> -->
-                        <!-- <label for="date">DELIVERY DATE</label> -->
-                        <input type="date" class="form-control form-control-sm" [(ngModel)]="order.DeliveryDate"
-                            [class.is-invalid]="form_validation.deliverydate" (input)="validation()" />
-                        <span *ngIf="form_validation.deliverydate" class="text-danger font-11">Select a
-                            Date</span>
-
+            <div class="row">
+                <div class="col">
+                    <section class="hk-sec-wrapper">
+                        <div class="row">
+                            <div class="col">
+                                <strong>Order Type</strong><br>
+                                <select class="form-control custom-select" [(ngModel)]="order.OrderTypeId"
+                                    (change)="onOrderTypeChange()">
+                                    <option value="2">TakeAway</option>
+                                    <option value="3" selected>Delivery</option>
+                                    <option value="4">PickUp</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <strong>Delivery Date</strong><br>
+                                <form class="row row-cols-sm-auto">
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp"
+                                                [(ngModel)]="selectedDate" ngbDatepicker #d="ngbDatepicker"
+                                                [class.is-invalid]="form_validation.deliverydate" (input)="validation()"
+                                                (ngModelChange)="ChangeDate()" (click)="d.toggle()" />
+                                            <button class="btn btn-dark" (click)="d.toggle()" type="button"><i
+                                                    class="fa fa-calendar" aria-hidden="true"></i></button>
+                                            <span *ngIf="form_validation.deliverydate"
+                                                class="text-danger font-11">Select a
+                                                Date</span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col">
+                                <strong>Delivery Time</strong><br>
+                                <form class="row row-cols-sm-auto">
+                                    <div class="col">
+                                        <div class="time-picker">
+                                            <input type="time" id="appt" name="appt" (ngModelChange)="ChangeTime()"
+                                                [(ngModel)]="selectedTime"
+                                                [class.is-invalid]="form_validation.deliverytime"
+                                                (input)="validation()">
+                                            <span *ngIf="form_validation.deliverytime"
+                                                class="text-danger font-11">Select a
+                                                Time</span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                         <br>
-                        <!-- </div>
-                        <div class="form-group"> -->
-                        <!-- <label for="date">DELIVERY TIME</label> -->
-                        <input type="time" class="form-control form-control-sm" [(ngModel)]="order.DeliveryTime"
-                            [class.is-invalid]="form_validation.deliverytime" (input)="validation()">
-                        <span *ngIf="form_validation.deliverytime" class="text-danger font-11">Select a
-                            Time</span>
+                        <div class="table-container" style="height: 47.5vh; overflow-y: auto;">
+                            <div class="row">
+                                <div class="col-xl-9">
+                                    <ng-template #pd let-r="result" let-t="term">
+                                        <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
+                                    </ng-template>
+                                    <input #autocompleteel id="autocompleteel" type="text" class="form-control col"
+                                        [(ngModel)]="pdsearchTerm" [ngbTypeahead]="prodsearch" [resultTemplate]="pd"
+                                        [inputFormatter]="pformatter" (selectItem)="selectItem($event.item, quantityel)"
+                                        onfocus="this.select()" placeholder="Type ProductName" />
+                                </div>
+                                <div class="col-xl-3">
+                                    <input #quantityel type="number" class="form-control" [(ngModel)]="quantity"
+                                        (keyup.enter)="quantity && quantity>0 && addItem()" placeholder="Qty">
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="row">
+                                <div class="col-6">
+                                    <!-- <NOTE> -->
+                                    <label *ngIf="cart_settings.message_or_note == 'NOTE'" for="note">Booking
+                                        Note</label>
+                                    <button *ngIf="cart_settings.message_or_note == 'NOTE'" class="btn btn-link btn-sm"
+                                        (click)="cart_settings.message_or_note = 'MESSAGE'">Message for Store
+                                        >></button>
+                                    <textarea *ngIf="cart_settings.message_or_note == 'NOTE'" name="note"
+                                        [(ngModel)]="order.Note" class="form-control" cols="30" rows="3"></textarea>
+                                    <!-- </NOTE> -->
 
-                        <!-- </div> -->
-                    </div>
-                    <hr>
-                    <!-- <NOTE> -->
-                    <label *ngIf="cart_settings.message_or_note == 'NOTE'" for="note">Booking Note</label>
-                    <button *ngIf="cart_settings.message_or_note == 'NOTE'" class="btn btn-link btn-sm"
-                        (click)="cart_settings.message_or_note = 'MESSAGE'">Message for Store
-                        >></button>
-                    <textarea *ngIf="cart_settings.message_or_note == 'NOTE'" name="note" [(ngModel)]="order.Note"
-                        class="form-control" cols="30" rows="3"></textarea>
-                    <!-- </NOTE> -->
+                                    <!-- <MESSAGE> -->
+                                    <label *ngIf="cart_settings.message_or_note == 'MESSAGE'" for="message">Message for
+                                        Store</label>
+                                    <button *ngIf="cart_settings.message_or_note == 'MESSAGE'"
+                                        class="btn btn-link btn-sm"
+                                        (click)="cart_settings.message_or_note = 'NOTE'">Order Message
+                                        >></button>
+                                    <textarea *ngIf="cart_settings.message_or_note == 'MESSAGE'" name="message"
+                                        [(ngModel)]="order.Message" class="form-control" cols="30" rows="3"></textarea>
+                                    <!-- </MESSAGE> -->
+                                </div>
+                                <div class="col-6">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <th>Discount</th>
+                                                <td class="text-right">-₹&nbsp;{{order.OrderTotDisc +
+                                                    order.AllItemTotalDisc
+                                                    | number:
+                                                    "0.2"}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tax</th>
+                                                <td class="text-right">₹&nbsp;{{order.Tax1 + order.Tax2 + order.Tax3 |
+                                                    number: "0.2"}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Subtotal</th>
+                                                <td class="text-right">₹&nbsp;{{order.subtotal | number: "0.2"}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <strong>Total</strong>
+                                                </th>
+                                                <td class="text-right"><strong>₹&nbsp;{{order.BillAmount | number:
+                                                        '.2'}}</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="hk-sec-wrapper">
+                        <div class="row">
+                            <div class="col-4">
+                                <!-- <input class="form-control" type="search" placeholder="Customer Mobile"
+                                aria-label="Search" /> -->
+                            </div>
+                            <div class="col-1">
+                                <!-- <button type="button" class="btn btn-secondary btn-sm" style="border-radius: 500px;"
+                                (click)="openDrawer()">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                            </button> -->
+                            </div>
+                            <div class="col" style="text-align: right;">
+                                <button type="button" class="btn btn-link text-primary" (click)="openModal()">
+                                    Bulk Discount
+                                </button>
+                                <button type="button" class="btn btn-link text-danger" (click)="toggleOrderStatus()">
+                                    {{ orderButtonText }}
+                                </button>
 
-                    <!-- <MESSAGE> -->
-                    <label *ngIf="cart_settings.message_or_note == 'MESSAGE'" for="message">Message for Store</label>
-                    <button *ngIf="cart_settings.message_or_note == 'MESSAGE'" class="btn btn-link btn-sm"
-                        (click)="cart_settings.message_or_note = 'NOTE'">Order Message
-                        >></button>
-                    <textarea *ngIf="cart_settings.message_or_note == 'MESSAGE'" name="message"
-                        [(ngModel)]="order.Message" class="form-control" cols="30" rows="3"></textarea>
-                    <!-- </MESSAGE> -->
-                </div>
-                <div class="col-xl-6 row px-15" style="align-content: flex-start;">
-                    <!-- <autocomplet> -->
-                    <div class="col-xl-9">
-                        <ng-template #pd let-r="result" let-t="term">
-                            <ngb-highlight [result]="r.Product" [term]="t"></ngb-highlight>
-                        </ng-template>
-                        <input #autocompleteel id="autocompleteel" type="text" class="form-control col"
-                            [(ngModel)]="pdsearchTerm" [ngbTypeahead]="prodsearch" [resultTemplate]="pd"
-                            [inputFormatter]="pformatter" (selectItem)="selectItem($event.item, quantityel)"
-                            onfocus="this.select()" />
-                    </div>
-                    <div class="col-xl-3">
-                        <input #quantityel type="number" class="form-control" [(ngModel)]="quantity"
-                            (keyup.enter)="quantity && quantity>0 && addItem()">
-                    </div>
-                    <!-- </autocomplet> -->
-                    <!-- <item list> -->
-                    <div class="col-xl-12 mb-20"></div>
-                    <div class="col-xl-12 row px-30" *ngFor="let item of order.Items; let i = index;"
-                        [hidden]="(item.Quantity + item.ComplementryQty) == 0">
-                        <!-- <div> -->
-                        <div class="col-xl-1">
-                            <button class="btn btn-link p-0" (click)="editItem(item)">[#{{i+1}}]</button>
+                                <i class="fa fa-check-circle" (click)="ClearOrder()" *ngIf="ShowCoics == true"
+                                    style="cursor: pointer; color: green;"></i>
+                                &nbsp;&nbsp;
+                                <i class="fa fa-times-circle" (click)="CancelClearOrder()" *ngIf="ShowCoics == true"
+                                    style="cursor: pointer; color: red;"></i>
+                            </div>
                         </div>
-                        <div class="col-xl-5">
-                            {{item.showname}}
+                        <br>
+                        <div class="table-container" style="height: 40vh; overflow-y: auto;">
+                            <table class="table table-flush">
+                                <thead class="z-index-1" style="position: sticky; top: 0; background-color: #2b2b2b;">
+                                    <tr>
+                                        <th style="color: white; width: 40%;">
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th style="color: white; width: 20%;">
+                                            <strong>Quantity</strong>
+                                        </th>
+                                        <th style="color: white; width: 20%;">
+                                            <strong>Amount</strong>
+                                        </th>
+                                        <th style="color: white; width: 20%;">
+                                            <strong>Actions</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of order.Items; let i = index;"
+                                        [hidden]="(item.Quantity + item.ComplementryQty) == 0">
+                                        <td style="width: 40%;"><strong
+                                                (click)="editItem(item)"><u>{{item.showname}}</u></strong></td>
+                                        <td style="width: 20%;">
+                                            {{item.Quantity}}
+                                        </td>
+                                        <td style="width: 20%;">₹&nbsp;{{item.TotalAmount | number: '.2'}}</td>
+                                        <td style="width: 20%;">
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                (click)="item.Quantity = 0; item.ComplementryQty = 0; order.setbillamount()">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-xl-2 text-right">x&nbsp;{{item.Quantity}}</div>
-                        <div class="col-xl-3 text-right">₹&nbsp;{{item.TotalAmount | number: '.2'}}</div>
-                        <div class="col-xl-1">
-                            <button class="btn btn-link p-0 text-danger"
-                                (click)="item.Quantity = 0; item.ComplementryQty = 0; order.setbillamount()">✕</button>
+                    </section>
+                    <section class="hk-sec-wrapper" style="padding: 18px;">
+                        <div class="row">
+                            <div class="col">
+                            </div>
+                            <div class="col" style="text-align: right;">
+                                <button class="btn btn-success" (click)="saveOrder()"><i class="fa fa-inr"
+                                        aria-hidden="true"></i>&nbsp;Place
+                                    Order</button>
+                            </div>
                         </div>
-                        <!-- </div> -->
-                    </div>
-                    <!-- </item list> -->
-                </div>
-                <div class="col-xl-3">
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td><button class="btn btn-link p-0" (click)="openbdmodal()">Bulk Discount</button></td>
-                            </tr>
-                            <tr>
-                                <th>Discount</th>
-                                <td class="text-right">-₹&nbsp;{{order.OrderTotDisc + order.AllItemTotalDisc | number:
-                                    "0.2"}}</td>
-                            </tr>
-                            <tr>
-                                <th>Tax</th>
-                                <td class="text-right">₹&nbsp;{{order.Tax1 + order.Tax2 + order.Tax3 | number: "0.2"}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Subtotal</th>
-                                <td class="text-right">₹&nbsp;{{order.subtotal | number: "0.2"}}</td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <strong>Total</strong>
-                                </th>
-                                <td class="text-right"><strong>₹&nbsp;{{order.BillAmount | number: '.2'}}</strong></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- <strong>Tax:</strong>{{order.Tax1 + order.Tax2 + order.Tax3}} <br>
-                    <strong>Subtotal:</strong>{{order.subtotal}} <br>
-                    <strong>Total</strong>{{order.BillAmount}} -->
+                    </section>
                 </div>
             </div>
         </section>
@@ -301,14 +379,6 @@
             <span class="icon-label">
                 <i class="fa fa-times"></i>
                 <!-- <i *ngIf="loading" class="fa fa-circle-notch fa-spin"></i> -->
-            </span>
-        </button>
-        <button *ngIf="store" [disabled]="loading || !order" style="position: fixed; bottom: 20px; right: 20px;"
-            class="btn btn-success btn-wth-icon btn-rounded icon-right btn-sm">
-            <span class="btn-text" (click)="saveOrder()">Save Order</span>
-            <span class="icon-label">
-                <i *ngIf="!loading" class="fa fa-save"></i>
-                <i *ngIf="loading" class="fa fa-circle-notch fa-spin"></i>
             </span>
         </button>
     </div>
@@ -457,11 +527,10 @@
     <div class="modal-body">
         <div class="col-xl-12 row">
             <div class="col-xl-6">
-                <h6>Customer:</h6>
-                <p *ngIf="temp_order.CustomerDetails?.Name">{{temp_order.CustomerDetails?.Name}},<br></p>
-                <p *ngIf="temp_order.CustomerDetails?.Address">{{temp_order.CustomerDetails?.Address}},<br></p>
-                <p *ngIf="temp_order.CustomerDetails?.City">{{temp_order.CustomerDetails?.City}},<br></p>
-                <i class="fa fa-phone mr-3"></i>{{temp_order.CustomerDetails?.PhoneNo}}
+                <p><i class="fa fa-user" aria-hidden="true"></i>&nbsp; {{GetCusDetailsValues?.Name}}</p>
+                <p><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; {{GetCusDetailsValues?.Address}}</p>
+                <p><i class="fa fa-building" aria-hidden="true"></i>&nbsp; {{GetCusDetailsValues?.City}}</p>
+                <p><i class="fa fa-phone" aria-hidden="true"></i>&nbsp; {{GetCusDetailsValues?.PhoneNo}}</p>
             </div>
             <div class="col-xl-6">
                 <table class="table">
@@ -473,7 +542,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of temp_order.Items">
+                        <tr *ngFor="let item of itemsnew">
                             <td>{{item.showname}}</td>
                             <td>{{item.Quantity}} <span
                                     *ngIf="item.ComplementryQty > 0">({{item.ComplementryQty}})</span></td>
@@ -504,3 +573,91 @@
             Changes</button>
     </div> -->
 </ng-template>
+
+
+<div class="modal" tabindex="-1" role="dialog" id="myModal">
+    <div class="container d-flex align-items-center justify-content-center vh-100">
+        <div class="card" style="width: 40%;">
+            <div class="card-header" style="border-bottom: 1px solid #aaa; font-weight:bolder">
+                <strong>
+                    Bulk Discount
+                </strong>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="discountType" id="cashDiscountRadio"
+                        [(ngModel)]="selectedDiscountType" value="cash" (change)="toggleDiscountInputs()">
+                    <label class="form-check-label" for="cashDiscountRadio" style="font-weight: bolder;">
+                        CASH DISCOUNT
+                    </label>
+                </div>
+                <input class="form-control" type="number" id="cashDiscount" aria-label="Search"
+                    [(ngModel)]="order!.DiscAmount" [disabled]="selectedDiscountType !== 'cash'" />
+
+                <hr />
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="discountType" id="percentageDiscountRadio"
+                        [(ngModel)]="selectedDiscountType" value="percentage" (change)="toggleDiscountInputs()">
+                    <label class="form-check-label" for="percentageDiscountRadio" style="font-weight: bolder;">
+                        PERCENTAGE DISCOUNT
+                    </label>
+                </div>
+                <input class="form-control" type="number" id="percentageDiscount" aria-label="Search"
+                    [(ngModel)]="order!.DiscPercent" [disabled]="selectedDiscountType !== 'percentage'" />
+                <br><br>
+                <div class="row">
+                    <div class="col" style="text-align: right;">
+                        <button type="button" class="btn btn-primary"
+                            (click)="order.setbillamount();closeModal()">Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="hk-settings-panel">
+    <div class="nicescroll-bar position-relative">
+        <div class="settings-panel-wrap">
+            <div class="settings-panel-head">
+                <h4>Add Customer</h4>
+                <a href="javascript:void(0);" id="settings_panel_close" class="settings-panel-close"><span
+                        class="feather-icon"><i data-feather="x"></i></span></a>
+            </div>
+            <hr />
+            <div>
+                <label for="cars" style="font-weight: bolder;">Customer Name <span style="color: red;">*</span>
+                </label>
+                <input class="form-control" type="search" aria-label="Search" [(ngModel)]="customer.Name" />
+                <br>
+                <label for="cars" style="font-weight: bolder;">Customer Mobile No <span style="color: red;">*</span>
+                </label>
+                <input class="form-control" type="search" aria-label="Search" [(ngModel)]="customer.PhoneNo" />
+                <br>
+                <label for="cars" style="font-weight: bolder;">Customer Email
+                </label>
+                <input class="form-control" type="search" aria-label="Search" [(ngModel)]="customer.Email" />
+                <br>
+                <label for="cars" style="font-weight: bolder;">Address
+                </label>
+                <input class="form-control" type="search" aria-label="Search" [(ngModel)]="customer.Address" />
+                <br>
+                <label for="cars" style="font-weight: bolder;">City
+                </label>
+                <input class="form-control" type="search" aria-label="Search" [(ngModel)]="customer.City" />
+                <br>
+
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-danger" (click)="openDrawer()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
