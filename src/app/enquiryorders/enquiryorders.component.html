@@ -48,6 +48,11 @@
                         [(ngModel)]="searchText" (input)="filterOrders()" />
                 </div>
                 <div class="col" style="text-align: right;">
+                    <button type="button" class="btn btn-link text-primary" (click)="getENQOrders()">
+                        <strong style="color: coral;"><i class="fa fa-refresh" aria-hidden="true"></i>
+                            &nbsp;sync</strong>
+                    </button>
+                    &nbsp;&nbsp;
                     <button class="btn btn-success" (click)="mode = 'edit'"><i class="fa fa-plus"
                             aria-hidden="true"></i>&nbsp;&nbsp;New
                         Order</button>
@@ -74,6 +79,9 @@
                                                     <strong>Amount</strong>
                                                 </th>
                                                 <th style="color: white;">
+                                                    <strong>Delivery Store</strong>
+                                                </th>
+                                                <th style="color: white;">
                                                     <strong>Ordered Date</strong>
                                                 </th>
                                                 <th style="color: white;">
@@ -81,6 +89,9 @@
                                                 </th>
                                                 <th style="color: white;">
                                                     <strong>Status</strong>
+                                                </th>
+                                                <th style="color: white;">
+                                                    <strong>Action</strong>
                                                 </th>
                                             </tr>
                                         </thead>
@@ -104,6 +115,9 @@
                                                     {{order.PaidAmount}}/{{order.BillAmount}}
                                                 </td>
                                                 <td>
+                                                    {{order.delStore}}
+                                                </td>
+                                                <td>
                                                     <span class="text-muted">
                                                         <i class="icon-clock font-13"></i> {{order.OrderedDateTime |
                                                         date: "MMM
@@ -123,6 +137,17 @@
                                                         of Delivery</span></td>
                                                 <td *ngIf="order.OrderStatusId == 5"><span
                                                         class="badge badge-success">Delivered</span></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-light"
+                                                        (click)="GetReceipt_WO(order)">
+                                                        <i class="fa fa-print" aria-hidden="true"></i>
+                                                    </button>
+                                                    &nbsp;&nbsp;
+                                                    <button type="button" class="btn btn-danger"
+                                                        (click)="openCancelmodal(order.OdrsId)">
+                                                        <i class="fa fa-ban" aria-hidden="true"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -321,7 +346,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="table-container" style="height: 40vh; overflow-y: auto;">
+                        <div class="table-container" style="height: 38.5vh; overflow-y: auto;">
                             <table class="table table-flush">
                                 <thead class="z-index-1" style="position: sticky; top: 0; background-color: #2b2b2b;">
                                     <tr>
@@ -361,11 +386,24 @@
                     </section>
                     <section class="hk-sec-wrapper" style="padding: 18px;">
                         <div class="row">
-                            <div class="col">
+                            <div class="btn-group-toggle" data-toggle="buttons">
+                                <ng-container *ngFor="let paymentType of PaymentTypesValues">
+                                    <label class="btn btn-outline-primary" [ngClass]="{'active': paymentType.selected}"
+                                        (click)="toggleButton(paymentType)" style="margin: 10px;">
+                                        <input type="radio" [id]="'btn' + paymentType.Id" autocomplete="off">
+                                        {{ paymentType.Name }}
+                                    </label>
+                                </ng-container>
+                                <button type="button" class="btn btn-warning" *ngIf="PaymentTypesValues.length > 0"
+                                    style="margin: 10px;" data-toggle="modal" data-target="#splitModal"><i
+                                        class="fa fa-columns" aria-hidden="true"></i>&nbsp;
+                                    Split</button>
                             </div>
+
+
                             <div class="col" style="text-align: right;">
                                 <button class="btn btn-success" (click)="saveOrder()"><i class="fa fa-inr"
-                                        aria-hidden="true"></i>&nbsp;Place
+                                        aria-hidden="true" style="margin: 10px;"></i>&nbsp;Place
                                     Order</button>
                             </div>
                         </div>
@@ -579,32 +617,24 @@
                 </button>
             </div>
             <div class="card-body">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="discountType" id="cashDiscountRadio"
-                        [(ngModel)]="selectedDiscountType" value="cash" (change)="toggleDiscountInputs()">
-                    <label class="form-check-label" for="cashDiscountRadio" style="font-weight: bolder;">
-                        CASH DISCOUNT
+                <div class="form-group">
+                    <label for="Discount">
+                        {{order!.DiscType == 1 ? 'Cash' : 'Percentage'}} Discount
                     </label>
+                    <button *ngIf="order!.DiscType == 1" class="btn btn-link"
+                        (click)="order!.DiscType = 2; order!.DiscAmount = 0;">Percentage</button>
+                    <button *ngIf="order!.DiscType == 2" class="btn btn-link"
+                        (click)="order!.DiscType = 1; order!.DiscPercent = 0">Cash</button>
+                    <input *ngIf="order!.DiscType == 1" type="number" class="form-control" name="Discount"
+                        [(ngModel)]="order!.DiscAmount">
+                    <input *ngIf="order!.DiscType == 2" type="number" class="form-control" name="Discount"
+                        [(ngModel)]="order!.DiscPercent">
                 </div>
-                <input class="form-control" type="number" id="cashDiscount" aria-label="Search"
-                    [(ngModel)]="order!.DiscAmount" [disabled]="selectedDiscountType !== 'cash'" />
-
-                <hr />
-
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="discountType" id="percentageDiscountRadio"
-                        [(ngModel)]="selectedDiscountType" value="percentage" (change)="toggleDiscountInputs()">
-                    <label class="form-check-label" for="percentageDiscountRadio" style="font-weight: bolder;">
-                        PERCENTAGE DISCOUNT
-                    </label>
-                </div>
-                <input class="form-control" type="number" id="percentageDiscount" aria-label="Search"
-                    [(ngModel)]="order!.DiscPercent" [disabled]="selectedDiscountType !== 'percentage'" />
                 <br><br>
                 <div class="row">
                     <div class="col" style="text-align: right;">
-                        <button type="button" class="btn btn-primary"
-                            (click)="order.setbillamount();closeModal()">Done</button>
+                        <button type="button" class="btn btn-primary" (click)="order.setbillamount();closeModal()">Save
+                            Changes</button>
                     </div>
                 </div>
             </div>
@@ -631,13 +661,9 @@
                 </label>
                 <input class="form-control" type="search" aria-label="Search" [(ngModel)]="customer.PhoneNo" />
                 <br>
-                <label for="cars" style="font-weight: bolder;">Customer Email
+                <label for="cars" style="font-weight: bolder;">Address <span style="color: red;">*</span>
                 </label>
-                <input class="form-control" type="search" aria-label="Search" [(ngModel)]="customer.Email" />
-                <br>
-                <label for="cars" style="font-weight: bolder;">Address
-                </label>
-                <input class="form-control" type="search" aria-label="Search" [(ngModel)]="customer.Address" />
+                <textarea class="form-control" rows="3" [(ngModel)]="customer.Address"></textarea>
                 <br>
                 <label for="cars" style="font-weight: bolder;">City
                 </label>
@@ -653,3 +679,67 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="splitModal" tabindex="-1" role="dialog" aria-labelledby="splitModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-slideout modal-right" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="splitModalLabel">Split Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: right;">
+                    <strong>Bill Amount :</strong> ₹&nbsp;{{order.BillAmount | number: '.2'}}
+                    <br>
+                    <strong>Paid Amount :</strong> ₹&nbsp;{{ totalAmount | number: '.2' }}
+                </div>
+
+                <hr>
+                <table style="width: 100%;">
+                    <tr *ngFor="let paymentType of PaymentTypesValues; let i = index;" style="width: 100%;">
+                        <td style="width: 50%;"><strong>{{ paymentType.Name }}</strong></td>
+                        <td style="width: 50%;">
+                            <input type="number" class="form-control" placeholder="Enter Amt" style="margin: 10px;"
+                                [(ngModel)]="paymentType.saveamounts" (input)="calculateTotal()">
+                        </td>
+                    </tr>
+                </table>
+                <span class="text-danger" *ngIf="order.BillAmount < totalAmount"
+                    style="font-size: 10px; position: absolute;">* Paid Amount EXCEEDING the Bill Amount</span>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-danger" data-dismiss="modal" aria-label="Close"
+                            (click)="CancelSplit()">Reset</button>
+                    </div>
+
+                    <div class="col" style="text-align: right;">
+                        <button class="btn btn-success" (click)="saveData()" data-dismiss="modal" aria-label="Close"
+                            [disabled]="order.BillAmount < totalAmount">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #CancelModel let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Cancel Reason ?</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <textarea [(ngModel)]="cancelreason" rows="3" style="width: 100%;"
+            placeholder="Enter a Cancel Reason..."></textarea><br>
+        <button type="button" class="btn btn-danger" (click)="cancelorder();modal.close('Save click')"
+            style="width: 100%;">Cancel
+            Order</button>
+    </div>
+</ng-template>

@@ -1,4 +1,10 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, OperatorFunction } from 'rxjs';
@@ -13,9 +19,11 @@ import {
   CustomerModule,
   OrderItemModule,
   OrderModule,
+  Transaction,
 } from './order.module';
 import { SignalrService } from '../services/signalr/signalr.service';
 import { dtrangepicker } from '../../assets/dist/js/datePickerHelper';
+import html2canvas from 'html2canvas';
 
 declare function setHeightWidth(): any;
 declare const feather: any, $: any;
@@ -47,6 +55,7 @@ export class EnquiryordersComponent implements OnInit {
   temp_order: any;
   orders: any = [];
   customer: CustomerModule;
+  transaction: Transaction;
   sections = {
     customer: {
       collapse: false,
@@ -100,6 +109,7 @@ export class EnquiryordersComponent implements OnInit {
     );
     this.cart_settings = new CartSettings();
     this.customer = new CustomerModule();
+    this.transaction = new Transaction();
     console.log(this.plusIcon);
     this.phone_num_reg;
     this.signalR.hubconnection.on(
@@ -218,6 +228,7 @@ export class EnquiryordersComponent implements OnInit {
     this.order.store = this.store;
     this.order.CompanyId = this.store.CompanyId;
     this.getcompanyproducts();
+    this.PaymentTypes();
   }
   selectItem(e: any, quantityel: any) {
     console.log(e, quantityel);
@@ -373,11 +384,36 @@ export class EnquiryordersComponent implements OnInit {
     this.customer.CompanyId = this.store.CompanyId;
     this.customer.StoreId = this.store.Id;
     this.order.CustomerDetails = this.customer;
+    this.order.PaidAmount = this.totalAmount;
     // this.order.CompanyId = this.store.CompanyId
     // // this.order.
+    if (this.singletrans.StoreId == this.store.Id) {
+      console.log('success');
+      this.order.PaidAmount = this.order.BillAmount;
+      var transaction = new Transaction();
+      transaction = new Transaction();
+      transaction.Id = 0;
+      transaction.Remaining = 0;
+      transaction.Amount = this.order.BillAmount;
+      transaction.OrderId = this.order.OrderId;
+      transaction.StoreId = this.store.Id;
+      transaction.TransDate = moment().format('YYYY-MM-DD');
+      transaction.TransDateTime =
+        moment().format('YYYY-MM-DD') + ' ' + moment().format('HH:mm:ss');
+      transaction.TranstypeId = 1;
+      transaction.UserId = this.order.UserId;
+      transaction.CompanyId = this.store.CompanyId;
+      transaction.StorePaymentTypeName = this.singletrans.name;
+      transaction.StorePaymentTypeId = this.singletrans.Id;
+      this.transaction = transaction;
+      this.order.Transactions.push(this.transaction);
+      console.log(this.transaction);
+    }
+
     if (this.order.DeliveryDateTime == 'Invalid date')
       this.order.DeliveryDateTime = null;
     console.log(JSON.stringify(this.order));
+
     this.Auth.saveorder({ OrderJson: JSON.stringify(this.order) }).subscribe(
       (data) => {
         console.log(data);
@@ -415,6 +451,10 @@ export class EnquiryordersComponent implements OnInit {
     this.selectedDate = '';
     this.selectedTime = '';
     this.getENQOrders();
+    this.totalAmount = 0;
+    this.savedData = [];
+    this.PaymentTypesValues = [];
+    this.order.Transactions = [];
   }
   setcurrentitemprice() {
     var singleqtyoptionprice = 0;
@@ -680,6 +720,318 @@ export class EnquiryordersComponent implements OnInit {
           )) ||
         (order.CusPhone &&
           order.CusPhone.toLowerCase().includes(this.searchText.toLowerCase()))
+    );
+  }
+
+  PaymentTypesValues: any = 0;
+  PaymentTypes() {
+    this.Auth.StorePaymentTypes(this.store.CompanyId, this.store.Id).subscribe(
+      (data: any) => {
+        this.PaymentTypesValues = data['Payments'];
+        this.PaymentTypesValues.forEach((paymentType: any) => {
+          paymentType.selected = false;
+          paymentType.saveamounts = 0;
+        });
+        console.log(data);
+      }
+    );
+  }
+
+  toggleButton(selectedPaymentType: any) {
+    this.PaymentTypesValues.forEach((paymentType: any) => {
+      paymentType.selected = paymentType === selectedPaymentType;
+    });
+    console.log(selectedPaymentType);
+
+    this.singletrans = selectedPaymentType;
+  }
+
+  transactionlist: Array<Transaction> = [];
+  savedData: any;
+  saveamounts: any;
+  saveData() {
+    this.savedData = this.PaymentTypesValues.filter(
+      (paymentType: any) => paymentType.saveamounts !== 0
+    ).map((paymentType: any) => ({
+      Id: paymentType.Id,
+      name: paymentType.Name,
+      amount: paymentType.saveamounts,
+    }));
+
+    this.savedData.forEach((pt: any) => {
+      var transaction = new Transaction();
+      transaction = new Transaction();
+      this.order.PaidAmount = this.totalAmount;
+      transaction.Id = 0;
+      transaction.Remaining = this.order.BillAmount - this.totalAmount;
+      transaction.Amount = pt.amount;
+      transaction.OrderId = this.order.OrderId;
+      transaction.StoreId = this.store.Id;
+      transaction.TransDate = moment().format('YYYY-MM-DD');
+      transaction.TransDateTime =
+        moment().format('YYYY-MM-DD') + ' ' + moment().format('HH:mm:ss');
+      transaction.TranstypeId = 1;
+      transaction.UserId = this.order.UserId;
+      transaction.CompanyId = this.store.CompanyId;
+      transaction.StorePaymentTypeName = pt.name;
+      transaction.StorePaymentTypeId = pt.Id;
+      this.transaction = transaction;
+      this.order.Transactions.push(this.transaction);
+      console.log(this.transaction);
+    });
+    console.log(this.savedData);
+    console.log(this.transaction);
+
+    this.singletrans = [];
+    this.PaymentTypesValues.forEach(
+      (paymentType: any) => (paymentType.selected = false)
+    );
+  }
+
+  totalAmount: number = 0;
+  calculateTotal() {
+    this.totalAmount = this.PaymentTypesValues.reduce(
+      (sum: any, paymentType: any) => sum + (paymentType.saveamounts || 0),
+      0
+    );
+  }
+
+  CancelSplit() {
+    this.order.Transactions = [];
+    this.savedData = [];
+    this.totalAmount = 0;
+    this.PaymentTypesValues.forEach(
+      (paymentType: any) => (paymentType.selected = false)
+    );
+  }
+
+  singletrans: any;
+
+  printhtmlstyle = `
+  <style>
+    #printelement {
+      width: 270px;
+      font-family: monospace;
+    }
+    .header {
+        text-align: center;
+    }
+    .item-table {
+        width: 100%;
+    }
+    .text-right {
+      text-align: right!important;
+    }
+    .text-left {
+      text-align: left!important;
+    }
+    .text-center {
+      text-align: center!important;
+    }
+    tr.nb, thead.nb {
+        border-top: 0px;
+        border-bottom: 0px;
+    }
+    table, h3 {
+      empty-cells: inherit;
+      font-family: monospace;
+      //font-size: small;
+      width: 290px;
+      padding-left: 0px;
+      border-collapse: collapse;
+    }
+    table, tr, td {
+      border-bottom: 0;
+    }
+    hr {
+      border-top: 1px dashed black;
+    }
+    tr.bt {
+      border-top: 1px dashed black;
+      border-bottom: 0px;
+    }
+    tr {
+      padding-top: -5px;
+    }
+
+    thead.rd{
+      border-top: 1px dashed black;
+    }
+    
+  </style>`;
+
+  printreceipt() {
+    var printtemplate = `
+    <div id="printelement" style="width: 350px; font-family: monospace; padding-top: 50px; padding-bottom: 50px">
+    <div class="header" style="text-align: center;">
+        <h3>${this.GetReceiptValues[0].Company}</h3>
+        <p>
+            ${this.GetReceiptValues[0].Store}, ${
+      this.GetReceiptValues[0].Address
+    }<br>
+            ${this.GetReceiptValues[0].City}, ${
+      this.GetReceiptValues[0].ContactNo
+    }
+            GSTIN:${this.GetReceiptValues[0].GST}<br>
+            <strong>Receipt: ${this.GetReceiptValues[0].Invoice}</strong><br>
+            ${moment(this.GetReceiptValues[0].OderedDate).format('LLLL')}
+            <br>
+            Customer Mobile : ${this.GetReceiptValues[0].CusPhone}
+        </p>
+    </div>
+    <hr>
+    <table class="item-table" style="width: 100%; empty-cells: inherit; font-family: monospace; width: 290px; margin: auto; border-collapse: collapse;">
+        <thead class="nb" style="border-top: 0px;
+        border-bottom: 0px; border-bottom: 0.5px solid grey;">
+            <th class="text-left" style="width: 100px;text-align: left!important;" colspan="2"><strong>ITEM</strong></th>
+            <th class="text-right" style="text-align: center!important;"><strong>QTY</strong></th>
+            <th class="text-right"><strong>PRICE</strong></th>
+        </thead>
+        <tbody>`;
+    var extra = 0;
+    this.GetReceiptValues.forEach((item: any) => {
+      printtemplate += `
+      <tr class="nb" style="border-top: 0px;
+      border-bottom: 0px; border-bottom: 0.5px solid grey;">
+          <td class="text-left" style="width: 100px;text-align: left!important;" colspan="2">${
+            item.ITEM
+          }</td>
+          <td class="text-right" style="text-align: center!important;">${
+            item.QTY
+          }${
+        item.ComplementryQty > 0 ? '(' + item.ComplementryQty + ')' : ''
+      }</td>
+      <td class="text-right">${item.Price.toFixed(2)}</td>
+      </tr>`;
+      extra += item.Extra;
+    });
+    printtemplate += `
+    <tr class="bt">
+        <td class="text-left"><strong>Sub Total</strong></td>
+        <td colspan="2"></td>
+        <td class="text-right">${(
+          this.GetReceiptValues[0].Bill -
+          this.GetReceiptValues[0].CGST +
+          this.GetReceiptValues[0].SGST
+        ).toFixed(2)}</td>
+    </tr>
+    <tr class="nb" ${
+      this.GetReceiptValues[0].OrderTotDisc +
+        this.GetReceiptValues[0].AllItemTotalDisc ==
+      0
+        ? 'hidden'
+        : ''
+    }>
+        <td class="text-left"><strong>Discount</strong></td>
+        <td colspan="2"></td>
+        <td class="text-right">${(+(
+          this.GetReceiptValues[0].OrderTotDisc +
+          this.GetReceiptValues[0].AllItemTotalDisc
+        ).toFixed(0)).toFixed(2)}</td>
+    </tr>
+    <tr class="nb">
+        <td class="text-left"><strong>CGST</strong></td>
+        <td colspan="2"></td>
+        <td class="text-right">${this.GetReceiptValues[0].CGST.toFixed(2)}</td>
+    </tr>
+    <tr class="nb">
+        <td class="text-left"><strong>SGST</strong></td>
+        <td colspan="2"></td>
+        <td class="text-right">${this.GetReceiptValues[0].SGST.toFixed(2)}</td>
+    </tr>`;
+    printtemplate += `
+          <tr class="nb" ${this.GetReceiptValues[0].Extra > 0 ? '' : 'hidden'}>
+              <td class="text-left"><strong>Extra</strong></td>
+              <td colspan="2"></td>
+              <td class="text-right">${this.GetReceiptValues[0].Extra.toFixed(
+                2
+              )}</td>
+          </tr>
+          <tr class="nb">
+              <td class="text-left"><strong>Paid</strong></td>
+              <td colspan="2"></td>
+              <td class="text-right">${this.GetReceiptValues[0].Paid.toFixed(
+                2
+              )}</td>
+          </tr>
+          <tr class="nb">
+              <td class="text-left"><strong>Total</strong></td>
+              <td colspan="2"></td>
+              <td class="text-right">${this.GetReceiptValues[0].Bill.toFixed(
+                2
+              )}</td>
+          </tr>
+          <tr class="nb" ${
+            this.GetReceiptValues[0].Bill - this.GetReceiptValues[0].Paid > 0
+              ? ''
+              : 'hidden'
+          }>
+              <td class="text-left"><strong>Balance</strong></td>
+              <td colspan="2"></td>
+              <td class="text-right">${(
+                this.GetReceiptValues[0].Bill - this.GetReceiptValues[0].Paid
+              ).toFixed(2)}</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr>
+      <div class="text-center">
+        <p>Powered By Biz1Book.</p>
+      </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', printtemplate);
+    const newPrintElement = document.getElementById('printelement');
+
+    if (newPrintElement) {
+      html2canvas(newPrintElement).then((canvas) => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = `${this.savedfilename}.png`;
+
+        link.click();
+
+        newPrintElement.remove();
+        this.Auth.isloading.next(false);
+      });
+    } else {
+      console.error("Print element with id 'printelement' not found.");
+    }
+  }
+  @ViewChild('printElement') printElement: ElementRef | any;
+
+  savedfilename: any;
+  GetReceiptValues: any;
+  GetReceipt_WO(data: any) {
+    this.Auth.GetReceipt_WO(data.OdrsId).subscribe((data: any) => {
+      this.GetReceiptValues = data;
+      this.printreceipt();
+      this.Auth.isloading.next(true);
+      this.savedfilename =
+        this.GetReceiptValues[0].Invoice +
+        '/' +
+        this.GetReceiptValues[0].CusPhone;
+    });
+  }
+
+  @ViewChild('CancelModel', { static: false }) public CancelModel:
+    | TemplateRef<any>
+    | any;
+  openCancelmodal(data: any) {
+    this.modalService.open(this.CancelModel, {
+      centered: true,
+      backdropClass: 'z-index-1',
+    });
+    this.savedcancelOrdId = data;
+  }
+
+  cancelreason: any;
+  savedcancelOrdId: any;
+  cancelorder() {
+    this.Auth.cancelorder(this.savedcancelOrdId, this.cancelreason).subscribe(
+      (res: any) => {
+        this.getENQOrders();
+      }
     );
   }
 }

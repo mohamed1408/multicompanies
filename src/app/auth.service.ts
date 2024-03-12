@@ -1112,6 +1112,12 @@ export class AuthService {
         `Customer/GetCusDetailsUP?cusname=${cusname}&cusadd=${cusadd}&cuscity=${cuscity}&cusphone=${cusphone}&cuiId=${cuiId}`
     );
   }
+
+  GetReceipt_WO(orderid: number) {
+    return this.http.get(
+      this.base_url2 + 'Login/GetReceipt_WO?orderid=' + orderid
+    );
+  }
 }
 
 // baseurl
