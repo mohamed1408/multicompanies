@@ -1115,7 +1115,7 @@ export class AuthService {
 
   GetReceipt_WO(orderid: number) {
     return this.http.get(
-      this.base_url2 + 'Login/GetReceipt_WO?orderid=' + orderid
+      this.baseurl + 'POSOrder/GetReceipt_WO?orderid=' + orderid
     );
   }
 }
