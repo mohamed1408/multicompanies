@@ -23,7 +23,7 @@
         <input type="text" class="w-100 cbselectels" placeholder="Select atleast one" readonly
           (focus)="toggleDropDown()" [(ngModel)]="selected_companies" />
         <div *ngIf="showdropdown | async" class="options w-100 shadow shadow-xl cbselectels">
-          <div class="option px-15 cbselectels" (click)="all = !all; toggleAll()">
+          <div class="option px-15 cbselectels" (click)="all = !all; toggleAll()" *ngIf="SavedRoleZone == 1">
             <label for="one" class="cbselectels">
               <input type="checkbox" readonly [(ngModel)]="all" class="cbselectels" />
               Select All

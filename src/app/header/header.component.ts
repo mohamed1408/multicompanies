@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit {
   showdropdown: Observable<boolean>;
   selected_companies: string = '';
   all: boolean = false;
+  SavedRoleZone: any;
 
   constructor(
     private auth: AuthService,
@@ -34,6 +35,7 @@ export class HeaderComponent implements OnInit {
     private router: Router
   ) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.SavedRoleZone = this.user.roleid;
     // console.log(this.user, getMenuData)
     // getMenuData = getMenuData.filter(x => x.roles.includes(this.user.role))
     this.menus = getMenuData;
@@ -155,6 +157,7 @@ export class HeaderComponent implements OnInit {
     this.auth.showdropdown.next(true);
   }
 
+  ZoneUsers: any;
   change(bool: boolean = true) {
     // console.log(bool);
     this.selected_companies = this.companies
@@ -167,6 +170,20 @@ export class HeaderComponent implements OnInit {
         .filter((x: any) => x.isselected)
         .map((x: any) => x.CompanyId)
     );
+
+    this.ZoneUsers = this.companies
+      .filter((x: any) => x.isselected)
+      .map((x: any) => x.UserId)
+      .join(', ');
+    this.auth.ZoneUsers.next(
+      this.companies.filter((x: any) => x.isselected).map((x: any) => x.UserId)
+    );
+
+    this.auth.userstores(this.ZoneUsers).subscribe((data: any) => {
+      this.auth.ZoneStores.next(data);
+      console.log(data);
+    });
+    console.log(this.ZoneUsers);
   }
 
   toggleAll() {

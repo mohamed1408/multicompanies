@@ -51,15 +51,15 @@ export class LockscreenComponent implements OnInit {
           .getusercompanies(token_parsed.userid)
           .subscribe((data: any) => {
             this.auth.companies.next([
-              {
-                AccountId: 0,
-                AccountName: 'All',
-                Address: '',
-                CompanyId: 0,
-                CompanyName: 'All Companies',
-                Email: 'all@gmail.com',
-                UserId: 149,
-              },
+              // {
+              //   AccountId: 0,
+              //   AccountName: 'All',
+              //   Address: '',
+              //   CompanyId: 0,
+              //   CompanyName: 'All Companies',
+              //   Email: 'all@gmail.com',
+              //   UserId: 149,
+              // },
               ...data['userCompanies'],
             ]);
             this.auth.companyid.next(this.companyid);

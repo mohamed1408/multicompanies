@@ -38,6 +38,12 @@ export class AuthService {
   >([]);
   public selectedcompanies: BehaviorSubject<Array<number>> =
     new BehaviorSubject<Array<number>>([]);
+  public ZoneUsers: BehaviorSubject<Array<number>> = new BehaviorSubject<
+    Array<number>
+  >([]);
+  public ZoneStores: BehaviorSubject<Array<number>> = new BehaviorSubject<
+    Array<number>
+  >([]);
   public companyid: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public limited_user: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     true

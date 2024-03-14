@@ -43,15 +43,26 @@ export class StorewiseComponent implements OnInit {
     Zomato: ['Zomato', 0],
     DiscAmount: ['DiscAmount', 0],
   };
-
-  constructor(private Auth: AuthService, private ng2filterpipe: Ng2SearchPipe, private excelService: ExcelService) {
+  SavedRoleZone: any;
+  ZoneStore: any;
+  constructor(
+    private Auth: AuthService,
+    private ng2filterpipe: Ng2SearchPipe,
+    private excelService: ExcelService
+  ) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.SavedRoleZone = this.user.roleid;
     this.rangeSettings = JSON.parse(
       localStorage.getItem('rangeSettings') || '[]'
     );
     this.Auth.companyid.subscribe((companyid) => {
       this.companyid = companyid;
       this.getstores();
+    });
+
+    this.Auth.ZoneStores.subscribe((zonestores) => {
+      this.ZoneStore = zonestores;
+      console.log(this.ZoneStore);
     });
   }
 
@@ -99,6 +110,16 @@ export class StorewiseComponent implements OnInit {
     ).subscribe((data: any) => {
       console.log(data);
       this.storereport = data['Order'];
+
+      if (this.SavedRoleZone != 1) {
+        this.storereport = this.storereport.filter((report: any) => {
+          return this.ZoneStore.some(
+            (zone: any) => zone.StoreId === report.StoreId
+          );
+        });
+      }
+
+      console.log(this.storereport);
       this.calculate();
       this.paint();
       this.Auth.isloading.next(false);
@@ -223,8 +244,7 @@ export class StorewiseComponent implements OnInit {
     else if (type == 'string')
       this.storereport = this.storereport.sort(
         (a: any, b: any) =>
-          (a[field].localeCompare(b[field])) *
-          this.sortSetting[field][1]
+          a[field].localeCompare(b[field]) * this.sortSetting[field][1]
       );
   }
 
@@ -241,8 +261,8 @@ export class StorewiseComponent implements OnInit {
     const jsonData = this.storereport.map((row: TableRow) => ({
       'Store Name': row.Name,
       // 'Bill Amount': row.BillAmount,
-      'Amount': row.PaidAmount,
-      'Net Amount': row.Swiggy + row.Zomato
+      Amount: row.PaidAmount,
+      'Net Amount': row.Swiggy + row.Zomato,
       // POS: row.Pos,
       // Swiggy: row.Swiggy,
       // Zomato: row.Zomato,
@@ -251,7 +271,6 @@ export class StorewiseComponent implements OnInit {
 
     this.excelService.exportAsExcelFile(jsonData, 'store_report');
   }
-
 
   calculateNetPaid(): number {
     let totalPaid = 0;
@@ -303,8 +322,6 @@ export class StorewiseComponent implements OnInit {
 
   //   this.excelService.exportAsExcelFile(excel, 'store_report');
   // }
-
-
 }
 
 class RangeSetting {

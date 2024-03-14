@@ -57,8 +57,9 @@ export class AppComponent {
   isLocked$: Observable<boolean>;
   isLoading$: Observable<boolean>;
   companyid: number;
-
+  user: any;
   savedcompany: any;
+  SavedRoleZone: any;
   savedcompanyFinal: any;
   constructor(
     private auth: AuthService,
@@ -72,6 +73,8 @@ export class AppComponent {
     this.isLocked$ = this.auth.accLocked;
     this.isLoading$ = this.auth.isloading;
 
+    this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.SavedRoleZone = this.user.roleid;
     //HYPER CHANGING SAVE TOP COMPANY IN LOCAL STOARGE
     this.savedcompany = localStorage.getItem('SavedCompaniesId');
     this.savedcompanyFinal = parseInt(this.savedcompany);
@@ -82,6 +85,8 @@ export class AppComponent {
     this.auth.companyid.subscribe((cid) => {
       console.log(cid);
     });
+
+    this.savedcompany = localStorage.getItem('SavedCompaniesId');
 
     if (Number.isNaN(this.savedcompanyFinal) == false) {
       this.companyid = this.savedcompanyFinal;
@@ -98,19 +103,35 @@ export class AppComponent {
       this.auth.user.next(token_parsed);
       this.auth.accLocked.next(false);
       this.auth.getusercompanies(token_parsed.userid).subscribe((data: any) => {
-        this.auth.companies.next([
-          {
-            AccountId: 0,
-            AccountName: 'All',
-            Address: '',
-            CompanyId: 0,
-            CompanyName: 'All Companies',
-            Email: 'all@gmail.com',
-            UserId: 149,
-          },
-          ...data['userCompanies'],
-        ]);
-        this.auth.companyid.next(this.companyid);
+        if (this.SavedRoleZone == 1) {
+          this.auth.companies.next([
+            {
+              AccountId: 0,
+              AccountName: 'All',
+              Address: '',
+              CompanyId: 0,
+              CompanyName: 'All Companies',
+              Email: 'all@gmail.com',
+              UserId: 149,
+            },
+            ...data['userCompanies'],
+          ]);
+          this.auth.companyid.next(this.companyid);
+        } else {
+          this.auth.companies.next([
+            // {
+            //   AccountId: 0,
+            //   AccountName: 'All',
+            //   Address: '',
+            //   CompanyId: 0,
+            //   CompanyName: 'All Companies',
+            //   Email: 'all@gmail.com',
+            //   UserId: 149,
+            // },
+            ...data['userCompanies'],
+          ]);
+          this.auth.companyid.next(this.companyid);
+        }
       });
     } else {
       this.auth.accLocked.next(true);
