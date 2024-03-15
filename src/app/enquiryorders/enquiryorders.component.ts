@@ -387,7 +387,7 @@ export class EnquiryordersComponent implements OnInit {
     this.order.PaidAmount = this.totalAmount;
     // this.order.CompanyId = this.store.CompanyId
     // // this.order.
-    if (this.singletrans.storeId == this.store.Id) {
+    if (this.singletrans.length !== 0) {
       console.log('success');
       this.order.PaidAmount = this.order.BillAmount;
       var transaction = new Transaction();
@@ -805,7 +805,7 @@ export class EnquiryordersComponent implements OnInit {
     );
   }
 
-  singletrans: any;
+  singletrans: any = [];
 
   printhtmlstyle = `
   <style>
