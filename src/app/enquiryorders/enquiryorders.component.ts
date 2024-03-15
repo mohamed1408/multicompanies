@@ -387,7 +387,7 @@ export class EnquiryordersComponent implements OnInit {
     this.order.PaidAmount = this.totalAmount;
     // this.order.CompanyId = this.store.CompanyId
     // // this.order.
-    if (this.singletrans.StoreId == this.store.Id) {
+    if (this.singletrans.storeId == this.store.Id) {
       console.log('success');
       this.order.PaidAmount = this.order.BillAmount;
       var transaction = new Transaction();
@@ -404,7 +404,7 @@ export class EnquiryordersComponent implements OnInit {
       transaction.UserId = this.order.UserId;
       transaction.CompanyId = this.store.CompanyId;
       transaction.StorePaymentTypeName = this.singletrans.name;
-      transaction.StorePaymentTypeId = this.singletrans.Id;
+      transaction.StorePaymentTypeId = this.singletrans.id;
       this.transaction = transaction;
       this.order.Transactions.push(this.transaction);
       console.log(this.transaction);
@@ -727,7 +727,7 @@ export class EnquiryordersComponent implements OnInit {
   PaymentTypes() {
     this.Auth.StorePaymentTypes(this.store.CompanyId, this.store.Id).subscribe(
       (data: any) => {
-        this.PaymentTypesValues = data['payments'];
+        this.PaymentTypesValues = data;
         this.PaymentTypesValues.forEach((paymentType: any) => {
           paymentType.selected = false;
           paymentType.saveamounts = 0;
@@ -753,8 +753,8 @@ export class EnquiryordersComponent implements OnInit {
     this.savedData = this.PaymentTypesValues.filter(
       (paymentType: any) => paymentType.saveamounts !== 0
     ).map((paymentType: any) => ({
-      Id: paymentType.Id,
-      name: paymentType.Name,
+      Id: paymentType.id,
+      name: paymentType.name,
       amount: paymentType.saveamounts,
     }));
 
@@ -774,7 +774,7 @@ export class EnquiryordersComponent implements OnInit {
       transaction.UserId = this.order.UserId;
       transaction.CompanyId = this.store.CompanyId;
       transaction.StorePaymentTypeName = pt.name;
-      transaction.StorePaymentTypeId = pt.Id;
+      transaction.StorePaymentTypeId = pt.id;
       this.transaction = transaction;
       this.order.Transactions.push(this.transaction);
       console.log(this.transaction);

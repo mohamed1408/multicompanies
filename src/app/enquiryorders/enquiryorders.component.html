@@ -390,8 +390,8 @@
                                 <ng-container *ngFor="let paymentType of PaymentTypesValues">
                                     <label class="btn btn-outline-primary" [ngClass]="{'active': paymentType.selected}"
                                         (click)="toggleButton(paymentType)" style="margin: 10px;">
-                                        <input type="radio" [id]="'btn' + paymentType.Id" autocomplete="off">
-                                        {{ paymentType.Name }}
+                                        <input type="radio" [id]="'btn' + paymentType.id" autocomplete="off">
+                                        {{ paymentType.name }}
                                     </label>
                                 </ng-container>
                                 <button type="button" class="btn btn-warning" *ngIf="PaymentTypesValues.length > 0"
@@ -701,7 +701,7 @@
                 <hr>
                 <table style="width: 100%;">
                     <tr *ngFor="let paymentType of PaymentTypesValues; let i = index;" style="width: 100%;">
-                        <td style="width: 50%;"><strong>{{ paymentType.Name }}</strong></td>
+                        <td style="width: 50%;"><strong>{{ paymentType.name }}</strong></td>
                         <td style="width: 50%;">
                             <input type="number" class="form-control" placeholder="Enter Amt" style="margin: 10px;"
                                 [(ngModel)]="paymentType.saveamounts" (input)="calculateTotal()">
