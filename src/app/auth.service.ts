@@ -84,9 +84,9 @@ export class AuthService {
   //   this.router.navigate(['/']);
   // }
 
-  userstores(userid: number) {
+  userstores(userid: string) {
     return this.http.get(
-      this.baseurl + `Dashboard/UserStores?userid=${userid}`
+      this.baseurl1 + `Dashboard/UserStores?userid=${userid}`
     );
   }
 
@@ -1071,7 +1071,7 @@ export class AuthService {
 
   StorePaymentTypes(CompId: number, StrId: number) {
     return this.http.get(
-      this.baseurl1 + `WebOrders/GetPayTypes?CompId=${CompId}&StrId=${StrId}`
+      this.base_url2 + `Login/GetPayTypes?CompId=${CompId}&StrId=${StrId}`
     );
   }
 

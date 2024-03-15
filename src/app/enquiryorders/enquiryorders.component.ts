@@ -727,7 +727,7 @@ export class EnquiryordersComponent implements OnInit {
   PaymentTypes() {
     this.Auth.StorePaymentTypes(this.store.CompanyId, this.store.Id).subscribe(
       (data: any) => {
-        this.PaymentTypesValues = data['Payments'];
+        this.PaymentTypesValues = data['payments'];
         this.PaymentTypesValues.forEach((paymentType: any) => {
           paymentType.selected = false;
           paymentType.saveamounts = 0;
