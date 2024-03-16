@@ -86,7 +86,7 @@ export class AuthService {
 
   userstores(userid: string) {
     return this.http.get(
-      this.baseurl1 + `Dashboard/UserStores?userid=${userid}`
+      this.baseurl + `Dashboard/UserStores?userid=${userid}`
     );
   }
 
