@@ -263,6 +263,29 @@ export class AuthService {
     );
   }
 
+  WOorderwiseV2(
+    fromdate: string,
+    todate: string,
+    storeid: number,
+    companyid: number,
+    sourceid: number
+  ) {
+    return this.http.get(
+      this.baseurl +
+        'OrderWise/GetWOReportV2?fromdate=' +
+        fromdate +
+        '&todate=' +
+        todate +
+        '&storeid=' +
+        storeid +
+        '&companyid=' +
+        companyid +
+        '&sourceid=' +
+        sourceid +
+        '&cancelorder=0'
+    );
+  }
+
   orderwiseV2_temp(
     fromdate: string,
     todate: string,

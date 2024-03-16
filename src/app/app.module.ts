@@ -52,6 +52,7 @@ import { AddProductComponent } from './add-product/add-product.component';
 import { SptRptComponent } from './reports/spt-rpt/spt-rpt.component';
 // import { UseraccComponent } from './useracc/useracc.component';
 import { CategorywiseRptNewComponent } from './reports/categorywise-rpt-new/categorywise-rpt-new.component';
+import { WeborderRptComponent } from './reports/weborder-rpt/weborder-rpt.component';
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import { CategorywiseRptNewComponent } from './reports/categorywise-rpt-new/cate
     SptRptComponent,
     // UseraccComponent,
     CategorywiseRptNewComponent,
+    WeborderRptComponent,
   ],
   imports: [
     BrowserModule,
