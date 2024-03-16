@@ -196,11 +196,11 @@ export class EnquiryordersComponent implements OnInit {
         term.length < 1
           ? []
           : this.stores
-              .filter(
-                (v: any) =>
-                  v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10)
+            .filter(
+              (v: any) =>
+                v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+            )
+            .slice(0, 10)
       )
     );
   prodsearch: OperatorFunction<string, readonly string[]> = (
@@ -213,11 +213,11 @@ export class EnquiryordersComponent implements OnInit {
         term.length < 1
           ? []
           : this.products
-              .filter(
-                (v: any) =>
-                  v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10)
+            .filter(
+              (v: any) =>
+                v.Name.toLowerCase().indexOf(term.toLowerCase()) > -1
+            )
+            .slice(0, 10)
       )
     );
   selected(e: any) {
@@ -403,8 +403,8 @@ export class EnquiryordersComponent implements OnInit {
       transaction.TranstypeId = 1;
       transaction.UserId = this.order.UserId;
       transaction.CompanyId = this.store.CompanyId;
-      transaction.StorePaymentTypeName = this.singletrans.name;
-      transaction.StorePaymentTypeId = this.singletrans.id;
+      transaction.StorePaymentTypeName = this.singletrans.Name;
+      transaction.StorePaymentTypeId = this.singletrans.Id;
       this.transaction = transaction;
       this.order.Transactions.push(this.transaction);
       console.log(this.transaction);
@@ -727,7 +727,7 @@ export class EnquiryordersComponent implements OnInit {
   PaymentTypes() {
     this.Auth.StorePaymentTypes(this.store.CompanyId, this.store.Id).subscribe(
       (data: any) => {
-        this.PaymentTypesValues = data;
+        this.PaymentTypesValues = data['Payments'];
         this.PaymentTypesValues.forEach((paymentType: any) => {
           paymentType.selected = false;
           paymentType.saveamounts = 0;
@@ -753,8 +753,8 @@ export class EnquiryordersComponent implements OnInit {
     this.savedData = this.PaymentTypesValues.filter(
       (paymentType: any) => paymentType.saveamounts !== 0
     ).map((paymentType: any) => ({
-      Id: paymentType.id,
-      name: paymentType.name,
+      Id: paymentType.Id,
+      name: paymentType.Name,
       amount: paymentType.saveamounts,
     }));
 
@@ -774,7 +774,7 @@ export class EnquiryordersComponent implements OnInit {
       transaction.UserId = this.order.UserId;
       transaction.CompanyId = this.store.CompanyId;
       transaction.StorePaymentTypeName = pt.name;
-      transaction.StorePaymentTypeId = pt.id;
+      transaction.StorePaymentTypeId = pt.Id;
       this.transaction = transaction;
       this.order.Transactions.push(this.transaction);
       console.log(this.transaction);
@@ -866,12 +866,10 @@ export class EnquiryordersComponent implements OnInit {
     <div class="header" style="text-align: center;">
         <h3>${this.GetReceiptValues[0].Company}</h3>
         <p>
-            ${this.GetReceiptValues[0].Store}, ${
-      this.GetReceiptValues[0].Address
-    }<br>
-            ${this.GetReceiptValues[0].City}, ${
-      this.GetReceiptValues[0].ContactNo
-    }
+            ${this.GetReceiptValues[0].Store}, ${this.GetReceiptValues[0].Address
+      }<br>
+            ${this.GetReceiptValues[0].City}, ${this.GetReceiptValues[0].ContactNo
+      }
             GSTIN:${this.GetReceiptValues[0].GST}<br>
             <strong>Receipt: ${this.GetReceiptValues[0].Invoice}</strong><br>
             ${moment(this.GetReceiptValues[0].OderedDate).format('LLLL')}
@@ -893,14 +891,11 @@ export class EnquiryordersComponent implements OnInit {
       printtemplate += `
       <tr class="nb" style="border-top: 0px;
       border-bottom: 0px; border-bottom: 0.5px solid grey;">
-          <td class="text-left" style="width: 100px;text-align: left!important;" colspan="2">${
-            item.ITEM
-          }</td>
-          <td class="text-right" style="text-align: center!important;">${
-            item.QTY
-          }${
-        item.ComplementryQty > 0 ? '(' + item.ComplementryQty + ')' : ''
-      }</td>
+          <td class="text-left" style="width: 100px;text-align: left!important;" colspan="2">${item.ITEM
+        }</td>
+          <td class="text-right" style="text-align: center!important;">${item.QTY
+        }${item.ComplementryQty > 0 ? '(' + item.ComplementryQty + ')' : ''
+        }</td>
       <td class="text-right">${item.Price.toFixed(2)}</td>
       </tr>`;
       extra += item.Extra;
@@ -910,24 +905,23 @@ export class EnquiryordersComponent implements OnInit {
         <td class="text-left"><strong>Sub Total</strong></td>
         <td colspan="2"></td>
         <td class="text-right">${(
-          this.GetReceiptValues[0].Bill -
-          this.GetReceiptValues[0].CGST +
-          this.GetReceiptValues[0].SGST
-        ).toFixed(2)}</td>
+        this.GetReceiptValues[0].Bill -
+        this.GetReceiptValues[0].CGST +
+        this.GetReceiptValues[0].SGST
+      ).toFixed(2)}</td>
     </tr>
-    <tr class="nb" ${
-      this.GetReceiptValues[0].OrderTotDisc +
+    <tr class="nb" ${this.GetReceiptValues[0].OrderTotDisc +
         this.GetReceiptValues[0].AllItemTotalDisc ==
-      0
+        0
         ? 'hidden'
         : ''
-    }>
+      }>
         <td class="text-left"><strong>Discount</strong></td>
         <td colspan="2"></td>
         <td class="text-right">${(+(
-          this.GetReceiptValues[0].OrderTotDisc +
-          this.GetReceiptValues[0].AllItemTotalDisc
-        ).toFixed(0)).toFixed(2)}</td>
+        this.GetReceiptValues[0].OrderTotDisc +
+        this.GetReceiptValues[0].AllItemTotalDisc
+      ).toFixed(0)).toFixed(2)}</td>
     </tr>
     <tr class="nb">
         <td class="text-left"><strong>CGST</strong></td>
@@ -944,33 +938,32 @@ export class EnquiryordersComponent implements OnInit {
               <td class="text-left"><strong>Extra</strong></td>
               <td colspan="2"></td>
               <td class="text-right">${this.GetReceiptValues[0].Extra.toFixed(
-                2
-              )}</td>
+      2
+    )}</td>
           </tr>
           <tr class="nb">
               <td class="text-left"><strong>Paid</strong></td>
               <td colspan="2"></td>
               <td class="text-right">${this.GetReceiptValues[0].Paid.toFixed(
-                2
-              )}</td>
+      2
+    )}</td>
           </tr>
           <tr class="nb">
               <td class="text-left"><strong>Total</strong></td>
               <td colspan="2"></td>
               <td class="text-right">${this.GetReceiptValues[0].Bill.toFixed(
-                2
-              )}</td>
+      2
+    )}</td>
           </tr>
-          <tr class="nb" ${
-            this.GetReceiptValues[0].Bill - this.GetReceiptValues[0].Paid > 0
-              ? ''
-              : 'hidden'
-          }>
+          <tr class="nb" ${this.GetReceiptValues[0].Bill - this.GetReceiptValues[0].Paid > 0
+        ? ''
+        : 'hidden'
+      }>
               <td class="text-left"><strong>Balance</strong></td>
               <td colspan="2"></td>
               <td class="text-right">${(
-                this.GetReceiptValues[0].Bill - this.GetReceiptValues[0].Paid
-              ).toFixed(2)}</td>
+        this.GetReceiptValues[0].Bill - this.GetReceiptValues[0].Paid
+      ).toFixed(2)}</td>
           </tr>
         </tbody>
       </table>

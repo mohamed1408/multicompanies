@@ -1094,7 +1094,7 @@ export class AuthService {
 
   StorePaymentTypes(CompId: number, StrId: number) {
     return this.http.get(
-      this.base_url2 + `Login/GetPayTypes?CompId=${CompId}&StrId=${StrId}`
+      this.baseurl + `POSOrder/GetPayTypes?CompId=${CompId}&StrId=${StrId}`
     );
   }
 
