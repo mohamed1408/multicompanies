@@ -1042,6 +1042,9 @@ export class EnquiryordersComponent implements OnInit {
     this.PaymentTypesValues.forEach(
       (paymentType: any) => (paymentType.selected = false)
     );
+    this.order.Transactions = [];
+    this.savedData = [];
+    this.totalAmount = 0;
     this.nopaisSelected = !this.nopaisSelected;
     if (this.nopaisSelected) {
       console.log('Selected');
