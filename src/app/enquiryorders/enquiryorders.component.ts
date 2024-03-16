@@ -870,7 +870,7 @@ export class EnquiryordersComponent implements OnInit {
       this.GetReceiptValues[0].Address
     }<br>
             ${this.GetReceiptValues[0].City}, ${
-      this.GetReceiptValues[0].ContactNo
+      this.GetReceiptValues[0].Conatct
     }
             GSTIN:${this.GetReceiptValues[0].GST}<br>
             <strong>Receipt: ${this.GetReceiptValues[0].Invoice}</strong><br>
