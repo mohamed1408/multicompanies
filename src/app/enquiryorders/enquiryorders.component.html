@@ -398,6 +398,15 @@
                                     style="margin: 10px;" data-toggle="modal" data-target="#splitModal"><i
                                         class="fa fa-columns" aria-hidden="true"></i>&nbsp;
                                     Split</button>
+                                <button type="button" class="btn"
+                                    [ngClass]="{'btn-danger': nopaisSelected, 'btn-outline-danger': !nopaisSelected}"
+                                    (click)="toggleSelection()" style="margin: 10px;"
+                                    *ngIf="PaymentTypesValues.length > 0">
+                                    <i class="fa fa-hand-paper-o" aria-hidden="true"></i>&nbsp;
+                                    {{ nopaisSelected ? 'Not Paid' : 'Not Paid'}}
+                                </button>
+
+
                             </div>
 
 
