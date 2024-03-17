@@ -911,8 +911,7 @@ export class EnquiryordersComponent implements OnInit {
         <td colspan="2"></td>
         <td class="text-right">${(
           this.GetReceiptValues[0].Bill -
-          this.GetReceiptValues[0].CGST +
-          this.GetReceiptValues[0].SGST
+          (this.GetReceiptValues[0].CGST + this.GetReceiptValues[0].SGST)
         ).toFixed(2)}</td>
     </tr>
     <tr class="nb" ${

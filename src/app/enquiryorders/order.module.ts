@@ -264,8 +264,9 @@ export class OrderModule {
     if (!this.isordersaved) this.PaidAmount = 0;
     var isdiscinclusivoftax = false;
 
-    // console.log(this.BillAmount)
+    // console.log(this.OrderTotDisc, this.DiscPercent)
     this.Items.forEach((item) => {
+      console.log(item);
       item.TotalAmount = 0;
       if (item.Quantity == 0) return;
       item.TaxAmount1 = 0;
@@ -322,6 +323,9 @@ export class OrderModule {
           } else {
             item.DiscPercent =
               (item.DiscAmount * 100) / (item.TotalAmount + item.TaxAmount);
+            console.log(
+              `Formula: (${item.DiscAmount} * 100) / (${item.TotalAmount} + ${item.TaxAmount})`
+            );
           }
         }
       }
@@ -334,6 +338,9 @@ export class OrderModule {
 
       item.TotalAmount =
         item.TotalAmount - (item.TotalAmount * item.DiscPercent) / 100;
+      console.log(
+        `item.TotalAmount = ${item.TotalAmount} - ((${item.TotalAmount} * ${item.DiscPercent}) / 100)`
+      );
 
       item.TaxAmount1 -= (item.TaxAmount1 * item.DiscPercent) / 100;
       item.TaxAmount2 -= (item.TaxAmount2 * item.DiscPercent) / 100;
@@ -368,18 +375,23 @@ export class OrderModule {
         } else {
           this.DiscPercent =
             (this.DiscAmount * 100) / (this.BillAmount + this.TaxAmount);
+          console.log(
+            `Formula: (${this.DiscAmount} * 100) / (${this.BillAmount} + ${this.TaxAmount})`
+          );
         }
       }
       // // console.log(this.BillAmount, this.DiscPercent, (this.BillAmount * this.DiscPercent) / 100)
       // this.BillAmount -= (this.BillAmount * this.DiscPercent) / 100
     }
+    // console.log("DiscPercentage", this.DiscPercent)
     this.OrderDiscount = (this.BillAmount * this.DiscPercent) / 100;
     this.OrderTaxDisc =
       (this.Tax1 * this.DiscPercent) / 100 +
       (this.Tax2 * this.DiscPercent) / 100 +
       (this.Tax3 * this.DiscPercent) / 100;
+    // console.log(this.OrderTotDisc, this.OrderDiscount, this.OrderTaxDisc)
     this.OrderTotDisc = this.OrderDiscount + this.OrderTaxDisc;
-
+    console.log('DiscPercent: ', this.DiscPercent);
     this.Tax1 -= (this.Tax1 * this.DiscPercent) / 100;
     this.Tax2 -= (this.Tax2 * this.DiscPercent) / 100;
     this.Tax3 -= (this.Tax3 * this.DiscPercent) / 100;
@@ -398,7 +410,6 @@ export class OrderModule {
       }
     });
     // this.BillAmount += extracharge
-
     this.Items.forEach((item) => {
       item.OrderDiscount =
         (item.TotalAmount * this.OrderDiscount) / this.BillAmount;
@@ -406,11 +417,25 @@ export class OrderModule {
         item.TaxOrderDiscount =
           (item.TaxAmount * this.OrderTaxDisc) / this.TaxAmount;
     });
+    console.log(
+      'ba:',
+      this.BillAmount,
+      'ta:',
+      this.TaxAmount,
+      'od:',
+      this.OrderTotDisc,
+      'id:',
+      this.AllItemTotalDisc
+    );
+    console.log(
+      `BillAmount = ${this.BillAmount} + ${this.TaxAmount} + ${this.extra} + ${this.Charges} - ${this.OrderTotDisc}`
+    );
     this.BillAmount +=
-      this.TaxAmount + this.extra + this.Charges - this.OrderTotDisc;
+      this.TaxAmount + this.extra + this.Charges - this.OrderDiscount;
     if (this.DiscType == 1) {
       this.DiscPercent = 0;
     }
+    console.log('finale = ', this.BillAmount);
     this.BillAmount = +(+this.BillAmount.toFixed(0)).toFixed(2);
     this.TaxAmount = +this.TaxAmount.toFixed(2);
     this.Items.forEach((item) => {
@@ -817,10 +842,12 @@ export class CurrentItemModule {
       this.Tax1 = product.TaxGroup.Tax1;
       this.Tax2 = product.TaxGroup.Tax2;
       this.Tax3 = product.TaxGroup.Tax3;
+      this.IsTaxInclusive = product.TaxGroup.IsInclusive;
     } else {
       this.Tax1 = product.Tax1;
       this.Tax2 = product.Tax2;
       this.Tax3 = product.Tax3;
+      this.IsTaxInclusive = product.IsTaxInclusive;
     }
     this.TaxGroupId = product.TaxGroupId;
     this.TaxItemDiscount = 0;
@@ -828,7 +855,6 @@ export class CurrentItemModule {
     this.TotalAmount = 0;
     this.kotquantity = 0;
     this.isorderitem = product.isorderitem ? true : false;
-    this.IsTaxInclusive = product.IsTaxInclusive;
     if (this.Quantity >= this.MinimumQty) {
       this.ComplementryQty = (this.Quantity * this.FreeQtyPercentage) / 100;
     }
