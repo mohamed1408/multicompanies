@@ -876,7 +876,8 @@ export class EnquiryordersComponent implements OnInit {
             <strong>Receipt: ${this.GetReceiptValues[0].Invoice}</strong><br>
             ${moment(this.GetReceiptValues[0].OderedDate).format('LLLL')}
             <br>
-            Customer Mobile : ${this.GetReceiptValues[0].CusPhone}
+            Customer Mobile : ${this.GetReceiptValues[0].CusPhone} <br>
+            Customer Name : ${this.GetReceiptValues[0].CusName}
         </p>
     </div>
     <hr>
