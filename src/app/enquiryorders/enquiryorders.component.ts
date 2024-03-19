@@ -185,10 +185,11 @@ export class EnquiryordersComponent implements OnInit {
     this.feather = feather;
     console.log(this.feather);
     const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
 
-    this.selectedTime = `${hours}:${minutes}`;
+    // Format the time into AM/PM format
+    this.selectedTime = this.formatAMPM(hours, minutes);
   }
   formatter = (result: any) => result.Name;
   pformatter = (result: any) => result.Name;
@@ -1273,6 +1274,13 @@ export class EnquiryordersComponent implements OnInit {
     //   this.savetblorder()
     // }
     // // console.log(this.order.KOTS)
+  }
+
+  formatAMPM(hours: number, minutes: number): string {
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+    const hourStr = (hours % 12 || 12).toString().padStart(2, '0');
+    const minuteStr = minutes.toString().padStart(2, '0');
+    return hourStr + ':' + minuteStr + ' ' + ampm;
   }
 }
 

@@ -239,7 +239,7 @@
                                 <form class="row row-cols-sm-auto">
                                     <div class="col">
                                         <div class="time-picker">
-                                            <input type="time" id="appt" name="appt" (ngModelChange)="ChangeTime()"
+                                            <input type="time" id="appt" name="appt" (input)="ChangeTime()"
                                                 [(ngModel)]="selectedTime"
                                                 [class.is-invalid]="form_validation.deliverytime"
                                                 (input)="validation()">
@@ -570,6 +570,8 @@
 <ng-template #order_details let-modal>
     <div class="modal-header" *ngIf="temp_order">
         <h5 class="modal-title">{{temp_order.InvoiceNo}}</h5>
+        &nbsp;&nbsp;<button type="button" class="btn btn-dark btn-sm"
+            (click)="getcustomer(GetCusDetailsValues?.PhoneNo);openDrawer()">Edit Customer</button>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
