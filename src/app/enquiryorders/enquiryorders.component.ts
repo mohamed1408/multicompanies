@@ -152,6 +152,7 @@ export class EnquiryordersComponent implements OnInit {
   getAllStores() {
     this.Auth.getAllstores().subscribe((data: any) => {
       this.stores = data;
+      this.savedupstore = this.stores;
       this.getENQOrders();
       // this.Stores.unshift()
     });
@@ -450,11 +451,15 @@ export class EnquiryordersComponent implements OnInit {
     this.mode = 'list';
     this.selectedDate = '';
     this.selectedTime = '';
-    this.getENQOrders();
+    // this.getENQOrders();
     this.totalAmount = 0;
     this.savedData = [];
     this.PaymentTypesValues = [];
     this.order.Transactions = [];
+    this.updatedeleteValue = [];
+    this.UpdateOrder = [];
+    this.UpdateItem = [];
+    this.UpScreen = false;
   }
   setcurrentitemprice() {
     var singleqtyoptionprice = 0;
@@ -1051,6 +1056,218 @@ export class EnquiryordersComponent implements OnInit {
     } else {
       console.log('Deselected');
     }
+  }
+
+  UpdateOrder: any;
+  UpdateItem: any;
+  UpScreen = false;
+  savedupstore: any;
+  GetOrderUpdateDetails(data: any) {
+    this.Auth.GetWOOrdDeails(data).subscribe((data: any) => {
+      this.UpScreen = true;
+      this.mode = 'edit';
+      this.UpdateOrder = data['Deatails'];
+      console.log(this.UpdateOrder);
+      this.UpdateItem = JSON.parse(data['Deatails'][0].Items);
+      const modifiedItems = [];
+      for (let i = 0; i < this.UpdateItem.length; i++) {
+        const itemObject = JSON.parse(this.UpdateItem[i].Items);
+        delete itemObject.Name;
+        modifiedItems.push(itemObject);
+      }
+      this.UpdateItem = modifiedItems;
+      this.Auth.getCompanyProducts(
+        this.UpdateOrder[0].CompanyId,
+        this.UpdateOrder[0].StoreId
+      ).subscribe(
+        (data: any) => {
+          this.products = data;
+          console.log(this.products);
+
+          // this.page_loading = false
+          this.Auth.isloading.next(false);
+        },
+        (error) => {
+          console.log(error);
+          this.Auth.isloading.next(false);
+        },
+        () => {
+          console.log('completed');
+          this.Auth.isloading.next(false);
+        }
+      );
+      this.Auth.StorePaymentTypes(
+        this.UpdateOrder[0].CompanyId,
+        this.UpdateOrder[0].StoreId
+      ).subscribe((data: any) => {
+        this.PaymentTypesValues = data['Payments'];
+        this.PaymentTypesValues.forEach((paymentType: any) => {
+          paymentType.selected = false;
+          paymentType.saveamounts = 0;
+          // this.upSPTypFilter();
+        });
+        console.log(data);
+      });
+      this.savedupstore = this.savedupstore.filter((x: any) => {
+        return x.Id == this.UpdateOrder[0].StoreId;
+      });
+      this.order.StoreId = this.UpdateOrder[0].StoreId;
+      this.order.OrderTypeId = this.UpdateOrder[0].OrderTypeId;
+      const orderedDate = new Date(this.UpdateOrder[0].DeliveryDate);
+      this.selectedDate = {
+        year: orderedDate.getFullYear(),
+        month: orderedDate.getMonth() + 1,
+        day: orderedDate.getDate(),
+      };
+      this.order.DeliveryDate = this.selectedDate;
+      const deliveryTime = new Date(this.UpdateOrder[0].DeliveryDateTime);
+      const hours = deliveryTime.getHours().toString().padStart(2, '0');
+      const minutes = deliveryTime.getMinutes().toString().padStart(2, '0');
+      this.selectedTime = `${hours}:${minutes}`;
+      this.order.DeliveryTime = this.selectedTime;
+      this.order.Note = this.UpdateOrder[0].Note;
+      console.log(this.selectedTime);
+      console.log(this.savedupstore[0].Name);
+      this.order.Items = this.UpdateItem;
+      this.order.OrderTotDisc = this.UpdateOrder[0].OrderTotDisc;
+      this.order.AllItemTotalDisc = this.UpdateOrder[0].AllItemTotalDisc;
+      this.order.Tax1 = this.UpdateOrder[0].Tax1;
+      this.order.Tax2 = this.UpdateOrder[0].Tax2;
+      this.order.Tax3 = this.UpdateOrder[0].Tax3;
+      this.order.subtotal =
+        this.UpdateOrder[0].BillAmount -
+        (this.UpdateOrder[0].Tax1 + this.UpdateOrder[0].Tax2);
+      this.order.BillAmount = this.UpdateOrder[0].BillAmount;
+      this.order.OdrsId = this.UpdateOrder[0].OdrsId;
+    });
+  }
+
+  isOpenUp: boolean = false;
+
+  openDrawerUp() {
+    this.isOpenUp = !this.isOpenUp;
+  }
+
+  UpdateOrderValue() {
+    this.loading = true;
+    const index = this.order.Items.indexOf(this.updatedeleteValue);
+    if (index !== -1) {
+      this.order.Items.splice(index, 1);
+    }
+    this.order.DeliveryDate = moment(this.selectedDate).format('YYYY-MM-DD');
+    this.order.DeliveryTime = moment(this.selectedTime, 'HH:mm').format(
+      'hh:mm A'
+    );
+    this.order.DeliveryDateTime = moment(
+      this.order.DeliveryDate + ' ' + this.order.DeliveryTime
+    ).format('YYYY-MM-DD hh:mm A');
+    this.generatekotWO();
+    this.order.PaidAmount = this.totalAmount;
+    if (this.singletrans.length !== 0) {
+      console.log('success');
+      this.order.PaidAmount = this.order.BillAmount;
+      var transaction = new Transaction();
+      transaction = new Transaction();
+      transaction.Id = 0;
+      transaction.Remaining = 0;
+      transaction.Amount = this.order.BillAmount;
+      transaction.OrderId = this.order.OrderId;
+      transaction.StoreId = this.order.StoreId;
+      transaction.TransDate = moment().format('YYYY-MM-DD');
+      transaction.TransDateTime =
+        moment().format('YYYY-MM-DD') + ' ' + moment().format('HH:mm:ss');
+      transaction.TranstypeId = 1;
+      transaction.UserId = this.order.UserId;
+      transaction.CompanyId = this.order.CompanyId;
+      transaction.StorePaymentTypeName = this.singletrans.Name;
+      transaction.StorePaymentTypeId = this.singletrans.Id;
+      this.transaction = transaction;
+      this.order.Transactions.push(this.transaction);
+      console.log(this.transaction);
+    }
+    console.log(this.order.Items);
+    console.log(this.order);
+    this.Auth.UpdateOrder_WO({
+      OrderJson: JSON.stringify(this.order),
+    }).subscribe((data: any) => {
+      if (data['data'][0].OdrsId > 0) {
+        this.loading = false;
+        this.clearOrder();
+        this.getENQOrders();
+      }
+    });
+    Object.keys(this.order).forEach((key) => {
+      if (typeof this.order[key as keyof OrderModule] == 'number') {
+        console.log(
+          key,
+          this.order[key as keyof OrderModule],
+          typeof this.order[key as keyof OrderModule]
+        );
+      }
+    });
+    console.log({ OrderJson: JSON.stringify(this.order) });
+  }
+
+  updatedeleteValue: any;
+  updatedelete(data: any) {
+    this.updatedeleteValue = data;
+    console.log(this.updatedeleteValue);
+  }
+
+  upSPType: any;
+  upSPTypFilter() {
+    this.upSPType = this.PaymentTypesValues.filter((data: any) => {
+      return data.Name.toLowerCase().startsWith('ph');
+    });
+    console.log(this.upSPType);
+  }
+
+  generatekotWO() {
+    var groupeditems = _.mapValues(
+      _.groupBy(
+        this.order.Items.filter(
+          (x) => x.Quantity + x.ComplementryQty - x.kotquantity != 0
+        ),
+        'KOTGroupId'
+      )
+    );
+    Object.keys(groupeditems).forEach((key) => {
+      this.order.addkot(groupeditems[key], -1);
+      // this.updatekotno()
+    });
+    if (this.order.OrderNo == 0) {
+      this.order.OrderNo = -1;
+      this.order.InvoiceNo = 'WO | ';
+      // this.updateorderno()
+    } else {
+      if (!this.order.changeditems.includes('kot'))
+        this.order.changeditems.push('kot');
+    }
+    this.order.Items = this.order.Items.filter(
+      (x) => x.Quantity + x.ComplementryQty != 0
+    );
+    // localStorage.setItem("testorder", JSON.stringify(this.order))
+    this.order.setrefid();
+    this.order.KOTS.forEach((kot) => {
+      kot.CreatedDate = moment().format('YYYY-MM-DD hh:mm A');
+      kot.ModifiedDate = moment().format('YYYY-MM-DD hh:mm A');
+      kot.invoiceno = this.order.InvoiceNo;
+      kot.ordertypeid = this.order.OrderTypeId;
+      kot.CompanyId = this.order.CompanyId;
+      kot.StoreId = this.order.StoreId;
+      if (!kot.isprinted) {
+        // this.savekot(new KDSKotModule(kot, this.order))
+        // // console.log("new kot")
+        // this.orderlogging('new_kot')
+        // kot.isprinted = true
+        // if (this.order.OrderTypeId != 5) this.printkot(kot)
+      }
+    });
+    this.order.setkotquantity();
+    // if (this.order.OrderTypeId == 1) {
+    //   this.savetblorder()
+    // }
+    // // console.log(this.order.KOTS)
   }
 }
 

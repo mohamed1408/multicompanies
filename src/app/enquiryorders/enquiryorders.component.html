@@ -147,6 +147,11 @@
                                                         (click)="openCancelmodal(order.OdrsId)">
                                                         <i class="fa fa-ban" aria-hidden="true"></i>
                                                     </button>
+                                                    &nbsp;&nbsp;
+                                                    <button type="button" class="btn btn-info"
+                                                        (click)="GetOrderUpdateDetails(order.OdrsId)">
+                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -160,10 +165,11 @@
         </section>
     </div>
     <div *ngIf="mode == 'edit'" class="col-xl-12">
-        <div class="title">Add New Order</div>
+        <div class="title" *ngIf="UpScreen == false">Add New Order</div>
+        <div class="title" *ngIf="UpScreen == true">EDIT Order</div>
         <section class="hk-sec-wrapper">
             <div *ngIf=" !sections.customer.collapse" class="col-xl-12 row" style="position: relative;">
-                <div class="form-group col-xl-3">
+                <div class="form-group col-xl-3" *ngIf="UpScreen == false">
                     <ng-template #rt let-r="result" let-t="term">
                         <ngb-highlight [result]="r.Name" [term]="t"></ngb-highlight>
                     </ng-template>
@@ -171,13 +177,16 @@
                         [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
                         (selectItem)="selected($event.item)" placeholder="Search Stores..." />
                 </div>
-                <div class="col-xl-3" style="position: relative;">
+                <div class="form-group col-xl-3" *ngIf="UpScreen == true">
+                    <input type="text" class="form-control col" [(ngModel)]="savedupstore[0].Name" disabled />
+                </div>
+                <div class="col-xl-3" style="position: relative;" *ngIf="UpScreen == false">
                     <input type="text" class="form-control" (keyup.enter)="getcustomer(customer.PhoneNo);openDrawer()"
                         [class.is-invalid]="form_validation.phoneno" [(ngModel)]="customer.PhoneNo"
                         (input)="validation()" placeholder="Customer Mobile" />
                     <span *ngIf="form_validation.phoneno" class="text-danger font-11">Phone Num. is Mandatory</span>
                 </div>
-                <div class="col">
+                <div class="col" *ngIf="UpScreen == false">
                     <button type="button" class="btn btn-secondary btn-sm" style="border-radius: 500px;"
                         (click)="openDrawer()">
                         <i class="fa fa-user" aria-hidden="true"></i>
@@ -334,7 +343,8 @@
                                 <button type="button" class="btn btn-link text-primary" (click)="openModal()">
                                     Bulk Discount
                                 </button>
-                                <button type="button" class="btn btn-link text-danger" (click)="toggleOrderStatus()">
+                                <button type="button" class="btn btn-link text-danger" (click)="toggleOrderStatus()"
+                                    *ngIf="UpScreen == false">
                                     {{ orderButtonText }}
                                 </button>
 
@@ -375,7 +385,8 @@
                                         <td style="width: 20%;">₹&nbsp;{{item.TotalAmount | number: '.2'}}</td>
                                         <td style="width: 20%;">
                                             <button type="button" class="btn btn-danger btn-sm"
-                                                (click)="item.Quantity = 0; item.ComplementryQty = 0; order.setbillamount()">
+                                                (click)="item.Quantity = 0; item.ComplementryQty = 0; order.setbillamount()"
+                                                (click)="updatedelete(item)">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </button>
                                         </td>
@@ -405,14 +416,14 @@
                                     <i class="fa fa-hand-paper-o" aria-hidden="true"></i>&nbsp;
                                     {{ nopaisSelected ? 'Not Paid' : 'Not Paid'}}
                                 </button>
-
-
                             </div>
 
-
                             <div class="col" style="text-align: right;">
-                                <button class="btn btn-success" (click)="saveOrder()"><i class="fa fa-inr"
-                                        aria-hidden="true" style="margin: 10px;"></i>&nbsp;Place
+                                <button class="btn btn-success" (click)="saveOrder()" *ngIf="UpScreen == false"><i
+                                        class="fa fa-inr" aria-hidden="true" style="margin: 10px;"></i>&nbsp;Place
+                                    Order</button>
+                                <button class="btn btn-info" *ngIf="UpScreen == true" (click)="UpdateOrderValue()"><i
+                                        class="fa fa-inr" aria-hidden="true" style="margin: 10px;"></i>&nbsp;Update
                                     Order</button>
                             </div>
                         </div>

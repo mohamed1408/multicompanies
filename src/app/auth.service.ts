@@ -1147,6 +1147,10 @@ export class AuthService {
       this.baseurl + 'POSOrder/GetReceipt_WO?orderid=' + orderid
     );
   }
+
+  UpdateOrder_WO(payload: any) {
+    return this.http.post(this.baseurl + 'POSOrder/UpdateOrder_WO', payload);
+  }
 }
 
 // baseurl
