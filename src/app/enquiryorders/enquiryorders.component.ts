@@ -21,9 +21,9 @@ import {
   OrderModule,
   Transaction,
 } from './order.module';
-import { SignalrService } from '../services/signalr/signalr.service';
 import { dtrangepicker } from '../../assets/dist/js/datePickerHelper';
 import html2canvas from 'html2canvas';
+// import { AppSignalRService } from './app-signalr.service';
 
 declare function setHeightWidth(): any;
 declare const feather: any, $: any;
@@ -96,9 +96,9 @@ export class EnquiryordersComponent implements OnInit {
   constructor(
     private Auth: AuthService,
     private modalService: NgbModal,
-    private sanitizer: DomSanitizer,
-    private signalR: SignalrService
+    private sanitizer: DomSanitizer // private signalRService: AppSignalRService // private signalR: SignalrService
   ) {
+    // this.signalRService.startConnection();
     this.order = new OrderModule(3);
     // this.customer.Address;
     this.plusIcon = sanitizer.bypassSecurityTrustHtml(
@@ -112,16 +112,16 @@ export class EnquiryordersComponent implements OnInit {
     this.transaction = new Transaction();
     console.log(this.plusIcon);
     this.phone_num_reg;
-    this.signalR.hubconnection.on(
-      'DeliveryOrderUpdate',
-      (fromstoreid, tostoreid, invoiceno) => {
-        if (invoiceno.includes('WO')) {
-          console.log('DeliveryOrderUpdate', fromstoreid, tostoreid, invoiceno);
-          const orderid = +invoiceno.split(' | ')[1];
-          this.getSingleOrder(orderid);
-        }
-      }
-    );
+    // this.signalR.hubconnection.on(
+    //   'DeliveryOrderUpdate',
+    //   (fromstoreid, tostoreid, invoiceno) => {
+    //     if (invoiceno.includes('WO')) {
+    //       console.log('DeliveryOrderUpdate', fromstoreid, tostoreid, invoiceno);
+    //       const orderid = +invoiceno.split(' | ')[1];
+    //       this.getSingleOrder(orderid);
+    //     }
+    //   }
+    // );
   }
 
   getENQOrders() {
@@ -184,6 +184,11 @@ export class EnquiryordersComponent implements OnInit {
     setHeightWidth();
     this.feather = feather;
     console.log(this.feather);
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+
+    this.selectedTime = `${hours}:${minutes}`;
   }
   formatter = (result: any) => result.Name;
   pformatter = (result: any) => result.Name;
