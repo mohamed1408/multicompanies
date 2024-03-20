@@ -47,6 +47,22 @@
                     <input class="form-control" type="search" placeholder="Search..." aria-label="Search"
                         [(ngModel)]="searchText" (input)="filterOrders()" />
                 </div>
+                <div>
+                    <div style="margin-left:50px;">
+                        <input type="text" class="form-group" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
+                            [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected"
+                            [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
+                            [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
+                            placeholder="Select Date..." class="form-control" (input)="filterOrders()" />
+                    </div>
+                    <div hidden style="margin-left:120px;margin-top: 3px">
+                        <input type="text" class="form-group" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
+                            [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected"
+                            [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
+                            [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
+                            placeholder="Select Date..." class="form-control" (input)="filterOrders()" />
+                    </div>
+                </div>
                 <div class="col" style="text-align: right;">
                     <button type="button" class="btn btn-link text-primary" (click)="getENQOrders()">
                         <strong style="color: coral;"><i class="fa fa-refresh" aria-hidden="true"></i>
@@ -96,7 +112,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let order of filteredOrders.length ? filteredOrders : orders">
+                                            <tr *ngFor="let order of filteredOrders">
                                                 <td>
                                                     <button class=" btn btn-link"
                                                         (click)="GetWOOrdDeails(order.OdrsId)">#{{order.InvoiceNo}}</button>
@@ -570,8 +586,6 @@
 <ng-template #order_details let-modal>
     <div class="modal-header" *ngIf="temp_order">
         <h5 class="modal-title">{{temp_order.InvoiceNo}}</h5>
-        &nbsp;&nbsp;<button type="button" class="btn btn-dark btn-sm"
-            (click)="getcustomer(GetCusDetailsValues?.PhoneNo);openDrawer()">Edit Customer</button>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>

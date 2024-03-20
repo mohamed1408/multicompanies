@@ -129,6 +129,7 @@ export class EnquiryordersComponent implements OnInit {
     this.Auth.getENQOrders(0).subscribe((data: any) => {
       console.log(data);
       this.orders = data;
+      this.filteredOrders = this.orders;
       this.orders = this.orders.map((x: any) => {
         // let json = JSON.parse(x.OrderJson)
         // let status = this.status.filter(y => y[0] == json.OrderStatusId)[0]
@@ -723,6 +724,13 @@ export class EnquiryordersComponent implements OnInit {
   filteredOrders: any[] = [];
 
   filterOrders() {
+    if (!this.searchText) {
+      // If search text is empty, return all orders
+      this.filteredOrders = this.orders;
+      return;
+    }
+
+    // Filter orders based on customer name or phone number
     this.filteredOrders = this.orders.filter(
       (order: any) =>
         (order.CusName &&
@@ -1281,6 +1289,55 @@ export class EnquiryordersComponent implements OnInit {
     const hourStr = (hours % 12 || 12).toString().padStart(2, '0');
     const minuteStr = minutes.toString().padStart(2, '0');
     return hourStr + ':' + minuteStr + ' ' + ampm;
+  }
+
+  ranges: any = {
+    Today: [moment(), moment()],
+    Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+    'This Month': [moment().startOf('month'), moment().endOf('month')],
+    'Last Month': [
+      moment().subtract(1, 'month').startOf('month'),
+      moment().subtract(1, 'month').endOf('month'),
+    ],
+  };
+
+  startdate: any;
+  enddate: any;
+  // date(
+  //   e:
+  //     | {
+  //         startDate: { format: (arg0: string) => any };
+  //         endDate: { format: (arg0: string) => any };
+  //       }
+  //     | any
+  // ) {
+  //   // console.log(e);
+  //   if (e && e.startDate && e.endDate) {
+  //     this.startdate = e.startDate.format('YYYY-MM-DD');
+  //     this.enddate = e.endDate.format('YYYY-MM-DD');
+  //   }
+  // }
+
+  date(e: any) {
+    if (e && e.startDate && e.endDate) {
+      const startDate = e.startDate.format('YYYY-MM-DD');
+      const endDate = e.endDate.format('YYYY-MM-DD');
+
+      // Filter orders based on the selected date range
+      this.filteredOrders = this.orders.filter((order: any) => {
+        const orderDate = new Date(order.OrderedDateTime);
+        const orderDateString = orderDate.toISOString().split('T')[0];
+
+        return orderDateString >= startDate && orderDateString <= endDate;
+      });
+
+      // If the filtered orders array is empty, no orders were found for the selected range
+      if (this.filteredOrders.length === 0) {
+        // Add a notification or handle this scenario as per your requirements
+      }
+    }
   }
 }
 
