@@ -58,11 +58,31 @@
                     </div>
                     <div class="form-group" style="width: 15em;margin-left:40px;">
                         <label for="username">Category Type : </label>
-                        <select class="form-control custom-select" name="OrderType" [(ngModel)]="CatId">
+                        <!-- <select class="form-control custom-select" [(ngModel)]="CategoryId">
+                            <option value="0" selected disabled>Select Category</option>
+                            <option value="All">All</option>
+                            <option value="{{ item.id }}" *ngFor="let item  of categ">
+                                {{ item.description }}
+                            </option>
+                        </select> -->
+
+                        <div class="dropdown">
+                            <input type="text" (click)="toggleDropdown()" [value]="selectedValues" readonly
+                                placeholder="Select atleast one">
+                            <ul class="dropdown-menu" [class.show]="showDropdown">
+                                <li *ngFor="let item of categ" (click)="toggleItem(item)">
+                                    <input type="checkbox" [(ngModel)]="item.checked">
+                                    {{ item.description }}
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <!-- <select class="form-control custom-select" name="OrderType" [(ngModel)]="CatId">
                             <option value="0" disabled selected>Select Atleast One</option>
                             <option value="{{item.Id}}" *ngFor="let item of GetCatValues">{{item.Description}}</option>
                             <option value="-74489">Other</option>
-                        </select>
+                        </select> -->
                     </div>
                     <div style="margin-top:35px;">
                         <div class="row">
@@ -152,12 +172,14 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th><strong>[Store]</strong></th>
                                 <th><strong>[Cat Name]</strong></th>
                                 <th><strong>[Total Amt]</strong></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of filterothercats">
+                                <td>{{item.StoreName}}</td>
                                 <td>{{item.CateId}}</td>
                                 <td>{{item.Amt}}</td>
                             </tr>

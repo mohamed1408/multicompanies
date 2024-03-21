@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
 
 @Component({
@@ -28,7 +29,7 @@ export class CategorywiseRptNewComponent implements OnInit {
   ngOnInit(): void {
     this.Auth.companyid.subscribe((companyid) => {
       this.CompanyId = companyid;
-      this.GetCat();
+      this.getCategory();
       this.CatId = 0;
     });
   }
@@ -80,7 +81,7 @@ export class CategorywiseRptNewComponent implements OnInit {
   totalamount: any;
   totaldiscamount: any;
   totalzsamount: any;
-  hidebool: any;
+  hidebool: any = 1;
   // GetCatwiseAllRpt() {
   //   if (this.CatId == -74489) {
   //     this.hidebool = 1;
@@ -116,15 +117,15 @@ export class CategorywiseRptNewComponent implements OnInit {
   FinalCatValues: any;
   GetCatwiseAllRpt() {
     this.Auth.isloading.next(true);
-    if (this.CatId == -74489) {
-      this.hidebool = 1;
-      this.CatId = this.GetCatValues[0]?.Id ?? 0; // Default to 0 if undefined
-    } else {
-      this.hidebool = 0;
-    }
+    // if (this.CatId == -74489) {
+    //   this.hidebool = 1;
+    //   this.CatId = this.GetCatValues[0]?.Id ?? 0; // Default to 0 if undefined
+    // } else {
+    //   this.hidebool = 0;
+    // }
 
     this.Auth.GetCatwiseAllStr(
-      this.CatId,
+      this.CategoryId,
       this.CompanyId,
       this.startdate,
       this.enddate,
@@ -204,9 +205,9 @@ export class CategorywiseRptNewComponent implements OnInit {
       this.totalzsamount = totalZzAmount + totalSsAmount;
     });
 
-    if (this.hidebool == 1) {
-      this.CatId = -74489;
-    }
+    // if (this.hidebool == 1) {
+    //   this.CatId = -74489;
+    // }
     this.filterothercats = [];
   }
 
@@ -216,5 +217,43 @@ export class CategorywiseRptNewComponent implements OnInit {
     this.filterothercats = this.filterothercats.filter(
       (x: any) => x.StoreName == data
     );
+  }
+
+  categ: any;
+  getCategory() {
+    this.Auth.getcat(this.CompanyId).subscribe((data: any) => {
+      this.categ = data['totalSales'];
+      console.log(this.categ);
+    });
+  }
+  selectedCategories: string[] = [];
+  CategoryId: any = 0;
+  showDropdown: boolean = false;
+  selectedValues: string = '';
+  @HostListener('document:click', ['$event'])
+  handleDocumentClick(event: MouseEvent): void {
+    const clickedElement = event.target as HTMLElement;
+    const dropdownElement = document.querySelector('.dropdown');
+    if (!dropdownElement?.contains(clickedElement)) {
+      this.showDropdown = false;
+    }
+  }
+
+  toggleDropdown(): void {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  toggleItem(item: any): void {
+    item.checked = !item.checked;
+    this.updateSelectedValues();
+  }
+
+  updateSelectedValues(): void {
+    const selectedItems = this.categ.filter((item: any) => item.checked);
+    this.selectedValues = selectedItems
+      .map((item: any) => item.description)
+      .join(', ');
+    this.CategoryId = selectedItems.map((item: any) => item.id).join(',');
+    console.log(this.CategoryId);
   }
 }

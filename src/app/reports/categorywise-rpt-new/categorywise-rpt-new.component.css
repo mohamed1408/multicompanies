@@ -9,3 +9,38 @@
 .container {
     max-width: 95vw !important;
 }
+
+
+/* //CUSTOM SELECT */
+/* CSS */
+.dropdown {
+    position: relative;
+  }
+  
+  .dropdown input {
+    cursor: pointer;
+  }
+  
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    list-style-type: none;
+    padding: 5px 10px;
+    margin: 0;
+    z-index: 1000;
+  }
+  
+  .dropdown-menu li {
+    cursor: pointer;
+  }
+  
+  .dropdown-menu li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .show {
+    display: block;
+  }
+  

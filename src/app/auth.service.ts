@@ -10,6 +10,7 @@ import { Message, Transaction } from './model/model';
 })
 export class AuthService {
   baseurl = 'https://biz1pos.azurewebsites.net/api/';
+  baseurl3 = 'https://uat-bizpos.azurewebsites.net/api/';
   baseurl1 = 'https://localhost:44383/api/';
   ecomurl = 'https://biz1ecom.azurewebsites.net/api/';
   posurl = 'http://localhost:2357/';
@@ -1076,8 +1077,8 @@ export class AuthService {
     hidebool: number
   ) {
     return this.http.get(
-      this.baseurl +
-        `Report/GetCatwiseAllStr?cateId=${cateId}&companyId=${companyId}&fromDate=${fromDate}&toDate=${toDate}&hidebool=${hidebool}`
+      this.baseurl3 +
+        `Login/GetCatwiseAllStr?cateId=${cateId}&companyId=${companyId}&fromDate=${fromDate}&toDate=${toDate}&hidebool=${hidebool}`
     );
   }
 
