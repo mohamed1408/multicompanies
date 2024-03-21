@@ -29,7 +29,7 @@ export class CategorywiseRptNewComponent implements OnInit {
   ngOnInit(): void {
     this.Auth.companyid.subscribe((companyid) => {
       this.CompanyId = companyid;
-      this.getCategory();
+      this.GetCatProGrp();
       this.CatId = 0;
     });
   }
@@ -220,10 +220,17 @@ export class CategorywiseRptNewComponent implements OnInit {
   }
 
   categ: any;
-  getCategory() {
-    this.Auth.getcat(this.CompanyId).subscribe((data: any) => {
-      this.categ = data['totalSales'];
-      console.log(this.categ);
+  // getCategory() {
+  //   this.Auth.getcat(this.CompanyId).subscribe((data: any) => {
+  //     this.categ = data['totalSales'];
+  //     console.log(this.categ);
+  //   });
+  // }
+
+  GetCatProGrp() {
+    this.Auth.GetCatProGrp(this.CompanyId).subscribe((data: any) => {
+      this.categ = data['listCat'];
+      console.log(data);
     });
   }
   selectedCategories: string[] = [];
