@@ -21,6 +21,17 @@
     cursor: pointer;
   }
   
+  /* .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    list-style-type: none;
+    padding: 5px 10px;
+    margin: 0;
+    z-index: 1000;
+  } */
+
   .dropdown-menu {
     display: none;
     position: absolute;
@@ -30,7 +41,10 @@
     padding: 5px 10px;
     margin: 0;
     z-index: 1000;
-  }
+    max-height: 200px; /* Set max height for the list */
+    overflow-y: auto; /* Enable vertical scrollbar */
+}
+
   
   .dropdown-menu li {
     cursor: pointer;

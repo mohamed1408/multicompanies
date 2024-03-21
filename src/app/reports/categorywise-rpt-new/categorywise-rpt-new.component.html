@@ -68,7 +68,7 @@
 
                         <div class="dropdown">
                             <input type="text" (click)="toggleDropdown()" [value]="selectedValues" readonly
-                                placeholder="Select atleast one">
+                                placeholder="Select at least one">
                             <ul class="dropdown-menu" [class.show]="showDropdown">
                                 <li *ngFor="let item of categ" (click)="toggleItem(item)">
                                     <input type="checkbox" [(ngModel)]="item.checked">
@@ -76,6 +76,7 @@
                                 </li>
                             </ul>
                         </div>
+
 
 
                         <!-- <select class="form-control custom-select" name="OrderType" [(ngModel)]="CatId">
