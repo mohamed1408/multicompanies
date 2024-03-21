@@ -194,8 +194,10 @@
                   (click)="oti = 3">Delivery</button>
                 <button type="button" [class.btn-outline-grey]="oti != 4" class="btn btn-secondary"
                   (click)="oti = 4">PickUp</button>
-                <button type="button" [class.btn-outline-grey]="oti != 7" class="btn btn-secondary" (click)="oti = 7">FB
-                  Online</button>
+                <!-- <button type="button" [class.btn-outline-grey]="oti != 7" class="btn btn-secondary" (click)="oti = 7">FB
+                  Online</button> -->
+                <button type="button" [class.btn-outline-grey]="oti != 6" class="btn btn-secondary" (click)="oti = 6">ZS
+                  Order</button>
                 <button type="button" [class.btn-outline-grey]="oti != 5" class="btn btn-secondary"
                   (click)="oti = 5">Quick</button>
                 <button type="button" [class.btn-outline-grey]="oti != 1" class="btn btn-secondary"
@@ -220,7 +222,7 @@
                     <td>{{i+1}}</td>
                     <td class="position-relative" style="padding-top: 20px !important;">
                       <span class="font-italic position-absolute font-13" style="top: 0;"
-                        [ngStyle]="{'color': cservice.statusColors(r.osi)}">
+                        [ngStyle]="{'color': cservice.statusColors(r.osi)}" *ngIf="r.osi != 0">
                         {{r.StatusName}}
                       </span>
                       <a class="biza" data-toggle="modal" data-target="#exampleModalLarge01" href="javascript:void(0)"

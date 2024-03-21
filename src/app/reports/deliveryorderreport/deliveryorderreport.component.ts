@@ -271,6 +271,8 @@ export class DeliveryorderreportComponent implements OnInit {
                 .join('|');
               delete r.json;
               this.report.push(r);
+              console.log(r.transaxnlist);
+              console.log(this.report);
               this.totalba += r.ba;
               this.totalpa += r.pa;
               this.ordertypes.filter((x: any) => x.id == r.oti)[0].count++;
@@ -280,6 +282,18 @@ export class DeliveryorderreportComponent implements OnInit {
                 .oc(r.oti);
             }
           });
+        console.log(data['ZSorder']);
+        data['ZSorder'].forEach((item: any) => {
+          item.items = JSON.parse(item.items);
+        });
+        this.report.push(...data['ZSorder']);
+        console.log(data['ZSorderTrans']);
+
+        this.report.sort((a: ReportItem, b: ReportItem) => {
+          const dateA = new Date(a.dddt);
+          const dateB = new Date(b.dddt);
+          return dateB.getTime() - dateA.getTime();
+        });
         console.log(this.report);
         this.Report = this.report;
       });
@@ -426,6 +440,7 @@ class GDS {
     this.data = [];
   }
   add(order: any) {
+    console.log(order);
     if (!this.data.some((x) => x.storeid == order.si)) {
       this.data.push({
         storeid: order.si,
@@ -440,4 +455,8 @@ class GDS {
       .map((x: any) => x.qy)
       .reduce((a: number, c: number) => a + c, 0);
   }
+}
+
+interface ReportItem {
+  dddt: string;
 }
