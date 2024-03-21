@@ -258,9 +258,9 @@ export class CategorywiseRptNewComponent implements OnInit {
   updateSelectedValues(): void {
     const selectedItems = this.categ.filter((item: any) => item.checked);
     this.selectedValues = selectedItems
-      .map((item: any) => item.description)
+      .map((item: any) => item.pCateName)
       .join(', ');
-    this.CategoryId = selectedItems.map((item: any) => item.id).join(',');
+    this.CategoryId = selectedItems.map((item: any) => item.cateGrp).join(',');
     console.log(this.CategoryId);
   }
 }
