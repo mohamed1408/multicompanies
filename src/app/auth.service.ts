@@ -1082,6 +1082,12 @@ export class AuthService {
     );
   }
 
+  GetCatProGrp(CompanyId: number) {
+    return this.http.get(
+      this.base_url2 + 'Login/CategoryGrp?CompanyId=' + CompanyId
+    );
+  }
+
   GetOldProds(companyId: number) {
     return this.http.get(
       this.baseurl1 + 'Customer/GetOldProds?ComId=' + companyId
