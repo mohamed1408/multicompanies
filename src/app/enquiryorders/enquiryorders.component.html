@@ -145,12 +145,12 @@
                                                         date: "MMM
                                                         d, y, h:mm a"}}</span>
                                                 </td>
-                                                <td *ngIf="order.OrderStatusId == 0"><span
-                                                        class="badge badge-dark">Pending</span></td>
                                                 <td *ngIf="order.OrderStatusId == 1"><span
-                                                        class="badge badge-warning">Accepted</span></td>
-                                                <td *ngIf="order.OrderStatusId == 4"><span class="badge badge-info">Out
-                                                        of Delivery</span></td>
+                                                        class="badge badge-dark">Accepted</span></td>
+                                                <td *ngIf="order.OrderStatusId == 0"><span
+                                                        class="badge badge-warning">Pending</span></td>
+                                                <td *ngIf="order.OrderStatusId == 4"><span
+                                                        class="badge badge-info">Accepted</span></td>
                                                 <td *ngIf="order.OrderStatusId == 5"><span
                                                         class="badge badge-success">Delivered</span></td>
                                                 <td>
