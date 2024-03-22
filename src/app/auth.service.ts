@@ -160,6 +160,17 @@ export class AuthService {
         storeid
     );
   }
+
+  getCompanyProducts2(companyid: number, storeid: number) {
+    return this.http.get(
+      this.baseurl3 +
+        'StoreData/GetEnqProd?companyid=' +
+        companyid +
+        '&storeid=' +
+        storeid
+    );
+  }
+
   getAllOld() {
     return this.http.get(this.baseurl + 'Product/GetAllOld');
   }

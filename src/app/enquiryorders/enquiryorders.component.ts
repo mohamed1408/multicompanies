@@ -162,9 +162,15 @@ export class EnquiryordersComponent implements OnInit {
     // this.page_loading = true
     this.Auth.isloading.next(true);
     this.products = [];
-    this.Auth.getCompanyProducts(this.store.CompanyId, this.store.Id).subscribe(
+    this.Auth.getCompanyProducts2(
+      this.store.CompanyId,
+      this.store.Id
+    ).subscribe(
       (data: any) => {
-        this.products = data;
+        data['data'].forEach((item: any) => {
+          item.TaxGroup = JSON.parse(item.TaxGroup);
+        });
+        this.products = data['data'];
         console.log(this.products);
 
         // this.page_loading = false
@@ -1090,12 +1096,15 @@ export class EnquiryordersComponent implements OnInit {
         modifiedItems.push(itemObject);
       }
       this.UpdateItem = modifiedItems;
-      this.Auth.getCompanyProducts(
+      this.Auth.getCompanyProducts2(
         this.UpdateOrder[0].CompanyId,
         this.UpdateOrder[0].StoreId
       ).subscribe(
         (data: any) => {
-          this.products = data;
+          data['data'].forEach((item: any) => {
+            item.TaxGroup = JSON.parse(item.TaxGroup);
+          });
+          this.products = data['data'];
           console.log(this.products);
 
           // this.page_loading = false

@@ -810,6 +810,7 @@ export class CurrentItemModule {
   kotrefid!: string;
   refid!: string;
   constructor(product: any) {
+    console.log('hyper', product);
     this.Id = 0;
     this.CategoryId = product.CategoryId;
     this.ComplementryQty = 0;
@@ -837,12 +838,12 @@ export class CurrentItemModule {
     this.Price = product.Price;
     this.Quantity = product.Quantity ? product.Quantity : 1;
     this.StatusId = 0;
-    if (product.TaxGroup) {
-      this.TaxGroup = product.TaxGroup;
-      this.Tax1 = product.TaxGroup.Tax1;
-      this.Tax2 = product.TaxGroup.Tax2;
-      this.Tax3 = product.TaxGroup.Tax3;
-      this.IsTaxInclusive = product.TaxGroup.IsInclusive;
+    if (product.TaxGroup[0]) {
+      this.TaxGroup = product.TaxGroup[0];
+      this.Tax1 = product.TaxGroup[0].Tax1;
+      this.Tax2 = product.TaxGroup[0].Tax2;
+      this.Tax3 = product.TaxGroup[0].Tax3;
+      this.IsTaxInclusive = product.TaxGroup[0].IsInclusive;
     } else {
       this.Tax1 = product.Tax1;
       this.Tax2 = product.Tax2;
@@ -891,6 +892,7 @@ export class CurrentItemModule {
     } else if (this.DiscType == 2) {
       this.TotalAmount -= (this.TotalAmount * this.DiscPercent) / 100;
     }
+    console.log('HYPERETCH CHECK');
   }
 }
 export class CustomerModule {
