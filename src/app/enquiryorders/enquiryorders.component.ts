@@ -130,6 +130,7 @@ export class EnquiryordersComponent implements OnInit {
       console.log(data);
       this.orders = data;
       this.filteredOrders = this.orders;
+      this.searchOrderFetch = this.filteredOrders
       this.orders = this.orders.map((x: any) => {
         // let json = JSON.parse(x.OrderJson)
         // let status = this.status.filter(y => y[0] == json.OrderStatusId)[0]
@@ -153,7 +154,7 @@ export class EnquiryordersComponent implements OnInit {
   getAllStores() {
     this.Auth.getAllstores().subscribe((data: any) => {
       this.stores = data;
-      this.savedupstore = this.stores;
+      this.tempsstore = this.stores;
       this.getENQOrders();
       // this.Stores.unshift()
     });
@@ -471,6 +472,7 @@ export class EnquiryordersComponent implements OnInit {
     this.order.Transactions = [];
     this.updatedeleteValue = [];
     this.UpdateOrder = [];
+    // this.savedupstore = []
     this.UpdateItem = [];
     this.UpScreen = false;
   }
@@ -728,16 +730,17 @@ export class EnquiryordersComponent implements OnInit {
 
   searchText: string = '';
   filteredOrders: any[] = [];
-
+  searchOrderFetch: any
   filterOrders() {
     if (!this.searchText) {
-      // If search text is empty, return all orders
-      this.filteredOrders = this.orders;
+      // // If search text is empty, return all orders
+      // this.filteredOrders = this.orders;
+      this.searchOrderFetch = this.filteredOrders
       return;
     }
 
     // Filter orders based on customer name or phone number
-    this.filteredOrders = this.orders.filter(
+    this.searchOrderFetch = this.filteredOrders.filter(
       (order: any) =>
         (order.CusName &&
           order.CusName.toLowerCase().includes(
@@ -1082,7 +1085,9 @@ export class EnquiryordersComponent implements OnInit {
   UpdateItem: any;
   UpScreen = false;
   savedupstore: any;
+  tempsstore:any
   GetOrderUpdateDetails(data: any) {
+    this.savedupstore = this.tempsstore
     this.Auth.GetWOOrdDeails(data).subscribe((data: any) => {
       this.UpScreen = true;
       this.mode = 'edit';
@@ -1342,6 +1347,7 @@ export class EnquiryordersComponent implements OnInit {
         return orderDateString >= startDate && orderDateString <= endDate;
       });
 
+      this.searchOrderFetch = this.filteredOrders
       // If the filtered orders array is empty, no orders were found for the selected range
       if (this.filteredOrders.length === 0) {
         // Add a notification or handle this scenario as per your requirements

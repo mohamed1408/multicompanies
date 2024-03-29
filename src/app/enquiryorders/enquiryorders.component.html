@@ -53,14 +53,14 @@
                             [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected"
                             [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
                             [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
-                            placeholder="Select Date..." class="form-control" (input)="filterOrders()" />
+                            placeholder="Select Date..." class="form-control" />
                     </div>
                     <div hidden style="margin-left:120px;margin-top: 3px">
                         <input type="text" class="form-group" style="width:15em;margin-left:5px;" ngxDaterangepickerMd
                             [locale]="{applyLabel: 'ok', format: 'DD/MM/YYYY'}" [(ngModel)]="selected"
                             [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges"
                             [linkedCalendars]="true" [showClearButton]="true" (change)="date($event)"
-                            placeholder="Select Date..." class="form-control" (input)="filterOrders()" />
+                            placeholder="Select Date..." class="form-control"  />
                     </div>
                 </div>
                 <div class="col" style="text-align: right;">
@@ -112,7 +112,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let order of filteredOrders">
+                                            <tr *ngFor="let order of searchOrderFetch">
                                                 <td>
                                                     <button class=" btn btn-link"
                                                         (click)="GetWOOrdDeails(order.OdrsId)">#{{order.InvoiceNo}}</button>
