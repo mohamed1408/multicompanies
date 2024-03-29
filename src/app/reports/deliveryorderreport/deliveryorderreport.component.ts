@@ -290,8 +290,8 @@ export class DeliveryorderreportComponent implements OnInit {
         console.log(data['ZSorderTrans']);
 
         this.report.sort((a: ReportItem, b: ReportItem) => {
-          const dateA = new Date(a.dddt);
-          const dateB = new Date(b.dddt);
+          const dateA = new Date(a.didt);
+          const dateB = new Date(b.didt);
           return dateB.getTime() - dateA.getTime();
         });
         console.log(this.report);
@@ -458,5 +458,5 @@ class GDS {
 }
 
 interface ReportItem {
-  dddt: string;
+  didt: string;
 }
