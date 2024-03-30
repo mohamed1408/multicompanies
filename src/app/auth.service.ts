@@ -9,7 +9,8 @@ import { Message, Transaction } from './model/model';
   providedIn: 'root',
 })
 export class AuthService {
-  baseurl = 'https://biz1pos.azurewebsites.net/api/';
+  baseurl = 'https://report-pos.azurewebsites.net/api/';
+  baseurl2 = 'https://biz1pos.azurewebsites.net/api/';
   baseurl3 = 'https://uat-bizpos.azurewebsites.net/api/';
   baseurl1 = 'https://localhost:44383/api/';
   ecomurl = 'https://biz1ecom.azurewebsites.net/api/';
